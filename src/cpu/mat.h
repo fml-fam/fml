@@ -26,7 +26,7 @@ static inline int fml_mat_init(mat_t *x, len_t m, len_t n)
 
 
 
-static inline void fml_dmat_free(mat_t *x)
+static inline void fml_mat_free(mat_t *x)
 {
   free(x->data);
   x->data = NULL;
@@ -34,7 +34,7 @@ static inline void fml_dmat_free(mat_t *x)
 
 
 
-static inline void fml_dmat_fill_rand(mat_t *x, int seed)
+static inline void fml_mat_fill_rand(mat_t *x, int seed)
 {
   fml_rand_init(seed);
   
@@ -47,7 +47,7 @@ static inline void fml_dmat_fill_rand(mat_t *x, int seed)
 
 
 
-static inline void fml_dmat_fill_zero(mat_t *x)
+static inline void fml_mat_fill_zero(mat_t *x)
 {
   double *data = x->data;
   memset(data, 0, (x->m)*(x->n) * sizeof(*data));
@@ -56,7 +56,7 @@ static inline void fml_dmat_fill_zero(mat_t *x)
 
 
 // DATA(y) := DATA(x)
-static inline int fml_dmat_copy(mat_t *x, mat_t *y)
+static inline int fml_mat_copy(mat_t *x, mat_t *y)
 {
   if (x->m != y->m || x->n != y->n)
     return FML_EXIT_ERROR_NONCONFORMABLE;
