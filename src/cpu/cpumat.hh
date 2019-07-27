@@ -57,9 +57,9 @@ cpumat<REAL>::~cpumat()
 template <typename REAL>
 void cpumat<REAL>::print(uint8_t ndigits)
 {
-  for (int i=0; i<this->m; i++)
+  for (len_t i=0; i<this->m; i++)
   {
-    for (int j=0; j<this->n; j++)
+    for (len_t j=0; j<this->n; j++)
       printf("%.*f ", ndigits, this->data[i + this->m*j]);
     
     putchar('\n');
