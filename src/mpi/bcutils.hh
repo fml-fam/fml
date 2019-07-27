@@ -69,21 +69,21 @@ namespace bcutils
   
   int l2g(const int i, const int nb, const int nprocs, const int myproc)
   {
-    return nprocs * nb * (i-1)/nb + ((i-1)%nb) + ((nprocs+myproc)%nprocs)*nb + 1;
+    return nprocs*nb*(i/nb) + (i%nb) + ((nprocs+myproc)%nprocs)*nb;
   }
   
   
   
   int g2l(const int gi, const int nb, const int nprocs)
   {
-    return nb * ((gi-1)/(nb*nprocs)) + ((gi-1)%nb) + 1;
+    return nb * (gi/(nb*nprocs)) + (gi%nb);
   }
   
   
   
   int g2p(const int gi, const int nb, const int nprocs)
   {
-    return ((gi-1)/nb) % nprocs;
+    return (gi/nb) % nprocs;
   }
 }
 
