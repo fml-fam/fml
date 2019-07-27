@@ -28,7 +28,11 @@ class grid
     void printf(int row, int col, const char *fmt, ...);
     void print();
     
-    void barrier(char *scope);
+    void barrier(char scope);
+    
+    void reduce(int m, int n, int *x, char *scope, int rdest, int cdest);
+    void reduce(int m, int n, float *x, char *scope, int rdest, int cdest);
+    void reduce(int m, int n, double *x, char *scope, int rdest, int cdest);
     
     int ictxt() const {return _ictxt;};
     int nprocs() const {return _nprocs;};
@@ -154,9 +158,29 @@ void grid::print()
 
 
 
-void grid::barrier(char *scope)
+void grid::barrier(char scope)
 {
-  Cblacs_barrier(_ictxt, scope);
+  Cblacs_barrier(_ictxt, &scope);
+}
+
+
+
+void grid::reduce(int m, int n, int *x, char *scope, int rdest, int cdest)
+{
+  char top = ' ';
+  Cigsum2d(_ictxt, scope, &top, m, n, x, m, rdest, cdest);
+}
+
+void grid::reduce(int m, int n, float *x, char *scope, int rdest, int cdest)
+{
+  char top = ' ';
+  Csgsum2d(_ictxt, scope, &top, m, n, x, m, rdest, cdest);
+}
+
+void grid::reduce(int m, int n, double *x, char *scope, int rdest, int cdest)
+{
+  char top = ' ';
+  Cdgsum2d(_ictxt, scope, &top, m, n, x, m, rdest, cdest);
 }
 
 

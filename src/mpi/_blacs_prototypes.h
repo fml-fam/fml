@@ -13,6 +13,9 @@ extern void Cblacs_gridinfo(int ConTxt, int *nprow, int *npcol, int *myrow, int 
 extern void Cblacs_gridinit(int *ConTxt, char *order, int nprow, int npcol);
 extern void Cblacs_barrier(int ictxt, char *scope);
 extern void Cblacs_pinfo(int *mypnum, int *nprocs);
+extern void Cigsum2d(int ConTxt, char *scope, char *top, int m, int n, int *A, int lda, int rdest, int cdest);
+extern void Csgsum2d(int ConTxt, char *scope, char *top, int m, int n, float *A, int lda, int rdest, int cdest);
+extern void Cdgsum2d(int ConTxt, char *scope, char *top, int m, int n, double *A, int lda, int rdest, int cdest);
 
 
 #ifdef __cplusplus
