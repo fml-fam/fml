@@ -16,6 +16,12 @@ extern void Cblacs_pinfo(int *mypnum, int *nprocs);
 extern void Cigsum2d(int ConTxt, char *scope, char *top, int m, int n, int *A, int lda, int rdest, int cdest);
 extern void Csgsum2d(int ConTxt, char *scope, char *top, int m, int n, float *A, int lda, int rdest, int cdest);
 extern void Cdgsum2d(int ConTxt, char *scope, char *top, int m, int n, double *A, int lda, int rdest, int cdest);
+extern void Cigesd2d(int ConTxt, int m, int n, int *A, int lda, int rdest, int cdest);
+extern void Csgesd2d(int ConTxt, int m, int n, float *A, int lda, int rdest, int cdest);
+extern void Cdgesd2d(int ConTxt, int m, int n, double *A, int lda, int rdest, int cdest);
+extern void Cigerv2d(int ConTxt, int m, int n, int *A, int lda, int rdest, int cdest);
+extern void Csgerv2d(int ConTxt, int m, int n, float *A, int lda, int rdest, int cdest);
+extern void Cdgerv2d(int ConTxt, int m, int n, double *A, int lda, int rdest, int cdest);
 
 
 #ifdef __cplusplus

@@ -30,6 +30,13 @@ class grid
     
     void barrier(char scope);
     
+    void send(int m, int n, int *x, int rdest, int cdest);
+    void send(int m, int n, float *x, int rdest, int cdest);
+    void send(int m, int n, double *x, int rdest, int cdest);
+    void recv(int m, int n, int *x, int rdest, int cdest);
+    void recv(int m, int n, float *x, int rdest, int cdest);
+    void recv(int m, int n, double *x, int rdest, int cdest);
+    
     void reduce(int m, int n, int *x, char *scope, int rdest, int cdest);
     void reduce(int m, int n, float *x, char *scope, int rdest, int cdest);
     void reduce(int m, int n, double *x, char *scope, int rdest, int cdest);
@@ -161,6 +168,40 @@ void grid::print()
 void grid::barrier(char scope)
 {
   Cblacs_barrier(_ictxt, &scope);
+}
+
+
+
+void grid::send(int m, int n, int *x, int rdest, int cdest)
+{
+  Cigesd2d(_ictxt, m, n, x, m, rdest, cdest);
+}
+
+void grid::send(int m, int n, float *x, int rdest, int cdest)
+{
+  Csgesd2d(_ictxt, m, n, x, m, rdest, cdest);
+}
+
+void grid::send(int m, int n, double *x, int rdest, int cdest)
+{
+  Cdgesd2d(_ictxt, m, n, x, m, rdest, cdest);
+}
+
+
+
+void grid::recv(int m, int n, int *x, int rsrc, int csrc)
+{
+  Cigerv2d(_ictxt, m, n, x, m, rsrc, csrc);
+}
+
+void grid::recv(int m, int n, float *x, int rsrc, int csrc)
+{
+  Csgerv2d(_ictxt, m, n, x, m, rsrc, csrc);
+}
+
+void grid::recv(int m, int n, double *x, int rsrc, int csrc)
+{
+  Cdgerv2d(_ictxt, m, n, x, m, rsrc, csrc);
 }
 
 
