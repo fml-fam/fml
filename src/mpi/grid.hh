@@ -106,12 +106,12 @@ grid::grid(int gridtype)
 
 grid::grid(const grid &g)
 {
-  _nprocs = nprocs();
-  _ictxt = ictxt();
-  _nprow = nprow();
-  _npcol = npcol();
-  _myrow = myrow();
-  _mycol = mycol();
+  _ictxt = g.ictxt();
+  _nprocs = g.nprocs();
+  _nprow = g.nprow();
+  _npcol = g.npcol();
+  _myrow = g.myrow();
+  _mycol = g.mycol();
 }
 
 
