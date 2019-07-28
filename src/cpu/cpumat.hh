@@ -8,13 +8,16 @@
 
 #include "../matrix.hh"
 
+
 template <typename REAL>
 class cpumat : public matrix<REAL>
 {
   public:
     cpumat(len_t nrows, len_t ncols);
     cpumat(REAL *data, len_t nrows, len_t ncols);
-    ~cpumat();
+    cpumat(const cpumat &x);
+    
+    void free();
     
     void print(uint8_t ndigits=4);
     
@@ -37,6 +40,8 @@ cpumat<REAL>::cpumat(len_t nrows, len_t ncols)
   this->n = ncols;
 }
 
+
+
 template <typename REAL>
 cpumat<REAL>::cpumat(REAL *data_, len_t nrows, len_t ncols)
 {
@@ -45,11 +50,26 @@ cpumat<REAL>::cpumat(REAL *data_, len_t nrows, len_t ncols)
   this->data = data_;
 }
 
+
+
 template <typename REAL>
-cpumat<REAL>::~cpumat()
+cpumat<REAL>::cpumat(const cpumat<REAL> &x)
+{
+  this->m = x.nrows();
+  this->n = x.ncols();
+  this->data = x.data_ptr_const();
+}
+
+
+
+template <typename REAL>
+void cpumat<REAL>::free()
 {
   if (this->data)
+  {
     free(this->data);
+    this->data = NULL;
+  }
 }
 
 
@@ -77,6 +97,8 @@ void cpumat<REAL>::fill_zero()
   memset(this->data, 0, len);
 }
 
+
+
 template <typename REAL>
 void cpumat<REAL>::fill_eye()
 {
@@ -84,6 +106,8 @@ void cpumat<REAL>::fill_eye()
   for (len_t i=0; i<this->m && i<this->n; i++)
     this->data[i + this->m*i] = 1;
 }
+
+
 
 template <typename REAL>
 void cpumat<REAL>::fill_runif(int seed, REAL min, REAL max)
