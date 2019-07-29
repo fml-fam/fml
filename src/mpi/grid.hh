@@ -27,6 +27,7 @@ class grid
     void inherit_grid(int blacs_context);
     void printf(int row, int col, const char *fmt, ...);
     void print();
+    bool rank0();
     
     void barrier(char scope);
     
@@ -161,6 +162,13 @@ void grid::printf(int row, int col, const char *fmt, ...)
 void grid::print()
 {
   printf(0, 0, "## Grid %d %dx%d\n", _ictxt, _nprow, _npcol);
+}
+
+
+
+bool grid::rank0()
+{
+  return (_myrow==0 && _mycol==0);
 }
 
 
