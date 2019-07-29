@@ -35,8 +35,9 @@ class mpimat : public matrix<REAL>
     len_local_t ncols_local() const {return n_local;};
     int bf_rows() const {return mb;};
     int bf_cols() const {return nb;};
-    int* desc_ptr() const {return desc;};
-    grid get_grid() {return g;};
+    int* desc_ptr() {return desc;};
+    const int* desc_ptr() const {return desc;};
+    grid get_grid() const {return g;};
     
   protected:
     len_local_t m_local;
