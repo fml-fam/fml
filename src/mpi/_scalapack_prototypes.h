@@ -7,15 +7,25 @@ extern "C" {
 #endif
 
 
-void psgetrf_(const int *const restrict m, const int *const restrict n,
-  float *const restrict a, const int *const restrict ia,
-  const int *const restrict ja, const int *const restrict desca,
-  int *const restrict ipiv, int *const restrict info);
+void psgemm_(const char *transa, const char *transb, const int *m, const int *n,
+  const int *k, const float *alpha, const float *a, const int *ia,
+  const int *ja, const int *desca, const float *b, const int *ib,
+  const int *jb, const int *descb, const float *beta, float *c, const int *ic,
+  const int *jc, const int *descc);
 
-void pdgetrf_(const int *const restrict m, const int *const restrict n,
-  double *const restrict a, const int *const restrict ia,
-  const int *const restrict ja, const int *const restrict desca,
-  int *const restrict ipiv, int *const restrict info);
+void pdgemm_(const char *transa, const char *transb, const int *m, const int *n,
+  const int *k, const double *alpha, const double *a, const int *ia,
+  const int *ja, const int *desca, const double *b, const int *ib,
+  const int *jb, const int *descb, const double *beta, double *c, const int *ic,
+  const int *jc, const int *descc);
+
+
+
+extern void psgetrf_(const int *m, const int *n, float *a, const int *ia,
+  const int *ja, const int *desca, int *ipiv, int *info);
+
+extern void pdgetrf_(const int *m, const int *n, double *a, const int *ia,
+  const int *ja, const int *desca, int *ipiv, int *info);
 
 
 #ifdef __cplusplus

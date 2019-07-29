@@ -7,6 +7,28 @@
 
 namespace scalapack
 {
+  void gemm(const char transa, const char transb, const int m, const int n,
+    const int k, const float alpha, const float *a, const int *desca,
+    const float *b, const int *descb, const float beta, float *c,
+    const int *descc)
+  {
+    int ij = 1;
+    psgemm_(&transa, &transb, &m, &n, &k, &alpha, a, &ij, &ij, desca, b,
+      &ij, &ij, descb, &beta, c, &ij, &ij, descc);
+  }
+  
+  void gemm(const char transa, const char transb, const int m, const int n,
+    const int k, const double alpha, const double *a, const int *desca,
+    const double *b, const int *descb, const double beta, double *c,
+    const int *descc)
+  {
+    int ij = 1;
+    pdgemm_(&transa, &transb, &m, &n, &k, &alpha, a, &ij, &ij, desca, b,
+      &ij, &ij, descb, &beta, c, &ij, &ij, descc);
+  }
+  
+  
+  
   void getrf(const int m, const int n, float *a, int *desca, int *ipiv, int *info)
   {
     int ij = 1;
