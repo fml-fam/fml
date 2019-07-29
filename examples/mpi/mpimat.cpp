@@ -14,6 +14,7 @@ int main()
   g.printf(0, 0, "%dx%d\n", m, n);
   
   x.fill_eye();
+  x.scale(3);
   
   cpumat<float> x_gbl = mpihelpers::mpi2cpu(x);
   if (g.rank0())

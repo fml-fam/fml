@@ -27,6 +27,8 @@ class mpimat : public matrix<REAL>
     void fill_eye();
     void fill_runif(int seed, REAL min=0, REAL max=1);
     
+    void scale(const REAL s);
+    
     len_local_t nrows_local() const {return m_local;};
     len_local_t ncols_local() const {return n_local;};
     int bf_rows() const {return mb;};
@@ -164,6 +166,18 @@ template <typename REAL>
 void mpimat<REAL>::fill_runif(int seed, REAL min, REAL max)
 {
   
+}
+
+
+
+template <typename REAL>
+void mpimat<REAL>::scale(const REAL s)
+{
+  for (len_local_t j=0; j<this->m_local; j++)
+  {
+    for (len_local_t i=0; i<this->n_local; i++)
+      this->data[i + this->m_local*j] *= s;
+  }
 }
 
 
