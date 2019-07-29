@@ -19,7 +19,9 @@ class mpimat : public matrix<REAL>
   public:
     mpimat(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows=16, int bf_cols=16);
     mpimat(REAL *data_, grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols);
-    ~mpimat();
+    mpimat(const mpimat &x);
+    
+    void free();
     
     void print(uint8_t ndigits=4);
     
@@ -87,10 +89,13 @@ mpimat<REAL>::mpimat(REAL *data_, grid &blacs_grid, len_t nrows, len_t ncols, in
 
 
 template <typename REAL>
-mpimat<REAL>::~mpimat()
+void mpimat<REAL>::free()
 {
   if (this->data)
+  {
     free(this->data);
+    this->data = NULL;
+  }
 }
 
 
