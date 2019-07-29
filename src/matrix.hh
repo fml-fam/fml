@@ -14,7 +14,7 @@ class matrix
     len_t nrows() const {return m;};
     len_t ncols() const {return n;};
     REAL* data_ptr() {return data;};
-    REAL* data_ptr_const() const {return data;};
+    REAL* data_ptr() const {return data;};
   
   protected:
     len_t m;

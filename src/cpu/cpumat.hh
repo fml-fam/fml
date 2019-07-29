@@ -59,7 +59,7 @@ cpumat<REAL>::cpumat(const cpumat<REAL> &x)
 {
   this->m = x.nrows();
   this->n = x.ncols();
-  this->data = x.data_ptr_const();
+  this->data = x.data_ptr();
 }
 
 
