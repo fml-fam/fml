@@ -161,7 +161,7 @@ void grid::printf(int row, int col, const char *fmt, ...)
 
 void grid::print()
 {
-  printf(0, 0, "## Grid %d %dx%d\n", _ictxt, _nprow, _npcol);
+  printf(0, 0, "## Grid %d %dx%d\n\n", _ictxt, _nprow, _npcol);
 }
 
 
