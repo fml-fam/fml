@@ -10,8 +10,7 @@ int main()
   x.fill_eye();
   x.print();
   
-  float *data = x.data_ptr();
-  data[0] = 3;
+  x.scale(3);
   x.print();
   
   x.fill_runif(1234);

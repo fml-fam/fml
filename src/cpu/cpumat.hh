@@ -24,6 +24,8 @@ class cpumat : public matrix<REAL>
     void fill_zero();
     void fill_eye();
     void fill_runif(int seed, REAL min=0, REAL max=1);
+    
+    void scale(const REAL s);
 };
 
 
@@ -120,6 +122,18 @@ void cpumat<REAL>::fill_runif(int seed, REAL min, REAL max)
       static std::uniform_real_distribution<REAL> dist(min, max);
       this->data[i + this->m*j] = dist(mt);
     }
+  }
+}
+
+
+
+template <typename REAL>
+void cpumat<REAL>::scale(const REAL s)
+{
+  for (len_t j=0; j<this->m; j++)
+  {
+    for (len_t i=0; i<this->n; i++)
+      this->data[i + this->m*j] *= s;
   }
 }
 
