@@ -11,7 +11,7 @@
 namespace mpihelpers
 {
   template <typename REAL>
-  cpumat<REAL> mpi2cpu(mpimat<REAL> &mpi)
+  void mpi2cpu_noalloc(mpimat<REAL> &mpi, cpumat<REAL> &cpu)
   {
     len_t m = mpi.nrows();
     len_t n = mpi.ncols();
@@ -21,7 +21,6 @@ namespace mpihelpers
     
     grid g = mpi.get_grid();
     
-    cpumat<REAL> cpu(m, n);
     cpu.fill_zero();
     
     REAL *gbl = cpu.data_ptr();
@@ -42,6 +41,18 @@ namespace mpihelpers
     }
     
     g.reduce(m, n, gbl, 'A', 0, 0);
+  }
+  
+  
+  
+  template <typename REAL>
+  cpumat<REAL> mpi2cpu(mpimat<REAL> &mpi)
+  {
+    len_t m = mpi.nrows();
+    len_t n = mpi.ncols();
+    
+    cpumat<REAL> cpu(m, n);
+    mpi2cpu_noalloc(mpi, cpu);
     
     return cpu;
   }
