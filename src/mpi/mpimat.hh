@@ -90,6 +90,29 @@ mpimat<REAL>::mpimat(REAL *data_, grid &blacs_grid, len_t nrows, len_t ncols, in
 
 
 template <typename REAL>
+mpimat<REAL>::mpimat(const mpimat<REAL> &x)
+{
+  this->m = x.nrows();
+  this->n = x.ncols();
+  
+  this->m_local = x.nrows_local();
+  this->n_local = x.ncols_local();
+  this->mb = x.bf_rows();
+  this->nb = x.bf_cols();
+  
+  const int *xdesc = x.desc_ptr();
+  for (int i=0; i<9; i++)
+    this->desc[i] = xdesc[i];
+  
+  grid g = x.get_grid();
+  this->g = g;
+  
+  this->data = x.data_ptr();
+}
+
+
+
+template <typename REAL>
 void mpimat<REAL>::free()
 {
   if (this->data)
