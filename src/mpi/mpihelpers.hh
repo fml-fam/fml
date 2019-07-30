@@ -30,7 +30,7 @@ namespace mpihelpers
     {
       for (len_local_t j=0; j<n_local; j++)
       {
-        for (len_local_t i=0; i<n_local; i++)
+        for (len_local_t i=0; i<m_local; i++)
         {
           int gi = bcutils::l2g(i, mpi.bf_rows(), g.nprow(), g.myrow());
           int gj = bcutils::l2g(j, mpi.bf_cols(), g.npcol(), g.mycol());
