@@ -2,6 +2,8 @@
 #define FML_MPIHELPERS_H
 
 
+#include <stdexcept>
+
 #include "../cpu/cpumat.hh"
 #include "bcutils.hh"
 #include "grid.hh"
@@ -15,6 +17,9 @@ namespace mpihelpers
   {
     len_t m = mpi.nrows();
     len_t n = mpi.ncols();
+    
+    if (m != cpu.nrows() || n != cpu.nrows())
+      throw std::runtime_error("non-conformable arguments");
     
     len_local_t m_local = mpi.nrows_local();
     len_local_t n_local = mpi.ncols_local();
@@ -42,8 +47,6 @@ namespace mpihelpers
     
     g.reduce(m, n, gbl, 'A', 0, 0);
   }
-  
-  
   
   template <typename REAL>
   cpumat<REAL> mpi2cpu(mpimat<REAL> &mpi)
