@@ -2,55 +2,26 @@
 #define FML_CPUMAT_LINALG_H
 
 
+#include "../linalgutils.hh"
 #include "cpumat.hh"
 #include "lapack.hh"
 
 
 namespace linalg
 {
-  namespace
-  {
-    template <typename REAL>
-    void matmult_params(const bool transx, const bool transy, const cpumat<REAL> &x, const cpumat<REAL> &y, int *m, int *n, int *k)
-    {
-      // m = # rows of op(x)
-      // n = # cols of op(y)
-      // k = # cols of op(x)
-      
-      int mx = x.nrows();
-      int nx = x.ncols();
-      int my = y.nrows();
-      int ny = y.ncols();
-      
-      if (transx)
-      {
-        *m = nx;
-        *k = mx;
-      }
-      else
-      {
-        *m = mx;
-        *k = nx;
-      }
-      
-      *n = transy ? my : ny;
-    }
-  }
-  
-  
-  
   template <typename REAL>
   cpumat<REAL> matmult(const bool transx, const bool transy, const REAL alpha, cpumat<REAL> &x, cpumat<REAL> &y)
   {
     int m, n, k;
-    matmult_params(transx, transy, x, y, &m, &n, &k);
+    len_t mx = x.nrows();
+    len_t my = y.nrows();
+    
+    linalgutils::matmult_params(transx, transy, mx, x.ncols(), my, y.ncols(), &m, &n, &k);
     cpumat<REAL> ret(m, n);
     
     char ctransx = transx ? 'T' : 'N';
     char ctransy = transy ? 'T' : 'N';
     
-    int mx = x.nrows();
-    int my = y.nrows();
     lapack::gemm(ctransx, ctransy, m, n, k, alpha, x.data_ptr(), mx, y.data_ptr(), my, (REAL)0, ret.data_ptr(), m);
     
     return ret;
@@ -65,13 +36,14 @@ namespace linalg
     //   TODO
     
     int m, n, k;
-    matmult_params(transx, transy, x, y, &m, &n, &k);
+    len_t mx = x.nrows();
+    len_t my = y.nrows();
+    
+    linalgutils::matmult_params(transx, transy, mx, x.ncols(), my, y.ncols(), &m, &n, &k);
     
     char ctransx = transx ? 'T' : 'N';
     char ctransy = transy ? 'T' : 'N';
     
-    int mx = x.nrows();
-    int my = y.nrows();
     lapack::gemm(ctransx, ctransy, m, n, k, alpha, x.data_ptr(), mx, y.data_ptr(), my, (REAL)0, ret.data_ptr(), m);
   }
 }

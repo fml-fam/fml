@@ -2,48 +2,20 @@
 #define FML_MPIMAT_LINALG_H
 
 
+#include "../linalgutils.hh"
 #include "mpimat.hh"
 #include "scalapack.hh"
 
 
 namespace linalg
 {
-  namespace
-  {
-    template <typename REAL>
-    void matmult_params(const bool transx, const bool transy, const mpimat<REAL> &x, const mpimat<REAL> &y, int *m, int *n, int *k)
-    {
-      // m = # rows of op(x)
-      // n = # cols of op(y)
-      // k = # cols of op(x)
-      
-      int mx = x.nrows();
-      int nx = x.ncols();
-      int my = y.nrows();
-      int ny = y.ncols();
-      
-      if (transx)
-      {
-        *m = nx;
-        *k = mx;
-      }
-      else
-      {
-        *m = mx;
-        *k = nx;
-      }
-      
-      *n = transy ? my : ny;
-    }
-  }
-  
-  
-  
   template <typename REAL>
   mpimat<REAL> matmult(const bool transx, const bool transy, const REAL alpha, mpimat<REAL> &x, mpimat<REAL> &y)
   {
     int m, n, k;
-    matmult_params(transx, transy, x, y, &m, &n, &k);
+    
+    linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
+    
     grid g = x.get_grid();
     mpimat<REAL> ret(g, m, n, x.bf_rows(), x.bf_cols());
     
@@ -66,7 +38,8 @@ namespace linalg
     //   TODO
     
     int m, n, k;
-    matmult_params(transx, transy, x, y, &m, &n, &k);
+    
+    linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
     
     char ctransx = transx ? 'T' : 'N';
     char ctransy = transy ? 'T' : 'N';
