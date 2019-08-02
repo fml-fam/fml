@@ -4,6 +4,7 @@
 
 #include <climits>
 #include <cmath>
+#include <stdexcept>
 #include <string>
 
 // https://docs.nvidia.com/deploy/nvml-api/nvml-api-reference.html#nvml-api-reference
@@ -20,7 +21,54 @@ namespace nvml
     {
       if (check != NVML_SUCCESS)
       {
-        // TODO
+        if (check == NVML_ERROR_UNINITIALIZED)
+          throw std::runtime_error("NVML was not successfully initialized");  
+        else if (check == NVML_ERROR_INVALID_ARGUMENT)
+          throw std::runtime_error("invalid argument");
+        else if (check == NVML_ERROR_NOT_SUPPORTED)
+          throw std::runtime_error("device does not support requested feature");
+        else if (check == NVML_ERROR_NO_PERMISSION)
+          throw std::runtime_error("NVML does not have permission to talk to the driver");
+        // else if (check == NVML_ERROR_ALREADY_INITIALIZED) // deprecated
+        //   throw std::runtime_error("already initialized")
+        else if (check == NVML_ERROR_NOT_FOUND)
+          throw std::runtime_error("process not found");
+        else if (check == NVML_ERROR_INSUFFICIENT_SIZE)
+          throw std::runtime_error("internal string buffer too small");
+        else if (check == NVML_ERROR_INSUFFICIENT_POWER)
+          throw std::runtime_error("device has improperly attached external power cable");
+        else if (check == NVML_ERROR_DRIVER_NOT_LOADED)
+          throw std::runtime_error("NVIDIA driver is not running");
+        else if (check == NVML_ERROR_TIMEOUT)
+          throw std::runtime_error("provided timeout has passed");
+        else if (check == NVML_ERROR_IRQ_ISSUE)
+          throw std::runtime_error("NVIDIA kernel detected an interrupt issue with the attached GPUs");
+        else if (check == NVML_ERROR_LIBRARY_NOT_FOUND)
+          throw std::runtime_error("NVML shared library could not be loaded");
+        else if (check == NVML_ERROR_FUNCTION_NOT_FOUND)
+          throw std::runtime_error("local NVML version does not support requested function");
+        else if (check == NVML_ERROR_CORRUPTED_INFOROM)
+          throw std::runtime_error("infoROM is corrupted");
+        else if (check == NVML_ERROR_GPU_IS_LOST)
+          throw std::runtime_error("GPU is inaccessible");
+        else if (check == NVML_ERROR_RESET_REQUIRED)
+          throw std::runtime_error("GPU needs to be reset before it can be used again");
+        else if (check == NVML_ERROR_OPERATING_SYSTEM)
+          throw std::runtime_error("GPU control device was blocked by the OS");
+        else if (check == NVML_ERROR_LIB_RM_VERSION_MISMATCH)
+          throw std::runtime_error("driver/library version mismatch");
+        else if (check == NVML_ERROR_IN_USE)
+          throw std::runtime_error("GPU currently in use");
+        else if (check == NVML_ERROR_MEMORY)
+          throw std::runtime_error("insufficient memory");
+        else if (check == NVML_ERROR_MEMORY)
+          throw std::runtime_error("no data");
+        else if (check == NVML_ERROR_VGPU_ECC_NOT_SUPPORTED)
+          throw std::runtime_error("operation is not available because ECC is enabled");
+        else if (check == NVML_ERROR_UNKNOWN)
+          throw std::runtime_error("unknown NVML error");
+        else
+          throw std::runtime_error(nvmlErrorString(check));
       }
     }
   }
