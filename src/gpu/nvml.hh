@@ -11,6 +11,7 @@
 #include <nvml.h>
 
 #define CHECK_NVML(call) {nvmlReturn_t check = call; nvml::check_nvml_ret(check);}
+#define NVML_MAX_STRLEN 128
 
 
 namespace nvml
@@ -92,9 +93,6 @@ namespace nvml
 {
   namespace system
   {
-    #define MAX_STRLEN 80
-    
-    
     int get_cuda_driver_version()
     {
       int ret;
@@ -121,13 +119,10 @@ namespace nvml
     std::string get_process_name(unsigned int pid)
     {
       std::string ret;
-      ret.resize(MAX_STRLEN);
+      ret.resize(NVML_MAX_STRLEN);
       CHECK_NVML( nvmlSystemGetProcessName(pid, &ret[0], ret.max_size()) );
       return ret;
     }
-    
-    
-    #undef MAX_STRLEN
   }
 }
 
@@ -137,14 +132,10 @@ namespace nvml
 {
   namespace device
   {
-    #define MAX_STRLEN 80
-    
-    
-    
     std::string get_board_part_number(nvmlDevice_t device)
     {
       std::string ret;
-      ret.resize(MAX_STRLEN);
+      ret.resize(NVML_MAX_STRLEN);
       CHECK_NVML( nvmlDeviceGetBoardPartNumber(device, &ret[0], ret.max_size()) );
       return ret;
     }
@@ -259,7 +250,7 @@ namespace nvml
     std::string get_name(nvmlDevice_t device)
     {
       std::string ret;
-      ret.resize(MAX_STRLEN);
+      ret.resize(NVML_MAX_STRLEN);
       CHECK_NVML( nvmlDeviceGetName(device, &ret[0], ret.max_size()) );
       return ret;
     }
@@ -295,7 +286,7 @@ namespace nvml
     std::string get_serial(nvmlDevice_t device)
     {
       std::string ret;
-      ret.resize(MAX_STRLEN);
+      ret.resize(NVML_MAX_STRLEN);
       CHECK_NVML( nvmlDeviceGetSerial(device, &ret[0], ret.max_size()) );
       return ret;
     }
@@ -318,18 +309,16 @@ namespace nvml
     std::string get_uuid(nvmlDevice_t device)
     {
       std::string ret;
-      ret.resize(MAX_STRLEN);
+      ret.resize(NVML_MAX_STRLEN);
       CHECK_NVML( nvmlDeviceGetUUID(device, &ret[0], ret.max_size()) );
       return ret;
     }
-    
-    
-    #undef MAX_STRLEN
   }
 }
 
 
 
+#undef NVML_MAX_STRLEN
 #undef CHECK_NVML
 
 
