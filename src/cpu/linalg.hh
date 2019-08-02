@@ -2,6 +2,8 @@
 #define FML_CPUMAT_LINALG_H
 
 
+#include <stdexcept>
+
 #include "../linalgutils.hh"
 #include "cpumat.hh"
 #include "lapack.hh"
@@ -32,8 +34,8 @@ namespace linalg
   template <typename REAL>
   void matmult_noalloc(const bool transx, const bool transy, const REAL alpha, cpumat<REAL> &x, cpumat<REAL> &y, cpumat<REAL> ret)
   {
-    // if (x.ncols() != ret.nrows() || ret.ncols() != y.nrows())
-    //   TODO
+    if (x.ncols() != ret.nrows() || ret.ncols() != y.nrows())
+      throw std::runtime_error("non-conformable arguments");
     
     int m, n, k;
     len_t mx = x.nrows();
