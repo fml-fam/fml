@@ -13,6 +13,7 @@ template <typename REAL>
 class cpumat : public matrix<REAL>
 {
   public:
+    cpumat(){};
     cpumat(len_t nrows, len_t ncols);
     cpumat(REAL *data, len_t nrows, len_t ncols);
     cpumat(const cpumat &x);
