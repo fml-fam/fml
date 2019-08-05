@@ -27,6 +27,9 @@ class cpumat : public matrix<REAL>
     void fill_runif(int seed, REAL min=0, REAL max=1);
     
     void scale(const REAL s);
+  
+  private:
+    void printval(uint8_t ndigits, len_t i, len_t j);
 };
 
 
