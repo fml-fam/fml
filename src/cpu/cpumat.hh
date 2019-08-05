@@ -158,7 +158,7 @@ void cpumat<REAL>::info()
 {
   printf("# cpumat");
   printf(" %dx%d", this->m, this->n);
-  printf(" %s", typeid(REAL).name());
+  printf(" type=%s", typeid(REAL).name());
   printf("\n");
 }
 
