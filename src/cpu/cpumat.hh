@@ -20,6 +20,7 @@ class cpumat : public matrix<REAL>
     
     void free();
     void resize(len_t nrows, len_t ncols);
+    void set(REAL *data, len_t nrows, len_t ncols);
     
     void print(uint8_t ndigits=4);
     void info();
@@ -95,6 +96,16 @@ void cpumat<REAL>::resize(len_t nrows, len_t ncols)
   
   this->m = nrows;
   this->n = ncols;
+}
+
+
+
+template <typename REAL>
+void cpumat<REAL>::set(REAL *data, len_t nrows, len_t ncols)
+{
+  this->m = nrows;
+  this->n = ncols;
+  this->data = data;
 }
 
 
