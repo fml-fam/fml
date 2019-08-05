@@ -77,13 +77,26 @@ void cpumat<REAL>::free()
 
 
 
+template <>
+void cpumat<int>::printval(uint8_t ndigits, len_t i, len_t j)
+{
+  (void)ndigits;
+  printf("%d ", this->data[i + this->m*j]);
+}
+
+template <>
+void cpumat<float>::printval(uint8_t ndigits, len_t i, len_t j)
+{
+  printf("%.*f ", ndigits, this->data[i + this->m*j]);
+}
+
 template <typename REAL>
 void cpumat<REAL>::print(uint8_t ndigits)
 {
   for (len_t i=0; i<this->m; i++)
   {
     for (len_t j=0; j<this->n; j++)
-      printf("%.*f ", ndigits, this->data[i + this->m*j]);
+      this->printval(ndigits, i, j);
     
     putchar('\n');
   }
