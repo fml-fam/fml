@@ -131,8 +131,8 @@ void cpumat<int>::printval(uint8_t ndigits, len_t i, len_t j)
   printf("%d ", this->data[i + this->m*j]);
 }
 
-template <>
-void cpumat<float>::printval(uint8_t ndigits, len_t i, len_t j)
+template <typename REAL>
+void cpumat<REAL>::printval(uint8_t ndigits, len_t i, len_t j)
 {
   printf("%.*f ", ndigits, this->data[i + this->m*j]);
 }
