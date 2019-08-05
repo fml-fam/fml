@@ -21,6 +21,7 @@ class cpumat : public matrix<REAL>
     void free();
     void resize(len_t nrows, len_t ncols);
     void set(REAL *data, len_t nrows, len_t ncols);
+    cpumat<REAL> dupe();
     
     void print(uint8_t ndigits=4);
     void info();
@@ -106,6 +107,19 @@ void cpumat<REAL>::set(REAL *data, len_t nrows, len_t ncols)
   this->m = nrows;
   this->n = ncols;
   this->data = data;
+}
+
+
+
+template <typename REAL>
+cpumat<REAL> cpumat<REAL>::dupe()
+{
+  cpumat<REAL> dup(this->m, this->n);
+  
+  size_t len = this->m * this->n * sizeof(REAL);
+  memcpy(dup.data_ptr(), this->data, len);
+  
+  return dup;
 }
 
 
