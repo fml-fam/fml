@@ -47,6 +47,10 @@ class mpimat : public matrix<REAL>
     int nb;
     int desc[9];
     grid g;
+  
+    
+  private:
+    void printval(uint8_t ndigits, len_t i, len_t j);
 };
 
 
@@ -125,6 +129,19 @@ void mpimat<REAL>::free()
 
 
 
+template <>
+void mpimat<int>::printval(uint8_t ndigits, len_t i, len_t j)
+{
+  (void)ndigits;
+  printf("%d ", this->data[i + this->m*j]);
+}
+
+template <typename REAL>
+void mpimat<REAL>::printval(uint8_t ndigits, len_t i, len_t j)
+{
+  printf("%.*f ", ndigits, this->data[i + this->m*j]);
+}
+
 template <typename REAL>
 void mpimat<REAL>::print(uint8_t ndigits)
 {
@@ -146,7 +163,7 @@ void mpimat<REAL>::print(uint8_t ndigits)
         else
           this->g.recv(1, 1, &d, pr, pc);
         
-        printf("%.*f ", ndigits, d);
+        this->printval(ndigits, i, j);
       }
       else if (pr == this->g.myrow() && pc == this->g.mycol())
       {
