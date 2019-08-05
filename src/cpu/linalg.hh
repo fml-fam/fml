@@ -48,6 +48,26 @@ namespace linalg
     
     lapack::gemm(ctransx, ctransy, m, n, k, alpha, x.data_ptr(), mx, y.data_ptr(), my, (REAL)0, ret.data_ptr(), m);
   }
+  
+  
+  
+  template <typename REAL>
+  int lu(cpumat<REAL> &x, cpumat<int> &p)
+  {
+    int info = 0;
+    len_t m = x.nrows();
+    len_t lipiv = std::min(m, x.ncols());
+    
+    int *ipiv = (int*) malloc(lipiv * sizeof(*ipiv));
+    if (ipiv == NULL)
+      throw std::bad_alloc();
+    
+    lapack::getrf(m, x.ncols(), x.data_ptr(), m, ipiv, &info);
+    
+    p.set(ipiv, m, 1);
+    
+    return info;
+  }
 }
 
 
