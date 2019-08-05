@@ -23,6 +23,7 @@ class mpimat : public matrix<REAL>
     mpimat(const mpimat &x);
     
     void free();
+    void resize(len_t nrows, len_t ncols);
     
     void print(uint8_t ndigits=4);
     void info();
@@ -126,6 +127,27 @@ void mpimat<REAL>::free()
     std::free(this->data);
     this->data = NULL;
   }
+}
+
+
+
+template <typename REAL>
+void mpimat<REAL>::resize(len_t nrows, len_t ncols)
+{
+  m_local = bcutils::numroc(nrows, this->mb, this->g.myrow(), 0, this->g.nprow());
+  n_local = bcutils::numroc(ncols, this->nb, this->g.mycol(), 0, this->g.npcol());
+  
+  size_t len = m_local * n_local * sizeof(REAL);
+  void *realloc_ptr = realloc(this->data, len);
+  if (realloc_ptr == NULL)
+    throw std::bad_alloc();
+  
+  this->data = (REAL*) realloc_ptr;
+  
+  bcutils::descinit(this->desc, this->g.ictxt(), nrows, ncols, this->mb, this->nb, m_local);
+  
+  this->m = nrows;
+  this->n = ncols;
 }
 
 
