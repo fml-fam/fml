@@ -2,6 +2,7 @@
 #define FML_CPUMAT_LINALG_H
 
 
+#include <cmath>
 #include <stdexcept>
 
 #include "../linalgutils.hh"
@@ -67,6 +68,66 @@ namespace linalg
     p.set(ipiv, m, 1);
     
     return info;
+  }
+  
+  
+  
+  template <typename REAL>
+  void det(cpumat<REAL> &x, int &sign, REAL &modulus)
+  {
+    len_t m = x.nrows();
+    len_t n = x.ncols();
+    if (m != n)
+      throw std::runtime_error("'x' must be a square matrix");
+    
+    cpumat<int> p;
+    int info = lu(x, p);
+    
+    if (info != 0)
+    {
+      p.free();
+      
+      if (info > 0)
+      {
+        sign = 1;
+        modulus = -INFINITY;
+        return;
+      }
+      else
+        return;
+    }
+    
+    
+    // get determinant
+    REAL mod = 0.0;
+    int sgn = 1;
+    
+    const int *ipiv = p.data_ptr();
+    for (int i=0; i<m; i++)
+    {
+      if (ipiv[i] != (i + 1))
+        sgn = -sgn;
+    }
+    
+    p.free();
+    
+    const REAL *a = x.data_ptr();
+    
+    #pragma omp parallel for default(none) shared(m,a) reduction(+:mod) reduction(*:sgn)
+    for (int i=0; i<m; i+=m+1)
+    {
+      REAL d = a[i + m*i];
+      if (d < 0)
+      {
+        mod += log(-d);
+        sgn *= -1;
+      }
+      else
+        mod += log(d);
+    }
+    
+    modulus = mod;
+    sign = sgn;
   }
 }
 
