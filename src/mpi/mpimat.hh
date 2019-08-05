@@ -24,6 +24,7 @@ class mpimat : public matrix<REAL>
     
     void free();
     void resize(len_t nrows, len_t ncols);
+    void set(REAL *data_, grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols);
     
     void print(uint8_t ndigits=4);
     void info();
@@ -148,6 +149,24 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols)
   
   this->m = nrows;
   this->n = ncols;
+}
+
+
+
+template <typename REAL>
+void mpimat<REAL>::set(REAL *data_, grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols)
+{
+  m_local = bcutils::numroc(nrows, bf_rows, blacs_grid.myrow(), 0, blacs_grid.nprow());
+  n_local = bcutils::numroc(ncols, bf_cols, blacs_grid.mycol(), 0, blacs_grid.npcol());
+  bcutils::descinit(this->desc, blacs_grid.ictxt(), nrows, ncols, bf_rows, bf_cols, m_local);
+  
+  this->m = nrows;
+  this->n = ncols;
+  this->mb = bf_rows;
+  this->nb = bf_cols;
+  this->g = blacs_grid;
+  
+  this->data = data_;
 }
 
 
