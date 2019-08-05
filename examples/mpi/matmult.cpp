@@ -27,6 +27,7 @@ int main()
   
   mpimat<float> z = linalg::matmult(false, false, 1.0f, x, y);
   
+  z.info();
   cpumat<float> z_gbl = mpihelpers::mpi2cpu(z);
   if (g.rank0())
     z_gbl.print();
@@ -45,6 +46,10 @@ int main()
   mpihelpers::mpi2cpu_noalloc(z, z_gbl);
   if (g.rank0())
     z_gbl.print();
+  
+  x.free();
+  y.free();
+  z.free();
   
   g.exit();
   g.finalize();

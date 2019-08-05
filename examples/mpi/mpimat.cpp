@@ -20,6 +20,8 @@ int main()
   if (g.rank0())
     x_gbl.print();
   
+  x.free();
+  
   g.exit();
   g.finalize();
   
