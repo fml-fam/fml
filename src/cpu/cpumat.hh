@@ -39,7 +39,7 @@ template <typename REAL>
 cpumat<REAL>::cpumat(len_t nrows, len_t ncols)
 {
   size_t len = nrows * ncols * sizeof(REAL);
-  this->data = (REAL*) malloc(len);
+  this->data = (REAL*) std::malloc(len);
   if (this->data == NULL)
     throw std::bad_alloc();
   
@@ -74,7 +74,7 @@ void cpumat<REAL>::free()
 {
   if (this->data)
   {
-    free(this->data);
+    std::free(this->data);
     this->data = NULL;
   }
 }
