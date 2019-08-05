@@ -21,6 +21,7 @@ class cpumat : public matrix<REAL>
     void free();
     
     void print(uint8_t ndigits=4);
+    void info();
     
     void fill_zero();
     void fill_eye();
@@ -105,6 +106,17 @@ void cpumat<REAL>::print(uint8_t ndigits)
   }
   
   putchar('\n');
+}
+
+
+
+template <typename REAL>
+void cpumat<REAL>::info()
+{
+  printf("# cpumat");
+  printf(" %dx%d", this->m, this->n);
+  printf(" %s", typeid(REAL).name());
+  printf("\n");
 }
 
 
