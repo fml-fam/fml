@@ -19,6 +19,7 @@ class cpumat : public matrix<REAL>
     cpumat(const cpumat &x);
     
     void free();
+    void resize(len_t nrows, len_t ncols);
     
     void print(uint8_t ndigits=4);
     void info();
@@ -77,6 +78,23 @@ void cpumat<REAL>::free()
     std::free(this->data);
     this->data = NULL;
   }
+}
+
+
+
+template <typename REAL>
+void cpumat<REAL>::resize(len_t nrows, len_t ncols)
+{
+  size_t len = nrows * ncols * sizeof(REAL);
+  
+  void *realloc_ptr = realloc(this->data, len);
+  if (realloc_ptr == NULL)
+    throw std::bad_alloc();
+  
+  this->data = (REAL*) realloc_ptr;
+  
+  this->m = nrows;
+  this->n = ncols;
 }
 
 
