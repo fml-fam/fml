@@ -25,6 +25,7 @@ class mpimat : public matrix<REAL>
     void free();
     void resize(len_t nrows, len_t ncols);
     void set(REAL *data_, grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols);
+    mpimat<REAL> dupe();
     
     void print(uint8_t ndigits=4);
     void info();
@@ -167,6 +168,19 @@ void mpimat<REAL>::set(REAL *data_, grid &blacs_grid, len_t nrows, len_t ncols, 
   this->g = blacs_grid;
   
   this->data = data_;
+}
+
+
+
+template <typename REAL>
+mpimat<REAL> mpimat<REAL>::dupe()
+{
+  mpimat<REAL> dup(this->g, this->m, this->n, this->mb, this->nb);
+  
+  size_t len = this->m_local * this->n_local * sizeof(REAL);
+  memcpy(dup.data_ptr(), this->data, len);
+  
+  return dup;
 }
 
 
