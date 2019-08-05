@@ -25,6 +25,7 @@ class mpimat : public matrix<REAL>
     void free();
     
     void print(uint8_t ndigits=4);
+    void info();
     
     void fill_zero();
     void fill_eye();
@@ -176,6 +177,18 @@ void mpimat<REAL>::print(uint8_t ndigits)
   }
   
   this->g.printf(0, 0, "\n");
+}
+
+
+
+template <typename REAL>
+void mpimat<REAL>::info()
+{
+  printf("# mpimat");
+  printf(" %dx%d", this->m, this->n);
+  printf(" on %dx%d grid", this->g.nprow(), this->g.npcol());
+  printf(" %s", typeid(REAL).name());
+  printf("\n");
 }
 
 
