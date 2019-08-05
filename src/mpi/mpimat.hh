@@ -64,7 +64,7 @@ mpimat<REAL>::mpimat(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, in
   bcutils::descinit(this->desc, blacs_grid.ictxt(), nrows, ncols, bf_rows, bf_cols, m_local);
   
   size_t len = m_local * n_local * sizeof(REAL);
-  this->data = (REAL*) malloc(len);
+  this->data = (REAL*) std::malloc(len);
   if (this->data == NULL)
     throw std::bad_alloc();
   
@@ -123,7 +123,7 @@ void mpimat<REAL>::free()
 {
   if (this->data)
   {
-    free(this->data);
+    std::free(this->data);
     this->data = NULL;
   }
 }
