@@ -29,6 +29,26 @@ namespace scalapack
   
   
   
+  void syrk(const char uplo, const char trans, const int n, const int k, 
+    const float alpha, const float *a, const int *desca,
+    const float beta, float *restrict c, const int *descc)
+  {
+    int ij = 1;
+    pssyrk_(&uplo, &trans, &n, &k, &alpha, a, &ij, &ij, desca, &beta, c, &ij,
+      &ij, descc);
+  }
+  
+  void syrk(const char uplo, const char trans, const int n, const int k, 
+    const double alpha, const double *a, const int *desca,
+    const double beta, double *restrict c, const int *descc)
+  {
+    int ij = 1;
+    pdsyrk_(&uplo, &trans, &n, &k, &alpha, a, &ij, &ij, desca, &beta, c, &ij,
+      &ij, descc);
+  }
+  
+  
+  
   void getrf(const int m, const int n, float *a, int *desca, int *ipiv, int *info)
   {
     int ij = 1;
