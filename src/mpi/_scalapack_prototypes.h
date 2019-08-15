@@ -21,6 +21,18 @@ extern void pdgemm_(const char *transa, const char *transb, const int *m, const 
 
 
 
+extern void pssyrk_(const char *uplo, const char *trans, const int *n,
+  const int *k, const float *alpha, const float *a, const int *ia,
+  const int *ja, const int *desca, const float *beta, float *c, const int *ic,
+  const int *jc, const int *descc);
+  
+extern void pdsyrk_(const char *uplo, const char *trans, const int *n,
+  const int *k, const double *alpha, const double *a, const int *ia,
+  const int *ja, const int *desca, const double *beta, double *c, const int *ic,
+  const int *jc, const int *descc);
+
+
+
 extern void psgetrf_(const int *m, const int *n, float *a, const int *ia,
   const int *ja, const int *desca, int *ipiv, int *info);
 
