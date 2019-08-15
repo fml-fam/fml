@@ -6,8 +6,6 @@
 #define restrict __restrict__
 #endif
 
-
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -44,6 +42,7 @@ extern void sgetrf_(const int *const restrict m, const int *const restrict n,
 extern void dgetrf_(const int *const restrict m, const int *const restrict n,
   double *const restrict a, const int *const lda,
   int *const restrict ipiv, int *const restrict info);
+
 
 
 #ifdef __cplusplus
