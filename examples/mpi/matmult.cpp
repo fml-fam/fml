@@ -47,10 +47,6 @@ int main()
   if (g.rank0())
     z_gbl.print();
   
-  x.free();
-  y.free();
-  z.free();
-  
   g.exit();
   g.finalize();
   
