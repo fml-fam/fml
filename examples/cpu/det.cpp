@@ -43,6 +43,5 @@ int main()
   linalg::det(x, sign, modulus);
   print_det(sign, modulus);
   
-  x.free();
   return 0;
 }

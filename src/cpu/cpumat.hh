@@ -17,8 +17,8 @@ class cpumat : public matrix<REAL>
     cpumat(len_t nrows, len_t ncols);
     cpumat(REAL *data, len_t nrows, len_t ncols);
     cpumat(const cpumat &x);
+    ~cpumat();
     
-    void free();
     void resize(len_t nrows, len_t ncols);
     void set(REAL *data, len_t nrows, len_t ncols);
     cpumat<REAL> dupe();
@@ -73,7 +73,7 @@ cpumat<REAL>::cpumat(const cpumat<REAL> &x)
 
 
 template <typename REAL>
-void cpumat<REAL>::free()
+cpumat<REAL>::~cpumat()
 {
   if (this->data)
   {

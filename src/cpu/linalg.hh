@@ -85,8 +85,6 @@ namespace linalg
     
     if (info != 0)
     {
-      p.free();
-      
       if (info > 0)
       {
         sign = 1;
@@ -108,8 +106,6 @@ namespace linalg
       if (ipiv[i] != (i + 1))
         sgn = -sgn;
     }
-    
-    p.free();
     
     const REAL *a = x.data_ptr();
     
