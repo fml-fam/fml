@@ -12,7 +12,7 @@
 namespace linalg
 {
   template <typename REAL>
-  mpimat<REAL> matmult(const bool transx, const bool transy, const REAL alpha, mpimat<REAL> &x, mpimat<REAL> &y)
+  mpimat<REAL> matmult(const bool transx, const bool transy, const REAL alpha, const mpimat<REAL> &x, const mpimat<REAL> &y)
   {
     int m, n, k;
     
@@ -34,7 +34,7 @@ namespace linalg
   
   
   template <typename REAL>
-  void matmult_noalloc(const bool transx, const bool transy, const REAL alpha, mpimat<REAL> &x, mpimat<REAL> &y, mpimat<REAL> ret)
+  void matmult_noalloc(const bool transx, const bool transy, const REAL alpha, const mpimat<REAL> &x, const mpimat<REAL> &y, mpimat<REAL> &ret)
   {
     if (x.ncols() != ret.nrows() || ret.ncols() != y.nrows())
       throw std::runtime_error("non-conformable arguments");
