@@ -17,14 +17,14 @@ template <typename REAL>
 class mpimat : public matrix<REAL>
 {
   public:
-    mpimat(){}
+    mpimat();
     mpimat(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows=16, int bf_cols=16);
-    mpimat(REAL *data_, grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols);
+    mpimat(REAL *data_, grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct=false);
     mpimat(const mpimat &x);
     ~mpimat();
     
     void resize(len_t nrows, len_t ncols);
-    void set(REAL *data_, grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols);
+    void set(REAL *data_, grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct=false);
     mpimat<REAL> dupe();
     
     void print(uint8_t ndigits=4);
@@ -54,8 +54,20 @@ class mpimat : public matrix<REAL>
   
     
   private:
+    bool free_data;
+    bool should_free() const {return free_data;};
     void printval(uint8_t ndigits, len_t i, len_t j);
 };
+
+
+
+template <typename REAL>
+mpimat<REAL>::mpimat()
+{
+  this->data = NULL;
+  
+  this->free_data = true;
+}
 
 
 
@@ -76,12 +88,14 @@ mpimat<REAL>::mpimat(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, in
   this->mb = bf_rows;
   this->nb = bf_cols;
   this->g = blacs_grid;
+  
+  this->free_data = true;
 }
 
 
 
 template <typename REAL>
-mpimat<REAL>::mpimat(REAL *data_, grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols)
+mpimat<REAL>::mpimat(REAL *data_, grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct)
 {
   m_local = bcutils::numroc(nrows, bf_rows, blacs_grid.myrow(), 0, blacs_grid.nprow());
   n_local = bcutils::numroc(ncols, bf_cols, blacs_grid.mycol(), 0, blacs_grid.npcol());
@@ -94,6 +108,8 @@ mpimat<REAL>::mpimat(REAL *data_, grid &blacs_grid, len_t nrows, len_t ncols, in
   this->g = blacs_grid;
   
   this->data = data_;
+  
+  this->free_data = free_on_destruct;
 }
 
 
@@ -117,6 +133,8 @@ mpimat<REAL>::mpimat(const mpimat<REAL> &x)
   this->g = g;
   
   this->data = x.data_ptr();
+  
+  this->free_data = x.should_free();
 }
 
 
@@ -124,7 +142,7 @@ mpimat<REAL>::mpimat(const mpimat<REAL> &x)
 template <typename REAL>
 mpimat<REAL>::~mpimat()
 {
-  if (this->data)
+  if (free_data && this->data)
   {
     std::free(this->data);
     this->data = NULL;
@@ -155,7 +173,7 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols)
 
 
 template <typename REAL>
-void mpimat<REAL>::set(REAL *data_, grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols)
+void mpimat<REAL>::set(REAL *data_, grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct)
 {
   m_local = bcutils::numroc(nrows, bf_rows, blacs_grid.myrow(), 0, blacs_grid.nprow());
   n_local = bcutils::numroc(ncols, bf_cols, blacs_grid.mycol(), 0, blacs_grid.npcol());
@@ -168,6 +186,8 @@ void mpimat<REAL>::set(REAL *data_, grid &blacs_grid, len_t nrows, len_t ncols, 
   this->g = blacs_grid;
   
   this->data = data_;
+  
+  this->free_data = free_on_destruct;
 }
 
 
