@@ -13,14 +13,14 @@ template <typename REAL>
 class cpumat : public matrix<REAL>
 {
   public:
-    cpumat(){};
+    cpumat();
     cpumat(len_t nrows, len_t ncols);
-    cpumat(REAL *data, len_t nrows, len_t ncols);
+    cpumat(REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
     cpumat(const cpumat &x);
     ~cpumat();
     
     void resize(len_t nrows, len_t ncols);
-    void set(REAL *data, len_t nrows, len_t ncols);
+    void set(REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
     cpumat<REAL> dupe();
     
     void print(uint8_t ndigits=4);
@@ -33,8 +33,20 @@ class cpumat : public matrix<REAL>
     void scale(const REAL s);
   
   private:
+    bool free_data;
+    bool should_free() const {return free_data;};
     void printval(uint8_t ndigits, len_t i, len_t j);
 };
+
+
+
+template <typename REAL>
+cpumat<REAL>::cpumat()
+{
+  this->data = NULL;
+  
+  this->free_data = true;
+}
 
 
 
@@ -48,16 +60,20 @@ cpumat<REAL>::cpumat(len_t nrows, len_t ncols)
   
   this->m = nrows;
   this->n = ncols;
+  
+  this->free_data = true;
 }
 
 
 
 template <typename REAL>
-cpumat<REAL>::cpumat(REAL *data_, len_t nrows, len_t ncols)
+cpumat<REAL>::cpumat(REAL *data_, len_t nrows, len_t ncols, bool free_on_destruct)
 {
   this->m = nrows;
   this->n = ncols;
   this->data = data_;
+  
+  this->free_data = free_on_destruct;
 }
 
 
@@ -68,6 +84,8 @@ cpumat<REAL>::cpumat(const cpumat<REAL> &x)
   this->m = x.nrows();
   this->n = x.ncols();
   this->data = x.data_ptr();
+  
+  this->free_data = x.should_free();
 }
 
 
@@ -75,7 +93,7 @@ cpumat<REAL>::cpumat(const cpumat<REAL> &x)
 template <typename REAL>
 cpumat<REAL>::~cpumat()
 {
-  if (this->data)
+  if (this->free_data && this->data)
   {
     std::free(this->data);
     this->data = NULL;
@@ -102,11 +120,13 @@ void cpumat<REAL>::resize(len_t nrows, len_t ncols)
 
 
 template <typename REAL>
-void cpumat<REAL>::set(REAL *data, len_t nrows, len_t ncols)
+void cpumat<REAL>::set(REAL *data, len_t nrows, len_t ncols, bool free_on_destruct)
 {
   this->m = nrows;
   this->n = ncols;
   this->data = data;
+  
+  this->free_data = free_on_destruct;
 }
 
 
