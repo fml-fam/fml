@@ -29,6 +29,7 @@ class cpumat : public matrix<REAL>
     void fill_zero();
     void fill_eye();
     void fill_runif(int seed, REAL min=0, REAL max=1);
+    void fill_rnorm(int seed, REAL mean=0, REAL sd=1);
     
     void scale(const REAL s);
   
@@ -212,6 +213,22 @@ void cpumat<REAL>::fill_runif(int seed, REAL min, REAL max)
     for (len_t i=0; i<this->m; i++)
     {
       static std::uniform_real_distribution<REAL> dist(min, max);
+      this->data[i + this->m*j] = dist(mt);
+    }
+  }
+}
+
+
+
+template <typename REAL>
+void cpumat<REAL>::fill_rnorm(int seed, REAL mean, REAL sd)
+{
+  std::mt19937 mt(seed);
+  for (len_t j=0; j<this->n; j++)
+  {
+    for (len_t i=0; i<this->m; i++)
+    {
+      static std::normal_distribution<REAL> dist(mean, sd);
       this->data[i + this->m*j] = dist(mt);
     }
   }

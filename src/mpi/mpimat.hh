@@ -33,6 +33,7 @@ class mpimat : public matrix<REAL>
     void fill_zero();
     void fill_eye();
     void fill_runif(int seed, REAL min=0, REAL max=1);
+    void fill_rnorm(int seed, REAL mean=0, REAL sd=1);
     
     void scale(const REAL s);
     
@@ -299,6 +300,14 @@ void mpimat<REAL>::fill_eye()
 
 template <typename REAL>
 void mpimat<REAL>::fill_runif(int seed, REAL min, REAL max)
+{
+  
+}
+
+
+
+template <typename REAL>
+void mpimat<REAL>::fill_rnorm(int seed, REAL mean, REAL sd)
 {
   
 }
