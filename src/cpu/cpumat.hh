@@ -1,5 +1,5 @@
-#ifndef FML_CPUMAT_H
-#define FML_CPUMAT_H
+#ifndef FML_CPU_CPUMAT_H
+#define FML_CPU_CPUMAT_H
 
 
 #include <cstdlib>

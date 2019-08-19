@@ -1,5 +1,5 @@
-#ifndef FML_MPIMAT_H
-#define FML_MPIMAT_H
+#ifndef FML_MPI_MPIMAT_H
+#define FML_MPI_MPIMAT_H
 
 
 #include <cstdlib>

@@ -1,5 +1,5 @@
-#ifndef FML_MPIHELPERS_H
-#define FML_MPIHELPERS_H
+#ifndef FML_MPI_MPIHELPERS_H
+#define FML_MPI_MPIHELPERS_H
 
 
 #include <stdexcept>

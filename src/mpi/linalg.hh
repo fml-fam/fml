@@ -1,5 +1,5 @@
-#ifndef FML_MPIMAT_LINALG_H
-#define FML_MPIMAT_LINALG_H
+#ifndef FML_MPI_LINALG_H
+#define FML_MPI_LINALG_H
 
 
 #include <stdexcept>

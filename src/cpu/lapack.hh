@@ -1,5 +1,5 @@
-#ifndef FML_CPUMAT_LAPACK_H
-#define FML_CPUMAT_LAPACK_H
+#ifndef FML_CPU_LAPACK_H
+#define FML_CPU_LAPACK_H
 
 
 #include "_lapack_prototypes.h"

@@ -1,5 +1,5 @@
-#ifndef FML_NVML_H
-#define FML_NVML_H
+#ifndef FML_GPU_NVML_H
+#define FML_GPU_NVML_H
 
 
 #include <climits>

@@ -1,5 +1,5 @@
-#ifndef FML_BCUTILS_H
-#define FML_BCUTILS_H
+#ifndef FML_MPI_BCUTILS_H
+#define FML_MPI_BCUTILS_H
 
 
 #include <cmath>

@@ -1,5 +1,5 @@
-#ifndef FML_GPUMAT_CUSOLVER_H
-#define FML_GPUMAT_CUSOLVER_H
+#ifndef FML_GPU_CUSOLVER_H
+#define FML_GPU_CUSOLVER_H
 
 
 #include <cusolverDn.h>

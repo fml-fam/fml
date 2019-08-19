@@ -1,5 +1,5 @@
-#ifndef FML_COMM_H
-#define FML_COMM_H
+#ifndef FML_PAR_COMM_H
+#define FML_PAR_COMM_H
 
 
 #define OMPI_SKIP_MPICXX 1
