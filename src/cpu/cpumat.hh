@@ -283,7 +283,7 @@ void cpumat<REAL>::scale(const REAL s)
 // -----------------------------------------------------------------------------
 
 template <>
-void cpumat<int>::printval(const int val, uint8_t ndigits)
+inline void cpumat<int>::printval(const int val, uint8_t ndigits)
 {
   (void)ndigits;
   printf("%d ", val);
