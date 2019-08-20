@@ -229,7 +229,7 @@ void cpumat<REAL>::fill_eye()
 {
   this->fill_zero();
   for (len_t i=0; i<this->m && i<this->n; i++)
-    this->data[i + this->m*i] = 1;
+    this->data[i + this->m*i] = (REAL) 1;
 }
 
 
