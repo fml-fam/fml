@@ -37,7 +37,7 @@ class cpumat : public matrix<REAL>
   private:
     bool free_data;
     bool should_free() const {return free_data;};
-    void printval(uint8_t ndigits, len_t i, len_t j);
+    void printval(const REAL val, uint8_t ndigits);
 };
 
 
@@ -154,18 +154,7 @@ cpumat<REAL> cpumat<REAL>::dupe()
 
 
 
-template <>
-void cpumat<int>::printval(uint8_t ndigits, len_t i, len_t j)
-{
-  (void)ndigits;
-  printf("%d ", this->data[i + this->m*j]);
-}
-
-template <typename REAL>
-void cpumat<REAL>::printval(uint8_t ndigits, len_t i, len_t j)
-{
-  printf("%.*f ", ndigits, this->data[i + this->m*j]);
-}
+// printers
 
 template <typename REAL>
 void cpumat<REAL>::print(uint8_t ndigits)
@@ -173,7 +162,7 @@ void cpumat<REAL>::print(uint8_t ndigits)
   for (len_t i=0; i<this->m; i++)
   {
     for (len_t j=0; j<this->n; j++)
-      this->printval(ndigits, i, j);
+      printval(this->data[i + this->m*j], ndigits);
     
     putchar('\n');
   }
@@ -277,6 +266,26 @@ void cpumat<REAL>::scale(const REAL s)
       this->data[i + this->m*j] *= s;
   }
 }
+
+
+
+// -----------------------------------------------------------------------------
+// private
+// -----------------------------------------------------------------------------
+
+template <>
+void cpumat<int>::printval(const int val, uint8_t ndigits)
+{
+  (void)ndigits;
+  printf("%d ", val);
+}
+
+template <typename REAL>
+void cpumat<REAL>::printval(const REAL val, uint8_t ndigits)
+{
+  printf("%.*f ", ndigits, val);
+}
+
 
 
 #endif
