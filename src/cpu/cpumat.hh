@@ -117,6 +117,13 @@ cpumat<REAL>::~cpumat()
 template <typename REAL>
 void cpumat<REAL>::resize(len_t nrows, len_t ncols)
 {
+  if ( (this->m == nrows || this->n == nrows) && (this->m == ncols || this->n == ncols) )
+  {
+    this->m = nrows;
+    this->n = ncols;
+    return;
+  }
+  
   size_t len = nrows * ncols * sizeof(REAL);
   
   void *realloc_ptr = realloc(this->data, len);
