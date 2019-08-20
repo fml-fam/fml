@@ -69,4 +69,3 @@ The basic philosophy of fml is:
 * Follow general C++ conventions by default (like RAII and exceptions), but give the ability to break these for the performance-minded.
 * Other than object creation, changing a code from one class to another should be very simple, ideally with no changes to the source (the internals will simply **Do The Right Thing (tm)**).
 * Use a permissive open source license.
-* No Boost, under any circumstances whatsoever.
