@@ -27,6 +27,8 @@ class cpumat : public matrix<REAL>
     void info();
     
     void fill_zero();
+    void fill_one();
+    void fill_val(const REAL v);
     void fill_eye();
     void fill_runif(int seed, REAL min=0, REAL max=1);
     void fill_rnorm(int seed, REAL mean=0, REAL sd=1);
@@ -199,6 +201,27 @@ void cpumat<REAL>::fill_zero()
 {
   size_t len = (this->m) * (this->n) * sizeof(REAL);
   memset(this->data, 0, len);
+}
+
+
+
+template <typename REAL>
+void cpumat<REAL>::fill_one()
+{
+  this->fill_val((REAL) 1);
+}
+
+
+
+template <typename REAL>
+void cpumat<REAL>::fill_val(const REAL v)
+{
+  #pragma omp parallel for simd
+  for (len_t j=0; j<this->n; j++)
+  {
+    for (len_t i=0; i<this->m; i++)
+      this->data[i + this->m*j] = v;
+  }
 }
 
 
