@@ -8,6 +8,7 @@
 #include <cstdarg>
 #include <cstdio>
 #include <stdexcept>
+#include <vector>
 
 
 class comm
@@ -43,6 +44,7 @@ class comm
     void bcast(int n, double *data, int root);
     
     bool rank0();
+    std::vector<int> jid(int n);
     
     MPI_Comm get_comm() const {return _comm;};
     int rank() const {return _rank;};
@@ -231,6 +233,45 @@ bool comm::rank0()
 {
   return (_rank == 0);
 }
+
+
+
+std::vector<int> comm::jid(int n)
+{
+  std::vector<int> ret;
+  
+  if (n > _size)
+  {
+    int local = n / _size;
+    int rem = n % _size;
+    
+    if (rem == 0 || (_rank < (_size - rem)))
+    {
+      ret.resize(local);
+      for (int i=0; i<local; i++)
+        ret[i] = i + (_rank*local);
+    }
+    else
+    {
+      ret.resize(local+1);
+      for (int i=0; i<=local; i++)
+        ret[i] = i + (_rank*(local+1)) - (_size - rem);
+    }
+  }
+  else
+  {
+    if (n > _rank)
+    {
+      ret.resize(1);
+      ret[0] = _rank;
+    }
+    else
+      ret.resize(0);
+  }
+  
+  return ret;
+}
+
 
 
 
