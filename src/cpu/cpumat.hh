@@ -37,6 +37,7 @@ class cpumat : public matrix<REAL>
   private:
     bool free_data;
     bool should_free() const {return free_data;};
+    void free();
     void printval(const REAL val, uint8_t ndigits);
 };
 
@@ -103,11 +104,7 @@ cpumat<REAL>::cpumat(const cpumat<REAL> &x)
 template <typename REAL>
 cpumat<REAL>::~cpumat()
 {
-  if (this->free_data && this->data)
-  {
-    std::free(this->data);
-    this->data = NULL;
-  }
+  this->free();
 }
 
 
@@ -281,6 +278,18 @@ void cpumat<REAL>::scale(const REAL s)
 // -----------------------------------------------------------------------------
 // private
 // -----------------------------------------------------------------------------
+
+template <typename REAL>
+void cpumat<REAL>::free()
+{
+  if (this->free_data && this->data)
+  {
+    std::free(this->data);
+    this->data = NULL;
+  }
+}
+
+
 
 template <>
 inline void cpumat<int>::printval(const int val, uint8_t ndigits)
