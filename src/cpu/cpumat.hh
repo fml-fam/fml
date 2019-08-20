@@ -248,9 +248,9 @@ void cpumat<REAL>::fill_rnorm(int seed, REAL mean, REAL sd)
 template <typename REAL>
 void cpumat<REAL>::scale(const REAL s)
 {
-  for (len_t j=0; j<this->m; j++)
+  for (len_t j=0; j<this->n; j++)
   {
-    for (len_t i=0; i<this->n; i++)
+    for (len_t i=0; i<this->m; i++)
       this->data[i + this->m*j] *= s;
   }
 }
