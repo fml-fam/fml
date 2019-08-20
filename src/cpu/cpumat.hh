@@ -30,7 +30,6 @@ class cpumat : public matrix<REAL>
     void fill_eye();
     void fill_runif(int seed, REAL min=0, REAL max=1);
     void fill_rnorm(int seed, REAL mean=0, REAL sd=1);
-    
     void scale(const REAL s);
   
   private:
@@ -40,6 +39,12 @@ class cpumat : public matrix<REAL>
 };
 
 
+
+// -----------------------------------------------------------------------------
+// public
+// -----------------------------------------------------------------------------
+
+// constructors/destructor
 
 template <typename REAL>
 cpumat<REAL>::cpumat()
@@ -102,6 +107,8 @@ cpumat<REAL>::~cpumat()
 }
 
 
+
+// memory management
 
 template <typename REAL>
 void cpumat<REAL>::resize(len_t nrows, len_t ncols)
@@ -184,6 +191,8 @@ void cpumat<REAL>::info()
 }
 
 
+
+// fillers
 
 template <typename REAL>
 void cpumat<REAL>::fill_zero()
