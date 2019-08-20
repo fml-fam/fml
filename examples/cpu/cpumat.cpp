@@ -1,5 +1,6 @@
 #include <cpu/cpumat.hh>
 
+
 int main()
 {
   cpumat<float> x = cpumat<float>(5, 5);

@@ -2,6 +2,7 @@
 #include <mpi/mpimat.hh>
 #include <mpi/mpihelpers.hh>
 
+
 int main()
 {
   grid g = grid(PROC_GRID_SQUARE);

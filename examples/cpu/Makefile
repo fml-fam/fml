@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -I../../src
+CXXFLAGS = -I../../src -O2
 LDFLAGS = -fopenmp -llapack -lblas
 
 WARNFLAGS = -Wall -pedantic -Wextra
@@ -8,7 +8,7 @@ WARNFLAGS = -Wall -pedantic -Wextra
 all: clean cpumat matmult det
 
 cpumat:
-	$(CXX) $(CXXFLAGS) $(WARNFLAGS) cpumat.cpp -o cpumat
+	$(CXX) $(CXXFLAGS) $(WARNFLAGS) cpumat.cpp -o cpumat $(LDFLAGS)
 	
 matmult:
 	$(CXX) $(CXXFLAGS) $(WARNFLAGS) matmult.cpp -o matmult $(LDFLAGS)
