@@ -51,6 +51,8 @@ class cpumat : public matrix<REAL>
 template <typename REAL>
 cpumat<REAL>::cpumat()
 {
+  this->m = 0;
+  this->n = 0;
   this->data = NULL;
   
   this->free_data = true;
