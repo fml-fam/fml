@@ -1,7 +1,7 @@
 # fml
 
 * **Version:** 0.1-0
-* **License:** [BSD 2-Clause](http://opensource.org/licenses/BSD-2-Clause)
+* **License:** [BSD 2-Clause](http://opensource.org/licenses/BSL-1.0)
 * **Project home**: https://github.com/wrathematics/fml
 * **Bug reports**: https://github.com/wrathematics/fml/issues
 * **Author:** Drew Schmidt
