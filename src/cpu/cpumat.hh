@@ -153,12 +153,12 @@ void cpumat<REAL>::set(REAL *data, len_t nrows, len_t ncols, bool free_on_destru
 template <typename REAL>
 cpumat<REAL> cpumat<REAL>::dupe()
 {
-  cpumat<REAL> dup(this->m, this->n);
+  cpumat<REAL> cpy(this->m, this->n);
   
   size_t len = this->m * this->n * sizeof(REAL);
-  memcpy(dup.data_ptr(), this->data, len);
+  memcpy(cpy.data_ptr(), this->data, len);
   
-  return dup;
+  return cpy;
 }
 
 
