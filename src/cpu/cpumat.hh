@@ -138,6 +138,8 @@ void cpumat<REAL>::resize(len_t nrows, len_t ncols)
 template <typename REAL>
 void cpumat<REAL>::set(REAL *data, len_t nrows, len_t ncols, bool free_on_destruct)
 {
+  this->free();
+  
   this->m = nrows;
   this->n = ncols;
   this->data = data;
