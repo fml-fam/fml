@@ -38,6 +38,10 @@ class comm
     void reduce(int n, float *data, int root=0);
     void reduce(int n, double *data, int root=0);
     
+    void bcast(int n, int *data, int root);
+    void bcast(int n, float *data, int root);
+    void bcast(int n, double *data, int root);
+    
     bool rank0();
     
     MPI_Comm get_comm() const {return _comm;};
@@ -198,6 +202,26 @@ void comm::reduce(int n, float *data, int root)
 void comm::reduce(int n, double *data, int root)
 {
   int ret = MPI_Reduce(MPI_IN_PLACE, data, n, MPI_DOUBLE, MPI_SUM, root, _comm);
+  check_ret(ret);
+}
+
+
+
+void comm::bcast(int n, int *data, int root)
+{
+  int ret = MPI_Bcast(data, n, MPI_INT, root, _comm);
+  check_ret(ret);
+}
+
+void comm::bcast(int n, float *data, int root)
+{
+  int ret = MPI_Bcast(data, n, MPI_FLOAT, root, _comm);
+  check_ret(ret);
+}
+
+void comm::bcast(int n, double *data, int root)
+{
+  int ret = MPI_Bcast(data, n, MPI_DOUBLE, root, _comm);
   check_ret(ret);
 }
 
