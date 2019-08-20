@@ -17,9 +17,9 @@ class comm
     comm(const comm &c);
     
     void finalize();
+    
     void printf(int rank, const char *fmt, ...);
     void info();
-    bool rank0();
     
     void barrier();
     
@@ -37,6 +37,8 @@ class comm
     void reduce(int n, int *data, int root=0);
     void reduce(int n, float *data, int root=0);
     void reduce(int n, double *data, int root=0);
+    
+    bool rank0();
     
     MPI_Comm get_comm() const {return _comm;};
     int rank() const {return _rank;};
@@ -109,13 +111,6 @@ void comm::printf(int rank, const char *fmt, ...)
 void comm::info()
 {
   printf(0, "## MPI on %d ranks\n\n", _size);
-}
-
-
-
-bool comm::rank0()
-{
-  return (_rank == 0);
 }
 
 
@@ -204,6 +199,13 @@ void comm::reduce(int n, double *data, int root)
 {
   int ret = MPI_Reduce(MPI_IN_PLACE, data, n, MPI_DOUBLE, MPI_SUM, root, _comm);
   check_ret(ret);
+}
+
+
+
+bool comm::rank0()
+{
+  return (_rank == 0);
 }
 
 
