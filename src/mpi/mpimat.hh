@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <random>
+#include <stdexcept>
 
 #include "grid.hh"
 #include "bcutils.hh"
@@ -36,8 +37,12 @@ class mpimat : public matrix<REAL>
     void fill_eye();
     void fill_runif(int seed, REAL min=0, REAL max=1);
     void fill_rnorm(int seed, REAL mean=0, REAL sd=1);
-    
     void scale(const REAL s);
+    
+    REAL operator()(len_t i);
+    const REAL operator()(len_t i) const;
+    REAL operator()(len_t i, len_t j);
+    const REAL operator()(len_t i, len_t j) const;
     
     len_local_t nrows_local() const {return m_local;};
     len_local_t ncols_local() const {return n_local;};
@@ -341,11 +346,63 @@ void mpimat<REAL>::fill_rnorm(int seed, REAL mean, REAL sd)
 template <typename REAL>
 void mpimat<REAL>::scale(const REAL s)
 {
-  for (len_local_t j=0; j<this->m_local; j++)
+  for (len_local_t j=0; j<this->n_local; j++)
   {
-    for (len_local_t i=0; i<this->n_local; i++)
+    for (len_local_t i=0; i<this->m_local; i++)
       this->data[i + this->m_local*j] *= s;
   }
+}
+
+
+
+// operators
+
+template <typename REAL>
+REAL mpimat<REAL>::operator()(len_t i)
+{
+  if (i < 0 || i >= (this->m * this->n))
+    throw std::runtime_error("index out of bounds");
+  
+  int gi = i % this->m;
+  int gj = i / this->m;
+  
+  REAL ret = this->get_val_from_global_index(gi, gj);
+  return ret;
+}
+
+template <typename REAL>
+const REAL mpimat<REAL>::operator()(len_t i) const
+{
+  if (i < 0 || i >= (this->m * this->n))
+    throw std::runtime_error("index out of bounds");
+  
+  int gi = i % this->m;
+  int gj = i / this->m;
+  
+  REAL ret = this->get_val_from_global_index(gi, gj);
+  return ret;
+}
+
+
+
+template <typename REAL>
+REAL mpimat<REAL>::operator()(len_t i, len_t j)
+{
+  if (i < 0 || i >= this->m || j < 0 || j >= this->n)
+    throw std::runtime_error("index out of bounds");
+  
+  REAL ret = this->get_val_from_global_index(i, j);
+  return ret;
+}
+
+template <typename REAL>
+const REAL mpimat<REAL>::operator()(len_t i, len_t j) const
+{
+  if (i < 0 || i >= this->m || j < 0 || j >= this->n)
+    throw std::runtime_error("index out of bounds");
+  
+  REAL ret = this->get_val_from_global_index(i, j);
+  return ret;
 }
 
 
@@ -365,6 +422,29 @@ template <typename REAL>
 void mpimat<REAL>::printval(REAL val, uint8_t ndigits)
 {
   printf("%.*f ", ndigits, val);
+}
+
+
+
+template <typename REAL>
+REAL mpimat<REAL>::get_val_from_global_index(len_t gi, len_t gj)
+{
+  REAL ret;
+  
+  int pr = bcutils::g2p(gi, this->mb, this->g.nprow());
+  int pc = bcutils::g2p(gj, this->nb, this->g.npcol());
+  
+  int li = bcutils::g2l(gi, this->mb, this->g.nprow());
+  int lj = bcutils::g2l(gj, this->nb, this->g.npcol());
+  
+  if (pr == this->g.myrow() && pc == this->g.mycol())
+    ret = this->data[li + (this->m_local)*lj];
+  else
+    ret = (REAL) 0;
+  
+  g.reduce(1, 1, &ret, 'A', -1, -1);
+  
+  return ret;
 }
 
 
