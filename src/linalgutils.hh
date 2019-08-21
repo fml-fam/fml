@@ -4,7 +4,7 @@
 
 namespace linalgutils
 {
-  void matmult_params(const bool transx, const bool transy, const int mx, const int nx, const int my, const int ny, int *m, int *n, int *k)
+  inline void matmult_params(const bool transx, const bool transy, const int mx, const int nx, const int my, const int ny, int *m, int *n, int *k)
   {
     // m = # rows of op(x)
     // n = # cols of op(y)

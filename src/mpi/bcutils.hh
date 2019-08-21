@@ -34,7 +34,7 @@ namespace bcutils
   
   
   
-  void descinit(int *desc, const int ictxt, const int m, const int n, const int mb, const int nb, const int lld)
+  inline void descinit(int *desc, const int ictxt, const int m, const int n, const int mb, const int nb, const int lld)
   {
     desc[DESC_DTYPE] = 1;
     desc[DESC_CTXT] = ictxt;
@@ -49,7 +49,7 @@ namespace bcutils
   
   
   
-  int numroc(int n, int nb, int iproc, int isrcproc, int nprocs)
+  inline int numroc(int n, int nb, int iproc, int isrcproc, int nprocs)
   {
     int mydist = (nprocs+iproc-isrcproc) % nprocs;
     int nblocks = n / nb;
@@ -67,21 +67,21 @@ namespace bcutils
   
   
   
-  int l2g(const int i, const int nb, const int nprocs, const int myproc)
+  inline int l2g(const int i, const int nb, const int nprocs, const int myproc)
   {
     return nprocs*nb*(i/nb) + (i%nb) + ((nprocs+myproc)%nprocs)*nb;
   }
   
   
   
-  int g2l(const int gi, const int nb, const int nprocs)
+  inline int g2l(const int gi, const int nb, const int nprocs)
   {
     return nb * (gi/(nb*nprocs)) + (gi%nb);
   }
   
   
   
-  int g2p(const int gi, const int nb, const int nprocs)
+  inline int g2p(const int gi, const int nb, const int nprocs)
   {
     return (gi/nb) % nprocs;
   }

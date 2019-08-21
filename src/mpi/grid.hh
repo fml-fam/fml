@@ -66,7 +66,7 @@ class grid
 
 
 
-grid::grid()
+inline grid::grid()
 {
   _ictxt = UNINITIALIZED_GRID;
   _nprocs = _nprow = _npcol = _myrow = _mycol = -1;
@@ -74,7 +74,7 @@ grid::grid()
 
 
 
-grid::grid(int gridtype)
+inline grid::grid(int gridtype)
 {
   char order = 'R';
   
@@ -105,7 +105,7 @@ grid::grid(int gridtype)
 
 
 
-grid::grid(const grid &g)
+inline grid::grid(const grid &g)
 {
   _ictxt = g.ictxt();
   _nprocs = g.nprocs();
@@ -117,7 +117,7 @@ grid::grid(const grid &g)
 
 
 
-void grid::exit()
+inline void grid::exit()
 {
   if (_ictxt != EXITED_GRID && _ictxt != UNINITIALIZED_GRID)
     Cblacs_gridexit(_ictxt);
@@ -128,7 +128,7 @@ void grid::exit()
 
 
 
-void grid::finalize(int mpi_continue)
+inline void grid::finalize(int mpi_continue)
 {
   exit();
   Cblacs_exit(mpi_continue);
@@ -136,7 +136,7 @@ void grid::finalize(int mpi_continue)
 
 
 
-void grid::inherit_grid(int blacs_context)
+inline void grid::inherit_grid(int blacs_context)
 {
   // TODO size
   _ictxt = blacs_context;
@@ -145,7 +145,7 @@ void grid::inherit_grid(int blacs_context)
 
 
 
-void grid::printf(int row, int col, const char *fmt, ...)
+inline void grid::printf(int row, int col, const char *fmt, ...)
 {
   if (_myrow == row && _mycol == col)
   {
@@ -159,74 +159,74 @@ void grid::printf(int row, int col, const char *fmt, ...)
 
 
 
-void grid::print()
+inline void grid::print()
 {
   printf(0, 0, "## Grid %d %dx%d\n\n", _ictxt, _nprow, _npcol);
 }
 
 
 
-bool grid::rank0()
+inline bool grid::rank0()
 {
   return (_myrow==0 && _mycol==0);
 }
 
 
 
-void grid::barrier(char scope)
+inline void grid::barrier(char scope)
 {
   Cblacs_barrier(_ictxt, &scope);
 }
 
 
 
-void grid::send(int m, int n, int *x, int rdest, int cdest)
+inline void grid::send(int m, int n, int *x, int rdest, int cdest)
 {
   Cigesd2d(_ictxt, m, n, x, m, rdest, cdest);
 }
 
-void grid::send(int m, int n, float *x, int rdest, int cdest)
+inline void grid::send(int m, int n, float *x, int rdest, int cdest)
 {
   Csgesd2d(_ictxt, m, n, x, m, rdest, cdest);
 }
 
-void grid::send(int m, int n, double *x, int rdest, int cdest)
+inline void grid::send(int m, int n, double *x, int rdest, int cdest)
 {
   Cdgesd2d(_ictxt, m, n, x, m, rdest, cdest);
 }
 
 
 
-void grid::recv(int m, int n, int *x, int rsrc, int csrc)
+inline void grid::recv(int m, int n, int *x, int rsrc, int csrc)
 {
   Cigerv2d(_ictxt, m, n, x, m, rsrc, csrc);
 }
 
-void grid::recv(int m, int n, float *x, int rsrc, int csrc)
+inline void grid::recv(int m, int n, float *x, int rsrc, int csrc)
 {
   Csgerv2d(_ictxt, m, n, x, m, rsrc, csrc);
 }
 
-void grid::recv(int m, int n, double *x, int rsrc, int csrc)
+inline void grid::recv(int m, int n, double *x, int rsrc, int csrc)
 {
   Cdgerv2d(_ictxt, m, n, x, m, rsrc, csrc);
 }
 
 
 
-void grid::reduce(int m, int n, int *x, char scope, int rdest, int cdest)
+inline void grid::reduce(int m, int n, int *x, char scope, int rdest, int cdest)
 {
   char top = ' ';
   Cigsum2d(_ictxt, &scope, &top, m, n, x, m, rdest, cdest);
 }
 
-void grid::reduce(int m, int n, float *x, char scope, int rdest, int cdest)
+inline void grid::reduce(int m, int n, float *x, char scope, int rdest, int cdest)
 {
   char top = ' ';
   Csgsum2d(_ictxt, &scope, &top, m, n, x, m, rdest, cdest);
 }
 
-void grid::reduce(int m, int n, double *x, char scope, int rdest, int cdest)
+inline void grid::reduce(int m, int n, double *x, char scope, int rdest, int cdest)
 {
   char top = ' ';
   Cdgsum2d(_ictxt, &scope, &top, m, n, x, m, rdest, cdest);
@@ -234,7 +234,7 @@ void grid::reduce(int m, int n, double *x, char scope, int rdest, int cdest)
 
 
 
-void grid::squarish(int *nr, int *nc)
+inline void grid::squarish(int *nr, int *nc)
 {
   int n = (int) sqrt((double) _nprocs);
   n = (n<1)?1:n; // suppresses bogus compiler warning
