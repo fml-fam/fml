@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <random>
+#include <stdexcept>
 
 #include "../matrix.hh"
 
@@ -33,6 +34,11 @@ class cpumat : public matrix<REAL>
     void fill_runif(int seed, REAL min=0, REAL max=1);
     void fill_rnorm(int seed, REAL mean=0, REAL sd=1);
     void scale(const REAL s);
+    
+    REAL& operator()(len_t i);
+    const REAL& operator()(len_t i) const;
+    REAL& operator()(len_t i, len_t j);
+    const REAL& operator()(len_t i, len_t j) const;
   
   private:
     bool free_data;
@@ -273,6 +279,49 @@ void cpumat<REAL>::scale(const REAL s)
     for (len_t i=0; i<this->m; i++)
       this->data[i + this->m*j] *= s;
   }
+}
+
+
+
+// operators
+
+
+template <typename REAL>
+REAL& cpumat<REAL>::operator()(len_t i)
+{
+  if (i < 0 || i >= (this->m * this->n))
+    throw std::runtime_error("index out of bounds");
+  
+  return this->data[i];
+}
+
+template <typename REAL>
+const REAL& cpumat<REAL>::operator()(len_t i) const
+{
+  if (i < 0 || i >= (this->m * this->n))
+    throw std::runtime_error("index out of bounds");
+  
+  return this->data[i];
+}
+
+
+
+template <typename REAL>
+REAL& cpumat<REAL>::operator()(len_t i, len_t j)
+{
+  if (i < 0 || i >= this->m || j < 0 || j >= this->n)
+    throw std::runtime_error("index out of bounds");
+  
+  return this->data[i + (this->m)*j];
+}
+
+template <typename REAL>
+const REAL& cpumat<REAL>::operator()(len_t i, len_t j) const
+{
+  if (i < 0 || i >= this->m || j < 0 || j >= this->n)
+    throw std::runtime_error("index out of bounds");
+  
+  return this->data[i + (this->m)*j];
 }
 
 
