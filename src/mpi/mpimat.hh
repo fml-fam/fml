@@ -58,7 +58,7 @@ class mpimat : public matrix<REAL>
   private:
     bool free_data;
     bool should_free() const {return free_data;};
-    void printval(uint8_t ndigits, len_t i, len_t j);
+    void printval(REAL, uint8_t ndigits);
 };
 
 
@@ -234,15 +234,15 @@ void mpimat<REAL>::print(uint8_t ndigits)
       if (this->g.rank0())
       {
         if (pr == 0 && pc == 0)
-          d = this->data[i + this->m*j];
+          d = this->data[i + this->m_local*j];
         else
           this->g.recv(1, 1, &d, pr, pc);
         
-        this->printval(ndigits, i, j);
+        this->printval(d, ndigits);
       }
       else if (pr == this->g.myrow() && pc == this->g.mycol())
       {
-        d = this->data[i + this->m*j];
+        d = this->data[i + this->m_local*j];
         this->g.send(1, 1, &d, 0, 0);
       }
     }
@@ -352,16 +352,16 @@ void mpimat<REAL>::scale(const REAL s)
 // -----------------------------------------------------------------------------
 
 template <>
-inline void mpimat<int>::printval(uint8_t ndigits, len_t i, len_t j)
+inline void mpimat<int>::printval(int val, uint8_t ndigits)
 {
   (void)ndigits;
-  printf("%d ", this->data[i + this->m*j]);
+  printf("%d ", val);
 }
 
 template <typename REAL>
-void mpimat<REAL>::printval(uint8_t ndigits, len_t i, len_t j)
+void mpimat<REAL>::printval(REAL val, uint8_t ndigits)
 {
-  printf("%.*f ", ndigits, this->data[i + this->m*j]);
+  printf("%.*f ", ndigits, val);
 }
 
 
