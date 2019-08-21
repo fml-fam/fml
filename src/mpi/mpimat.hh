@@ -258,11 +258,14 @@ void mpimat<REAL>::print(uint8_t ndigits)
 template <typename REAL>
 void mpimat<REAL>::info()
 {
-  printf("# mpimat");
-  printf(" %dx%d", this->m, this->n);
-  printf(" on %dx%d grid", this->g.nprow(), this->g.npcol());
-  printf(" type=%s", typeid(REAL).name());
-  printf("\n");
+  if (this->g.rank0())
+  {
+    printf("# mpimat");
+    printf(" %dx%d", this->m, this->n);
+    printf(" on %dx%d grid", this->g.nprow(), this->g.npcol());
+    printf(" type=%s", typeid(REAL).name());
+    printf("\n");
+  }
 }
 
 
