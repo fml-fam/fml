@@ -75,8 +75,16 @@ class mpimat : public matrix<REAL>
 // constructors/destructor
 
 template <typename REAL>
-mpimat<REAL>::mpimat()
+mpimat<REAL>::mpimat(grid &blacs_grid)
 {
+  this->g = blacs_grid;
+  
+  this->m = 0;
+  this->n = 0;
+  this->m_local = 0;
+  this->n_local = 0;
+  this->mb = 0;
+  this->nb = 0;
   this->data = NULL;
   
   this->free_data = true;
