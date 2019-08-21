@@ -64,6 +64,7 @@ class mpimat : public matrix<REAL>
     bool free_data;
     bool should_free() const {return free_data;};
     void printval(REAL, uint8_t ndigits);
+    REAL get_val_from_global_index(len_t gi, len_t gj);
 };
 
 
