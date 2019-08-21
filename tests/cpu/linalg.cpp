@@ -1,64 +1,47 @@
 #include "../catch.hpp"
+#include "../fltcmp.hh"
 
 #include <cpu/cpumat.hh>
 #include <cpu/linalg.hh>
 
 
-static inline bool test_eq(const float x, const float y)
-{
-  const float eps = 1e-5;
-  return (std::abs(x-y) < eps);
-}
 
-
-
-TEST_CASE("matrix multiplication", "[linalg]")
+TEMPLATE_TEST_CASE("matrix multiplication", "[linalg]", float, double)
 {
   len_t n = 2;
   
-  cpumat<float> x = cpumat<float>(n, n);
-  cpumat<float> y = cpumat<float>(n, n);
-  
-  float *x_d = x.data_ptr();
-  float *y_d = y.data_ptr();
+  cpumat<TestType> x(n, n);
+  cpumat<TestType> y(n, n);
   
   for (len_t i=0; i<n*n; i++)
-    x_d[i] = (float) i+1;
+    x(i) = (TestType) i+1;
   
   for (len_t i=0; i<n*n; i++)
-    y_d[i] = (float) (n*n)-i;
+    y(i) = (TestType) (n*n)-i;
   
-  cpumat<float> z = linalg::matmult(false, false, 1.0f, x, y);
-  const float *data = z.data_ptr();
-  REQUIRE( (
-    test_eq(data[0], 13.f) &&
-    test_eq(data[1], 20.f) &&
-    test_eq(data[2], 5.f) &&
-    test_eq(data[3], 8.f)
-  ) );
+  cpumat<TestType> z = linalg::matmult(false, false, (TestType)1, x, y);
+  const TestType *data = z.data_ptr();
+  REQUIRE( fltcmp::eq(data[0], 13) );
+  REQUIRE( fltcmp::eq(data[1], 20) );
+  REQUIRE( fltcmp::eq(data[2], 5) );
+  REQUIRE( fltcmp::eq(data[3], 8) );
   
-  linalg::matmult_noalloc(true, false, 1.0f, x, y, z);
-  REQUIRE( (
-    test_eq(data[0], 10.f) &&
-    test_eq(data[1], 24.f) &&
-    test_eq(data[2], 4.f) &&
-    test_eq(data[3], 10.f)
-  ) );
+  linalg::matmult_noalloc(true, false, (TestType)1, x, y, z);
+  REQUIRE( fltcmp::eq(data[0], 10) );
+  REQUIRE( fltcmp::eq(data[1], 24) );
+  REQUIRE( fltcmp::eq(data[2], 4) );
+  REQUIRE( fltcmp::eq(data[3], 10) );
   
-  linalg::matmult_noalloc(false, true, 1.0f, x, y, z);
-  REQUIRE( (
-    test_eq(data[0], 10.f) &&
-    test_eq(data[1], 16.f) &&
-    test_eq(data[2], 6.f) &&
-    test_eq(data[3], 10.f)
-  ) );
+  linalg::matmult_noalloc(false, true, (TestType)1, x, y, z);
+  REQUIRE( fltcmp::eq(data[0], 10) );
+  REQUIRE( fltcmp::eq(data[1], 16) );
+  REQUIRE( fltcmp::eq(data[2], 6) );
+  REQUIRE( fltcmp::eq(data[3], 10) );
   
-  linalg::matmult_noalloc(true, true, 1.0f, x, y, z);
-  REQUIRE( (
-    test_eq(data[0], 8.f) &&
-    test_eq(data[1], 20.f) &&
-    test_eq(data[2], 5.f) &&
-    test_eq(data[3], 13.f)
-  ) );
+  linalg::matmult_noalloc(true, true, (TestType)1, x, y, z);
+  REQUIRE( fltcmp::eq(data[0], 8) );
+  REQUIRE( fltcmp::eq(data[1], 20) );
+  REQUIRE( fltcmp::eq(data[2], 5) );
+  REQUIRE( fltcmp::eq(data[3], 13) );
 }
  

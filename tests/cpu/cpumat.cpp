@@ -1,57 +1,76 @@
 #include "../catch.hpp"
+#include "../fltcmp.hh"
 
 #include <cpu/cpumat.hh>
 
 
-TEST_CASE("inheriting memory", "[cpumat]")
+
+TEMPLATE_TEST_CASE("basics", "[cpumat]", float, double)
+{
+  len_t m = 3;
+  len_t n = 2;
+  
+  cpumat<TestType> x(m, n);
+  REQUIRE( x.nrows() == m );
+  REQUIRE( x.ncols() == n );
+  
+  x.fill_zero();
+  REQUIRE( fltcmp::eq(x(0, 0), 0) );
+  x(0, 0) = (TestType) 3.14;
+  REQUIRE( fltcmp::eq(x(0, 0), 3.14) );
+}
+
+
+
+TEMPLATE_TEST_CASE("inheriting memory", "[cpumat]", float, double)
 {
   len_t m = 2;
   len_t n = 3;
   
-  float *data = (float*) malloc(m*n*sizeof(*data));
-  cpumat<float> x(data, m, n);
+  TestType *data = (TestType*) malloc(m*n*sizeof(*data));
+  cpumat<TestType> x(data, m, n);
   x.fill_eye();
   x.~cpumat();
-  REQUIRE( data[0] == 1.0f );
+  REQUIRE( fltcmp::eq(data[0], 1) );
   
-  cpumat<float> y;
+  cpumat<TestType> y;
   y.set(data, m, n);
   y.fill_zero();
   y.~cpumat();
-  REQUIRE( data[0] == 0.0f );
+  REQUIRE( fltcmp::eq(data[0], 0) );
   
   free(data);
 }
  
 
 
-TEST_CASE("resize", "[cpumat]")
+TEMPLATE_TEST_CASE("resize", "[cpumat]", float, double)
 {
   len_t m = 3;
   len_t n = 2;
   
-  cpumat<float> x;
+  cpumat<TestType> x;
   x.resize(m, n);
   x.fill_eye();
   
   REQUIRE( x.nrows() == m );
   REQUIRE( x.ncols() == n );
   
-  REQUIRE( (x.data_ptr())[0] == 1.0f );
-  REQUIRE( (x.data_ptr())[1] == 0.0f );
+  REQUIRE( fltcmp::eq(x(0), 1) );
+  REQUIRE( fltcmp::eq(x(1), 0) );
 }
 
 
 
-TEST_CASE("scale", "[cpumat]")
+TEMPLATE_TEST_CASE("scale", "[cpumat]", float, double)
 {
   len_t m = 3;
   len_t n = 2;
   
-  cpumat<float> x(m, n);
+  cpumat<TestType> x(m, n);
   x.fill_one();
   
-  x.scale(3.0f);
-  REQUIRE( (x.data_ptr())[0] == 3.0f );
-  REQUIRE( (x.data_ptr())[1] == 3.0f );
+  x.scale((TestType) 3);
+  REQUIRE( fltcmp::eq(x(0), 3) );
+  REQUIRE( fltcmp::eq(x(1), 3) );
 }
