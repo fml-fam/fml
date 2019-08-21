@@ -31,6 +31,8 @@ class mpimat : public matrix<REAL>
     void info();
     
     void fill_zero();
+    void fill_one();
+    void fill_val(const REAL v);
     void fill_eye();
     void fill_runif(int seed, REAL min=0, REAL max=1);
     void fill_rnorm(int seed, REAL mean=0, REAL sd=1);
@@ -274,6 +276,27 @@ void mpimat<REAL>::fill_zero()
 {
   size_t len = m_local * n_local * sizeof(REAL);
   memset(this->data, 0, len);
+}
+
+
+
+template <typename REAL>
+void mpimat<REAL>::fill_one()
+{
+  this->fill_val((REAL) 1);
+}
+
+
+
+template <typename REAL>
+void mpimat<REAL>::fill_val(const REAL v)
+{
+  #pragma omp parallel for simd
+  for (len_t j=0; j<this->n_local; j++)
+  {
+    for (len_t i=0; i<this->m_local; i++)
+      this->data[i + this->m_local*j] = v;
+  }
 }
 
 
