@@ -17,7 +17,7 @@ template <typename REAL>
 class mpimat : public matrix<REAL>
 {
   public:
-    mpimat();
+    mpimat(grid &blacs_grid);
     mpimat(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows=16, int bf_cols=16);
     mpimat(REAL *data_, grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct=false);
     mpimat(const mpimat &x);
@@ -54,7 +54,6 @@ class mpimat : public matrix<REAL>
     int nb;
     int desc[9];
     grid g;
-  
     
   private:
     bool free_data;
@@ -63,6 +62,12 @@ class mpimat : public matrix<REAL>
 };
 
 
+
+// -----------------------------------------------------------------------------
+// public
+// -----------------------------------------------------------------------------
+
+// constructors/destructor
 
 template <typename REAL>
 mpimat<REAL>::mpimat()
@@ -154,6 +159,8 @@ mpimat<REAL>::~mpimat()
 
 
 
+// memory management
+
 template <typename REAL>
 void mpimat<REAL>::resize(len_t nrows, len_t ncols)
 {
@@ -208,18 +215,7 @@ mpimat<REAL> mpimat<REAL>::dupe()
 
 
 
-template <>
-void mpimat<int>::printval(uint8_t ndigits, len_t i, len_t j)
-{
-  (void)ndigits;
-  printf("%d ", this->data[i + this->m*j]);
-}
-
-template <typename REAL>
-void mpimat<REAL>::printval(uint8_t ndigits, len_t i, len_t j)
-{
-  printf("%.*f ", ndigits, this->data[i + this->m*j]);
-}
+// printers
 
 template <typename REAL>
 void mpimat<REAL>::print(uint8_t ndigits)
@@ -270,6 +266,8 @@ void mpimat<REAL>::info()
 }
 
 
+
+// fillers
 
 template <typename REAL>
 void mpimat<REAL>::fill_zero()
@@ -345,6 +343,25 @@ void mpimat<REAL>::scale(const REAL s)
     for (len_local_t i=0; i<this->n_local; i++)
       this->data[i + this->m_local*j] *= s;
   }
+}
+
+
+
+// -----------------------------------------------------------------------------
+// private
+// -----------------------------------------------------------------------------
+
+template <>
+inline void mpimat<int>::printval(uint8_t ndigits, len_t i, len_t j)
+{
+  (void)ndigits;
+  printf("%d ", this->data[i + this->m*j]);
+}
+
+template <typename REAL>
+void mpimat<REAL>::printval(uint8_t ndigits, len_t i, len_t j)
+{
+  printf("%.*f ", ndigits, this->data[i + this->m*j]);
 }
 
 
