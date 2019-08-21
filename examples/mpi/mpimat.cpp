@@ -9,17 +9,12 @@ int main()
   g.print();
   
   mpimat<float> x = mpimat<float>(g, 5, 5, 2, 2);
-  
-  len_t m = x.nrows();
-  len_t n = x.ncols();
-  g.printf(0, 0, "%dx%d\n", m, n);
+  x.info();
   
   x.fill_eye();
   x.scale(3);
   
-  cpumat<float> x_gbl = mpihelpers::mpi2cpu(x);
-  if (g.rank0())
-    x_gbl.print();
+  x.print();
   
   g.exit();
   g.finalize();
