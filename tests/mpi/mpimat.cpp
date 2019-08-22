@@ -51,10 +51,8 @@ TEMPLATE_TEST_CASE("inheriting memory", "[mpimat]", float, double)
   
   if (g.rank0())
     testval = data[0];
-  else
-    testval = 0.f;
   
-  g.allreduce(1, 1, &testval, 'A');
+  g.bcast(1, 1, &testval, 'A', 0, 0);
   REQUIRE( fltcmp::eq(testval, 1) );
   
   mpimat<TestType> y(g);
@@ -64,10 +62,8 @@ TEMPLATE_TEST_CASE("inheriting memory", "[mpimat]", float, double)
   
   if (g.rank0())
     testval = data[0];
-  else
-    testval = 0.f;
   
-  g.allreduce(1, 1, &testval, 'A');
+  g.bcast(1, 1, &testval, 'A', 0, 0);
   REQUIRE( fltcmp::eq(testval, 0) );
   
   free(data);
