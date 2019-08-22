@@ -78,15 +78,16 @@ class mpimat : public matrix<REAL>
 template <typename REAL>
 mpimat<REAL>::mpimat(grid &blacs_grid)
 {
-  this->g = blacs_grid;
-  
   this->m = 0;
   this->n = 0;
+  this->data = NULL;
+  
   this->m_local = 0;
   this->n_local = 0;
   this->mb = 0;
   this->nb = 0;
-  this->data = NULL;
+  
+  this->g = blacs_grid;
   
   this->free_data = true;
 }
@@ -96,11 +97,12 @@ mpimat<REAL>::mpimat(grid &blacs_grid)
 template <typename REAL>
 mpimat<REAL>::mpimat(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols)
 {
-  m_local = bcutils::numroc(nrows, bf_rows, blacs_grid.myrow(), 0, blacs_grid.nprow());
-  n_local = bcutils::numroc(ncols, bf_cols, blacs_grid.mycol(), 0, blacs_grid.npcol());
-  bcutils::descinit(this->desc, blacs_grid.ictxt(), nrows, ncols, bf_rows, bf_cols, m_local);
+  this->m_local = bcutils::numroc(nrows, bf_rows, blacs_grid.myrow(), 0, blacs_grid.nprow());
+  this->n_local = bcutils::numroc(ncols, bf_cols, blacs_grid.mycol(), 0, blacs_grid.npcol());
   
-  size_t len = m_local * n_local * sizeof(REAL);
+  bcutils::descinit(this->desc, blacs_grid.ictxt(), nrows, ncols, bf_rows, bf_cols, this->m_local);
+  
+  size_t len = this->m_local * this->n_local * sizeof(REAL);
   this->data = (REAL*) std::malloc(len);
   if (this->data == NULL)
     throw std::bad_alloc();
@@ -119,9 +121,10 @@ mpimat<REAL>::mpimat(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, in
 template <typename REAL>
 mpimat<REAL>::mpimat(REAL *data_, grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct)
 {
-  m_local = bcutils::numroc(nrows, bf_rows, blacs_grid.myrow(), 0, blacs_grid.nprow());
-  n_local = bcutils::numroc(ncols, bf_cols, blacs_grid.mycol(), 0, blacs_grid.npcol());
-  bcutils::descinit(this->desc, blacs_grid.ictxt(), nrows, ncols, bf_rows, bf_cols, m_local);
+  this->m_local = bcutils::numroc(nrows, bf_rows, blacs_grid.myrow(), 0, blacs_grid.nprow());
+  this->n_local = bcutils::numroc(ncols, bf_cols, blacs_grid.mycol(), 0, blacs_grid.npcol());
+  
+  bcutils::descinit(this->desc, blacs_grid.ictxt(), nrows, ncols, bf_rows, bf_cols, this->m_local);
   
   this->m = nrows;
   this->n = ncols;
@@ -178,17 +181,27 @@ mpimat<REAL>::~mpimat()
 template <typename REAL>
 void mpimat<REAL>::resize(len_t nrows, len_t ncols)
 {
-  m_local = bcutils::numroc(nrows, this->mb, this->g.myrow(), 0, this->g.nprow());
-  n_local = bcutils::numroc(ncols, this->nb, this->g.mycol(), 0, this->g.npcol());
+  if ( (this->m == nrows || this->n == nrows) && (this->m == ncols || this->n == ncols) )
+  {
+    this->m = nrows;
+    this->n = ncols;
+    return;
+  }
   
-  size_t len = m_local * n_local * sizeof(REAL);
+  this->mb = bf_rows;
+  this->nb = bf_cols;
+  
+  this->m_local = bcutils::numroc(nrows, this->mb, this->g.myrow(), 0, this->g.nprow());
+  this->n_local = bcutils::numroc(ncols, this->nb, this->g.mycol(), 0, this->g.npcol());
+  
+  size_t len = this->m_local * this->n_local * sizeof(REAL);
   void *realloc_ptr = realloc(this->data, len);
   if (realloc_ptr == NULL)
     throw std::bad_alloc();
   
   this->data = (REAL*) realloc_ptr;
   
-  bcutils::descinit(this->desc, this->g.ictxt(), nrows, ncols, this->mb, this->nb, m_local);
+  bcutils::descinit(this->desc, this->g.ictxt(), nrows, ncols, this->mb, this->nb, this->m_local);
   
   this->m = nrows;
   this->n = ncols;
