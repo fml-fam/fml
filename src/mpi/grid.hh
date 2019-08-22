@@ -123,9 +123,9 @@ inline void grid::finalize(int mpi_continue)
 
 inline void grid::inherit_grid(int blacs_context)
 {
-  // TODO size
   _ictxt = blacs_context;
   Cblacs_gridinfo(_ictxt, &_nprow, &_npcol, &_myrow, &_mycol);
+  _nprocs = _nprow * _npcol;
 }
 
 
