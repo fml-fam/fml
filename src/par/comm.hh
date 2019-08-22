@@ -56,6 +56,7 @@ class comm
   
   private:
     void init();
+    void set_metadata();
     void check_ret(int ret);
 };
 
@@ -69,17 +70,11 @@ class comm
 
 comm::comm()
 {
-  int ret;
-  
   init();
   
   _comm = MPI_COMM_WORLD;
   
-  ret = MPI_Comm_rank(_comm, &_rank);
-  check_ret(ret);
-  
-  ret = MPI_Comm_size(_comm, &_size);
-  check_ret(ret);
+  set_metadata();
 }
 
 
@@ -302,6 +297,19 @@ void comm::init()
     ret = MPI_Init(NULL, NULL);
     check_ret(ret);
   }
+}
+
+
+
+void comm::set_metadata()
+{
+  int ret;
+  
+  ret = MPI_Comm_rank(_comm, &_rank);
+  check_ret(ret);
+  
+  ret = MPI_Comm_size(_comm, &_size);
+  check_ret(ret);
 }
 
 
