@@ -23,7 +23,7 @@ TEMPLATE_TEST_CASE("inheriting memory", "[mpimat]", float, double)
   
   TestType *data = (TestType*) malloc(m_local*n_local*sizeof(*data));
   
-  mpimat<TestType> x(data, g, m, n, mb, nb);
+  mpimat<TestType> x(g, data, m, n, mb, nb);
   x.fill_eye();
   x.~mpimat();
   
@@ -36,7 +36,7 @@ TEMPLATE_TEST_CASE("inheriting memory", "[mpimat]", float, double)
   REQUIRE( fltcmp::eq(testval, 1) );
   
   mpimat<TestType> y(g);
-  y.set(data, g, m, n, mb, nb);
+  y.set(g, data, m, n, mb, nb);
   y.fill_zero();
   y.~mpimat();
   
