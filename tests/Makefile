@@ -1,7 +1,7 @@
 SUBDIRS := $(wildcard */.)
 
 
-all: cpumat_run mpimat_run
+all: miniclean cpumat_run mpimat_run
 
 $(SUBDIRS):
 	$(MAKE) -C $@
