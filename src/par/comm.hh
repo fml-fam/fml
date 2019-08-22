@@ -22,6 +22,8 @@ class comm
     void printf(int rank, const char *fmt, ...);
     void info();
     
+    bool rank0();
+    std::vector<int> jid(int n);
     void barrier();
     
     void send(int n, int *data, int dest, int tag=0);
@@ -43,9 +45,6 @@ class comm
     void bcast(int n, float *data, int root);
     void bcast(int n, double *data, int root);
     
-    bool rank0();
-    std::vector<int> jid(int n);
-    
     MPI_Comm get_comm() const {return _comm;};
     int rank() const {return _rank;};
     int size() const {return _size;};
@@ -65,6 +64,8 @@ class comm
 // -----------------------------------------------------------------------------
 // public
 // -----------------------------------------------------------------------------
+
+// constructors/destructor
 
 comm::comm()
 {
@@ -100,6 +101,8 @@ void comm::finalize()
 
 
 
+// printers
+
 void comm::printf(int rank, const char *fmt, ...)
 {
   if (_rank == rank)
@@ -121,113 +124,7 @@ void comm::info()
 
 
 
-void comm::barrier()
-{
-  int ret = MPI_Barrier(_comm);
-  check_ret(ret);
-}
-
-
-
-void comm::send(int n, int *data, int dest, int tag)
-{
-  int ret = MPI_Send(data, n, MPI_INT, dest, tag, _comm);
-  check_ret(ret);
-}
-
-void comm::send(int n, float *data, int dest, int tag)
-{
-  int ret = MPI_Send(data, n, MPI_FLOAT, dest, tag, _comm);
-  check_ret(ret);
-}
-
-void comm::send(int n, double *data, int dest, int tag)
-{
-  int ret = MPI_Send(data, n, MPI_DOUBLE, dest, tag, _comm);
-  check_ret(ret);
-}
-
-
-
-void comm::recv(int n, int *data, int source, int tag)
-{
-  int ret = MPI_Recv(data, n, MPI_INT, source, tag, _comm, MPI_STATUS_IGNORE);
-  check_ret(ret);
-}
-
-void comm::recv(int n, float *data, int source, int tag)
-{
-  int ret = MPI_Recv(data, n, MPI_FLOAT, source, tag, _comm, MPI_STATUS_IGNORE);
-  check_ret(ret);
-}
-
-void comm::recv(int n, double *data, int source, int tag)
-{
-  int ret = MPI_Recv(data, n, MPI_DOUBLE, source, tag, _comm, MPI_STATUS_IGNORE);
-  check_ret(ret);
-}
-
-
-
-void comm::allreduce(int n, int *data)
-{
-  int ret = MPI_Allreduce(MPI_IN_PLACE, data, n, MPI_INT, MPI_SUM, _comm);
-  check_ret(ret);
-}
-
-void comm::allreduce(int n, float *data)
-{
-  int ret = MPI_Allreduce(MPI_IN_PLACE, data, n, MPI_FLOAT, MPI_SUM, _comm);
-  check_ret(ret);
-}
-
-void comm::allreduce(int n, double *data)
-{
-  int ret = MPI_Allreduce(MPI_IN_PLACE, data, n, MPI_DOUBLE, MPI_SUM, _comm);
-  check_ret(ret);
-}
-
-
-
-void comm::reduce(int n, int *data, int root)
-{
-  int ret = MPI_Reduce(MPI_IN_PLACE, data, n, MPI_INT, MPI_SUM, root, _comm);
-  check_ret(ret);
-}
-
-void comm::reduce(int n, float *data, int root)
-{
-  int ret = MPI_Reduce(MPI_IN_PLACE, data, n, MPI_FLOAT, MPI_SUM, root, _comm);
-  check_ret(ret);
-}
-
-void comm::reduce(int n, double *data, int root)
-{
-  int ret = MPI_Reduce(MPI_IN_PLACE, data, n, MPI_DOUBLE, MPI_SUM, root, _comm);
-  check_ret(ret);
-}
-
-
-
-void comm::bcast(int n, int *data, int root)
-{
-  int ret = MPI_Bcast(data, n, MPI_INT, root, _comm);
-  check_ret(ret);
-}
-
-void comm::bcast(int n, float *data, int root)
-{
-  int ret = MPI_Bcast(data, n, MPI_FLOAT, root, _comm);
-  check_ret(ret);
-}
-
-void comm::bcast(int n, double *data, int root)
-{
-  int ret = MPI_Bcast(data, n, MPI_DOUBLE, root, _comm);
-  check_ret(ret);
-}
-
-
+// misc
 
 bool comm::rank0()
 {
@@ -272,6 +169,119 @@ std::vector<int> comm::jid(int n)
   return ret;
 }
 
+
+
+void comm::barrier()
+{
+  int ret = MPI_Barrier(_comm);
+  check_ret(ret);
+}
+
+
+
+// send/recv
+
+void comm::send(int n, int *data, int dest, int tag)
+{
+  int ret = MPI_Send(data, n, MPI_INT, dest, tag, _comm);
+  check_ret(ret);
+}
+
+void comm::send(int n, float *data, int dest, int tag)
+{
+  int ret = MPI_Send(data, n, MPI_FLOAT, dest, tag, _comm);
+  check_ret(ret);
+}
+
+void comm::send(int n, double *data, int dest, int tag)
+{
+  int ret = MPI_Send(data, n, MPI_DOUBLE, dest, tag, _comm);
+  check_ret(ret);
+}
+
+
+
+void comm::recv(int n, int *data, int source, int tag)
+{
+  int ret = MPI_Recv(data, n, MPI_INT, source, tag, _comm, MPI_STATUS_IGNORE);
+  check_ret(ret);
+}
+
+void comm::recv(int n, float *data, int source, int tag)
+{
+  int ret = MPI_Recv(data, n, MPI_FLOAT, source, tag, _comm, MPI_STATUS_IGNORE);
+  check_ret(ret);
+}
+
+void comm::recv(int n, double *data, int source, int tag)
+{
+  int ret = MPI_Recv(data, n, MPI_DOUBLE, source, tag, _comm, MPI_STATUS_IGNORE);
+  check_ret(ret);
+}
+
+
+
+// reductions
+
+void comm::allreduce(int n, int *data)
+{
+  int ret = MPI_Allreduce(MPI_IN_PLACE, data, n, MPI_INT, MPI_SUM, _comm);
+  check_ret(ret);
+}
+
+void comm::allreduce(int n, float *data)
+{
+  int ret = MPI_Allreduce(MPI_IN_PLACE, data, n, MPI_FLOAT, MPI_SUM, _comm);
+  check_ret(ret);
+}
+
+void comm::allreduce(int n, double *data)
+{
+  int ret = MPI_Allreduce(MPI_IN_PLACE, data, n, MPI_DOUBLE, MPI_SUM, _comm);
+  check_ret(ret);
+}
+
+
+
+void comm::reduce(int n, int *data, int root)
+{
+  int ret = MPI_Reduce(MPI_IN_PLACE, data, n, MPI_INT, MPI_SUM, root, _comm);
+  check_ret(ret);
+}
+
+void comm::reduce(int n, float *data, int root)
+{
+  int ret = MPI_Reduce(MPI_IN_PLACE, data, n, MPI_FLOAT, MPI_SUM, root, _comm);
+  check_ret(ret);
+}
+
+void comm::reduce(int n, double *data, int root)
+{
+  int ret = MPI_Reduce(MPI_IN_PLACE, data, n, MPI_DOUBLE, MPI_SUM, root, _comm);
+  check_ret(ret);
+}
+
+
+
+// broadcasters
+
+void comm::bcast(int n, int *data, int root)
+{
+  int ret = MPI_Bcast(data, n, MPI_INT, root, _comm);
+  check_ret(ret);
+}
+
+void comm::bcast(int n, float *data, int root)
+{
+  int ret = MPI_Bcast(data, n, MPI_FLOAT, root, _comm);
+  check_ret(ret);
+}
+
+void comm::bcast(int n, double *data, int root)
+{
+  int ret = MPI_Bcast(data, n, MPI_DOUBLE, root, _comm);
+  check_ret(ret);
+}
 
 
 
