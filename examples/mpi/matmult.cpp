@@ -7,7 +7,7 @@
 int main()
 {
   grid g = grid(PROC_GRID_SQUARE);
-  g.print();
+  g.info();
   
   len_t n = 2;
   cpumat<float> x_cpu = cpumat<float>(n, n);

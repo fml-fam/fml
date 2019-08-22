@@ -6,7 +6,7 @@
 int main()
 {
   grid g = grid(PROC_GRID_SQUARE);
-  g.print();
+  g.info();
   
   mpimat<float> x = mpimat<float>(g, 5, 5, 2, 2);
   x.info();

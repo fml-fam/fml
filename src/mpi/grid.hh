@@ -28,7 +28,7 @@ class grid
     void finalize(int mpi_continue=0);
     
     void printf(int row, int col, const char *fmt, ...);
-    void print();
+    void info();
     
     bool rank0();
     void barrier(char scope);
@@ -156,7 +156,7 @@ inline void grid::printf(int row, int col, const char *fmt, ...)
 
 
 
-inline void grid::print()
+inline void grid::info()
 {
   printf(0, 0, "## Grid %d %dx%d\n\n", _ictxt, _nprow, _npcol);
 }
