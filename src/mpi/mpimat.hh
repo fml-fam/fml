@@ -234,6 +234,8 @@ mpimat<REAL> mpimat<REAL>::dupe()
   size_t len = this->m_local * this->n_local * sizeof(REAL);
   memcpy(dup.data_ptr(), this->data, len);
   
+  memcpy(dup.desc_ptr(), this->desc, 9*sizeof(int));
+  
   return dup;
 }
 
