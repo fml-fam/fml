@@ -9,6 +9,28 @@
 extern grid g;
 
 
+
+TEMPLATE_TEST_CASE("basics", "[mpimat]", float, double)
+{
+  len_t m = 3;
+  len_t n = 2;
+  
+  mpimat<TestType> x(g, m, n, 1, 1);
+  REQUIRE( x.nrows() == m );
+  REQUIRE( x.ncols() == n );
+  
+  x.fill_zero();
+  REQUIRE( fltcmp::eq(x(0, 0), 0) );
+  // FIXME TODO can tis be fixed to match cpumat insertion?
+  // x(0, 0) = (TestType) 3.14;
+  if (g.rank0())
+    x.data_ptr()[0] = (TestType) 3.14;
+  
+  REQUIRE( fltcmp::eq(x(0, 0), 3.14) );
+}
+
+
+
 TEMPLATE_TEST_CASE("inheriting memory", "[mpimat]", float, double)
 {
   TestType testval;
