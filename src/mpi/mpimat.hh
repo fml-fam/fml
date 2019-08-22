@@ -24,7 +24,7 @@ class mpimat : public matrix<REAL>
     mpimat(const mpimat &x);
     ~mpimat();
     
-    void resize(len_t nrows, len_t ncols);
+    void resize(len_t nrows, len_t ncols, int bf_rows=16, int bf_cols=16);
     void set(REAL *data_, grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct=false);
     mpimat<REAL> dupe();
     
@@ -176,7 +176,7 @@ mpimat<REAL>::~mpimat()
 // memory management
 
 template <typename REAL>
-void mpimat<REAL>::resize(len_t nrows, len_t ncols)
+void mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
 {
   if ( (this->m == nrows || this->n == nrows) && (this->m == ncols || this->n == ncols) )
   {
