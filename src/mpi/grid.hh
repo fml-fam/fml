@@ -20,7 +20,6 @@ class grid
   public:
     grid();
     grid(int gridtype);
-    grid(const grid &g);
     
     void exit();
     void finalize(int mpi_continue=0);
@@ -101,18 +100,6 @@ inline grid::grid(int gridtype)
   }
   
   Cblacs_gridinfo(_ictxt, &_nprow, &_npcol, &_myrow, &_mycol);
-}
-
-
-
-inline grid::grid(const grid &g)
-{
-  _ictxt = g.ictxt();
-  _nprocs = g.nprocs();
-  _nprow = g.nprow();
-  _npcol = g.npcol();
-  _myrow = g.myrow();
-  _mycol = g.mycol();
 }
 
 
