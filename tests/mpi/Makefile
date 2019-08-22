@@ -1,5 +1,7 @@
 MPICXX = mpicxx
-CXXFLAGS = -I../../src -O2
+CXXFLAGS = -O2
+CPPFLAGS = -I../../src
+OMPFLAGS = -fopenmp 
 MPI_LDFLAGS = -lscalapack-openmpi
 
 WARNFLAGS = -Wall -pedantic -Wextra
@@ -11,10 +13,13 @@ SRCS=$(wildcard *.cpp)
 OBJS=$(SRCS:.cpp=.o )
 
 %.o: %.cpp 
-	$(MPICXX) $(CXXFLAGS) $(WARNFLAGS) -c $< -o $@
+	$(MPICXX) $(CXXFLAGS) $(CPPFLAGS) $(WARNFLAGS) $(OMPFLAGS) -c $< -o $@
 
 mpimat: test-main.o mpimat.o linalg.o
-	$(MPICXX) test-main.o mpimat.o linalg.o -o mpimat $(MPI_LDFLAGS)
-	
+	$(MPICXX) $(CXXFLAGS) test-main.o mpimat.o linalg.o -o mpimat $(OMPFLAGS) $(MPI_LDFLAGS)
+
+miniclean:
+	rm -rf linalg.o mpimat.o mpimat
+
 clean:
 	rm -rf *.o mpimat

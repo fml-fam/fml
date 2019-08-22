@@ -16,6 +16,10 @@ OBJS=$(SRCS:.cpp=.o )
 
 cpumat: test-main.o cpumat.o linalg.o
 	$(CXX) test-main.o cpumat.o linalg.o -o cpumat $(OMPFLAGS) $(LDFLAGS)
-	
+
+
+miniclean:
+	rm -rf cpumat cpumat.o linalg.o
+
 clean:
 	rm -rf *.o cpumat
