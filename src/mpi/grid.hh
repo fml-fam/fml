@@ -49,6 +49,10 @@ class grid
     void reduce(int m, int n, float *x, char scope, int rdest, int cdest);
     void reduce(int m, int n, double *x, char scope, int rdest, int cdest);
     
+    void bcast(int m, int n, int *x, char scope, int rsrc, int csrc);
+    void bcast(int m, int n, float *x, char scope, int rsrc, int csrc);
+    void bcast(int m, int n, double *x, char scope, int rsrc, int csrc);
+    
     int ictxt() const {return _ictxt;};
     int nprocs() const {return _nprocs;};
     int nprow() const {return _nprow;};
@@ -258,6 +262,35 @@ inline void grid::reduce(int m, int n, double *x, char scope, int rdest, int cde
 {
   char top = ' ';
   Cdgsum2d(_ictxt, &scope, &top, m, n, x, m, rdest, cdest);
+}
+
+
+
+inline void grid::bcast(int m, int n, int *x, char scope, int rsrc, int csrc)
+{
+  char top = ' ';
+  if (rsrc == _myrow && csrc == _mycol)
+    Cigebs2d(_ictxt, &scope, &top, m, n, x, m);
+  else
+    Cigebr2d(_ictxt, &scope, &top, m, n, x, m, rsrc, csrc);
+}
+
+inline void grid::bcast(int m, int n, float *x, char scope, int rsrc, int csrc)
+{
+  char top = ' ';
+  if (rsrc == _myrow && csrc == _mycol)
+    Csgebs2d(_ictxt, &scope, &top, m, n, x, m);
+  else
+    Csgebr2d(_ictxt, &scope, &top, m, n, x, m, rsrc, csrc);
+}
+
+inline void grid::bcast(int m, int n, double *x, char scope, int rsrc, int csrc)
+{
+  char top = ' ';
+  if (rsrc == _myrow && csrc == _mycol)
+    Cdgebs2d(_ictxt, &scope, &top, m, n, x, m);
+  else
+    Cdgebr2d(_ictxt, &scope, &top, m, n, x, m, rsrc, csrc);
 }
 
 
