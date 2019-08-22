@@ -33,7 +33,7 @@ TEMPLATE_TEST_CASE("inheriting memory", "[mpimat]", float, double)
     testval = 0.f;
   
   g.reduce(1, 1, &testval, 'A', -1, -1);
-  REQUIRE( testval == 1.0f );
+  REQUIRE( fltcmp::eq(testval, 1) );
   
   mpimat<TestType> y(g);
   y.set(data, g, m, n, mb, nb);
@@ -61,7 +61,7 @@ TEMPLATE_TEST_CASE("resize", "[mpimat]", float, double)
   int nb = 2;
   
   mpimat<TestType> x(g);
-  x.resize(m, n);
+  x.resize(m, n, mb, nb);
   x.fill_eye();
   
   REQUIRE( x.nrows() == m );
