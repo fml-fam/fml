@@ -41,6 +41,10 @@ class grid
     void recv(int m, int n, float *x, int rdest, int cdest);
     void recv(int m, int n, double *x, int rdest, int cdest);
     
+    void allreduce(int m, int n, int *x, char scope);
+    void allreduce(int m, int n, float *x, char scope);
+    void allreduce(int m, int n, double *x, char scope);
+    
     void reduce(int m, int n, int *x, char scope, int rdest, int cdest);
     void reduce(int m, int n, float *x, char scope, int rdest, int cdest);
     void reduce(int m, int n, double *x, char scope, int rdest, int cdest);
@@ -217,6 +221,26 @@ inline void grid::recv(int m, int n, double *x, int rsrc, int csrc)
 
 
 // reductions
+
+inline void grid::allreduce(int m, int n, int *x, char scope)
+{
+  char top = ' ';
+  Cigsum2d(_ictxt, &scope, &top, m, n, x, m, -1, -1);
+}
+
+inline void grid::allreduce(int m, int n, float *x, char scope)
+{
+  char top = ' ';
+  Csgsum2d(_ictxt, &scope, &top, m, n, x, m, -1, -1);
+}
+
+inline void grid::allreduce(int m, int n, double *x, char scope)
+{
+  char top = ' ';
+  Cdgsum2d(_ictxt, &scope, &top, m, n, x, m, -1, -1);
+}
+
+
 
 inline void grid::reduce(int m, int n, int *x, char scope, int rdest, int cdest)
 {
