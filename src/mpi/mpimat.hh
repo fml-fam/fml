@@ -477,7 +477,7 @@ REAL mpimat<REAL>::get_val_from_global_index(len_t gi, len_t gj)
   else
     ret = (REAL) 0;
   
-  g.reduce(1, 1, &ret, 'A', -1, -1);
+  g.allreduce(1, 1, &ret, 'A');
   
   return ret;
 }
