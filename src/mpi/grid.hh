@@ -8,6 +8,7 @@
 #include <cmath>
 #include <cstdarg>
 #include <cstdio>
+#include <stdexcept>
 
 #include "_blacs_prototypes.h"
 
@@ -94,10 +95,7 @@ inline grid::grid(int gridtype)
   else if (gridtype == PROC_GRID_WIDE)
     Cblacs_gridinit(&_ictxt, &order, 1, _nprocs);
   else
-  {
-    // TODO
-    // return FML_EXIT_ERROR_BLACSGRID;
-  }
+    throw std::runtime_error("Process grid should be one of PROC_GRID_SQUARE, PROC_GRID_TALL, or PROC_GRID_WIDE");
   
   Cblacs_gridinfo(_ictxt, &_nprow, &_npcol, &_myrow, &_mycol);
 }
