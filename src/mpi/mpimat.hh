@@ -63,6 +63,7 @@ class mpimat : public matrix<REAL>
   private:
     bool free_data;
     bool should_free() const {return free_data;};
+    void free();
     void printval(REAL, uint8_t ndigits);
     REAL get_val_from_global_index(len_t gi, len_t gj);
 };
@@ -167,11 +168,7 @@ mpimat<REAL>::mpimat(const mpimat<REAL> &x)
 template <typename REAL>
 mpimat<REAL>::~mpimat()
 {
-  if (free_data && this->data)
-  {
-    std::free(this->data);
-    this->data = NULL;
-  }
+  this->free();
 }
 
 
@@ -432,6 +429,18 @@ const REAL mpimat<REAL>::operator()(len_t i, len_t j) const
 // -----------------------------------------------------------------------------
 // private
 // -----------------------------------------------------------------------------
+
+template <typename REAL>
+void mpimat<REAL>::free()
+{
+  if (this->free_data && this->data)
+  {
+    std::free(this->data);
+    this->data = NULL;
+  }
+}
+
+
 
 template <>
 inline void mpimat<int>::printval(int val, uint8_t ndigits)
