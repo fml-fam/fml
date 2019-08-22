@@ -22,13 +22,15 @@ class grid
     grid();
     grid(int gridtype);
     
+    void inherit_grid(int blacs_context);
+    
     void exit();
     void finalize(int mpi_continue=0);
-    void inherit_grid(int blacs_context);
+    
     void printf(int row, int col, const char *fmt, ...);
     void print();
-    bool rank0();
     
+    bool rank0();
     void barrier(char scope);
     
     void send(int m, int n, int *x, int rdest, int cdest);
@@ -66,6 +68,12 @@ class grid
 
 
 
+// -----------------------------------------------------------------------------
+// public
+// -----------------------------------------------------------------------------
+
+// constructors/destructor
+
 inline grid::grid()
 {
   _ictxt = UNINITIALIZED_GRID;
@@ -102,6 +110,17 @@ inline grid::grid(int gridtype)
 
 
 
+inline void grid::inherit_grid(int blacs_context)
+{
+  _ictxt = blacs_context;
+  Cblacs_gridinfo(_ictxt, &_nprow, &_npcol, &_myrow, &_mycol);
+  _nprocs = _nprow * _npcol;
+}
+
+
+
+// mpi/blacs cleanup
+
 inline void grid::exit()
 {
   if (_ictxt != EXITED_GRID && _ictxt != UNINITIALIZED_GRID)
@@ -121,14 +140,7 @@ inline void grid::finalize(int mpi_continue)
 
 
 
-inline void grid::inherit_grid(int blacs_context)
-{
-  _ictxt = blacs_context;
-  Cblacs_gridinfo(_ictxt, &_nprow, &_npcol, &_myrow, &_mycol);
-  _nprocs = _nprow * _npcol;
-}
-
-
+// printers
 
 inline void grid::printf(int row, int col, const char *fmt, ...)
 {
@@ -151,6 +163,8 @@ inline void grid::print()
 
 
 
+// misc
+
 inline bool grid::rank0()
 {
   return (_myrow==0 && _mycol==0);
@@ -164,6 +178,8 @@ inline void grid::barrier(char scope)
 }
 
 
+
+// send/recv
 
 inline void grid::send(int m, int n, int *x, int rdest, int cdest)
 {
@@ -199,6 +215,8 @@ inline void grid::recv(int m, int n, double *x, int rsrc, int csrc)
 
 
 
+// reductions
+
 inline void grid::reduce(int m, int n, int *x, char scope, int rdest, int cdest)
 {
   char top = ' ';
@@ -218,6 +236,10 @@ inline void grid::reduce(int m, int n, double *x, char scope, int rdest, int cde
 }
 
 
+
+// -----------------------------------------------------------------------------
+// private
+// -----------------------------------------------------------------------------
 
 inline void grid::squarish(int *nr, int *nc)
 {
