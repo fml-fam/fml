@@ -285,7 +285,6 @@ void cpumat<REAL>::scale(const REAL s)
 
 // operators
 
-
 template <typename REAL>
 REAL& cpumat<REAL>::operator()(len_t i)
 {
