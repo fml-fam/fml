@@ -36,6 +36,7 @@ class grid
     void send(int m, int n, int *x, int rdest, int cdest);
     void send(int m, int n, float *x, int rdest, int cdest);
     void send(int m, int n, double *x, int rdest, int cdest);
+    
     void recv(int m, int n, int *x, int rdest, int cdest);
     void recv(int m, int n, float *x, int rdest, int cdest);
     void recv(int m, int n, double *x, int rdest, int cdest);

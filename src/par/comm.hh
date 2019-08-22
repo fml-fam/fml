@@ -30,6 +30,7 @@ class comm
     void send(int n, int *data, int dest, int tag=0);
     void send(int n, float *data, int dest, int tag=0);
     void send(int n, double *data, int dest, int tag=0);
+    
     void recv(int n, int *data, int source, int tag=0);
     void recv(int n, float *data, int source, int tag=0);
     void recv(int n, double *data, int source, int tag=0);
