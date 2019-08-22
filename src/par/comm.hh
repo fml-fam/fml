@@ -17,6 +17,8 @@ class comm
     comm();
     comm(const comm &c);
     
+    void inherit_comm(MPI_Comm comm);
+    
     void finalize();
     
     void printf(int rank, const char *fmt, ...);
@@ -84,6 +86,14 @@ comm::comm(const comm &c)
   _comm = c.get_comm();
   _rank = c.rank();
   _size = c.size();
+}
+
+
+
+void comm::inherit_comm(MPI_Comm comm)
+{
+  _comm = comm;
+  set_metadata();
 }
 
 
