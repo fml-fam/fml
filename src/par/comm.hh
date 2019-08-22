@@ -15,7 +15,6 @@ class comm
 {
   public:
     comm();
-    comm(const comm &c);
     
     void inherit_comm(MPI_Comm comm);
     
@@ -77,15 +76,6 @@ comm::comm()
   _comm = MPI_COMM_WORLD;
   
   set_metadata();
-}
-
-
-
-comm::comm(const comm &c)
-{
-  _comm = c.get_comm();
-  _rank = c.rank();
-  _size = c.size();
 }
 
 
