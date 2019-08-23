@@ -12,20 +12,11 @@ extern grid g;
 TEMPLATE_TEST_CASE("matrix multiplication", "[linalg]", float, double)
 {
   len_t n = 2;
-  cpumat<TestType> x_cpu = cpumat<TestType>(n, n);
-  cpumat<TestType> y_cpu = cpumat<TestType>(n, n);
   
-  TestType *x_d = x_cpu.data_ptr();
-  TestType *y_d = y_cpu.data_ptr();
-  
-  for (len_t i=0; i<n*n; i++)
-  {
-    x_d[i] = (TestType) i+1;
-    y_d[i] = (TestType) (n*n)-i;
-  }
-  
-  mpimat<TestType> x = mpihelpers::cpu2mpi(x_cpu, g, 1, 1);
-  mpimat<TestType> y = mpihelpers::cpu2mpi(y_cpu, g, 1, 1);
+  mpimat<TestType> x(g, n, n, 1, 1);
+  mpimat<TestType> y(g, n, n, 1, 1);
+  x.fill_linspace(1.f, (TestType) n*n);
+  y.fill_linspace((TestType) n*n, 1.f);
   
   mpimat<TestType> z = linalg::matmult(false, false, (TestType)1, x, y);
   REQUIRE( fltcmp::eq(z(0), 13) );

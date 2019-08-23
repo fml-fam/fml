@@ -13,11 +13,8 @@ TEMPLATE_TEST_CASE("matrix multiplication", "[linalg]", float, double)
   cpumat<TestType> x(n, n);
   cpumat<TestType> y(n, n);
   
-  for (len_t i=0; i<n*n; i++)
-    x(i) = (TestType) i+1;
-  
-  for (len_t i=0; i<n*n; i++)
-    y(i) = (TestType) (n*n)-i;
+  x.fill_linspace(1.f, (float) n*n);
+  y.fill_linspace((float) n*n, 1.f);
   
   cpumat<TestType> z = linalg::matmult(false, false, (TestType)1, x, y);
   const TestType *data = z.data_ptr();
@@ -44,4 +41,3 @@ TEMPLATE_TEST_CASE("matrix multiplication", "[linalg]", float, double)
   REQUIRE( fltcmp::eq(data[2], 5) );
   REQUIRE( fltcmp::eq(data[3], 13) );
 }
- 
