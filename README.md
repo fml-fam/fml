@@ -7,6 +7,8 @@
 * **Author:** Drew Schmidt
 
 
+<img align="right" src="./docs/logo/fml_med.png" />
+
 fml is the Fused Matrix Library, a multi-source, header-only C++ library for matrix computing.
 
 The library provides 4 main classes: `cpumat`, `gpumat`, `parmat`, and `mpimat`. These are mostly what they sound like, but the particular details are:
