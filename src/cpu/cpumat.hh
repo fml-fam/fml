@@ -40,6 +40,9 @@ class cpumat : public matrix<REAL>
     const REAL& operator()(len_t i) const;
     REAL& operator()(len_t i, len_t j);
     const REAL& operator()(len_t i, len_t j) const;
+    
+    bool operator==(const cpumat<REAL> &x) const;
+    bool operator!=(const cpumat<REAL> &x) const;
   
   private:
     bool free_data;
@@ -343,6 +346,36 @@ const REAL& cpumat<REAL>::operator()(len_t i, len_t j) const
     throw std::runtime_error("index out of bounds");
   
   return this->data[i + (this->m)*j];
+}
+
+
+
+template <typename REAL>
+bool cpumat<REAL>::operator==(const cpumat<REAL> &x) const
+{
+  if (this->m != x.nrows() || this->n != x.ncols())
+    return false;
+  
+  if (this->data == x.data_ptr())
+    return true;
+  
+  const REAL *x_d = x.data_ptr();
+  for (len_t j=0; j<this->n; j++)
+  {
+    for (len_t i=0; i<this->m; i++)
+    {
+      if (this->data[i + this->m*j] != x_d[i + this->m*j])
+        return false;
+    }
+  }
+  
+  return true;
+}
+
+template <typename REAL>
+bool cpumat<REAL>::operator!=(const cpumat<REAL> &x) const
+{
+  return !(*this == x);
 }
 
 
