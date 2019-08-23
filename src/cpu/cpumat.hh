@@ -10,6 +10,10 @@
 #include "../matrix.hh"
 
 
+/**
+ * @brief Matrix class for data held on a single CPU. 
+ * @tparam REAL should be 'float' or 'double'.
+ */
 template <typename REAL>
 class cpumat : public matrix<REAL>
 {

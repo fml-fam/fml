@@ -14,6 +14,12 @@
 typedef int len_local_t;
 
 
+/**
+ * @brief Matrix class for data distributed over MPI in the 2-d block cyclic
+    format. 
+ * 
+ * @tparam REAL should be 'float' or 'double'.
+ */
 template <typename REAL>
 class mpimat : public matrix<REAL>
 {
