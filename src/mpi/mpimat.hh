@@ -32,10 +32,10 @@ class mpimat : public matrix<REAL>
     
     void resize(len_t nrows, len_t ncols, int bf_rows=16, int bf_cols=16);
     void set(grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct=false);
-    mpimat<REAL> dupe();
+    mpimat<REAL> dupe() const;
     
-    void print(uint8_t ndigits=4);
-    void info();
+    void print(uint8_t ndigits=4) const;
+    void info() const;
     
     void fill_zero();
     void fill_one();
@@ -239,7 +239,7 @@ void mpimat<REAL>::set(grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, 
 
 
 template <typename REAL>
-mpimat<REAL> mpimat<REAL>::dupe()
+mpimat<REAL> mpimat<REAL>::dupe() const
 {
   mpimat<REAL> dup(this->g, this->m, this->n, this->mb, this->nb);
   
@@ -256,7 +256,7 @@ mpimat<REAL> mpimat<REAL>::dupe()
 // printers
 
 template <typename REAL>
-void mpimat<REAL>::print(uint8_t ndigits)
+void mpimat<REAL>::print(uint8_t ndigits) const
 {
   for (len_t gi=0; gi<this->m; gi++)
   {
@@ -294,7 +294,7 @@ void mpimat<REAL>::print(uint8_t ndigits)
 
 
 template <typename REAL>
-void mpimat<REAL>::info()
+void mpimat<REAL>::info() const
 {
   if (this->g.rank0())
   {

@@ -26,10 +26,10 @@ class cpumat : public matrix<REAL>
     
     void resize(len_t nrows, len_t ncols);
     void set(REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
-    cpumat<REAL> dupe();
+    cpumat<REAL> dupe() const;
     
-    void print(uint8_t ndigits=4);
-    void info();
+    void print(uint8_t ndigits=4) const;
+    void info() const;
     
     void fill_zero();
     void fill_one();
@@ -164,7 +164,7 @@ void cpumat<REAL>::set(REAL *data, len_t nrows, len_t ncols, bool free_on_destru
 
 
 template <typename REAL>
-cpumat<REAL> cpumat<REAL>::dupe()
+cpumat<REAL> cpumat<REAL>::dupe() const
 {
   cpumat<REAL> cpy(this->m, this->n);
   
@@ -179,7 +179,7 @@ cpumat<REAL> cpumat<REAL>::dupe()
 // printers
 
 template <typename REAL>
-void cpumat<REAL>::print(uint8_t ndigits)
+void cpumat<REAL>::print(uint8_t ndigits) const
 {
   for (len_t i=0; i<this->m; i++)
   {
@@ -195,7 +195,7 @@ void cpumat<REAL>::print(uint8_t ndigits)
 
 
 template <typename REAL>
-void cpumat<REAL>::info()
+void cpumat<REAL>::info() const
 {
   printf("# cpumat");
   printf(" %dx%d", this->m, this->n);
