@@ -74,3 +74,22 @@ TEMPLATE_TEST_CASE("scale", "[cpumat]", float, double)
   REQUIRE( fltcmp::eq(x(0), 3) );
   REQUIRE( fltcmp::eq(x(1), 3) );
 }
+
+
+
+TEMPLATE_TEST_CASE("indexing", "[cpumat]", float, double)
+{
+  len_t n = 2;
+  
+  cpumat<TestType> x(n, n);
+  cpumat<TestType> y(n, n);
+  
+  for (len_t i=0; i<n*n; i++)
+    x(i) = (TestType) i+1;
+  
+  y.fill_linspace(1.f, (TestType) n*n);
+  REQUIRE( (x == y) );
+  
+  y.fill_val(1.f);
+  REQUIRE( (x != y) );
+}

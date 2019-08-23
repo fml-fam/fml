@@ -3,6 +3,7 @@
 
 #include <mpi/bcutils.hh>
 #include <mpi/grid.hh>
+#include <mpi/mpihelpers.hh>
 #include <mpi/mpimat.hh>
 
 
@@ -91,7 +92,7 @@ TEMPLATE_TEST_CASE("resize", "[mpimat]", float, double)
 
 
 
-TEMPLATE_TEST_CASE("scale", "[cpumat]", float, double)
+TEMPLATE_TEST_CASE("scale", "[mpimat]", float, double)
 {
   len_t m = 6;
   len_t n = 5;
@@ -104,4 +105,27 @@ TEMPLATE_TEST_CASE("scale", "[cpumat]", float, double)
   x.scale(3.0f);
   REQUIRE( fltcmp::eq(x(0), 3) );
   REQUIRE( fltcmp::eq(x(1), 3) );
+}
+
+
+
+TEMPLATE_TEST_CASE("indexing", "[mpimat]", float, double)
+{
+  len_t n = 2;
+  
+  cpumat<TestType> x_cpu = cpumat<TestType>(n, n);
+  
+  TestType *x_d = x_cpu.data_ptr();
+  
+  for (len_t i=0; i<n*n; i++)
+    x_d[i] = (TestType) i+1;
+  
+  mpimat<TestType> x = mpihelpers::cpu2mpi(x_cpu, g, 1, 1);
+  mpimat<TestType> y(g, n, n, 1, 1);
+  
+  y.fill_linspace(1.f, (TestType) n*n);
+  REQUIRE( (x == y) );
+  
+  y.fill_val(1.f);
+  REQUIRE( (x != y) );
 }
