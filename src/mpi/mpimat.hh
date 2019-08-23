@@ -45,6 +45,9 @@ class mpimat : public matrix<REAL>
     REAL operator()(len_t i, len_t j);
     const REAL operator()(len_t i, len_t j) const;
     
+    bool operator==(const mpimat<REAL> &x) const;
+    bool operator!=(const mpimat<REAL> &x) const;
+    
     len_local_t nrows_local() const {return m_local;};
     len_local_t ncols_local() const {return n_local;};
     int bf_rows() const {return mb;};
@@ -450,6 +453,49 @@ const REAL mpimat<REAL>::operator()(len_t i, len_t j) const
   
   REAL ret = this->get_val_from_global_index(i, j);
   return ret;
+}
+
+
+
+template <typename REAL>
+bool mpimat<REAL>::operator==(const mpimat<REAL> &x) const
+{
+  // same dim, same blocking, same grid
+  if (this->m != x.nrows() || this->n != x.ncols())
+    return false;
+  
+  if (this->mb != x.bf_rows() || this->nb != x.bf_cols())
+    return false;
+  
+  if (this->g.ictxt() != x.g.ictxt())
+    return false;
+  
+  const REAL *x_d = x.data_ptr();
+  if (this->data == x_d)
+    return true;
+  
+  int negation_ret = 0;
+  for (len_t j=0; j<this->n_local; j++)
+  {
+    for (len_t i=0; i<this->m_local; i++)
+    {
+      if (this->data[i + this->m_local*j] != x_d[i + this->m_local*j])
+      {
+        negation_ret = 1;
+        break;
+      }
+    }
+  }
+  
+  g.allreduce(1, 1, &negation_ret, 'A');
+  
+  return !((bool) negation_ret);
+}
+
+template <typename REAL>
+bool mpimat<REAL>::operator!=(const mpimat<REAL> &x) const
+{
+  return !(*this == x);
 }
 
 
