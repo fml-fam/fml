@@ -34,6 +34,7 @@ class mpimat : public matrix<REAL>
     void fill_zero();
     void fill_one();
     void fill_val(const REAL v);
+    void fill_linspace(REAL min, REAL max);
     void fill_eye();
     void fill_runif(int seed, REAL min=0, REAL max=1);
     void fill_rnorm(int seed, REAL mean=0, REAL sd=1);
@@ -325,6 +326,29 @@ void mpimat<REAL>::fill_val(const REAL v)
   {
     for (len_t i=0; i<this->m_local; i++)
       this->data[i + this->m_local*j] = v;
+  }
+}
+
+
+
+template <typename REAL>
+void mpimat<REAL>::fill_linspace(REAL min, REAL max)
+{
+  if (min == max)
+    this->fill_val(min);
+  else
+  {
+    REAL v = (max-min)/((REAL) this->m*this->n - 1);
+    for (len_t j=0; j<this->n_local; j++)
+    {
+      for (len_t i=0; i<this->m_local; i++)
+      {
+        int gi = bcutils::l2g(i, this->mb, this->g.nprow(), this->g.myrow());
+        int gj = bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
+        
+        this->data[i + this->m_local*j] = v*((REAL) gi + this->m*gj) + min;
+      }
+    }
   }
 }
 
