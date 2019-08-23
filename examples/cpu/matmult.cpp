@@ -9,14 +9,8 @@ int main()
   cpumat<float> x = cpumat<float>(n, n);
   cpumat<float> y = cpumat<float>(n, n);
   
-  float *x_d = x.data_ptr();
-  float *y_d = y.data_ptr();
-  
-  for (len_t i=0; i<n*n; i++)
-    x_d[i] = (float) i+1;
-  
-  for (len_t i=0; i<n*n; i++)
-    y_d[i] = (float) (n*n)-i;
+  x.fill_linspace(1.f, (float) n*n);
+  y.fill_linspace((float) n*n, 1.f);
   
   cpumat<float> z = linalg::matmult(false, false, 1.0f, x, y);
   z.print();

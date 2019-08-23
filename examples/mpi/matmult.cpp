@@ -1,7 +1,6 @@
 #include <mpi/grid.hh>
 #include <mpi/linalg.hh>
 #include <mpi/mpimat.hh>
-#include <mpi/mpihelpers.hh>
 
 
 int main()
@@ -10,20 +9,11 @@ int main()
   g.info();
   
   len_t n = 2;
-  cpumat<float> x_cpu = cpumat<float>(n, n);
-  cpumat<float> y_cpu = cpumat<float>(n, n);
   
-  float *x_d = x_cpu.data_ptr();
-  float *y_d = y_cpu.data_ptr();
-  
-  for (len_t i=0; i<n*n; i++)
-  {
-    x_d[i] = (float) i+1;
-    y_d[i] = (float) (n*n)-i;
-  }
-  
-  mpimat<float> x = mpihelpers::cpu2mpi(x_cpu, g, 1, 1);
-  mpimat<float> y = mpihelpers::cpu2mpi(y_cpu, g, 1, 1);
+  mpimat<float> x(g, n, n, 1, 1);
+  mpimat<float> y(g, n, n, 1, 1);
+  x.fill_linspace(1.f, (float) n*n);
+  y.fill_linspace((float) n*n, 1.f);
   
   mpimat<float> z = linalg::matmult(false, false, 1.0f, x, y);
   
