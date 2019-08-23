@@ -27,31 +27,31 @@ class grid
     void exit();
     void finalize(int mpi_continue=0);
     
-    void printf(int row, int col, const char *fmt, ...);
-    void info();
+    void printf(int row, int col, const char *fmt, ...) const;
+    void info() const;
     
-    bool rank0();
-    void barrier(char scope);
+    bool rank0() const;
+    void barrier(char scope) const;
     
-    void send(int m, int n, int *x, int rdest, int cdest);
-    void send(int m, int n, float *x, int rdest, int cdest);
-    void send(int m, int n, double *x, int rdest, int cdest);
+    void send(int m, int n, int *x, int rdest, int cdest) const;
+    void send(int m, int n, float *x, int rdest, int cdest) const;
+    void send(int m, int n, double *x, int rdest, int cdest) const;
     
-    void recv(int m, int n, int *x, int rdest, int cdest);
-    void recv(int m, int n, float *x, int rdest, int cdest);
-    void recv(int m, int n, double *x, int rdest, int cdest);
+    void recv(int m, int n, int *x, int rdest, int cdest) const;
+    void recv(int m, int n, float *x, int rdest, int cdest) const;
+    void recv(int m, int n, double *x, int rdest, int cdest) const;
     
-    void allreduce(int m, int n, int *x, char scope);
-    void allreduce(int m, int n, float *x, char scope);
-    void allreduce(int m, int n, double *x, char scope);
+    void allreduce(int m, int n, int *x, char scope) const;
+    void allreduce(int m, int n, float *x, char scope) const;
+    void allreduce(int m, int n, double *x, char scope) const;
     
-    void reduce(int m, int n, int *x, char scope, int rdest, int cdest);
-    void reduce(int m, int n, float *x, char scope, int rdest, int cdest);
-    void reduce(int m, int n, double *x, char scope, int rdest, int cdest);
+    void reduce(int m, int n, int *x, char scope, int rdest, int cdest) const;
+    void reduce(int m, int n, float *x, char scope, int rdest, int cdest) const;
+    void reduce(int m, int n, double *x, char scope, int rdest, int cdest) const;
     
-    void bcast(int m, int n, int *x, char scope, int rsrc, int csrc);
-    void bcast(int m, int n, float *x, char scope, int rsrc, int csrc);
-    void bcast(int m, int n, double *x, char scope, int rsrc, int csrc);
+    void bcast(int m, int n, int *x, char scope, int rsrc, int csrc) const;
+    void bcast(int m, int n, float *x, char scope, int rsrc, int csrc) const;
+    void bcast(int m, int n, double *x, char scope, int rsrc, int csrc) const;
     
     int ictxt() const {return _ictxt;};
     int nprocs() const {return _nprocs;};
@@ -72,7 +72,7 @@ class grid
     static const int UNINITIALIZED_GRID = -1;
     static const int EXITED_GRID = -11;
     
-    void squarish(int *nr, int *nc);
+    void squarish(int *nr, int *nc) const;
 };
 
 
@@ -151,7 +151,7 @@ inline void grid::finalize(int mpi_continue)
 
 // printers
 
-inline void grid::printf(int row, int col, const char *fmt, ...)
+inline void grid::printf(int row, int col, const char *fmt, ...) const
 {
   if (_myrow == row && _mycol == col)
   {
@@ -165,7 +165,7 @@ inline void grid::printf(int row, int col, const char *fmt, ...)
 
 
 
-inline void grid::info()
+inline void grid::info() const
 {
   printf(0, 0, "## Grid %d %dx%d\n\n", _ictxt, _nprow, _npcol);
 }
@@ -174,14 +174,14 @@ inline void grid::info()
 
 // misc
 
-inline bool grid::rank0()
+inline bool grid::rank0() const
 {
   return (_myrow==0 && _mycol==0);
 }
 
 
 
-inline void grid::barrier(char scope)
+inline void grid::barrier(char scope) const
 {
   Cblacs_barrier(_ictxt, &scope);
 }
@@ -190,34 +190,34 @@ inline void grid::barrier(char scope)
 
 // send/recv
 
-inline void grid::send(int m, int n, int *x, int rdest, int cdest)
+inline void grid::send(int m, int n, int *x, int rdest, int cdest) const
 {
   Cigesd2d(_ictxt, m, n, x, m, rdest, cdest);
 }
 
-inline void grid::send(int m, int n, float *x, int rdest, int cdest)
+inline void grid::send(int m, int n, float *x, int rdest, int cdest) const
 {
   Csgesd2d(_ictxt, m, n, x, m, rdest, cdest);
 }
 
-inline void grid::send(int m, int n, double *x, int rdest, int cdest)
+inline void grid::send(int m, int n, double *x, int rdest, int cdest) const
 {
   Cdgesd2d(_ictxt, m, n, x, m, rdest, cdest);
 }
 
 
 
-inline void grid::recv(int m, int n, int *x, int rsrc, int csrc)
+inline void grid::recv(int m, int n, int *x, int rsrc, int csrc) const
 {
   Cigerv2d(_ictxt, m, n, x, m, rsrc, csrc);
 }
 
-inline void grid::recv(int m, int n, float *x, int rsrc, int csrc)
+inline void grid::recv(int m, int n, float *x, int rsrc, int csrc) const
 {
   Csgerv2d(_ictxt, m, n, x, m, rsrc, csrc);
 }
 
-inline void grid::recv(int m, int n, double *x, int rsrc, int csrc)
+inline void grid::recv(int m, int n, double *x, int rsrc, int csrc) const
 {
   Cdgerv2d(_ictxt, m, n, x, m, rsrc, csrc);
 }
@@ -226,19 +226,19 @@ inline void grid::recv(int m, int n, double *x, int rsrc, int csrc)
 
 // reductions
 
-inline void grid::allreduce(int m, int n, int *x, char scope)
+inline void grid::allreduce(int m, int n, int *x, char scope) const
 {
   char top = ' ';
   Cigsum2d(_ictxt, &scope, &top, m, n, x, m, -1, -1);
 }
 
-inline void grid::allreduce(int m, int n, float *x, char scope)
+inline void grid::allreduce(int m, int n, float *x, char scope) const
 {
   char top = ' ';
   Csgsum2d(_ictxt, &scope, &top, m, n, x, m, -1, -1);
 }
 
-inline void grid::allreduce(int m, int n, double *x, char scope)
+inline void grid::allreduce(int m, int n, double *x, char scope) const
 {
   char top = ' ';
   Cdgsum2d(_ictxt, &scope, &top, m, n, x, m, -1, -1);
@@ -246,19 +246,19 @@ inline void grid::allreduce(int m, int n, double *x, char scope)
 
 
 
-inline void grid::reduce(int m, int n, int *x, char scope, int rdest, int cdest)
+inline void grid::reduce(int m, int n, int *x, char scope, int rdest, int cdest) const
 {
   char top = ' ';
   Cigsum2d(_ictxt, &scope, &top, m, n, x, m, rdest, cdest);
 }
 
-inline void grid::reduce(int m, int n, float *x, char scope, int rdest, int cdest)
+inline void grid::reduce(int m, int n, float *x, char scope, int rdest, int cdest) const
 {
   char top = ' ';
   Csgsum2d(_ictxt, &scope, &top, m, n, x, m, rdest, cdest);
 }
 
-inline void grid::reduce(int m, int n, double *x, char scope, int rdest, int cdest)
+inline void grid::reduce(int m, int n, double *x, char scope, int rdest, int cdest) const
 {
   char top = ' ';
   Cdgsum2d(_ictxt, &scope, &top, m, n, x, m, rdest, cdest);
@@ -266,7 +266,7 @@ inline void grid::reduce(int m, int n, double *x, char scope, int rdest, int cde
 
 
 
-inline void grid::bcast(int m, int n, int *x, char scope, int rsrc, int csrc)
+inline void grid::bcast(int m, int n, int *x, char scope, int rsrc, int csrc) const
 {
   char top = ' ';
   if (rsrc == _myrow && csrc == _mycol)
@@ -275,7 +275,7 @@ inline void grid::bcast(int m, int n, int *x, char scope, int rsrc, int csrc)
     Cigebr2d(_ictxt, &scope, &top, m, n, x, m, rsrc, csrc);
 }
 
-inline void grid::bcast(int m, int n, float *x, char scope, int rsrc, int csrc)
+inline void grid::bcast(int m, int n, float *x, char scope, int rsrc, int csrc) const
 {
   char top = ' ';
   if (rsrc == _myrow && csrc == _mycol)
@@ -284,7 +284,7 @@ inline void grid::bcast(int m, int n, float *x, char scope, int rsrc, int csrc)
     Csgebr2d(_ictxt, &scope, &top, m, n, x, m, rsrc, csrc);
 }
 
-inline void grid::bcast(int m, int n, double *x, char scope, int rsrc, int csrc)
+inline void grid::bcast(int m, int n, double *x, char scope, int rsrc, int csrc) const
 {
   char top = ' ';
   if (rsrc == _myrow && csrc == _mycol)
@@ -299,7 +299,7 @@ inline void grid::bcast(int m, int n, double *x, char scope, int rsrc, int csrc)
 // private
 // -----------------------------------------------------------------------------
 
-inline void grid::squarish(int *nr, int *nc)
+inline void grid::squarish(int *nr, int *nc) const
 {
   int n = (int) sqrt((double) _nprocs);
   n = (n<1)?1:n; // suppresses bogus compiler warning
