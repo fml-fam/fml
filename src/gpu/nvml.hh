@@ -18,7 +18,7 @@ namespace nvml
 {
   namespace
   {
-    void check_nvml_ret(nvmlReturn_t check)
+    inline void check_nvml_ret(nvmlReturn_t check)
     {
       if (check != NVML_SUCCESS)
       {
@@ -76,12 +76,12 @@ namespace nvml
   
   
   
-  void init()
+  inline void init()
   {
     CHECK_NVML( nvmlInit() );
   }
   
-  void shutdown()
+  inline void shutdown()
   {
     CHECK_NVML( nvmlShutdown() );
   }
@@ -93,14 +93,14 @@ namespace nvml
 {
   namespace system
   {
-    int get_cuda_driver_version()
+    inline int get_cuda_driver_version()
     {
       int ret;
       CHECK_NVML( nvmlSystemGetCudaDriverVersion(&ret) );
       return ret;
     }
     
-    std::string get_driver_version()
+    inline std::string get_driver_version()
     {
       std::string ret;
       ret.resize(NVML_SYSTEM_DRIVER_VERSION_BUFFER_SIZE);
@@ -108,7 +108,7 @@ namespace nvml
       return ret;
     }
     
-    std::string get_nvml_version()
+    inline std::string get_nvml_version()
     {
       std::string ret;
       ret.resize(NVML_SYSTEM_NVML_VERSION_BUFFER_SIZE);
@@ -116,7 +116,7 @@ namespace nvml
       return ret;
     }
     
-    std::string get_process_name(unsigned int pid)
+    inline std::string get_process_name(unsigned int pid)
     {
       std::string ret;
       ret.resize(NVML_MAX_STRLEN);
@@ -132,7 +132,7 @@ namespace nvml
 {
   namespace device
   {
-    std::string get_board_part_number(nvmlDevice_t device)
+    inline std::string get_board_part_number(nvmlDevice_t device)
     {
       std::string ret;
       ret.resize(NVML_MAX_STRLEN);
@@ -140,7 +140,7 @@ namespace nvml
       return ret;
     }
     
-    std::string get_brand(nvmlDevice_t device)
+    inline std::string get_brand(nvmlDevice_t device)
     {
       nvmlBrandType_t type;
       CHECK_NVML( nvmlDeviceGetBrand(device, &type) );
@@ -164,7 +164,7 @@ namespace nvml
         return "missing from list; contact nvsmi devs";
     }
     
-    std::string get_compute_mode(nvmlDevice_t device)
+    inline std::string get_compute_mode(nvmlDevice_t device)
     {
       nvmlComputeMode_t mode;
       CHECK_NVML( nvmlDeviceGetComputeMode(device, &mode) );
@@ -180,40 +180,40 @@ namespace nvml
         return "";
     }
     
-    int get_count()
+    inline int get_count()
     {
       unsigned int num_gpus;
       CHECK_NVML( nvmlDeviceGetCount(&num_gpus) );
       return (int) num_gpus;
     }
     
-    void get_cuda_compute_capability(nvmlDevice_t device, int *major, int *minor)
+    inline void get_cuda_compute_capability(nvmlDevice_t device, int *major, int *minor)
     {
       CHECK_NVML( nvmlDeviceGetCudaComputeCapability(device, major, minor) );
     }
     
-    int get_curr_pcie_link_generation(nvmlDevice_t device)
+    inline int get_curr_pcie_link_generation(nvmlDevice_t device)
     {
       unsigned int currLinkGen;
       CHECK_NVML( nvmlDeviceGetCurrPcieLinkGeneration(device, &currLinkGen) );
       return (int) currLinkGen;
     }
     
-    int get_curr_pcie_link_width(nvmlDevice_t device)
+    inline int get_curr_pcie_link_width(nvmlDevice_t device)
     {
       unsigned int currLinkWidth;
       CHECK_NVML( nvmlDeviceGetCurrPcieLinkWidth(device, &currLinkWidth) );
       return (int) currLinkWidth;
     }
     
-    int get_display_active(nvmlDevice_t device)
+    inline int get_display_active(nvmlDevice_t device)
     {
       nvmlEnableState_t disp;
       CHECK_NVML( nvmlDeviceGetDisplayActive(device, &disp) );
       return (int) disp;
     }
     
-    int get_fan_speed(nvmlDevice_t device)
+    inline int get_fan_speed(nvmlDevice_t device)
     {
       unsigned int speed;
       nvmlReturn_t check = nvmlDeviceGetFanSpeed(device, &speed);
@@ -225,21 +225,21 @@ namespace nvml
       return (int) speed;
     }
     
-    nvmlDevice_t get_handle_by_index(int index)
+    inline nvmlDevice_t get_handle_by_index(int index)
     {
       nvmlDevice_t device;
       CHECK_NVML( nvmlDeviceGetHandleByIndex(index, &device) );
       return device;
     }
     
-    int get_index(nvmlDevice_t device)
+    inline int get_index(nvmlDevice_t device)
     {
       unsigned int index;
       CHECK_NVML( nvmlDeviceGetIndex(device, &index) );
       return (int) index;
     }
     
-    void get_memory_info(nvmlDevice_t device, double *memory_used, double *memory_total)
+    inline void get_memory_info(nvmlDevice_t device, double *memory_used, double *memory_total)
     {
       nvmlMemory_t memory;
       CHECK_NVML( nvmlDeviceGetMemoryInfo(device, &memory) );
@@ -247,7 +247,7 @@ namespace nvml
       *memory_total = (double) memory.total;
     }
     
-    std::string get_name(nvmlDevice_t device)
+    inline std::string get_name(nvmlDevice_t device)
     {
       std::string ret;
       ret.resize(NVML_MAX_STRLEN);
@@ -255,35 +255,35 @@ namespace nvml
       return ret;
     }
     
-    int get_performance_state(nvmlDevice_t device)
+    inline int get_performance_state(nvmlDevice_t device)
     {
       nvmlPstates_t pState;
       CHECK_NVML( nvmlDeviceGetPerformanceState(device, &pState) );
       return (int) pState;
     }
     
-    int get_persistence_mode(nvmlDevice_t device)
+    inline int get_persistence_mode(nvmlDevice_t device)
     {
       nvmlEnableState_t mode;
       CHECK_NVML( nvmlDeviceGetPersistenceMode(device, &mode) );
       return (int) mode;
     }
     
-    int get_power_max(nvmlDevice_t device)
+    inline int get_power_max(nvmlDevice_t device)
     {
       unsigned int power_min, power_max;
       CHECK_NVML( nvmlDeviceGetPowerManagementLimitConstraints(device, &power_min, &power_max) );
       return (int) power_max;
     }
     
-    int get_power_usage(nvmlDevice_t device)
+    inline int get_power_usage(nvmlDevice_t device)
     {
       unsigned int power;
       CHECK_NVML( nvmlDeviceGetPowerUsage(device, &power) );
       return (int) power;
     }
     
-    std::string get_serial(nvmlDevice_t device)
+    inline std::string get_serial(nvmlDevice_t device)
     {
       std::string ret;
       ret.resize(NVML_MAX_STRLEN);
@@ -291,7 +291,7 @@ namespace nvml
       return ret;
     }
     
-    int get_temperature(nvmlDevice_t device)
+    inline int get_temperature(nvmlDevice_t device)
     {
       nvmlTemperatureSensors_t sensor = NVML_TEMPERATURE_GPU;
       unsigned int temp;
@@ -299,14 +299,14 @@ namespace nvml
       return (int) temp;
     }
     
-    int get_utilization(nvmlDevice_t device)
+    inline int get_utilization(nvmlDevice_t device)
     {
       nvmlUtilization_t utilization;
       CHECK_NVML( nvmlDeviceGetUtilizationRates(device, &utilization) );
       return (int) utilization.gpu;
     }
     
-    std::string get_uuid(nvmlDevice_t device)
+    inline std::string get_uuid(nvmlDevice_t device)
     {
       std::string ret;
       ret.resize(NVML_MAX_STRLEN);
