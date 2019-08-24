@@ -13,9 +13,36 @@
 #include "_blacs_prototypes.h"
 
 
-enum gridshape {PROC_GRID_SQUARE, PROC_GRID_WIDE, PROC_GRID_TALL};
+/**
+  @defgroup Enumerations
+  Public enumeration types
+*/
+
+/**
+ * @ingroup Enumerations
+ * @brief Supported process grid shapes for 2-dimensional BLACS grids.
+ *
+ * These are the values used in grid constructor (parameter 'gridtype').
+ */
+enum gridshape
+{
+  /// A square process grid, or as square as can be when the total number of MPI
+  /// ranks is not a perfect square. In the latter case, the grid size will be
+  /// taken to be \f$ p_1 \times p_2 \f$ where \f$ p_1 > p_2 \f$ are integers of
+  /// whose difference is as small as possible such that their product is the
+  /// total number of MPI ranks. For example, with 210 processes we have
+  /// \f$ 210=7*5*3*2=15*14 \f$, and with 14 we have \f$ 14=7*2 \f$.
+  PROC_GRID_SQUARE,
+  /// A grid with 1 row and as many columns as there are MPI ranks.
+  PROC_GRID_WIDE,
+  /// A grid with 1 column and as many rows as there are MPI ranks.
+  PROC_GRID_TALL
+};
 
 
+/**
+ * @brief 2-dimensional MPI process grid. 
+ */
 class grid
 {
   public:
