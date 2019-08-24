@@ -74,8 +74,8 @@ class mpimat : public matrix<REAL>
     bool free_data;
     bool should_free() const {return free_data;};
     void free();
-    void printval(REAL, uint8_t ndigits);
-    REAL get_val_from_global_index(len_t gi, len_t gj);
+    void printval(REAL, uint8_t ndigits) const;
+    REAL get_val_from_global_index(len_t gi, len_t gj) const;
 };
 
 
@@ -523,14 +523,14 @@ void mpimat<REAL>::free()
 
 
 template <>
-inline void mpimat<int>::printval(int val, uint8_t ndigits)
+inline void mpimat<int>::printval(int val, uint8_t ndigits) const
 {
   (void)ndigits;
   printf("%d ", val);
 }
 
 template <typename REAL>
-void mpimat<REAL>::printval(REAL val, uint8_t ndigits)
+void mpimat<REAL>::printval(REAL val, uint8_t ndigits) const
 {
   printf("%.*f ", ndigits, val);
 }
@@ -538,7 +538,7 @@ void mpimat<REAL>::printval(REAL val, uint8_t ndigits)
 
 
 template <typename REAL>
-REAL mpimat<REAL>::get_val_from_global_index(len_t gi, len_t gj)
+REAL mpimat<REAL>::get_val_from_global_index(len_t gi, len_t gj) const
 {
   REAL ret;
   
