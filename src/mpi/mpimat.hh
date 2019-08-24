@@ -9,6 +9,8 @@
 
 #include "grid.hh"
 #include "bcutils.hh"
+
+#include "../fmlutils.hh"
 #include "../matrix.hh"
 
 typedef int len_local_t;
@@ -42,8 +44,10 @@ class mpimat : public matrix<REAL>
     void fill_val(const REAL v);
     void fill_linspace(REAL min, REAL max);
     void fill_eye();
-    void fill_runif(int seed, REAL min=0, REAL max=1);
-    void fill_rnorm(int seed, REAL mean=0, REAL sd=1);
+    void fill_runif(uint32_t seed, REAL min=0, REAL max=1);
+    void fill_runif(REAL min=0, REAL max=1);
+    void fill_rnorm(uint32_t seed, REAL mean=0, REAL sd=1);
+    void fill_rnorm(REAL mean=0, REAL sd=1);
     void scale(const REAL s);
     
     REAL operator()(len_t i);
@@ -384,17 +388,47 @@ void mpimat<REAL>::fill_eye()
 
 
 template <typename REAL>
-void mpimat<REAL>::fill_runif(int seed, REAL min, REAL max)
+void mpimat<REAL>::fill_runif(uint32_t seed, REAL min, REAL max)
 {
-  
+  std::mt19937 mt(seed);
+  for (len_t j=0; j<this->n_local; j++)
+  {
+    for (len_t i=0; i<this->m_local; i++)
+    {
+      static std::uniform_real_distribution<REAL> dist(min, max);
+      this->data[i + this->m_local*j] = dist(mt);
+    }
+  }
+}
+
+template <typename REAL>
+void mpimat<REAL>::fill_runif(REAL min, REAL max)
+{
+  uint32_t seed = fmlutils::get_seed() + (g.myrow() + g.nprow()*g.mycol());
+  this->fill_runif(seed, min, max);
 }
 
 
 
 template <typename REAL>
-void mpimat<REAL>::fill_rnorm(int seed, REAL mean, REAL sd)
+void mpimat<REAL>::fill_rnorm(uint32_t seed, REAL mean, REAL sd)
 {
-  
+  std::mt19937 mt(seed);
+  for (len_t j=0; j<this->n_local; j++)
+  {
+    for (len_t i=0; i<this->m_local; i++)
+    {
+      static std::normal_distribution<REAL> dist(mean, sd);
+      this->data[i + this->m_local*j] = dist(mt);
+    }
+  }
+}
+
+template <typename REAL>
+void mpimat<REAL>::fill_rnorm(REAL mean, REAL sd)
+{
+  uint32_t seed = fmlutils::get_seed() + (g.myrow() + g.nprow()*g.mycol());
+  this->fill_rnorm(seed, mean, sd);
 }
 
 
