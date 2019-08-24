@@ -14,7 +14,7 @@ OBJS=$(SRCS:.cpp=.o )
 %.o: %.cpp 
 	$(CXX) $(CXXFLAGS) $(WARNFLAGS) $(OMPFLAGS) -c $< -o $@
 
-cpumat: test-main.o cpumat.o linalg.o
+cpumat: $(OBJS)
 	$(CXX) test-main.o cpumat.o linalg.o -o cpumat $(OMPFLAGS) $(LDFLAGS)
 
 
