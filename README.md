@@ -13,10 +13,10 @@ fml is the Fused Matrix Library, a multi-source, header-only C++ library for mat
 
 The library provides 4 main classes: `cpumat`, `gpumat`, `parmat`, and `mpimat`. These are mostly what they sound like, but the particular details are:
 
-* CPU: Single node cpu computing (multi-threaded if using multi-threaded BLAS and linking with OpenMP).
-* GPU: Single gpu computing via CUDA.
-* PAR: Multi-node and/or multi-gpu computing via MPI and/or CUDA.
-* MPI: Multi-node computing via ScaLAPACK (+gpus if using [SLATE](http://icl.utk.edu/slate/)).
+* <font color="blue">CPU</font>: Single node cpu computing (multi-threaded if using multi-threaded BLAS and linking with OpenMP).
+* <font color="green">GPU</font>: Single gpu computing via CUDA.
+* <font color="orange">PAR</font>: Multi-node and/or multi-gpu computing via MPI and/or CUDA.
+* <font color="red">MPI</font>: Multi-node computing via ScaLAPACK (+gpus if using [SLATE](http://icl.utk.edu/slate/)).
 
 There are some differences in how objects of any particular type are constructed. But the high level APIs are largely the same between the objects. The goal is to be able to quickly create laptop-scale prototypes that are then easily converted into large scale gpu/multi-node/multi-gpu/multi-node+multi-gpu codes.
 
