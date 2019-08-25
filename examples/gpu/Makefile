@@ -19,4 +19,4 @@ nvml:
 	$(CXX) $(CXXFLAGS) $(WARNFLAGS) -I/usr/local/cuda/include nvml.cpp -o nvml -lnvidia-ml
 
 clean:
-	rm -rf gpumat nvml
+	rm -rf card gpumat nvml
