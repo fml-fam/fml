@@ -35,6 +35,18 @@ namespace kernelfuns
     if (i < m && j < n)
       data[i + m*j] = v;
   }
+  
+  
+  
+  template <typename REAL>
+  __global__ void kernel_scale(const REAL s, len_t m, len_t n, REAL *data)
+  {
+    int i = blockDim.x*blockIdx.x + threadIdx.x;
+    int j = blockDim.y*blockIdx.y + threadIdx.y;
+    
+    if (i < m && j < n)
+      data[i + m*j] *= s;
+  }
 }
 
 
