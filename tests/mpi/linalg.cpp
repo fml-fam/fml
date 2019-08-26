@@ -19,6 +19,9 @@ TEMPLATE_TEST_CASE("matrix multiplication", "[linalg]", float, double)
   y.fill_linspace((TestType) n*n, 1.f);
   
   mpimat<TestType> z = linalg::matmult(false, false, (TestType)1, x, y);
+  REQUIRE( z.nrows() == n );
+  REQUIRE( z.ncols() == n );
+  
   REQUIRE( fltcmp::eq(z(0), 13) );
   REQUIRE( fltcmp::eq(z(1), 20) );
   REQUIRE( fltcmp::eq(z(2), 5) );
