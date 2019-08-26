@@ -31,8 +31,6 @@ namespace linalg
     return ret;
   }
   
-  
-  
   template <typename REAL>
   void matmult_noalloc(const bool transx, const bool transy, const REAL alpha, const mpimat<REAL> &x, const mpimat<REAL> &y, mpimat<REAL> &ret)
   {
@@ -49,6 +47,29 @@ namespace linalg
     scalapack::gemm(ctransx, ctransy, m, n, k, alpha,
       x.data_ptr(), x.desc_ptr(), y.data_ptr(), y.desc_ptr(),
       (REAL)0, ret.data_ptr(), ret.desc_ptr());
+  }
+  
+  
+  
+  // upper triangle
+  template <typename REAL>
+  mpimat<REAL> crossprod(const REAL alpha, const mpimat<REAL> &x)
+  {
+    int n = x.ncols();
+    grid g = x.get_grid();
+    mpimat<REAL> ret(g, n, n, x.bf_rows(), x.bf_cols());
+    scalapack::syrk('L', 'T', n, x.nrows(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
+    return ret;
+  }
+  
+  template <typename REAL>
+  void crossprod_noalloc(const REAL alpha, const mpimat<REAL> &x, mpimat<REAL> &ret)
+  {
+    int n = x.ncols();
+    if (n != ret.nrows() || n != ret.ncols())
+      throw std::runtime_error("non-conformable arguments");
+    
+    scalapack::syrk('L', 'T', n, x.nrows(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
   }
 }
 
