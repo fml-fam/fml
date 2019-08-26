@@ -64,7 +64,7 @@ class mpimat : public matrix<REAL>
     int bf_cols() const {return nb;};
     int* desc_ptr() {return desc;};
     const int* desc_ptr() const {return desc;};
-    grid get_grid() const {return g;};
+    const grid get_grid() const {return g;};
     
   protected:
     len_local_t m_local;
