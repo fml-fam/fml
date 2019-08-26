@@ -71,6 +71,28 @@ namespace linalg
     
     scalapack::syrk('L', 'T', n, x.nrows(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
   }
+  
+  
+  
+  template <typename REAL>
+  mpimat<REAL> tcrossprod(const REAL alpha, const mpimat<REAL> &x)
+  {
+    int n = x.nrows();
+    grid g = x.get_grid();
+    mpimat<REAL> ret(g, n, n, x.bf_rows(), x.bf_cols());
+    scalapack::syrk('L', 'N', n, x.ncols(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
+    return ret;
+  }
+  
+  template <typename REAL>
+  void tcrossprod_noalloc(const REAL alpha, const mpimat<REAL> &x, mpimat<REAL> &ret)
+  {
+    int n = x.nrows();
+    if (n != ret.nrows() || n != ret.ncols())
+      throw std::runtime_error("non-conformable arguments");
+    
+    scalapack::syrk('L', 'N', n, x.ncols(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
+  }
 }
 
 
