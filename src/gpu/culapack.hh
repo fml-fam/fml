@@ -19,6 +19,18 @@ namespace culapack
   
   
   
+  inline cublasStatus_t syrk(cublasHandle_t handle, cublasFillMode_t uplo, cublasOperation_t trans, int n, int k, const float alpha, const float *A, int lda, const float beta, float *C, int ldc)
+  {
+    return cublasSsyrk(handle, uplo, trans, n, k, &alpha, A, lda, &beta, C, ldc);
+  }
+  
+  inline cublasStatus_t syrk(cublasHandle_t handle, cublasFillMode_t uplo, cublasOperation_t trans, int n, int k, const double alpha, const double *A, int lda, const double beta, float *C, int ldc)
+  {
+    return cublasDsyrk(handle, uplo, trans, n, k, &alpha, A, lda, &beta, C, ldc);
+  }
+  
+  
+  
   inline cusolverStatus_t getrf_buflen(cusolverDnHandle_t handle, int m, int n, float *A, int lda, int *lwork)
   {
     return cusolverDnSgetrf_bufferSize(handle, m, n, A, lda, lwork);
