@@ -79,6 +79,33 @@ namespace linalg
   
   
   template <typename REAL>
+  cpumat<REAL> tcrossprod(const REAL alpha, const cpumat<REAL> &x)
+  {
+    len_t m = x.nrows();
+    len_t n = x.ncols();
+    
+    cpumat<REAL> ret(m, m);
+    
+    lapack::syrk('L', 'N', m, n, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), m);
+    
+    return ret;
+  }
+  
+  template <typename REAL>
+  void tcrossprod_noalloc(const REAL alpha, const cpumat<REAL> &x, cpumat<REAL> &ret)
+  {
+    len_t m = x.nrows();
+    len_t n = x.ncols();
+    
+    if (m != ret.nrows() || m != ret.ncols())
+      throw std::runtime_error("non-conformable arguments");
+    
+    lapack::syrk('L', 'N', m, n, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), m);
+  }
+  
+  
+  
+  template <typename REAL>
   int lu(cpumat<REAL> &x, cpumat<int> &p)
   {
     int info = 0;
