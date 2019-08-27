@@ -1,3 +1,4 @@
 cpumat
-matmult
 det
+matmult
+svd
