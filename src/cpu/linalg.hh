@@ -30,8 +30,6 @@ namespace linalg
     return ret;
   }
   
-  
-  
   template <typename REAL>
   void matmult_noalloc(const bool transx, const bool transy, const REAL alpha, const cpumat<REAL> &x, const cpumat<REAL> &y, cpumat<REAL> &ret)
   {
@@ -48,6 +46,34 @@ namespace linalg
     char ctransy = transy ? 'T' : 'N';
     
     lapack::gemm(ctransx, ctransy, m, n, k, alpha, x.data_ptr(), mx, y.data_ptr(), my, (REAL)0, ret.data_ptr(), m);
+  }
+  
+  
+  
+  // lower triangle of t(x) %*% x
+  template <typename REAL>
+  cpumat<REAL> crossprod(const REAL alpha, const cpumat<REAL> &x)
+  {
+    len_t m = x.nrows();
+    len_t n = x.ncols();
+    
+    cpumat<REAL> ret(n, n);
+    
+    lapack::syrk('L', 'T', n, m, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), n);
+    
+    return ret;
+  }
+  
+  template <typename REAL>
+  void crossprod_noalloc(const REAL alpha, const cpumat<REAL> &x, cpumat<REAL> &ret)
+  {
+    len_t m = x.nrows();
+    len_t n = x.ncols();
+    
+    if (n != ret.nrows() || n != ret.ncols())
+      throw std::runtime_error("non-conformable arguments");
+    
+    lapack::syrk('L', 'T', n, m, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), n);
   }
   
   
