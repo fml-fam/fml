@@ -9,7 +9,8 @@
 #include <stdexcept>
 
 #include "../fmlutils.hh"
-#include "../matrix.hh"
+#include "../types.hh"
+#include "../unimat.hh"
 
 
 /**
@@ -17,7 +18,7 @@
  * @tparam REAL should be 'float' or 'double'.
  */
 template <typename REAL>
-class cpumat : public matrix<REAL>
+class cpumat : public unimat<REAL>
 {
   public:
     cpumat();

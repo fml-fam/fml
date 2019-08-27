@@ -11,7 +11,8 @@
 #include "bcutils.hh"
 
 #include "../fmlutils.hh"
-#include "../matrix.hh"
+#include "../types.hh"
+#include "../unimat.hh"
 
 
 /**
@@ -21,7 +22,7 @@
  * @tparam REAL should be 'float' or 'double'.
  */
 template <typename REAL>
-class mpimat : public matrix<REAL>
+class mpimat : public unimat<REAL>
 {
   public:
     mpimat(grid &blacs_grid);

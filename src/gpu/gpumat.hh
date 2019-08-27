@@ -5,13 +5,15 @@
 #include <cstdint>
 #include <cstdio>
 
-#include "../matrix.hh"
 #include "card.hh"
 #include "kernelfuns.hh"
 
+#include "../types.hh"
+#include "../unimat.hh"
+
 
 template <typename REAL>
-class gpumat : public matrix<REAL>
+class gpumat : public unimat<REAL>
 {
   public:
     gpumat(std::shared_ptr<card> gpu);
@@ -185,7 +187,7 @@ void gpumat<REAL>::print(uint8_t ndigits) const
       cudaMemcpy(&tmp, this->data + (i + this->m*j), sizeof(REAL), cudaMemcpyDeviceToHost);
       printf("%.*f ", ndigits, tmp);
     }
-    
+  
     putchar('\n');
   }
   
