@@ -57,7 +57,9 @@ namespace linalg
   {
     len_t n = x.ncols();
     grid g = x.get_grid();
+    
     mpimat<REAL> ret(g, n, n, x.bf_rows(), x.bf_cols());
+    ret.fill_zero();
     
     scalapack::syrk('L', 'T', n, x.nrows(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
     
@@ -81,7 +83,9 @@ namespace linalg
   {
     len_t n = x.nrows();
     grid g = x.get_grid();
+    
     mpimat<REAL> ret(g, n, n, x.bf_rows(), x.bf_cols());
+    ret.fill_zero();
     
     scalapack::syrk('L', 'N', n, x.ncols(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
     

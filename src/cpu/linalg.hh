@@ -58,6 +58,7 @@ namespace linalg
     len_t n = x.ncols();
     
     cpumat<REAL> ret(n, n);
+    ret.fill_zero();
     
     lapack::syrk('L', 'T', n, m, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), n);
     
@@ -85,6 +86,7 @@ namespace linalg
     len_t n = x.ncols();
     
     cpumat<REAL> ret(m, m);
+    ret.fill_zero();
     
     lapack::syrk('L', 'N', m, n, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), m);
     
