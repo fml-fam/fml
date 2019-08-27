@@ -13,8 +13,8 @@ TEMPLATE_TEST_CASE("matrix multiplication", "[linalg]", float, double)
   cpumat<TestType> x(n, n);
   cpumat<TestType> y(n, n);
   
-  x.fill_linspace(1.f, (float) n*n);
-  y.fill_linspace((float) n*n, 1.f);
+  x.fill_linspace(1.f, (TestType) n*n);
+  y.fill_linspace((TestType) n*n, 1.f);
   
   cpumat<TestType> z = linalg::matmult(false, false, (TestType)1, x, y);
   REQUIRE( z.nrows() == n );
