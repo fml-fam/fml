@@ -16,26 +16,17 @@ int main()
   y.fill_linspace((float) n*n, 1.f);
   
   mpimat<float> z = linalg::matmult(false, false, 1.0f, x, y);
-  
   z.info();
-  cpumat<float> z_gbl = mpihelpers::mpi2cpu(z);
-  if (g.rank0())
-    z_gbl.print();
+  z.print();
   
   linalg::matmult_noalloc(true, false, 1.0f, x, y, z);
-  mpihelpers::mpi2cpu_noalloc(z, z_gbl);
-  if (g.rank0())
-    z_gbl.print();
+  z.print();
   
   linalg::matmult_noalloc(false, true, 1.0f, x, y, z);
-  mpihelpers::mpi2cpu_noalloc(z, z_gbl);
-  if (g.rank0())
-    z_gbl.print();
+  z.print();
   
   linalg::matmult_noalloc(true, true, 1.0f, x, y, z);
-  mpihelpers::mpi2cpu_noalloc(z, z_gbl);
-  if (g.rank0())
-    z_gbl.print();
+  z.print();
   
   g.exit();
   g.finalize();
