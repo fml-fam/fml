@@ -2,9 +2,7 @@
 #define FML_MATRIX_H
 
 
-#include <cstdint>
-
-typedef int len_t;
+#include "types.hh"
 
 
 template <typename REAL>

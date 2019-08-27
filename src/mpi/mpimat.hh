@@ -13,8 +13,6 @@
 #include "../fmlutils.hh"
 #include "../matrix.hh"
 
-typedef int len_local_t;
-
 
 /**
  * @brief Matrix class for data distributed over MPI in the 2-d block cyclic
