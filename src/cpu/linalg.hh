@@ -7,6 +7,7 @@
 
 #include "../linalgutils.hh"
 #include "cpumat.hh"
+#include "cpuvec.hh"
 #include "lapack.hh"
 
 
@@ -108,19 +109,28 @@ namespace linalg
   
   
   template <typename REAL>
-  int lu(cpumat<REAL> &x, cpumat<int> &p)
+  int lu(cpumat<REAL> &x, cpuvec<int> &p)
   {
     int info = 0;
     len_t m = x.nrows();
     len_t lipiv = std::min(m, x.ncols());
     
-    int *ipiv = (int*) malloc(lipiv * sizeof(*ipiv));
-    if (ipiv == NULL)
-      throw std::bad_alloc();
+    p.resize(lipiv);
     
-    lapack::getrf(m, x.ncols(), x.data_ptr(), m, ipiv, &info);
+    lapack::getrf(m, x.ncols(), x.data_ptr(), m, p.data_ptr(), &info);
     
-    p.set(ipiv, m, 1);
+    return info;
+  }
+  
+  template <typename REAL>
+  int lu(cpumat<REAL> &x)
+  {
+    int info = 0;
+    len_t m = x.nrows();
+    len_t lipiv = std::min(m, x.ncols());
+    
+    cpuvec<int> p(lipiv);
+    lapack::getrf(m, x.ncols(), x.data_ptr(), m, p.data_ptr(), &info);
     
     return info;
   }
@@ -135,7 +145,7 @@ namespace linalg
     if (m != n)
       throw std::runtime_error("'x' must be a square matrix");
     
-    cpumat<int> p;
+    cpuvec<int> p;
     int info = lu(x, p);
     
     if (info != 0)
