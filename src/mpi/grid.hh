@@ -86,6 +86,8 @@ class grid
     int npcol() const {return _npcol;};
     int myrow() const {return _myrow;};
     int mycol() const {return _mycol;};
+    
+    bool valid_grid() const {return (_ictxt!=UNINITIALIZED_GRID && _ictxt!=EXITED_GRID);};
   
   protected:
     int _ictxt;
