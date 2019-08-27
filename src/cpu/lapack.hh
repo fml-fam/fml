@@ -50,6 +50,22 @@ namespace lapack
   {
     dgetrf_(&m, &n, a, &lda, ipiv, info);
   }
+  
+  
+  
+  inline void gesdd(const char jobz, const int m, const int n, float *a,
+    const int lda, float *s, float *u, const int ldu, float *vt,
+    const int ldvt, float *work, const int lwork, int *iwork, int *info)
+  {
+    sgesdd_(&jobz, &m, &n, a, &lda, s, u, &ldu, vt, &ldvt, work, &lwork, iwork, info);
+  }
+  
+  inline void gesdd(const char jobz, const int m, const int n, double *a,
+    const int lda, double *s, double *u, const int ldu, double *vt,
+    const int ldvt, double *work, const int lwork, int *iwork, int *info)
+  {
+    dgesdd_(&jobz, &m, &n, a, &lda, s, u, &ldu, vt, &ldvt, work, &lwork, iwork, info);
+  }
 }
 
 

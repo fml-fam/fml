@@ -45,6 +45,23 @@ extern void dgetrf_(const int *const restrict m, const int *const restrict n,
 
 
 
+extern void sgesdd_(const char *const restrict jobz, const int *const restrict m,
+  const int *const restrict n, float *const restrict a,
+  const int *const restrict lda, float *const restrict s,
+  float *const restrict u, const int *const restrict ldu,
+  float *const restrict vt, const int *const restrict ldvt,
+  float *const restrict work, const int *const restrict lwork,
+  int *const restrict iwork, int *const restrict info);
+
+extern void dgesdd_(const char *const restrict jobz, const int *const restrict m,
+  const int *const restrict n, double *const restrict a,
+  const int *const restrict lda, double *const restrict s,
+  double *const restrict u, const int *const restrict ldu,
+  double *const restrict vt, const int *const restrict ldvt,
+  double *const restrict work, const int *const restrict lwork,
+  int *const restrict iwork, int *const restrict info);
+
+
 #ifdef __cplusplus
 }
 #endif
