@@ -45,7 +45,7 @@ TEMPLATE_TEST_CASE("matrix multiplication", "[linalg]", float, double)
   REQUIRE( fltcmp::eq(z(2), 5) );
   REQUIRE( fltcmp::eq(z(3), 13) );
 }
- 
+
 
 
 TEMPLATE_TEST_CASE("crossprod and tcrossprod", "[linalg]", float, double)
@@ -92,4 +92,3 @@ TEMPLATE_TEST_CASE("crossprod and tcrossprod", "[linalg]", float, double)
   REQUIRE( fltcmp::eq(x_tcp(2, 1), 22) );
   REQUIRE( fltcmp::eq(x_tcp(2, 2), 17) );
 }
- 
