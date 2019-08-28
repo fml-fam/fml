@@ -2,6 +2,8 @@
 #define FML_GPU_GPUHELPERS_H
 
 
+#include <stdexcept>
+
 #include "../cpu/cpumat.hh"
 #include "../cpu/cpuvec.hh"
 
@@ -15,6 +17,9 @@ namespace gpuhelpers
   template <typename REAL>
   void gpu2cpu_noalloc(gpuvec<REAL> &gpu, cpuvec<REAL> &cpu)
   {
+    if (gpu.size() != cpu.size())
+      throw std::runtime_error("non-conformable arguments");
+    
     size_t len = gpu.size() * sizeof(REAL);
     gpu.get_card()->mem_gpu2cpu(cpu.data_ptr(), gpu.data_ptr(), len);
   }
@@ -32,8 +37,13 @@ namespace gpuhelpers
   template <typename REAL>
   void gpu2cpu_noalloc(gpumat<REAL> &gpu, cpumat<REAL> &cpu)
   {
-    size_t len = gpu.nrows() * gpu.ncols() * sizeof(REAL);
-    gpu.get_card()->mem_gpu2cpu(cpu.data_ptr(), gpu.data_ptr(), len);
+    size_t gpulen = (size_t) gpu.nrows() * gpu.ncols() * sizeof(REAL);
+    size_t cpulen = (size_t) cpu.nrows() * cpu.ncols() * sizeof(REAL);
+    
+    if (gpulen != cpulen)
+      throw std::runtime_error("non-conformable arguments");
+    
+    gpu.get_card()->mem_gpu2cpu(cpu.data_ptr(), gpu.data_ptr(), gpulen);
   }
   
   template <typename REAL>
@@ -50,6 +60,9 @@ namespace gpuhelpers
   template <typename REAL>
   void cpu2gpu_noalloc(cpuvec<REAL> &cpu, gpuvec<REAL> &gpu)
   {
+    if (gpu.size() != cpu.size())
+      throw std::runtime_error("non-conformable arguments");
+    
     size_t len = cpu.size() * sizeof(REAL);
     gpu.get_card()->mem_cpu2gpu(gpu.data_ptr(), cpu.data_ptr(), len);
   }
@@ -67,8 +80,13 @@ namespace gpuhelpers
   template <typename REAL>
   void cpu2gpu_noalloc(cpumat<REAL> &cpu, gpumat<REAL> &gpu)
   {
-    size_t len = cpu.nrows() * cpu.ncols() * sizeof(REAL);
-    gpu.get_card()->mem_cpu2gpu(gpu.data_ptr(), cpu.data_ptr(), len);
+    size_t gpulen = (size_t) gpu.nrows() * gpu.ncols() * sizeof(REAL);
+    size_t cpulen = (size_t) cpu.nrows() * cpu.ncols() * sizeof(REAL);
+    
+    if (gpulen != cpulen)
+      throw std::runtime_error("non-conformable arguments");
+    
+    gpu.get_card()->mem_cpu2gpu(gpu.data_ptr(), cpu.data_ptr(), gpulen);
   }
   
   template <typename REAL>
