@@ -25,6 +25,7 @@ template <typename REAL>
 class mpimat : public unimat<REAL>
 {
   public:
+    mpimat();
     mpimat(grid &blacs_grid);
     mpimat(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows=16, int bf_cols=16);
     mpimat(grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct=false);
@@ -89,6 +90,26 @@ class mpimat : public unimat<REAL>
 // -----------------------------------------------------------------------------
 
 // constructors/destructor
+
+template <typename REAL>
+mpimat<REAL>::mpimat()
+{
+  this->m = 0;
+  this->n = 0;
+  this->data = NULL;
+  
+  this->m_local = 0;
+  this->n_local = 0;
+  this->mb = 0;
+  this->nb = 0;
+  
+  grid g;
+  this->g = g;
+  
+  this->free_data = true;
+}
+
+
 
 template <typename REAL>
 mpimat<REAL>::mpimat(grid &blacs_grid)
