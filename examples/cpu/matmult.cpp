@@ -6,8 +6,8 @@ int main()
 {
   len_t n = 2;
   
-  cpumat<float> x = cpumat<float>(n, n);
-  cpumat<float> y = cpumat<float>(n, n);
+  cpumat<float> x(n, n);
+  cpumat<float> y(n, n);
   
   x.fill_linspace(1.f, (float) n*n);
   y.fill_linspace((float) n*n, 1.f);

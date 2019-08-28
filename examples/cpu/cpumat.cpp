@@ -3,7 +3,7 @@
 
 int main()
 {
-  cpumat<float> x = cpumat<float>(5, 5);
+  cpumat<float> x(5, 5);
   x.info();
   
   x.fill_eye();
