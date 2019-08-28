@@ -164,9 +164,7 @@ mpimat<REAL>::mpimat(const mpimat<REAL> &x)
   this->mb = x.bf_rows();
   this->nb = x.bf_cols();
   
-  const int *xdesc = x.desc_ptr();
-  for (int i=0; i<9; i++)
-    this->desc[i] = xdesc[i];
+  memcpy(this->desc, x.desc_ptr(), 9*sizeof(int));
   
   grid g = x.get_grid();
   this->g = g;
