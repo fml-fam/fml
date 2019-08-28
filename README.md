@@ -22,7 +22,6 @@ There are some differences in how objects of any particular type are constructed
 
 
 
-
 ## Dependencies Other Software
 
 There are no external header dependencies, but there are some shared libraries you need to have (more information below):
@@ -87,7 +86,82 @@ int main()
 Save as `svd.cpp` and build with:
 
 ```bash
-g++ -I/path/to/fml/src svd.cpp -o svd -fopenmp -llapack -lblas
+g++ -I/path/to/fml/src -fopenmp svd.cpp -o svd -llapack -lblas
+```
+
+You should see output like
+
+```
+# cpumat 3x2 type=f
+1 4 
+2 5 
+3 6 
+
+# cpuvec 2 type=f
+9.5080 0.7729 
+```
+
+The API is largely the same if we change the object storage, but we have to change the object initialization. For example, if `x` is an object of class `mpimat`, we still call `linalg::svd(x, s)`. The differences lie in the creation of the objects. Here is how we might change the above example to use distributed data:
+
+```C++
+#include <mpi/mpimat.hh>
+#include <mpi/linalg.hh>
+
+
+int main()
+{
+  grid g = grid(PROC_GRID_SQUARE);
+  g.info();
+  
+  len_t m = 3;
+  len_t n = 2;
+  
+  mpimat<float> x(g, m, n, 1, 1);
+  x.fill_linspace(1.f, (float)m*n);
+  
+  x.info();
+  x.print(0);
+  
+  cpuvec<float> s;
+  linalg::svd(x, s);
+  
+  if (g.rank0())
+  {
+    s.info();
+    s.print();
+  }
+  
+  g.exit();
+  g.finalize();
+  
+  return 0;
+}
+```
+
+We can build it via:
+
+```bash
+mpicxx -I/path/to/fml/src svd.cpp -fopenmp  svd.cpp -o svd -lscalapack-openmpi
+```
+
+We can launch the example with multiple processes via
+
+```bash
+mpirun -np 4 ./svd
+```
+
+And here we see:
+
+```
+## Grid 0 2x2
+
+# mpimat 3x2 on 2x2 grid type=f
+1 4 
+2 5 
+3 6 
+
+# cpuvec 2 type=f
+9.5080 0.7729 
 ```
 
 
