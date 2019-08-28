@@ -125,14 +125,8 @@ namespace linalg
   template <typename REAL>
   int lu(cpumat<REAL> &x)
   {
-    int info = 0;
-    len_t m = x.nrows();
-    len_t lipiv = std::min(m, x.ncols());
-    
-    cpuvec<int> p(lipiv);
-    lapack::getrf(m, x.ncols(), x.data_ptr(), m, p.data_ptr(), &info);
-    
-    return info;
+    cpuvec<int> p;
+    return lu(x, p);
   }
   
   
