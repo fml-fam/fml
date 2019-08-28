@@ -126,6 +126,70 @@ namespace linalg
     cpuvec<int> p;
     return lu(x, p);
   }
+  
+  
+  
+  namespace
+  {
+    template <typename REAL>
+    int svd_internals(const int nu, const int nv, mpimat<REAL> &x, cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
+    {
+      int info = 0;
+      char jobu, jobvt;
+      
+      len_t m = x.nrows();
+      len_t n = x.ncols();
+      
+      int minmn = std::min(m, n);
+      
+      s.resize(minmn);
+      
+      if (nu == 0 && nv == 0)
+      {
+        jobu = 'N';
+        jobvt = 'N';
+      }
+      else if (nu <= minmn && nv <= minmn)
+      {
+        jobu = 'V';
+        jobvt = 'V';
+        
+        int mb = x.bf_rows();
+        int nb = x.bf_cols();
+        
+        u.resize(m, minmn, mb, nb);
+        vt.resize(minmn, n, mb, nb);
+      }
+      else
+      {
+        // TODO
+      }
+      
+      int lwork = -1;
+      REAL tmp;
+      
+      scalapack::gesvd(jobu, jobvt, m, n, x.data_ptr(), x.desc_ptr(), s.data_ptr(), u.data_ptr(), u.desc_ptr(), vt.data_ptr(), vt.desc_ptr(), &tmp, lwork, &info);
+      lwork = (int) tmp;
+      cpuvec<REAL> work(lwork);
+      
+      scalapack::gesvd(jobu, jobvt, m, n, x.data_ptr(), x.desc_ptr(), s.data_ptr(), u.data_ptr(), u.desc_ptr(), vt.data_ptr(), vt.desc_ptr(), work.data_ptr(), lwork, &info);
+      
+      return info;
+    }
+  }
+  
+  template <typename REAL>
+  void svd(mpimat<REAL> &x, cpuvec<REAL> &s)
+  {
+    mpimat<REAL> ignored;
+    svd_internals(0, 0, x, s, ignored, ignored);
+  }
+  
+  template <typename REAL>
+  void svd(mpimat<REAL> &x, cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
+  {
+    svd_internals(1, 1, x, s, u, vt);
+  }
 }
 
 
