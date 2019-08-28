@@ -60,6 +60,26 @@ namespace scalapack
     int ij = 1;
     pdgetrf_(&m, &n, a, &ij, &ij, desca, ipiv, info);
   }
+  
+  
+  
+  inline void gesvd(const char jobu, const char jobvt, const int m, const int n,
+    float *a, int *desca, float *s, float *u, int *descu, float *vt,
+    int *descvt, float *work, int lwork, int *info)
+  {
+    int ij = 1;
+    psgesvd_(
+      &jobu, &jobvt, &m, &n, a, &ij, &ij, desca, s, u, &ij, &ij, descu, vt, &ij, &ij, descvt, work, &lwork, info);
+  }
+  
+  inline void gesvd(const char jobu, const char jobvt, const int m, const int n,
+    double *a, int *desca, double *s, double *u, int *descu, double *vt,
+    int *descvt, double *work, int lwork, int *info)
+  {
+    int ij = 1;
+    pdgesvd_(
+      &jobu, &jobvt, &m, &n, a, &ij, &ij, desca, s, u, &ij, &ij, descu, vt, &ij, &ij, descvt, work, &lwork, info);
+  }
 }
 
 
