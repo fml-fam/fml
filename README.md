@@ -56,6 +56,42 @@ Check the makefiles in the `examples/` tree if none of that makes sense.
 
 
 
+## Example
+
+```C++
+#include <cpu/cpumat.hh>
+#include <cpu/linalg.hh>
+
+
+int main()
+{
+  len_t m = 3;
+  len_t n = 2;
+  
+  cpumat<float> x(m, n);
+  x.fill_linspace(1.f, (float)m*n);
+  
+  x.info();
+  x.print(0);
+  
+  cpuvec<float> s;
+  linalg::svd(x, s);
+  
+  s.info();
+  s.print();
+  
+  return 0;
+}
+```
+
+Save as `svd.cpp` and build with:
+
+```bash
+g++ -I/path/to/fml/src svd.cpp -o svd -fopenmp -llapack -lblas
+```
+
+
+
 ## Philosophy and Similar Projects
 
 Some similar C/C++ projects worth mentioning:
