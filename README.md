@@ -22,7 +22,18 @@ There are some differences in how objects of any particular type are constructed
 
 
 
-## Building and Installation
+
+## Dependencies Other Software
+
+There are no external header dependencies, but there are some shared libraries you need to have (more information below):
+
+* CPU code needs [LAPACK](http://performance.netlib.org/lapack/) (I recommend [OpenBLAS](https://github.com/xianyi/OpenBLAS))
+* GPU code needs [CUDA](https://developer.nvidia.com/cuda-downloads)
+* MPI code needs [ScaLAPACK](http://performance.netlib.org/scalapack/)
+
+Other software:
+
+* Tests use [catch2](https://github.com/catchorg/Catch2)
 
 You can find some examples of how to use the library in the `examples/` tree. Right now there is no real build system beyond some ad hoc makefiles; but ad hoc is better than no hoc.
 
@@ -30,10 +41,10 @@ Depending on which class(es) you want to use, here are some general guidelines f
 
 * CPU: `cpumat`
     - Compile with your favorite C++ compiler.
-    - Link with LAPACK and BLAS (and ideally with OpenMP). I recommend [OpenBLAS](https://github.com/xianyi/OpenBLAS).
+    - Link with LAPACK and BLAS (and ideally with OpenMP).
 * GPU: `gpumat`
     - Compile with `nvcc`.
-    - For most functionality, link with libcudart, libcublas, and libcusolver.  Link with libnvidia-ml if using nvml (using this exclusively does not require `nvcc`; an ordinary C++ compiler will do).
+    - For most functionality, link with libcudart, libcublas, and libcusolver.  Link with libnvidia-ml if using nvml (if you're only using this, then you don't need `nvcc`; an ordinary C++ compiler will do).
 * PAR: `parmat`
     - Compile with `mpicxx`.
     - TODO
