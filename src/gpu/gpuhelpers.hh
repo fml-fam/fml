@@ -37,13 +37,11 @@ namespace gpuhelpers
   template <typename REAL>
   void gpu2cpu_noalloc(gpumat<REAL> &gpu, cpumat<REAL> &cpu)
   {
-    size_t gpulen = (size_t) gpu.nrows() * gpu.ncols() * sizeof(REAL);
-    size_t cpulen = (size_t) cpu.nrows() * cpu.ncols() * sizeof(REAL);
-    
-    if (gpulen != cpulen)
+    if (gpu.nrows() != cpu.nrows() || gpu.ncols() != cpu.ncols())
       throw std::runtime_error("non-conformable arguments");
     
-    gpu.get_card()->mem_gpu2cpu(cpu.data_ptr(), gpu.data_ptr(), gpulen);
+    size_t len = (size_t) gpu.nrows() * gpu.ncols() * sizeof(REAL);
+    gpu.get_card()->mem_gpu2cpu(cpu.data_ptr(), gpu.data_ptr(), len);
   }
   
   template <typename REAL>
@@ -80,17 +78,15 @@ namespace gpuhelpers
   template <typename REAL>
   void cpu2gpu_noalloc(cpumat<REAL> &cpu, gpumat<REAL> &gpu)
   {
-    size_t gpulen = (size_t) gpu.nrows() * gpu.ncols() * sizeof(REAL);
-    size_t cpulen = (size_t) cpu.nrows() * cpu.ncols() * sizeof(REAL);
-    
-    if (gpulen != cpulen)
+    if (gpu.nrows() != cpu.nrows() || gpu.ncols() != cpu.ncols())
       throw std::runtime_error("non-conformable arguments");
     
-    gpu.get_card()->mem_cpu2gpu(gpu.data_ptr(), cpu.data_ptr(), gpulen);
+    size_t len = (size_t) gpu.nrows() * gpu.ncols() * sizeof(REAL);
+    gpu.get_card()->mem_cpu2gpu(gpu.data_ptr(), cpu.data_ptr(), len);
   }
   
   template <typename REAL>
-  gpumat<REAL> cpu2gpu(std::shared_ptr<card> c, cpumat<REAL> &cpu)
+  gpumat<REAL> cpu2gpu(cpumat<REAL> &cpu, std::shared_ptr<card> c)
   {
     gpumat<REAL> gpu(c, cpu.nrows(), cpu.ncols());
     cpu2gpu_noalloc(cpu, gpu);
