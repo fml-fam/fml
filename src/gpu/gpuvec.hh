@@ -45,6 +45,7 @@ class gpuvec : public univec<T>
     bool should_free() const {return free_data;};
     void free();
     void printval(const T val, uint8_t ndigits) const;
+    void check_params(len_t size);
 };
 
 
@@ -71,6 +72,8 @@ gpuvec<T>::gpuvec(std::shared_ptr<card> gpu)
 template <typename T>
 gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, len_t size)
 {
+  check_params(size);
+  
   this->c = gpu;
   
   size_t len = (size_t) size * sizeof(T);
@@ -86,6 +89,8 @@ gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, len_t size)
 template <typename T>
 gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, T *data_, len_t size, bool free_on_destruct)
 {
+  check_params(size);
+  
   this->c = gpu;
   
   this->_size = size;
@@ -109,6 +114,8 @@ gpuvec<T>::~gpuvec()
 template <typename T>
 void gpuvec<T>::resize(len_t size)
 {
+  check_params(size);
+  
   if (this->_size == size)
     return;
   
@@ -131,6 +138,8 @@ void gpuvec<T>::resize(len_t size)
 template <typename T>
 void gpuvec<T>::set(std::shared_ptr<card> gpu, T *data, len_t size, bool free_on_destruct)
 {
+  check_params(size);
+  
   this->free();
   
   this->c = gpu;
@@ -233,6 +242,15 @@ void gpuvec<REAL>::free()
 {
   if (this->free_data)
     this->c->mem_free(this->data);
+}
+
+
+
+template <typename REAL>
+void gpuvec<REAL>::check_params(len_t size)
+{
+  if (size < 0)
+    throw std::runtime_error("invalid dimensions");
 }
 
 

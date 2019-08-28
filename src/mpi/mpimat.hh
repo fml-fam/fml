@@ -79,6 +79,7 @@ class mpimat : public unimat<REAL>
     void free();
     void printval(REAL, uint8_t ndigits) const;
     REAL get_val_from_global_index(len_t gi, len_t gj) const;
+    void check_params(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols);
 };
 
 
@@ -111,6 +112,8 @@ mpimat<REAL>::mpimat(grid &blacs_grid)
 template <typename REAL>
 mpimat<REAL>::mpimat(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols)
 {
+  check_params(blacs_grid, nrows, ncols, bf_rows, bf_cols);
+  
   this->m_local = bcutils::numroc(nrows, bf_rows, blacs_grid.myrow(), 0, blacs_grid.nprow());
   this->n_local = bcutils::numroc(ncols, bf_cols, blacs_grid.mycol(), 0, blacs_grid.npcol());
   
@@ -135,6 +138,8 @@ mpimat<REAL>::mpimat(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, in
 template <typename REAL>
 mpimat<REAL>::mpimat(grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct)
 {
+  check_params(blacs_grid, nrows, ncols, bf_rows, bf_cols);
+  
   this->m_local = bcutils::numroc(nrows, bf_rows, blacs_grid.myrow(), 0, blacs_grid.nprow());
   this->n_local = bcutils::numroc(ncols, bf_cols, blacs_grid.mycol(), 0, blacs_grid.npcol());
   
@@ -189,6 +194,8 @@ mpimat<REAL>::~mpimat()
 template <typename REAL>
 void mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
 {
+  check_params(this->g, nrows, ncols, bf_rows, bf_cols);
+  
   size_t len = (size_t) nrows * ncols * sizeof(REAL);
   size_t oldlen = (size_t) this->m * this->n * sizeof(REAL);
   
@@ -222,6 +229,8 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
 template <typename REAL>
 void mpimat<REAL>::set(grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct)
 {
+  check_params(blacs_grid, nrows, ncols, bf_rows, bf_cols);
+  
   this->free();
   
   m_local = bcutils::numroc(nrows, bf_rows, blacs_grid.myrow(), 0, blacs_grid.nprow());
@@ -589,6 +598,21 @@ REAL mpimat<REAL>::get_val_from_global_index(len_t gi, len_t gj) const
   g.allreduce(1, 1, &ret, 'A');
   
   return ret;
+}
+
+
+
+template <typename REAL>
+void mpimat<REAL>::check_params(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols)
+{
+  if (!blacs_grid.valid_grid())
+    throw std::runtime_error("invalid blacs grid");
+  
+  if (nrows < 0 || ncols < 0)
+    throw std::runtime_error("invalid dimensions");
+  
+  if (bf_rows <= 0 || bf_cols <= 0)
+    throw std::runtime_error("invalid blocking factor");
 }
 
 

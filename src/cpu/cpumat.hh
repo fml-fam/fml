@@ -58,6 +58,7 @@ class cpumat : public unimat<REAL>
     bool should_free() const {return free_data;};
     void free();
     void printval(const REAL val, uint8_t ndigits) const;
+    void check_params(len_t nrows, len_t ncols);
 };
 
 
@@ -83,6 +84,8 @@ cpumat<REAL>::cpumat()
 template <typename REAL>
 cpumat<REAL>::cpumat(len_t nrows, len_t ncols)
 {
+  check_params(nrows, ncols);
+  
   size_t len = (size_t) nrows * ncols * sizeof(REAL);
   this->data = (REAL*) std::malloc(len);
   if (this->data == NULL)
@@ -99,6 +102,8 @@ cpumat<REAL>::cpumat(len_t nrows, len_t ncols)
 template <typename REAL>
 cpumat<REAL>::cpumat(REAL *data_, len_t nrows, len_t ncols, bool free_on_destruct)
 {
+  check_params(nrows, ncols);
+  
   this->m = nrows;
   this->n = ncols;
   this->data = data_;
@@ -133,6 +138,8 @@ cpumat<REAL>::~cpumat()
 template <typename REAL>
 void cpumat<REAL>::resize(len_t nrows, len_t ncols)
 {
+  check_params(nrows, ncols);
+  
   size_t len = (size_t) nrows * ncols * sizeof(REAL);
   size_t oldlen = (size_t) this->m * this->n * sizeof(REAL);
   
@@ -158,6 +165,8 @@ void cpumat<REAL>::resize(len_t nrows, len_t ncols)
 template <typename REAL>
 void cpumat<REAL>::set(REAL *data, len_t nrows, len_t ncols, bool free_on_destruct)
 {
+  check_params(nrows, ncols);
+  
   this->free();
   
   this->m = nrows;
@@ -433,6 +442,14 @@ void cpumat<REAL>::printval(const REAL val, uint8_t ndigits) const
   printf("%.*f ", ndigits, val);
 }
 
+
+
+template <typename REAL>
+void cpumat<REAL>::check_params(len_t nrows, len_t ncols)
+{
+  if (nrows < 0 || ncols < 0)
+    throw std::runtime_error("invalid dimensions");
+}
 
 
 #endif

@@ -47,6 +47,7 @@ class cpuvec : public univec<T>
     bool should_free() const {return free_data;};
     void free();
     void printval(const T val, uint8_t ndigits) const;
+    void check_params(len_t size);
 };
 
 
@@ -71,6 +72,8 @@ cpuvec<T>::cpuvec()
 template <typename T>
 cpuvec<T>::cpuvec(len_t size)
 {
+  check_params(size);
+  
   size_t len = (size_t) size * sizeof(T);
   this->data = (T*) std::malloc(len);
   if (this->data == NULL)
@@ -86,6 +89,8 @@ cpuvec<T>::cpuvec(len_t size)
 template <typename T>
 cpuvec<T>::cpuvec(T *data_, len_t size, bool free_on_destruct)
 {
+  check_params(size);
+  
   this->_size = size;
   this->data = data_;
   
@@ -118,6 +123,8 @@ cpuvec<T>::~cpuvec()
 template <typename T>
 void cpuvec<T>::resize(len_t size)
 {
+  check_params(size);
+  
   if (this->_size == size)
     return;
   
@@ -137,6 +144,8 @@ void cpuvec<T>::resize(len_t size)
 template <typename T>
 void cpuvec<T>::set(T *data, len_t size, bool free_on_destruct)
 {
+  check_params(size);
+  
   this->free();
   
   this->_size = size;
@@ -300,6 +309,14 @@ void cpuvec<T>::printval(const T val, uint8_t ndigits) const
   printf("%.*f ", ndigits, val);
 }
 
+
+
+template <typename REAL>
+void cpuvec<REAL>::check_params(len_t size)
+{
+  if (size < 0)
+    throw std::runtime_error("invalid dimensions");
+}
 
 
 #endif
