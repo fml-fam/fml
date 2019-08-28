@@ -18,7 +18,7 @@ namespace mpihelpers
     len_t m = mpi.nrows();
     len_t n = mpi.ncols();
     
-    if (m != cpu.nrows() || n != cpu.nrows())
+    if (m != cpu.nrows() || n != cpu.ncols())
       throw std::runtime_error("non-conformable arguments");
     
     len_local_t m_local = mpi.nrows_local();
@@ -51,10 +51,7 @@ namespace mpihelpers
   template <typename REAL>
   cpumat<REAL> mpi2cpu(mpimat<REAL> &mpi)
   {
-    len_t m = mpi.nrows();
-    len_t n = mpi.ncols();
-    
-    cpumat<REAL> cpu(m, n);
+    cpumat<REAL> cpu(mpi.nrows(), mpi.ncols());
     mpi2cpu_noalloc(mpi, cpu);
     
     return cpu;
@@ -63,13 +60,17 @@ namespace mpihelpers
   
   
   template <typename REAL>
-  mpimat<REAL> cpu2mpi(cpumat<REAL> &cpu, grid g, int bf_rows=16, int bf_cols=16)
+  void cpu2mpi_noalloc(cpumat<REAL> &cpu, mpimat<REAL> &mpi)
   {
     len_t m = cpu.nrows();
     len_t n = cpu.ncols();
     
-    mpimat<REAL> mpi(g, m, n, bf_rows, bf_cols);
+    if (m != mpi.nrows() || n != mpi.ncols())
+      throw std::runtime_error("non-conformable arguments");
+    
     mpi.fill_zero();
+    
+    grid g = mpi.get_grid();
     
     len_local_t m_local = mpi.nrows_local();
     len_local_t n_local = mpi.ncols_local();
@@ -90,6 +91,13 @@ namespace mpihelpers
         }
       }
     }
+  }
+  
+  template <typename REAL>
+  mpimat<REAL> cpu2mpi(cpumat<REAL> &cpu, grid g, int bf_rows=16, int bf_cols=16)
+  {
+    mpimat<REAL> mpi(g, cpu.nrows(), cpu.ncols(), bf_rows, bf_cols);
+    cpu2mpi_noalloc(cpu, mpi);
     
     return mpi;
   }
