@@ -123,19 +123,21 @@ gpumat<REAL>::~gpumat()
 template <typename REAL>
 void gpumat<REAL>::resize(len_t nrows, len_t ncols)
 {
-  if ( (this->m == nrows || this->n == nrows) && (this->m == ncols || this->n == ncols) )
+  size_t len = (size_t) nrows * ncols * sizeof(REAL);
+  size_t oldlen = (size_t) this->m * this->n * sizeof(REAL);
+  
+  if (len == oldlen)
   {
     this->m = nrows;
     this->n = ncols;
     return;
   }
   
-  size_t len = nrows * ncols * sizeof(REAL);
+  
   
   REAL *realloc_ptr;
   realloc_ptr = (REAL*) this->c->mem_alloc(len);
   
-  size_t oldlen = this->m * this->n * sizeof(REAL);
   size_t copylen = std::min(len, oldlen);
   this->c->mem_gpu2gpu(realloc_ptr, this->data, copylen);
   this->c->mem_free(this->data);

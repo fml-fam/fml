@@ -189,7 +189,10 @@ mpimat<REAL>::~mpimat()
 template <typename REAL>
 void mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
 {
-  if ( (this->m == nrows || this->n == nrows) && (this->m == ncols || this->n == ncols) )
+  size_t len = (size_t) nrows * ncols * sizeof(REAL);
+  size_t oldlen = (size_t) this->m * this->n * sizeof(REAL);
+  
+  if (len == oldlen && this->mb == bf_rows && this->nb == bf_cols)
   {
     this->m = nrows;
     this->n = ncols;
@@ -202,7 +205,6 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
   this->m_local = bcutils::numroc(nrows, this->mb, this->g.myrow(), 0, this->g.nprow());
   this->n_local = bcutils::numroc(ncols, this->nb, this->g.mycol(), 0, this->g.npcol());
   
-  size_t len = this->m_local * this->n_local * sizeof(REAL);
   void *realloc_ptr = realloc(this->data, len);
   if (realloc_ptr == NULL)
     throw std::bad_alloc();
