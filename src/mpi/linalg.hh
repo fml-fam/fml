@@ -5,6 +5,8 @@
 #include <stdexcept>
 
 #include "../linalgutils.hh"
+#include "../cpu/cpuvec.hh"
+
 #include "mpimat.hh"
 #include "scalapack.hh"
 
@@ -105,30 +107,25 @@ namespace linalg
   
   
   template <typename REAL>
-  void xpose(mpimat<REAL> &x)
+  int lu(mpimat<REAL> &x, cpuvec<int> &p)
   {
+    int info = 0;
+    len_t m = x.nrows();
+    len_t lipiv = std::min(m, x.ncols());
     
+    p.resize(lipiv);
+    
+    scalapack::getrf(m, x.ncols(), x.data_ptr(), m, p.data_ptr(), &info);
+    
+    return info;
   }
   
-  
-  
-  // template <typename REAL>
-  // int lu(mpimat<REAL> &x, cpumat<int> &p)
-  // {
-  //   int info = 0;
-  //   len_t m = x.nrows();
-  //   len_t lipiv = std::min(m, x.ncols());
-  // 
-  //   int *ipiv = (int*) malloc(lipiv * sizeof(*ipiv));
-  //   if (ipiv == NULL)
-  //     throw std::bad_alloc();
-  // 
-  //   scalapack::getrf(m, x.ncols(), x.data_ptr(), m, ipiv, &info);
-  // 
-  //   p.set(ipiv, m, 1);
-  // 
-  //   return info;
-  // }
+  template <typename REAL>
+  int lu(mpimat<REAL> &x)
+  {
+    cpuvec<int> p;
+    return lu(x, p);
+  }
 }
 
 
