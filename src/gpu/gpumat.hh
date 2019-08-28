@@ -112,8 +112,7 @@ gpumat<REAL>::gpumat(std::shared_ptr<card> gpu, REAL *data_, len_t nrows, len_t 
 template <typename REAL>
 gpumat<REAL>::~gpumat()
 {
-  if (this->free_data)
-    this->c->mem_free(this->data);
+  this->free();
 }
 
 
@@ -133,8 +132,6 @@ void gpumat<REAL>::resize(len_t nrows, len_t ncols)
     return;
   }
   
-  
-  
   REAL *realloc_ptr;
   realloc_ptr = (REAL*) this->c->mem_alloc(len);
   
@@ -152,6 +149,8 @@ void gpumat<REAL>::resize(len_t nrows, len_t ncols)
 template <typename REAL>
 void gpumat<REAL>::set(std::shared_ptr<card> gpu, REAL *data, len_t nrows, len_t ncols, bool free_on_destruct)
 {
+  this->free();
+  
   this->c = gpu;
   
   this->m = nrows;
@@ -302,6 +301,12 @@ void gpumat<REAL>::scale(const REAL s)
 // private
 // -----------------------------------------------------------------------------
 
+template <typename REAL>
+void gpumat<REAL>::free()
+{
+  if (this->free_data)
+    this->c->mem_free(this->data);
+}
 
 
 #endif
