@@ -60,7 +60,7 @@ gpuvec<T>::gpuvec(std::shared_ptr<card> gpu)
 {
   this->c = gpu;
   
-  this->len = 0;
+  this->_size = 0;
   this->data = NULL;
   
   this->free_data = true;
@@ -76,7 +76,7 @@ gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, len_t size)
   size_t len = size * sizeof(T);
   this->data = (T*) this->c->mem_alloc(len);
   
-  this->len = size;
+  this->_size = size;
   
   this->free_data = true;
 }
@@ -88,7 +88,7 @@ gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, T *data_, len_t size, bool free_on_
 {
   this->c = gpu;
   
-  this->len = size;
+  this->_size = size;
   this->data = data_;
   
   this->free_data = free_on_destruct;
@@ -110,7 +110,7 @@ gpuvec<T>::~gpuvec()
 template <typename T>
 void gpuvec<T>::resize(len_t size)
 {
-  if (this->len == size)
+  if (this->_size == size)
     return;
   
   size_t len = size * sizeof(T);
@@ -124,7 +124,7 @@ void gpuvec<T>::resize(len_t size)
   this->c->mem_free(this->data);
   this->data = realloc_ptr;
   
-  this->len = size;
+  this->_size = size;
 }
 
 
@@ -134,7 +134,7 @@ void gpuvec<T>::set(std::shared_ptr<card> gpu, T *data, len_t size, bool free_on
 {
   this->c = gpu;
   
-  this->len = size;
+  this->_size = size;
   this->data = data;
   
   this->free_data = free_on_destruct;
@@ -145,9 +145,9 @@ void gpuvec<T>::set(std::shared_ptr<card> gpu, T *data, len_t size, bool free_on
 template <typename T>
 gpuvec<T> gpuvec<T>::dupe() const
 {
-  gpuvec<T> cpy(this->c, this->len);
+  gpuvec<T> cpy(this->c, this->_size);
   
-  size_t len = this->len * sizeof(T);
+  size_t len = this->_size * sizeof(T);
   this->c->mem_gpu2gpu(cpy.data_ptr(), this->data, len);
   
   return cpy;
@@ -176,7 +176,7 @@ template <typename T>
 void gpuvec<T>::info() const
 {
   printf("# gpuvec ");
-  printf("%d ", this->len);
+  printf("%d ", this->_size);
   printf("type=%s ", typeid(T).name());
   printf("\n");
 }
@@ -188,7 +188,7 @@ void gpuvec<T>::info() const
 template <typename T>
 void gpuvec<T>::fill_zero()
 {
-  size_t len = this->len * sizeof(T);
+  size_t len = this->_size * sizeof(T);
   this->c->mem_set(this->data, 0, len);
 }
 

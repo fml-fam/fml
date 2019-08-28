@@ -60,7 +60,7 @@ class cpuvec : public univec<T>
 template <typename T>
 cpuvec<T>::cpuvec()
 {
-  this->len = 0;
+  this->_size = 0;
   this->data = NULL;
   
   this->free_data = true;
@@ -76,7 +76,7 @@ cpuvec<T>::cpuvec(len_t size)
   if (this->data == NULL)
     throw std::bad_alloc();
   
-  this->len = size;
+  this->_size = size;
   
   this->free_data = true;
 }
@@ -86,7 +86,7 @@ cpuvec<T>::cpuvec(len_t size)
 template <typename T>
 cpuvec<T>::cpuvec(T *data_, len_t size, bool free_on_destruct)
 {
-  this->len = size;
+  this->_size = size;
   this->data = data_;
   
   this->free_data = free_on_destruct;
@@ -97,7 +97,7 @@ cpuvec<T>::cpuvec(T *data_, len_t size, bool free_on_destruct)
 template <typename T>
 cpuvec<T>::cpuvec(const cpuvec<T> &x)
 {
-  this->len = x.size();
+  this->_size = x.size();
   this->data = x.data_ptr();
   
   this->free_data = x.should_free();
@@ -118,7 +118,7 @@ cpuvec<T>::~cpuvec()
 template <typename T>
 void cpuvec<T>::resize(len_t size)
 {
-  if (this->len == size)
+  if (this->_size == size)
     return;
   
   size_t len = size * sizeof(T);
@@ -129,7 +129,7 @@ void cpuvec<T>::resize(len_t size)
   
   this->data = (T*) realloc_ptr;
   
-  this->len = size;
+  this->_size = size;
 }
 
 
@@ -139,7 +139,7 @@ void cpuvec<T>::set(T *data, len_t size, bool free_on_destruct)
 {
   this->free();
   
-  this->len = size;
+  this->_size = size;
   this->data = data;
   
   this->free_data = free_on_destruct;
@@ -150,9 +150,9 @@ void cpuvec<T>::set(T *data, len_t size, bool free_on_destruct)
 template <typename T>
 cpuvec<T> cpuvec<T>::dupe() const
 {
-  cpuvec<T> cpy(this->len);
+  cpuvec<T> cpy(this->_size);
   
-  size_t len = this->len * sizeof(T);
+  size_t len = this->_size * sizeof(T);
   memcpy(cpy.data_ptr(), this->data, len);
   
   return cpy;
@@ -165,7 +165,7 @@ cpuvec<T> cpuvec<T>::dupe() const
 template <typename T>
 void cpuvec<T>::print(uint8_t ndigits) const
 {
-  for (len_t i=0; i<this->len; i++)
+  for (len_t i=0; i<this->_size; i++)
     printval(this->data[i], ndigits);
   
   printf("\n\n");
@@ -177,7 +177,7 @@ template <typename T>
 void cpuvec<T>::info() const
 {
   printf("# cpuvec");
-  printf(" %d", this->len);
+  printf(" %d", this->_size);
   printf(" type=%s", typeid(T).name());
   printf("\n");
 }
@@ -189,7 +189,7 @@ void cpuvec<T>::info() const
 template <typename T>
 void cpuvec<T>::fill_zero()
 {
-  size_t len = this->len * sizeof(T);
+  size_t len = this->_size * sizeof(T);
   memset(this->data, 0, len);
 }
 
@@ -207,7 +207,7 @@ template <typename T>
 void cpuvec<T>::fill_val(const T v)
 {
   #pragma omp parallel for simd
-  for (len_t i=0; i<this->len; i++)
+  for (len_t i=0; i<this->_size; i++)
     this->data[i] = v;
 }
 
@@ -216,7 +216,7 @@ void cpuvec<T>::fill_val(const T v)
 template <typename T>
 void cpuvec<T>::scale(const T s)
 {
-  for (len_t i=0; i<this->len; i++)
+  for (len_t i=0; i<this->_size; i++)
     this->data[i] *= s;
 }
 
@@ -227,7 +227,7 @@ void cpuvec<T>::scale(const T s)
 template <typename T>
 T& cpuvec<T>::operator()(len_t i)
 {
-  if (i < 0 || i >= this->len)
+  if (i < 0 || i >= this->_size)
     throw std::runtime_error("index out of bounds");
   
   return this->data[i];
@@ -236,7 +236,7 @@ T& cpuvec<T>::operator()(len_t i)
 template <typename T>
 const T& cpuvec<T>::operator()(len_t i) const
 {
-  if (i < 0 || i >= this->len)
+  if (i < 0 || i >= this->_size)
     throw std::runtime_error("index out of bounds");
   
   return this->data[i];
@@ -247,14 +247,14 @@ const T& cpuvec<T>::operator()(len_t i) const
 template <typename T>
 bool cpuvec<T>::operator==(const cpuvec<T> &x) const
 {
-  if (this->len != x.size())
+  if (this->_size != x.size())
     return false;
   
   if (this->data == x.data_ptr())
     return true;
   
   const T *x_d = x.data_ptr();
-  for (len_t i=0; i<this->len; i++)
+  for (len_t i=0; i<this->_size; i++)
   {
     if (this->data[i] != x_d[i])
       return false;

@@ -8,12 +8,12 @@ template <typename T>
 class univec
 {
   public:
-    len_t size() const {return len;};
+    len_t size() const {return _size;};
     T* data_ptr() {return data;};
     T* data_ptr() const {return data;};
   
   protected:
-    len_t len;
+    len_t _size;
     T *data;
 };
 
