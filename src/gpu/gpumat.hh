@@ -84,7 +84,7 @@ gpumat<REAL>::gpumat(std::shared_ptr<card> gpu, len_t nrows, len_t ncols)
 {
   this->c = gpu;
   
-  size_t len = nrows * ncols * sizeof(REAL);
+  size_t len = (size_t) nrows * ncols * sizeof(REAL);
   this->data = (REAL*) this->c->mem_alloc(len);
   
   this->m = nrows;
@@ -167,7 +167,7 @@ gpumat<REAL> gpumat<REAL>::dupe() const
 {
   gpumat<REAL> cpy(this->c, this->m, this->n);
   
-  size_t len = this->m * this->n * sizeof(REAL);
+  size_t len = (size_t) this->m * this->n * sizeof(REAL);
   this->c->mem_gpu2gpu(cpy.data_ptr(), this->data, len);
   
   return cpy;
@@ -213,7 +213,7 @@ void gpumat<REAL>::info() const
 template <typename REAL>
 void gpumat<REAL>::fill_zero()
 {
-  size_t len = (this->m) * (this->n) * sizeof(REAL);
+  size_t len = (size_t) this->m * this->n * sizeof(REAL);
   this->c->mem_set(this->data, 0, len);
 }
 

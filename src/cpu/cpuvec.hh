@@ -71,7 +71,7 @@ cpuvec<T>::cpuvec()
 template <typename T>
 cpuvec<T>::cpuvec(len_t size)
 {
-  size_t len = size * sizeof(T);
+  size_t len = (size_t) size * sizeof(T);
   this->data = (T*) std::malloc(len);
   if (this->data == NULL)
     throw std::bad_alloc();
@@ -121,7 +121,7 @@ void cpuvec<T>::resize(len_t size)
   if (this->_size == size)
     return;
   
-  size_t len = size * sizeof(T);
+  size_t len = (size_t) size * sizeof(T);
   
   void *realloc_ptr = realloc(this->data, len);
   if (realloc_ptr == NULL)
@@ -152,7 +152,7 @@ cpuvec<T> cpuvec<T>::dupe() const
 {
   cpuvec<T> cpy(this->_size);
   
-  size_t len = this->_size * sizeof(T);
+  size_t len = (size_t) this->_size * sizeof(T);
   memcpy(cpy.data_ptr(), this->data, len);
   
   return cpy;
@@ -189,7 +189,7 @@ void cpuvec<T>::info() const
 template <typename T>
 void cpuvec<T>::fill_zero()
 {
-  size_t len = this->_size * sizeof(T);
+  size_t len = (size_t) this->_size * sizeof(T);
   memset(this->data, 0, len);
 }
 

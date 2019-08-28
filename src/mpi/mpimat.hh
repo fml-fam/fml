@@ -116,7 +116,7 @@ mpimat<REAL>::mpimat(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, in
   
   bcutils::descinit(this->desc, blacs_grid.ictxt(), nrows, ncols, bf_rows, bf_cols, this->m_local);
   
-  size_t len = this->m_local * this->n_local * sizeof(REAL);
+  size_t len = (size_t) this->m_local * this->n_local * sizeof(REAL);
   this->data = (REAL*) std::malloc(len);
   if (this->data == NULL)
     throw std::bad_alloc();
@@ -246,7 +246,7 @@ mpimat<REAL> mpimat<REAL>::dupe() const
 {
   mpimat<REAL> dup(this->g, this->m, this->n, this->mb, this->nb);
   
-  size_t len = this->m_local * this->n_local * sizeof(REAL);
+  size_t len = (size_t) this->m_local * this->n_local * sizeof(REAL);
   memcpy(dup.data_ptr(), this->data, len);
   
   memcpy(dup.desc_ptr(), this->desc, 9*sizeof(int));
@@ -316,7 +316,7 @@ void mpimat<REAL>::info() const
 template <typename REAL>
 void mpimat<REAL>::fill_zero()
 {
-  size_t len = m_local * n_local * sizeof(REAL);
+  size_t len = (size_t) m_local * n_local * sizeof(REAL);
   memset(this->data, 0, len);
 }
 

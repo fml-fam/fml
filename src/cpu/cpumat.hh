@@ -83,7 +83,7 @@ cpumat<REAL>::cpumat()
 template <typename REAL>
 cpumat<REAL>::cpumat(len_t nrows, len_t ncols)
 {
-  size_t len = nrows * ncols * sizeof(REAL);
+  size_t len = (size_t) nrows * ncols * sizeof(REAL);
   this->data = (REAL*) std::malloc(len);
   if (this->data == NULL)
     throw std::bad_alloc();
@@ -174,7 +174,7 @@ cpumat<REAL> cpumat<REAL>::dupe() const
 {
   cpumat<REAL> cpy(this->m, this->n);
   
-  size_t len = this->m * this->n * sizeof(REAL);
+  size_t len = (size_t) this->m * this->n * sizeof(REAL);
   memcpy(cpy.data_ptr(), this->data, len);
   
   return cpy;
@@ -216,7 +216,7 @@ void cpumat<REAL>::info() const
 template <typename REAL>
 void cpumat<REAL>::fill_zero()
 {
-  size_t len = (this->m) * (this->n) * sizeof(REAL);
+  size_t len = (size_t) this->m * this->n * sizeof(REAL);
   memset(this->data, 0, len);
 }
 

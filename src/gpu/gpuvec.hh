@@ -73,7 +73,7 @@ gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, len_t size)
 {
   this->c = gpu;
   
-  size_t len = size * sizeof(T);
+  size_t len = (size_t) size * sizeof(T);
   this->data = (T*) this->c->mem_alloc(len);
   
   this->_size = size;
@@ -112,12 +112,12 @@ void gpuvec<T>::resize(len_t size)
   if (this->_size == size)
     return;
   
-  size_t len = size * sizeof(T);
+  size_t len = (size_t) size * sizeof(T);
   
   T *realloc_ptr;
   realloc_ptr = (T*) this->c->mem_alloc(len);
   
-  size_t oldlen = this->size * sizeof(T);
+  size_t oldlen = (size_t) this->size * sizeof(T);
   size_t copylen = std::min(len, oldlen);
   this->c->mem_gpu2gpu(realloc_ptr, this->data, copylen);
   this->c->mem_free(this->data);
@@ -148,7 +148,7 @@ gpuvec<T> gpuvec<T>::dupe() const
 {
   gpuvec<T> cpy(this->c, this->_size);
   
-  size_t len = this->_size * sizeof(T);
+  size_t len = (size_t) this->_size * sizeof(T);
   this->c->mem_gpu2gpu(cpy.data_ptr(), this->data, len);
   
   return cpy;
@@ -189,7 +189,7 @@ void gpuvec<T>::info() const
 template <typename T>
 void gpuvec<T>::fill_zero()
 {
-  size_t len = this->_size * sizeof(T);
+  size_t len = (size_t) this->_size * sizeof(T);
   this->c->mem_set(this->data, 0, len);
 }
 
