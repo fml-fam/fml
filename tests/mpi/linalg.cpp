@@ -92,3 +92,22 @@ TEMPLATE_TEST_CASE("crossprod and tcrossprod", "[linalg]", float, double)
   REQUIRE( fltcmp::eq(x_tcp(2, 1), 22) );
   REQUIRE( fltcmp::eq(x_tcp(2, 2), 17) );
 }
+
+
+
+TEMPLATE_TEST_CASE("xpose", "[linalg]", float, double)
+{
+  len_t m = 3;
+  len_t n = 2;
+  
+  mpimat<TestType> x(g, m, n, 1, 1);
+  x.fill_linspace(1.f, (TestType) m*n);
+  
+  mpimat<TestType> tx = linalg::xpose(x);
+  REQUIRE( tx.nrows() == x.ncols() );
+  REQUIRE( tx.ncols() == x.nrows() );
+  
+  REQUIRE( fltcmp::eq(x(0, 0), tx(0, 0)) );
+  REQUIRE( fltcmp::eq(x(1, 0), tx(0, 1)) );
+  REQUIRE( fltcmp::eq(x(2, 1), tx(1, 2)) );
+}
