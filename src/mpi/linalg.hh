@@ -34,7 +34,7 @@ namespace linalg
   }
   
   template <typename REAL>
-  void matmult_noalloc(const bool transx, const bool transy, const REAL alpha, const mpimat<REAL> &x, const mpimat<REAL> &y, mpimat<REAL> &ret)
+  void matmult(const bool transx, const bool transy, const REAL alpha, const mpimat<REAL> &x, const mpimat<REAL> &y, mpimat<REAL> &ret)
   {
     if (x.ncols() != ret.nrows() || ret.ncols() != y.nrows())
       throw std::runtime_error("non-conformable arguments");
@@ -69,7 +69,7 @@ namespace linalg
   }
   
   template <typename REAL>
-  void crossprod_noalloc(const REAL alpha, const mpimat<REAL> &x, mpimat<REAL> &ret)
+  void crossprod(const REAL alpha, const mpimat<REAL> &x, mpimat<REAL> &ret)
   {
     len_t n = x.ncols();
     if (n != ret.nrows() || n != ret.ncols())
@@ -95,7 +95,7 @@ namespace linalg
   }
   
   template <typename REAL>
-  void tcrossprod_noalloc(const REAL alpha, const mpimat<REAL> &x, mpimat<REAL> &ret)
+  void tcrossprod(const REAL alpha, const mpimat<REAL> &x, mpimat<REAL> &ret)
   {
     len_t n = x.nrows();
     if (n != ret.nrows() || n != ret.ncols())
@@ -107,7 +107,7 @@ namespace linalg
   
   
   template <typename REAL>
-  void xpose_noalloc(mpimat<REAL> &x, mpimat<REAL> &tx)
+  void xpose(mpimat<REAL> &x, mpimat<REAL> &tx)
   {
     len_t m = x.nrows();
     len_t n = x.ncols();
@@ -126,7 +126,7 @@ namespace linalg
     len_t n = x.ncols();
     
     mpimat<REAL> tx(g, n, m, x.bf_rows(), x.bf_cols());
-    xpose_noalloc(x, tx);
+    xpose(x, tx);
     return tx;
   }
   

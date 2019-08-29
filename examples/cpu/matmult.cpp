@@ -15,13 +15,13 @@ int main()
   cpumat<float> z = linalg::matmult(false, false, 1.0f, x, y);
   z.print();
   
-  linalg::matmult_noalloc(true, false, 1.0f, x, y, z);
+  linalg::matmult(true, false, 1.0f, x, y, z);
   z.print();
   
-  linalg::matmult_noalloc(false, true, 1.0f, x, y, z);
+  linalg::matmult(false, true, 1.0f, x, y, z);
   z.print();
   
-  linalg::matmult_noalloc(true, true, 1.0f, x, y, z);
+  linalg::matmult(true, true, 1.0f, x, y, z);
   z.print();
   
   return 0;
