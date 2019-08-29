@@ -107,6 +107,32 @@ namespace linalg
   
   
   template <typename REAL>
+  void xpose_noalloc(mpimat<REAL> &x, mpimat<REAL> &tx)
+  {
+    len_t m = x.nrows();
+    len_t n = x.ncols();
+    
+    if (m != tx.ncols() || n != tx.nrows())
+      throw std::runtime_error("non-conformable arguments");
+    
+    scalapack::tran(n, m, 1.f, x.data_ptr(), x.desc_ptr(), 0.f, tx.data_ptr(), tx.desc_ptr());
+  }
+  
+  template <typename REAL>
+  mpimat<REAL> xpose(mpimat<REAL> &x)
+  {
+    grid g = x.get_grid();
+    len_t m = x.nrows();
+    len_t n = x.ncols();
+    
+    mpimat<REAL> tx(g, n, m, x.bf_rows(), x.bf_cols());
+    xpose_noalloc(x, tx);
+    return tx;
+  }
+  
+  
+  
+  template <typename REAL>
   int lu(mpimat<REAL> &x, cpuvec<int> &p)
   {
     int info = 0;
