@@ -24,7 +24,7 @@ namespace culapack
     return cublasSsyrk(handle, uplo, trans, n, k, &alpha, A, lda, &beta, C, ldc);
   }
   
-  inline cublasStatus_t syrk(cublasHandle_t handle, cublasFillMode_t uplo, cublasOperation_t trans, int n, int k, const double alpha, const double *A, int lda, const double beta, float *C, int ldc)
+  inline cublasStatus_t syrk(cublasHandle_t handle, cublasFillMode_t uplo, cublasOperation_t trans, int n, int k, const double alpha, const double *A, int lda, const double beta, double *C, int ldc)
   {
     return cublasDsyrk(handle, uplo, trans, n, k, &alpha, A, lda, &beta, C, ldc);
   }
@@ -38,7 +38,7 @@ namespace culapack
   
   inline cublasStatus_t geam(cublasHandle_t handle, cublasOperation_t transa, cublasOperation_t transb, int m, int n, const double *alpha, const double *A, int lda, const double *beta, const double *B, int ldb, double *C, int ldc)
   {
-    return cublasSgeam(handle, transa, transb, m, n, alpha, A, lda, beta, B, ldb, C, ldc);
+    return cublasDgeam(handle, transa, transb, m, n, alpha, A, lda, beta, B, ldb, C, ldc);
   }
   
   
