@@ -39,6 +39,18 @@ extern void pdsyrk_(const char *uplo, const char *trans, const int *n,
 
 
 
+extern void pstran_(const int *restrict m, const int *restrict n,
+  const float *restrict alpha, const float *restrict a, const int *ia,
+  const int *ja, const int *restrict desca, const float *restrict beta,
+  float *restrict c, const int *ic, const int *jc, const int *restrict descc);
+
+extern void pdtran_(const int *restrict m, const int *restrict n,
+  const double *restrict alpha, const double *restrict a, const int *ia,
+  const int *ja, const int *restrict desca, const double *restrict beta,
+  double *restrict c, const int *ic, const int *jc, const int *restrict descc);
+
+
+
 extern void psgetrf_(const int *m, const int *n, float *restrict a,
   const int *ia, const int *ja, const int *desca, int *restrict ipiv,
   int *info);

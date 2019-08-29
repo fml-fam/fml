@@ -49,6 +49,22 @@ namespace scalapack
   
   
   
+  inline void tran(const int m, const int n, const float alpha, const float *a,
+    const int *desca, const float beta, float *c, const int *descc)
+  {
+    int ij = 1;
+    pstran_(&m, &n, &alpha, a, &ij, &ij, desca, &beta, c, &ij, &ij, descc);
+  }
+  
+  inline void tran(const int m, const int n, const double alpha, const double *a,
+    const int *desca, const double beta, double *c, const int *descc)
+  {
+    int ij = 1;
+    pdtran_(&m, &n, &alpha, a, &ij, &ij, desca, &beta, c, &ij, &ij, descc);
+  }
+  
+  
+  
   inline void getrf(const int m, const int n, float *a, int *desca, int *ipiv, int *info)
   {
     int ij = 1;
