@@ -31,7 +31,7 @@ namespace scalapack
   
   inline void syrk(const char uplo, const char trans, const int n, const int k, 
     const float alpha, const float *a, const int *desca,
-    const float beta, float *restrict c, const int *descc)
+    const float beta, float *c, const int *descc)
   {
     int ij = 1;
     pssyrk_(&uplo, &trans, &n, &k, &alpha, a, &ij, &ij, desca, &beta, c, &ij,
@@ -40,7 +40,7 @@ namespace scalapack
   
   inline void syrk(const char uplo, const char trans, const int n, const int k, 
     const double alpha, const double *a, const int *desca,
-    const double beta, double *restrict c, const int *descc)
+    const double beta, double *c, const int *descc)
   {
     int ij = 1;
     pdsyrk_(&uplo, &trans, &n, &k, &alpha, a, &ij, &ij, desca, &beta, c, &ij,
