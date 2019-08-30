@@ -6,6 +6,8 @@
 #include <stdexcept>
 
 #include "../linalgutils.hh"
+#include "../omputils.hh"
+
 #include "cpumat.hh"
 #include "cpuvec.hh"
 #include "lapack.hh"
@@ -17,14 +19,14 @@ namespace linalg
   cpumat<REAL> matmult(const bool transx, const bool transy, const REAL alpha, const cpumat<REAL> &x, const cpumat<REAL> &y)
   {
     int m, n, k;
-    len_t mx = x.nrows();
-    len_t my = y.nrows();
+    const len_t mx = x.nrows();
+    const len_t my = y.nrows();
     
     linalgutils::matmult_params(transx, transy, mx, x.ncols(), my, y.ncols(), &m, &n, &k);
     cpumat<REAL> ret(m, n);
     
-    char ctransx = transx ? 'T' : 'N';
-    char ctransy = transy ? 'T' : 'N';
+    const char ctransx = transx ? 'T' : 'N';
+    const char ctransy = transy ? 'T' : 'N';
     
     lapack::gemm(ctransx, ctransy, m, n, k, alpha, x.data_ptr(), mx, y.data_ptr(), my, (REAL)0, ret.data_ptr(), m);
     
@@ -38,13 +40,13 @@ namespace linalg
       throw std::runtime_error("non-conformable arguments");
     
     int m, n, k;
-    len_t mx = x.nrows();
-    len_t my = y.nrows();
+    const len_t mx = x.nrows();
+    const len_t my = y.nrows();
     
     linalgutils::matmult_params(transx, transy, mx, x.ncols(), my, y.ncols(), &m, &n, &k);
     
-    char ctransx = transx ? 'T' : 'N';
-    char ctransy = transy ? 'T' : 'N';
+    const char ctransx = transx ? 'T' : 'N';
+    const char ctransy = transy ? 'T' : 'N';
     
     lapack::gemm(ctransx, ctransy, m, n, k, alpha, x.data_ptr(), mx, y.data_ptr(), my, (REAL)0, ret.data_ptr(), m);
   }
@@ -55,8 +57,8 @@ namespace linalg
   template <typename REAL>
   cpumat<REAL> crossprod(const REAL alpha, const cpumat<REAL> &x)
   {
-    len_t m = x.nrows();
-    len_t n = x.ncols();
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
     
     cpumat<REAL> ret(n, n);
     ret.fill_zero();
@@ -69,8 +71,8 @@ namespace linalg
   template <typename REAL>
   void crossprod(const REAL alpha, const cpumat<REAL> &x, cpumat<REAL> &ret)
   {
-    len_t m = x.nrows();
-    len_t n = x.ncols();
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
     
     if (n != ret.nrows() || n != ret.ncols())
       throw std::runtime_error("non-conformable arguments");
@@ -83,8 +85,8 @@ namespace linalg
   template <typename REAL>
   cpumat<REAL> tcrossprod(const REAL alpha, const cpumat<REAL> &x)
   {
-    len_t m = x.nrows();
-    len_t n = x.ncols();
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
     
     cpumat<REAL> ret(m, m);
     ret.fill_zero();
@@ -97,8 +99,8 @@ namespace linalg
   template <typename REAL>
   void tcrossprod(const REAL alpha, const cpumat<REAL> &x, cpumat<REAL> &ret)
   {
-    len_t m = x.nrows();
-    len_t n = x.ncols();
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
     
     if (m != ret.nrows() || m != ret.ncols())
       throw std::runtime_error("non-conformable arguments");
@@ -112,8 +114,8 @@ namespace linalg
   int lu(cpumat<REAL> &x, cpuvec<int> &p)
   {
     int info = 0;
-    len_t m = x.nrows();
-    len_t lipiv = std::min(m, x.ncols());
+    const len_t m = x.nrows();
+    const len_t lipiv = std::min(m, x.ncols());
     
     p.resize(lipiv);
     
@@ -134,8 +136,8 @@ namespace linalg
   template <typename REAL>
   void det(cpumat<REAL> &x, int &sign, REAL &modulus)
   {
-    len_t m = x.nrows();
-    len_t n = x.ncols();
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
     if (m != n)
       throw std::runtime_error("'x' must be a square matrix");
     
@@ -168,10 +170,10 @@ namespace linalg
     
     const REAL *a = x.data_ptr();
     
-    #pragma omp parallel for default(none) shared(m,a) reduction(+:mod) reduction(*:sgn)
+    #pragma omp parallel for reduction(+:mod) reduction(*:sgn)
     for (int i=0; i<m; i+=m+1)
     {
-      REAL d = a[i + m*i];
+      const REAL d = a[i + m*i];
       if (d < 0)
       {
         mod += log(-d);
@@ -197,10 +199,9 @@ namespace linalg
       char jobz;
       int ldvt;
       
-      len_t m = x.nrows();
-      len_t n = x.ncols();
-      
-      int minmn = std::min(m, n);
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      const len_t minmn = std::min(m, n);
       
       s.resize(minmn);
       
@@ -225,10 +226,9 @@ namespace linalg
       
       cpuvec<int> iwork(8*minmn);
       
-      int lwork = -1;
       REAL tmp;
-      lapack::gesdd(jobz, m, n, x.data_ptr(), m, s.data_ptr(), u.data_ptr(), m, vt.data_ptr(), ldvt, &tmp, lwork, iwork.data_ptr(), &info);
-      lwork = (int) tmp;
+      lapack::gesdd(jobz, m, n, x.data_ptr(), m, s.data_ptr(), u.data_ptr(), m, vt.data_ptr(), ldvt, &tmp, -1, iwork.data_ptr(), &info);
+      int lwork = (int) tmp;
       cpuvec<REAL> work(lwork);
       
       lapack::gesdd(jobz, m, n, x.data_ptr(), m, s.data_ptr(), u.data_ptr(), m, vt.data_ptr(), ldvt, work.data_ptr(), lwork, iwork.data_ptr(), &info);
