@@ -84,8 +84,7 @@ namespace scalapack
     int *descvt, float *work, int lwork, int *info)
   {
     int ij = 1;
-    psgesvd_(
-      &jobu, &jobvt, &m, &n, a, &ij, &ij, desca, s, u, &ij, &ij, descu, vt, &ij, &ij, descvt, work, &lwork, info);
+    psgesvd_(&jobu, &jobvt, &m, &n, a, &ij, &ij, desca, s, u, &ij, &ij, descu, vt, &ij, &ij, descvt, work, &lwork, info);
   }
   
   inline void gesvd(const char jobu, const char jobvt, const int m, const int n,
@@ -93,8 +92,7 @@ namespace scalapack
     int *descvt, double *work, int lwork, int *info)
   {
     int ij = 1;
-    pdgesvd_(
-      &jobu, &jobvt, &m, &n, a, &ij, &ij, desca, s, u, &ij, &ij, descu, vt, &ij, &ij, descvt, work, &lwork, info);
+    pdgesvd_(&jobu, &jobvt, &m, &n, a, &ij, &ij, desca, s, u, &ij, &ij, descu, vt, &ij, &ij, descvt, work, &lwork, info);
   }
 }
 
