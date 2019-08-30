@@ -111,6 +111,43 @@ namespace linalg
   
   
   template <typename REAL>
+  void xpose(const cpumat<REAL> &x, cpumat<REAL> &tx)
+  {
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
+    
+    if (m != tx.ncols() || n != tx.nrows())
+      throw std::runtime_error("non-conformable arguments");
+    
+    const int blocksize = 8;
+    const REAL *x_d = x.data_ptr();
+    REAL *tx_d = tx.data_ptr();
+    
+    #pragma omp parallel for shared(tx) schedule(dynamic, 1) if(m*n>omputils::OMP_MIN_SIZE)
+    for (int j=0; j<n; j+=blocksize)
+    {
+      for (int i=0; i<m; i+=blocksize)
+      {
+        for (int col=j; col<j+blocksize && col<n; ++col)
+        {
+          for (int row=i; row<i+blocksize && row<m; ++row)
+            tx_d[col + n*row] = x_d[row + m*col];
+        }
+      }
+    }
+  }
+  
+  template <typename REAL>
+  cpumat<REAL> xpose(const cpumat<REAL> &x)
+  {
+    cpumat<REAL> tx(x.ncols(), x.nrows());
+    xpose(x, tx);
+    return tx;
+  }
+  
+  
+  
+  template <typename REAL>
   int lu(cpumat<REAL> &x, cpuvec<int> &p)
   {
     int info = 0;
