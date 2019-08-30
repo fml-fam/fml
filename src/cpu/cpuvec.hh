@@ -7,6 +7,7 @@
 #include <cstring>
 #include <stdexcept>
 
+#include "../omputils.hh"
 #include "../univec.hh"
 
 
@@ -74,7 +75,7 @@ cpuvec<T>::cpuvec(len_t size)
 {
   check_params(size);
   
-  size_t len = (size_t) size * sizeof(T);
+  const size_t len = (size_t) size * sizeof(T);
   this->data = (T*) std::malloc(len);
   if (this->data == NULL)
     throw std::bad_alloc();
@@ -128,7 +129,7 @@ void cpuvec<T>::resize(len_t size)
   if (this->_size == size)
     return;
   
-  size_t len = (size_t) size * sizeof(T);
+  const size_t len = (size_t) size * sizeof(T);
   
   void *realloc_ptr = realloc(this->data, len);
   if (realloc_ptr == NULL)
@@ -161,7 +162,7 @@ cpuvec<T> cpuvec<T>::dupe() const
 {
   cpuvec<T> cpy(this->_size);
   
-  size_t len = (size_t) this->_size * sizeof(T);
+  const size_t len = (size_t) this->_size * sizeof(T);
   memcpy(cpy.data_ptr(), this->data, len);
   
   return cpy;
@@ -198,7 +199,7 @@ void cpuvec<T>::info() const
 template <typename T>
 void cpuvec<T>::fill_zero()
 {
-  size_t len = (size_t) this->_size * sizeof(T);
+  const size_t len = (size_t) this->_size * sizeof(T);
   memset(this->data, 0, len);
 }
 
@@ -215,7 +216,7 @@ void cpuvec<T>::fill_one()
 template <typename T>
 void cpuvec<T>::fill_val(const T v)
 {
-  #pragma omp parallel for simd
+  #pragma omp parallel for simd if(this->_size > omputils::OMP_MIN_SIZE)
   for (len_t i=0; i<this->_size; i++)
     this->data[i] = v;
 }
@@ -225,6 +226,7 @@ void cpuvec<T>::fill_val(const T v)
 template <typename T>
 void cpuvec<T>::scale(const T s)
 {
+  #pragma omp parallel for simd if(this->_size > omputils::OMP_MIN_SIZE)
   for (len_t i=0; i<this->_size; i++)
     this->data[i] *= s;
 }

@@ -11,6 +11,7 @@
 #include "bcutils.hh"
 
 #include "../fmlutils.hh"
+#include "../omputils.hh"
 #include "../types.hh"
 #include "../unimat.hh"
 
@@ -42,12 +43,12 @@ class mpimat : public unimat<REAL>
     void fill_zero();
     void fill_one();
     void fill_val(const REAL v);
-    void fill_linspace(REAL min, REAL max);
+    void fill_linspace(const REAL min, const REAL max);
     void fill_eye();
-    void fill_runif(uint32_t seed, REAL min=0, REAL max=1);
-    void fill_runif(REAL min=0, REAL max=1);
-    void fill_rnorm(uint32_t seed, REAL mean=0, REAL sd=1);
-    void fill_rnorm(REAL mean=0, REAL sd=1);
+    void fill_runif(const uint32_t seed, const REAL min=0, const REAL max=1);
+    void fill_runif(const REAL min=0, const REAL max=1);
+    void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
+    void fill_rnorm(const REAL mean=0, const REAL sd=1);
     void scale(const REAL s);
     
     REAL operator()(len_t i);
@@ -140,7 +141,7 @@ mpimat<REAL>::mpimat(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, in
   
   bcutils::descinit(this->desc, blacs_grid.ictxt(), nrows, ncols, bf_rows, bf_cols, this->m_local);
   
-  size_t len = (size_t) this->m_local * this->n_local * sizeof(REAL);
+  const size_t len = (size_t) this->m_local * this->n_local * sizeof(REAL);
   this->data = (REAL*) std::malloc(len);
   if (this->data == NULL)
     throw std::bad_alloc();
@@ -217,8 +218,8 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
 {
   check_params(this->g, nrows, ncols, bf_rows, bf_cols);
   
-  size_t len = (size_t) nrows * ncols * sizeof(REAL);
-  size_t oldlen = (size_t) this->m * this->n * sizeof(REAL);
+  const size_t len = (size_t) nrows * ncols * sizeof(REAL);
+  const size_t oldlen = (size_t) this->m * this->n * sizeof(REAL);
   
   if (len == oldlen && this->mb == bf_rows && this->nb == bf_cols)
   {
@@ -276,9 +277,9 @@ mpimat<REAL> mpimat<REAL>::dupe() const
 {
   mpimat<REAL> dup(this->g, this->m, this->n, this->mb, this->nb);
   
-  size_t len = (size_t) this->m_local * this->n_local * sizeof(REAL);
-  memcpy(dup.data_ptr(), this->data, len);
+  const size_t len = (size_t) this->m_local * this->n_local * sizeof(REAL);
   
+  memcpy(dup.data_ptr(), this->data, len);
   memcpy(dup.desc_ptr(), this->desc, 9*sizeof(int));
   
   return dup;
@@ -295,11 +296,11 @@ void mpimat<REAL>::print(uint8_t ndigits) const
   {
     for (len_t gj=0; gj<this->n; gj++)
     {
-      int pr = bcutils::g2p(gi, this->mb, this->g.nprow());
-      int pc = bcutils::g2p(gj, this->nb, this->g.npcol());
+      const int pr = bcutils::g2p(gi, this->mb, this->g.nprow());
+      const int pc = bcutils::g2p(gj, this->nb, this->g.npcol());
       
-      int i = bcutils::g2l(gi, this->mb, this->g.nprow());
-      int j = bcutils::g2l(gj, this->nb, this->g.npcol());
+      const int i = bcutils::g2l(gi, this->mb, this->g.nprow());
+      const int j = bcutils::g2l(gj, this->nb, this->g.npcol());
       
       REAL d;
       if (this->g.rank0())
@@ -346,7 +347,7 @@ void mpimat<REAL>::info() const
 template <typename REAL>
 void mpimat<REAL>::fill_zero()
 {
-  size_t len = (size_t) m_local * n_local * sizeof(REAL);
+  const size_t len = (size_t) m_local * n_local * sizeof(REAL);
   memset(this->data, 0, len);
 }
 
@@ -363,9 +364,10 @@ void mpimat<REAL>::fill_one()
 template <typename REAL>
 void mpimat<REAL>::fill_val(const REAL v)
 {
-  #pragma omp parallel for simd
+  #pragma omp parallel for if((this->m_local)*(this->n_local) > omputils::OMP_MIN_SIZE)
   for (len_t j=0; j<this->n_local; j++)
   {
+    #pragma omp simd
     for (len_t i=0; i<this->m_local; i++)
       this->data[i + this->m_local*j] = v;
   }
@@ -374,19 +376,22 @@ void mpimat<REAL>::fill_val(const REAL v)
 
 
 template <typename REAL>
-void mpimat<REAL>::fill_linspace(REAL min, REAL max)
+void mpimat<REAL>::fill_linspace(const REAL min, const REAL max)
 {
   if (min == max)
     this->fill_val(min);
   else
   {
-    REAL v = (max-min)/((REAL) this->m*this->n - 1);
+    const REAL v = (max-min)/((REAL) this->m*this->n - 1);
+    
+    #pragma omp parallel for if((this->m_local)*(this->n_local) > omputils::OMP_MIN_SIZE)
     for (len_t j=0; j<this->n_local; j++)
     {
+      #pragma omp simd
       for (len_t i=0; i<this->m_local; i++)
       {
-        int gi = bcutils::l2g(i, this->mb, this->g.nprow(), this->g.myrow());
-        int gj = bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
+        const int gi = bcutils::l2g(i, this->mb, this->g.nprow(), this->g.myrow());
+        const int gj = bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
         
         this->data[i + this->m_local*j] = v*((REAL) gi + this->m*gj) + min;
       }
@@ -399,12 +404,13 @@ void mpimat<REAL>::fill_linspace(REAL min, REAL max)
 template <typename REAL>
 void mpimat<REAL>::fill_eye()
 {
+  #pragma omp parallel for simd if((this->m_local)*(this->n_local) > omputils::OMP_MIN_SIZE)
   for (len_local_t j=0; j<n_local; j++)
   {
     for (len_local_t i=0; i<m_local; i++)
     {
-      int gi = bcutils::l2g(i, this->mb, this->g.nprow(), this->g.myrow());
-      int gj = bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
+      const int gi = bcutils::l2g(i, this->mb, this->g.nprow(), this->g.myrow());
+      const int gj = bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
       
       if (gi == gj)
         this->data[i + m_local*j] = 1;
@@ -417,7 +423,7 @@ void mpimat<REAL>::fill_eye()
 
 
 template <typename REAL>
-void mpimat<REAL>::fill_runif(uint32_t seed, REAL min, REAL max)
+void mpimat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL max)
 {
   std::mt19937 mt(seed);
   for (len_t j=0; j<this->n_local; j++)
@@ -431,7 +437,7 @@ void mpimat<REAL>::fill_runif(uint32_t seed, REAL min, REAL max)
 }
 
 template <typename REAL>
-void mpimat<REAL>::fill_runif(REAL min, REAL max)
+void mpimat<REAL>::fill_runif(const REAL min, const REAL max)
 {
   uint32_t seed = fmlutils::get_seed() + (g.myrow() + g.nprow()*g.mycol());
   this->fill_runif(seed, min, max);
@@ -440,7 +446,7 @@ void mpimat<REAL>::fill_runif(REAL min, REAL max)
 
 
 template <typename REAL>
-void mpimat<REAL>::fill_rnorm(uint32_t seed, REAL mean, REAL sd)
+void mpimat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL sd)
 {
   std::mt19937 mt(seed);
   for (len_t j=0; j<this->n_local; j++)
@@ -454,7 +460,7 @@ void mpimat<REAL>::fill_rnorm(uint32_t seed, REAL mean, REAL sd)
 }
 
 template <typename REAL>
-void mpimat<REAL>::fill_rnorm(REAL mean, REAL sd)
+void mpimat<REAL>::fill_rnorm(const REAL mean, const REAL sd)
 {
   uint32_t seed = fmlutils::get_seed() + (g.myrow() + g.nprow()*g.mycol());
   this->fill_rnorm(seed, mean, sd);
@@ -465,8 +471,10 @@ void mpimat<REAL>::fill_rnorm(REAL mean, REAL sd)
 template <typename REAL>
 void mpimat<REAL>::scale(const REAL s)
 {
+  #pragma omp parallel for if((this->m_local)*(this->n_local) > omputils::OMP_MIN_SIZE)
   for (len_local_t j=0; j<this->n_local; j++)
   {
+    #pragma omp simd
     for (len_local_t i=0; i<this->m_local; i++)
       this->data[i + this->m_local*j] *= s;
   }
