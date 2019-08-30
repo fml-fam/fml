@@ -23,8 +23,8 @@ namespace linalg
     grid g = x.get_grid();
     mpimat<REAL> ret(g, m, n, x.bf_rows(), x.bf_cols());
     
-    char ctransx = transx ? 'T' : 'N';
-    char ctransy = transy ? 'T' : 'N';
+    const char ctransx = transx ? 'T' : 'N';
+    const char ctransy = transy ? 'T' : 'N';
     
     scalapack::gemm(ctransx, ctransy, m, n, k, alpha,
       x.data_ptr(), x.desc_ptr(), y.data_ptr(), y.desc_ptr(),
@@ -43,8 +43,8 @@ namespace linalg
     
     linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
     
-    char ctransx = transx ? 'T' : 'N';
-    char ctransy = transy ? 'T' : 'N';
+    const char ctransx = transx ? 'T' : 'N';
+    const char ctransy = transy ? 'T' : 'N';
     
     scalapack::gemm(ctransx, ctransy, m, n, k, alpha,
       x.data_ptr(), x.desc_ptr(), y.data_ptr(), y.desc_ptr(),
@@ -57,7 +57,7 @@ namespace linalg
   template <typename REAL>
   mpimat<REAL> crossprod(const REAL alpha, const mpimat<REAL> &x)
   {
-    len_t n = x.ncols();
+    const len_t n = x.ncols();
     grid g = x.get_grid();
     
     mpimat<REAL> ret(g, n, n, x.bf_rows(), x.bf_cols());
@@ -71,7 +71,8 @@ namespace linalg
   template <typename REAL>
   void crossprod(const REAL alpha, const mpimat<REAL> &x, mpimat<REAL> &ret)
   {
-    len_t n = x.ncols();
+    const len_t n = x.ncols();
+    
     if (n != ret.nrows() || n != ret.ncols())
       throw std::runtime_error("non-conformable arguments");
     
@@ -83,7 +84,7 @@ namespace linalg
   template <typename REAL>
   mpimat<REAL> tcrossprod(const REAL alpha, const mpimat<REAL> &x)
   {
-    len_t n = x.nrows();
+    const len_t n = x.nrows();
     grid g = x.get_grid();
     
     mpimat<REAL> ret(g, n, n, x.bf_rows(), x.bf_cols());
@@ -97,7 +98,8 @@ namespace linalg
   template <typename REAL>
   void tcrossprod(const REAL alpha, const mpimat<REAL> &x, mpimat<REAL> &ret)
   {
-    len_t n = x.nrows();
+    const len_t n = x.nrows();
+    
     if (n != ret.nrows() || n != ret.ncols())
       throw std::runtime_error("non-conformable arguments");
     
@@ -107,10 +109,10 @@ namespace linalg
   
   
   template <typename REAL>
-  void xpose(mpimat<REAL> &x, mpimat<REAL> &tx)
+  void xpose(const mpimat<REAL> &x, mpimat<REAL> &tx)
   {
-    len_t m = x.nrows();
-    len_t n = x.ncols();
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
     
     if (m != tx.ncols() || n != tx.nrows())
       throw std::runtime_error("non-conformable arguments");
@@ -119,11 +121,11 @@ namespace linalg
   }
   
   template <typename REAL>
-  mpimat<REAL> xpose(mpimat<REAL> &x)
+  mpimat<REAL> xpose(const mpimat<REAL> &x)
   {
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
     grid g = x.get_grid();
-    len_t m = x.nrows();
-    len_t n = x.ncols();
     
     mpimat<REAL> tx(g, n, m, x.bf_rows(), x.bf_cols());
     xpose(x, tx);
@@ -136,8 +138,8 @@ namespace linalg
   int lu(mpimat<REAL> &x, cpuvec<int> &p)
   {
     int info = 0;
-    len_t m = x.nrows();
-    len_t lipiv = std::min(m, x.ncols());
+    const len_t m = x.nrows();
+    const len_t lipiv = std::min(m, x.ncols());
     
     p.resize(lipiv);
     
@@ -163,10 +165,9 @@ namespace linalg
       int info = 0;
       char jobu, jobvt;
       
-      len_t m = x.nrows();
-      len_t n = x.ncols();
-      
-      int minmn = std::min(m, n);
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      const len_t minmn = std::min(m, n);
       
       s.resize(minmn);
       
@@ -180,8 +181,8 @@ namespace linalg
         jobu = 'V';
         jobvt = 'V';
         
-        int mb = x.bf_rows();
-        int nb = x.bf_cols();
+        const int mb = x.bf_rows();
+        const int nb = x.bf_cols();
         
         u.resize(m, minmn, mb, nb);
         vt.resize(minmn, n, mb, nb);
@@ -191,11 +192,9 @@ namespace linalg
         // TODO
       }
       
-      int lwork = -1;
       REAL tmp;
-      
-      scalapack::gesvd(jobu, jobvt, m, n, x.data_ptr(), x.desc_ptr(), s.data_ptr(), u.data_ptr(), u.desc_ptr(), vt.data_ptr(), vt.desc_ptr(), &tmp, lwork, &info);
-      lwork = (int) tmp;
+      scalapack::gesvd(jobu, jobvt, m, n, x.data_ptr(), x.desc_ptr(), s.data_ptr(), u.data_ptr(), u.desc_ptr(), vt.data_ptr(), vt.desc_ptr(), &tmp, -1, &info);
+      int lwork = (int) tmp;
       cpuvec<REAL> work(lwork);
       
       scalapack::gesvd(jobu, jobvt, m, n, x.data_ptr(), x.desc_ptr(), s.data_ptr(), u.data_ptr(), u.desc_ptr(), vt.data_ptr(), vt.desc_ptr(), work.data_ptr(), lwork, &info);
