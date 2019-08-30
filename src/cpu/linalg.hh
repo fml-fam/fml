@@ -36,7 +36,7 @@ namespace linalg
   template <typename REAL>
   void matmult(const bool transx, const bool transy, const REAL alpha, const cpumat<REAL> &x, const cpumat<REAL> &y, cpumat<REAL> &ret)
   {
-    if (x.ncols() != ret.nrows() || ret.ncols() != y.nrows())
+    if (x.nrows() != ret.nrows() || ret.ncols() != y.ncols())
       throw std::runtime_error("non-conformable arguments");
     
     int m, n, k;
