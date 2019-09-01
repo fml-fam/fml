@@ -2,6 +2,7 @@
 #define FML_CPU_CPUVEC_H
 
 
+#include <cmath>
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
@@ -35,6 +36,7 @@ class cpuvec : public univec<T>
     void fill_zero();
     void fill_one();
     void fill_val(const T v);
+    void fill_linspace(const T min, const T max);
     void scale(const T s);
     
     T& operator()(len_t i);
@@ -220,6 +222,39 @@ void cpuvec<T>::fill_val(const T v)
   for (len_t i=0; i<this->_size; i++)
     this->data[i] = v;
 }
+
+
+
+template <>
+inline void cpuvec<int>::fill_linspace(const int min, const int max)
+{
+  if (min == max)
+    this->fill_val(min);
+  else
+  {
+    const float v = (max-min)/((float) this->_size - 1);
+    
+    #pragma omp parallel for simd if(this->_size > omputils::OMP_MIN_SIZE)
+    for (len_t i=0; i<this->_size; i++)
+      this->data[i] = (int) roundf(v*((float) i) + min);
+  }
+}
+
+template <typename REAL>
+void cpuvec<REAL>::fill_linspace(const REAL min, const REAL max)
+{
+  if (min == max)
+    this->fill_val(min);
+  else
+  {
+    const REAL v = (max-min)/((REAL) this->_size - 1);
+    
+    #pragma omp parallel for simd if(this->_size > omputils::OMP_MIN_SIZE)
+    for (len_t i=0; i<this->_size; i++)
+      this->data[i] = v*((REAL) i) + min;
+  }
+}
+
 
 
 

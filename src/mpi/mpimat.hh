@@ -2,6 +2,7 @@
 #define FML_MPI_MPIMAT_H
 
 
+#include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <random>
@@ -374,6 +375,30 @@ void mpimat<REAL>::fill_val(const REAL v)
 }
 
 
+
+template <>
+inline void mpimat<int>::fill_linspace(const int min, const int max)
+{
+  if (min == max)
+    this->fill_val(min);
+  else
+  {
+    const float v = (max-min)/((float) this->m*this->n - 1);
+    
+    #pragma omp parallel for if((this->m_local)*(this->n_local) > omputils::OMP_MIN_SIZE)
+    for (len_t j=0; j<this->n_local; j++)
+    {
+      #pragma omp simd
+      for (len_t i=0; i<this->m_local; i++)
+      {
+        const int gi = bcutils::l2g(i, this->mb, this->g.nprow(), this->g.myrow());
+        const int gj = bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
+        
+        this->data[i + this->m_local*j] = (int) roundf(v*((float) gi + this->m*gj) + min);
+      }
+    }
+  }
+}
 
 template <typename REAL>
 void mpimat<REAL>::fill_linspace(const REAL min, const REAL max)

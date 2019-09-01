@@ -2,6 +2,7 @@
 #define FML_CPU_CPUMAT_H
 
 
+#include <cmath>
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
@@ -253,6 +254,28 @@ void cpumat<REAL>::fill_val(const REAL v)
 }
 
 
+
+template <>
+inline void cpumat<int>::fill_linspace(const int min, const int max)
+{
+  if (min == max)
+    this->fill_val(min);
+  else
+  {
+    const float v = (max-min)/((float) this->m*this->n - 1);
+    
+    #pragma omp parallel for if((this->m)*(this->n) > omputils::OMP_MIN_SIZE)
+    for (len_t j=0; j<this->n; j++)
+    {
+      #pragma omp simd
+      for (len_t i=0; i<this->m; i++)
+      {
+        const len_t ind = i + this->m*j;
+        this->data[ind] = (int) roundf(v*((float) ind) + min);
+      }
+    }
+  }
+}
 
 template <typename REAL>
 void cpumat<REAL>::fill_linspace(const REAL min, const REAL max)
