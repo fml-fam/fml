@@ -200,13 +200,21 @@ inline void card::cleanup()
   init();
   
   if (_cs_handle)
+  {
     cusolverDnDestroy(_cs_handle);
+    _cs_handle = NULL;
+  }
   
   if (_cb_handle)
+  {
     cublasDestroy(_cb_handle);
+    _cb_handle = NULL;
+  }
   
   cerr = cudaSetDevice(_id);
   cerr = cudaDeviceReset();
+  
+  _id = DESTROYED_CARD;
 }
 
 
