@@ -31,6 +31,7 @@ class card
     void mem_gpu2gpu(void *dst, void *src, size_t len);
     
     void synch();
+    void check();
     
     int device_id() const {return _id;};
     cublasHandle_t cb_handle() {return _cb_handle;};
@@ -198,7 +199,15 @@ inline void card::synch()
 {
   init();
   cerr = cudaDeviceSynchronize();
-  check_cuda();
+  check_cuda_error();
+}
+
+
+
+inline void card::check()
+{
+  cerr = cudaGetLastError();
+  check_cuda_error();
 }
 
 
