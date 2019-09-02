@@ -19,6 +19,8 @@ class card
     card(int id=0);
     ~card();
     
+    void set(int id);
+    
     void info() const;
     
     void* mem_alloc(size_t len);
@@ -83,6 +85,24 @@ inline card::card(int id)
 inline card::~card()
 {
   cleanup();
+}
+
+
+
+inline void card::set(int id)
+{
+  cleanup();
+  
+  _id = id;
+  init();
+  
+  cublasStatus_t cb_status = cublasCreate(&_cb_handle);
+  if (cb_status != CUBLAS_STATUS_SUCCESS)
+    throw std::runtime_error("unable to initialize cuBLAS");
+  
+  cusolverStatus_t cs_status = cusolverDnCreate(&_cs_handle);
+  if (cs_status != CUSOLVER_STATUS_SUCCESS)
+    throw std::runtime_error("unable to initialize cuSOLVER");
 }
 
 
