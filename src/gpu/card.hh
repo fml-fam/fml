@@ -15,6 +15,7 @@
 class card
 {
   public:
+    card();
     card(int id=0);
     ~card();
     
@@ -39,6 +40,9 @@ class card
     cusolverDnHandle_t _cs_handle;
   
   private:
+    static const int UNINITIALIZED_CARD = -1;
+    static const int DESTROYED_CARD = -11;
+    
     void init();
     void cleanup();
     cudaError_t cerr;
@@ -53,10 +57,16 @@ class card
 
 // constructors/destructor
 
+inline card::card()
+{
+  _id = UNINITIALIZED_CARD;
+  _cb_handle = NULL;
+  _cs_handle = NULL;
+}
+
 inline card::card(int id)
 {
   _id = id;
-  
   init();
   
   cublasStatus_t cb_status = cublasCreate(&_cb_handle);
