@@ -42,7 +42,7 @@ class card
     void init();
     void cleanup();
     cudaError_t cerr;
-    void check_cuda();
+    void check_cuda_error();
 };
 
 
@@ -110,7 +110,7 @@ inline void* card::mem_alloc(size_t len)
   init();
   void *ptr;
   cerr = cudaMalloc(&ptr, len);
-  check_cuda();
+  check_cuda_error();
   return ptr;
 }
 
@@ -120,7 +120,7 @@ inline void card::mem_set(void *ptr, int value, size_t len)
 {
   init();
   cerr = cudaMemset(ptr, value, len);
-  check_cuda();
+  check_cuda_error();
 }
 
 
@@ -131,7 +131,7 @@ inline void card::mem_free(void *ptr)
   if (ptr)
   {
     cerr = cudaFree(ptr);
-    check_cuda();
+    check_cuda_error();
   }
 }
 
@@ -141,7 +141,7 @@ inline void card::mem_cpu2gpu(void *dst, void *src, size_t len)
 {
   init();
   cerr = cudaMemcpy(dst, src, len, cudaMemcpyHostToDevice);
-  check_cuda();
+  check_cuda_error();
 }
 
 
@@ -150,7 +150,7 @@ inline void card::mem_gpu2cpu(void *dst, void *src, size_t len)
 {
   init();
   cerr = cudaMemcpy(dst, src, len, cudaMemcpyDeviceToHost);
-  check_cuda();
+  check_cuda_error();
 }
 
 
@@ -159,7 +159,7 @@ inline void card::mem_gpu2gpu(void *dst, void *src, size_t len)
 {
   init();
   cerr = cudaMemcpy(dst, src, len, cudaMemcpyDeviceToDevice);
-  check_cuda();
+  check_cuda_error();
 }
 
 
@@ -180,7 +180,7 @@ inline void card::synch()
 inline void card::init()
 {
   cerr = cudaSetDevice(_id);
-  check_cuda();
+  check_cuda_error();
 }
 
 
@@ -201,7 +201,7 @@ inline void card::cleanup()
 
 
 
-inline void card::check_cuda()
+inline void card::check_cuda_error()
 {
   if (cerr != cudaSuccess)
   {
