@@ -36,6 +36,8 @@ class card
     int device_id() const {return _id;};
     cublasHandle_t cb_handle() {return _cb_handle;};
     cusolverDnHandle_t cs_handle() {return _cs_handle;};
+    
+    bool valid_card() const {return (_id!=UNINITIALIZED_CARD && _id!=DESTROYED_CARD);};
   
   protected:
     int _id;
