@@ -33,12 +33,12 @@ class gpumat : public unimat<REAL>
     void fill_zero();
     void fill_one();
     void fill_val(const REAL v);
-    void fill_linspace(REAL min, REAL max);
+    void fill_linspace(const REAL min, const REAL max);
     void fill_eye();
-    void fill_runif(uint32_t seed, REAL min=0, REAL max=1);
-    void fill_runif(REAL min=0, REAL max=1);
-    void fill_rnorm(uint32_t seed, REAL mean=0, REAL sd=1);
-    void fill_rnorm(REAL mean=0, REAL sd=1);
+    void fill_runif(const uint32_t seed, const REAL min=0, const REAL max=1);
+    void fill_runif(const REAL min=0, const REAL max=1);
+    void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
+    void fill_rnorm(const REAL mean=0, const REAL sd=1);
     void scale(const REAL s);
     
     REAL& operator()(len_t i);
@@ -104,7 +104,7 @@ gpumat<REAL>::gpumat(std::shared_ptr<card> gpu, len_t nrows, len_t ncols)
   
   this->c = gpu;
   
-  size_t len = (size_t) nrows * ncols * sizeof(REAL);
+  const size_t len = (size_t) nrows * ncols * sizeof(REAL);
   this->data = (REAL*) this->c->mem_alloc(len);
   
   this->m = nrows;
@@ -146,8 +146,8 @@ void gpumat<REAL>::resize(len_t nrows, len_t ncols)
 {
   check_params(nrows, ncols);
   
-  size_t len = (size_t) nrows * ncols * sizeof(REAL);
-  size_t oldlen = (size_t) this->m * this->n * sizeof(REAL);
+  const size_t len = (size_t) nrows * ncols * sizeof(REAL);
+  const size_t oldlen = (size_t) this->m * this->n * sizeof(REAL);
   
   if (len == oldlen)
   {
@@ -159,7 +159,7 @@ void gpumat<REAL>::resize(len_t nrows, len_t ncols)
   REAL *realloc_ptr;
   realloc_ptr = (REAL*) this->c->mem_alloc(len);
   
-  size_t copylen = std::min(len, oldlen);
+  const size_t copylen = std::min(len, oldlen);
   this->c->mem_gpu2gpu(realloc_ptr, this->data, copylen);
   this->c->mem_free(this->data);
   this->data = realloc_ptr;
@@ -202,7 +202,7 @@ gpumat<REAL> gpumat<REAL>::dupe() const
 {
   gpumat<REAL> cpy(this->c, this->m, this->n);
   
-  size_t len = (size_t) this->m * this->n * sizeof(REAL);
+  const size_t len = (size_t) this->m * this->n * sizeof(REAL);
   this->c->mem_gpu2gpu(cpy.data_ptr(), this->data, len);
   
   return cpy;
@@ -248,7 +248,7 @@ void gpumat<REAL>::info() const
 template <typename REAL>
 void gpumat<REAL>::fill_zero()
 {
-  size_t len = (size_t) this->m * this->n * sizeof(REAL);
+  const size_t len = (size_t) this->m * this->n * sizeof(REAL);
   this->c->mem_set(this->data, 0, len);
 }
 
