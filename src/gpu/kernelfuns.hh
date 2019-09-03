@@ -4,7 +4,7 @@
 
 #include <cuda_runtime.h>
 
-#include "../matrix.hh"
+#include "../types.hh"
 
 
 namespace kernelfuns
