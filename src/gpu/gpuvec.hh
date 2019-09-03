@@ -249,8 +249,11 @@ void gpuvec<T>::scale(const T s)
 template <typename REAL>
 void gpuvec<REAL>::free()
 {
-  if (this->free_data)
+  if (this->free_data && this->data)
+  {
     this->c->mem_free(this->data);
+    this->data = NULL;
+  }
 }
 
 

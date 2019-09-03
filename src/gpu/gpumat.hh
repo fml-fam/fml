@@ -339,8 +339,11 @@ void gpumat<REAL>::scale(const REAL s)
 template <typename REAL>
 void gpumat<REAL>::free()
 {
-  if (this->free_data)
+  if (this->free_data && this->data)
+  {
     this->c->mem_free(this->data);
+    this->data = NULL;
+  }
 }
 
 
