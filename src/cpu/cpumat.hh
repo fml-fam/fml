@@ -39,7 +39,7 @@ class cpumat : public unimat<REAL>
     void fill_zero();
     void fill_one();
     void fill_val(const REAL v);
-    void fill_linspace(const REAL min, const REAL max);
+    void fill_linspace(const REAL start, const REAL stop);
     void fill_eye();
     void fill_runif(const uint32_t seed, const REAL min=0, const REAL max=1);
     void fill_runif(const REAL min=0, const REAL max=1);
@@ -256,13 +256,13 @@ void cpumat<REAL>::fill_val(const REAL v)
 
 
 template <>
-inline void cpumat<int>::fill_linspace(const int min, const int max)
+inline void cpumat<int>::fill_linspace(const int start, const int stop)
 {
-  if (min == max)
-    this->fill_val(min);
+  if (start == stop)
+    this->fill_val(start);
   else
   {
-    const float v = (max-min)/((float) this->m*this->n - 1);
+    const float v = (stop-start)/((float) this->m*this->n - 1);
     
     #pragma omp parallel for if((this->m)*(this->n) > omputils::OMP_MIN_SIZE)
     for (len_t j=0; j<this->n; j++)
@@ -271,20 +271,20 @@ inline void cpumat<int>::fill_linspace(const int min, const int max)
       for (len_t i=0; i<this->m; i++)
       {
         const len_t ind = i + this->m*j;
-        this->data[ind] = (int) roundf(v*((float) ind) + min);
+        this->data[ind] = (int) roundf(v*((float) ind) + start);
       }
     }
   }
 }
 
 template <typename REAL>
-void cpumat<REAL>::fill_linspace(const REAL min, const REAL max)
+void cpumat<REAL>::fill_linspace(const REAL start, const REAL stop)
 {
-  if (min == max)
-    this->fill_val(min);
+  if (start == stop)
+    this->fill_val(start);
   else
   {
-    const REAL v = (max-min)/((REAL) this->m*this->n - 1);
+    const REAL v = (stop-start)/((REAL) this->m*this->n - 1);
     
     #pragma omp parallel for if((this->m)*(this->n) > omputils::OMP_MIN_SIZE)
     for (len_t j=0; j<this->n; j++)
@@ -293,7 +293,7 @@ void cpumat<REAL>::fill_linspace(const REAL min, const REAL max)
       for (len_t i=0; i<this->m; i++)
       {
         const len_t ind = i + this->m*j;
-        this->data[ind] = v*((REAL) ind) + min;
+        this->data[ind] = v*((REAL) ind) + start;
       }
     }
   }

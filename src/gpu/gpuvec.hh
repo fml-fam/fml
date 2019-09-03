@@ -29,7 +29,7 @@ class gpuvec : public univec<T>
     void fill_zero();
     void fill_one();
     void fill_val(const T v);
-    void fill_linspace(const T min, const T max);
+    void fill_linspace(const T start, const T stop);
     void scale(const T s);
     
     T& operator()(len_t i);
@@ -222,7 +222,7 @@ void gpuvec<T>::fill_val(const T v)
 
 
 template <typename T>
-void gpuvec<T>::fill_linspace(const T min, const T max)
+void gpuvec<T>::fill_linspace(const T start, const T stop)
 {
   
 }

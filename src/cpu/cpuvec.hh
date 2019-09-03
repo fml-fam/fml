@@ -36,7 +36,7 @@ class cpuvec : public univec<T>
     void fill_zero();
     void fill_one();
     void fill_val(const T v);
-    void fill_linspace(const T min, const T max);
+    void fill_linspace(const T start, const T stop);
     void scale(const T s);
     
     T& operator()(len_t i);
@@ -226,32 +226,32 @@ void cpuvec<T>::fill_val(const T v)
 
 
 template <>
-inline void cpuvec<int>::fill_linspace(const int min, const int max)
+inline void cpuvec<int>::fill_linspace(const int start, const int stop)
 {
-  if (min == max)
-    this->fill_val(min);
+  if (start == stop)
+    this->fill_val(start);
   else
   {
-    const float v = (max-min)/((float) this->_size - 1);
+    const float v = (stop-start)/((float) this->_size - 1);
     
     #pragma omp parallel for simd if(this->_size > omputils::OMP_MIN_SIZE)
     for (len_t i=0; i<this->_size; i++)
-      this->data[i] = (int) roundf(v*((float) i) + min);
+      this->data[i] = (int) roundf(v*((float) i) + start);
   }
 }
 
 template <typename REAL>
-void cpuvec<REAL>::fill_linspace(const REAL min, const REAL max)
+void cpuvec<REAL>::fill_linspace(const REAL start, const REAL stop)
 {
-  if (min == max)
-    this->fill_val(min);
+  if (start == stop)
+    this->fill_val(start);
   else
   {
-    const REAL v = (max-min)/((REAL) this->_size - 1);
+    const REAL v = (stop-start)/((REAL) this->_size - 1);
     
     #pragma omp parallel for simd if(this->_size > omputils::OMP_MIN_SIZE)
     for (len_t i=0; i<this->_size; i++)
-      this->data[i] = v*((REAL) i) + min;
+      this->data[i] = v*((REAL) i) + start;
   }
 }
 

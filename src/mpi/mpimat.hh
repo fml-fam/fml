@@ -44,7 +44,7 @@ class mpimat : public unimat<REAL>
     void fill_zero();
     void fill_one();
     void fill_val(const REAL v);
-    void fill_linspace(const REAL min, const REAL max);
+    void fill_linspace(const REAL start, const REAL stop);
     void fill_eye();
     void fill_runif(const uint32_t seed, const REAL min=0, const REAL max=1);
     void fill_runif(const REAL min=0, const REAL max=1);
@@ -377,13 +377,13 @@ void mpimat<REAL>::fill_val(const REAL v)
 
 
 template <>
-inline void mpimat<int>::fill_linspace(const int min, const int max)
+inline void mpimat<int>::fill_linspace(const int start, const int stop)
 {
-  if (min == max)
-    this->fill_val(min);
+  if (start == stop)
+    this->fill_val(start);
   else
   {
-    const float v = (max-min)/((float) this->m*this->n - 1);
+    const float v = (stop-start)/((float) this->m*this->n - 1);
     
     #pragma omp parallel for if((this->m_local)*(this->n_local) > omputils::OMP_MIN_SIZE)
     for (len_t j=0; j<this->n_local; j++)
@@ -394,20 +394,20 @@ inline void mpimat<int>::fill_linspace(const int min, const int max)
         const int gi = bcutils::l2g(i, this->mb, this->g.nprow(), this->g.myrow());
         const int gj = bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
         
-        this->data[i + this->m_local*j] = (int) roundf(v*((float) gi + this->m*gj) + min);
+        this->data[i + this->m_local*j] = (int) roundf(v*((float) gi + this->m*gj) + start);
       }
     }
   }
 }
 
 template <typename REAL>
-void mpimat<REAL>::fill_linspace(const REAL min, const REAL max)
+void mpimat<REAL>::fill_linspace(const REAL start, const REAL stop)
 {
-  if (min == max)
-    this->fill_val(min);
+  if (start == stop)
+    this->fill_val(start);
   else
   {
-    const REAL v = (max-min)/((REAL) this->m*this->n - 1);
+    const REAL v = (stop-start)/((REAL) this->m*this->n - 1);
     
     #pragma omp parallel for if((this->m_local)*(this->n_local) > omputils::OMP_MIN_SIZE)
     for (len_t j=0; j<this->n_local; j++)
@@ -418,7 +418,7 @@ void mpimat<REAL>::fill_linspace(const REAL min, const REAL max)
         const int gi = bcutils::l2g(i, this->mb, this->g.nprow(), this->g.myrow());
         const int gj = bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
         
-        this->data[i + this->m_local*j] = v*((REAL) gi + this->m*gj) + min;
+        this->data[i + this->m_local*j] = v*((REAL) gi + this->m*gj) + start;
       }
     }
   }

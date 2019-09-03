@@ -33,7 +33,7 @@ class gpumat : public unimat<REAL>
     void fill_zero();
     void fill_one();
     void fill_val(const REAL v);
-    void fill_linspace(const REAL min, const REAL max);
+    void fill_linspace(const REAL start, const REAL stop);
     void fill_eye();
     void fill_runif(const uint32_t seed, const REAL min=0, const REAL max=1);
     void fill_runif(const REAL min=0, const REAL max=1);
@@ -271,10 +271,10 @@ void gpumat<REAL>::fill_val(const REAL v)
 
 
 template <typename REAL>
-void gpumat<REAL>::fill_linspace(REAL min, REAL max)
+void gpumat<REAL>::fill_linspace(REAL start, REAL stop)
 {
-  // if (min == max)
-  //   this->fill_val(min);
+  // if (start == stop)
+  //   this->fill_val(start);
   // else
   {
     
