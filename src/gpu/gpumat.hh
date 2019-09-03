@@ -16,6 +16,7 @@ template <typename REAL>
 class gpumat : public unimat<REAL>
 {
   public:
+    gpumat();
     gpumat(std::shared_ptr<card> gpu);
     gpumat(std::shared_ptr<card> gpu, len_t nrows, len_t ncols);
     gpumat(std::shared_ptr<card> gpu, REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
@@ -65,6 +66,21 @@ class gpumat : public unimat<REAL>
 // -----------------------------------------------------------------------------
 
 // constructors/destructor
+
+template <typename REAL>
+gpumat<REAL>::gpumat()
+{
+  std::shared_ptr<card> gpu;
+  this->c = gpu;
+  
+  this->m = 0;
+  this->n = 0;
+  this->data = NULL;
+  
+  this->free_data = true;
+}
+
+
 
 template <typename REAL>
 gpumat<REAL>::gpumat(std::shared_ptr<card> gpu)
