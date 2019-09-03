@@ -76,7 +76,7 @@ namespace gpuhelpers
   
   // gpu2cpu
   template <typename REAL>
-  void gpu2cpu_noalloc(gpuvec<REAL> &gpu, cpuvec<REAL> &cpu)
+  void gpu2cpu(gpuvec<REAL> &gpu, cpuvec<REAL> &cpu)
   {
     if (gpu.size() != cpu.size())
       throw std::runtime_error("non-conformable arguments");
@@ -89,14 +89,14 @@ namespace gpuhelpers
   cpuvec<REAL> gpu2cpu(gpuvec<REAL> &gpu)
   {
     cpuvec<REAL> cpu(gpu.size());
-    gpu2cpu_noalloc(gpu, cpu);
+    gpu2cpu(gpu, cpu);
     return cpu;
   }
   
   
   
   template <typename REAL>
-  void gpu2cpu_noalloc(gpumat<REAL> &gpu, cpumat<REAL> &cpu)
+  void gpu2cpu(gpumat<REAL> &gpu, cpumat<REAL> &cpu)
   {
     if (gpu.nrows() != cpu.nrows() || gpu.ncols() != cpu.ncols())
       throw std::runtime_error("non-conformable arguments");
@@ -109,7 +109,7 @@ namespace gpuhelpers
   cpumat<REAL> gpu2cpu(gpumat<REAL> &gpu)
   {
     cpumat<REAL> cpu(gpu.nrows(), gpu.ncols());
-    gpu2cpu_noalloc(gpu, cpu);
+    gpu2cpu(gpu, cpu);
     return cpu;
   }
   
@@ -117,7 +117,7 @@ namespace gpuhelpers
   
   // cpu2gpu
   template <typename REAL>
-  void cpu2gpu_noalloc(cpuvec<REAL> &cpu, gpuvec<REAL> &gpu)
+  void cpu2gpu(cpuvec<REAL> &cpu, gpuvec<REAL> &gpu)
   {
     if (gpu.size() != cpu.size())
       throw std::runtime_error("non-conformable arguments");
@@ -130,14 +130,14 @@ namespace gpuhelpers
   gpuvec<REAL> cpu2gpu(std::shared_ptr<card> c, cpuvec<REAL> &cpu)
   {
     gpuvec<REAL> gpu(c, cpu.nrows(), cpu.ncols());
-    cpu2gpu_noalloc(cpu, gpu);
+    cpu2gpu(cpu, gpu);
     return gpu;
   }
   
   
   
   template <typename REAL>
-  void cpu2gpu_noalloc(cpumat<REAL> &cpu, gpumat<REAL> &gpu)
+  void cpu2gpu(cpumat<REAL> &cpu, gpumat<REAL> &gpu)
   {
     if (gpu.nrows() != cpu.nrows() || gpu.ncols() != cpu.ncols())
       throw std::runtime_error("non-conformable arguments");
@@ -150,7 +150,7 @@ namespace gpuhelpers
   gpumat<REAL> cpu2gpu(cpumat<REAL> &cpu, std::shared_ptr<card> c)
   {
     gpumat<REAL> gpu(c, cpu.nrows(), cpu.ncols());
-    cpu2gpu_noalloc(cpu, gpu);
+    cpu2gpu(cpu, gpu);
     return gpu;
   }
 }
