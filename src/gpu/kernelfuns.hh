@@ -38,6 +38,20 @@ namespace kernelfuns
   
   
   
+  __global__ void kernel_fill_linspace(const __half min, const __half max, len_t m, len_t n, __half *data)
+  {
+    int i = blockDim.x*blockIdx.x + threadIdx.x;
+    int j = blockDim.y*blockIdx.y + threadIdx.y;
+    
+    if (i < m && j < n)
+    {
+      float v_f = ((float)(max-min))/((float) m*n-1);
+      __half v = (__half) v_f;
+      len_t ind = i + m*j;
+      data[ind] = v*__int2half_rz(ind) + min;
+    }
+  }
+  
   template <typename REAL>
   __global__ void kernel_fill_linspace(const REAL min, const REAL max, len_t m, len_t n, REAL *data)
   {
