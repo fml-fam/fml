@@ -7,7 +7,7 @@
 
 int main()
 {
-  auto c = std::make_shared<card>(0);
+  auto c = gpuhelpers::new_card(0);
   c->info();
   
   len_t n = 5;
