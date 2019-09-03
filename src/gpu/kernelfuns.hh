@@ -38,7 +38,7 @@ namespace kernelfuns
   
   
   
-  __global__ void kernel_fill_linspace(const __half min, const __half max, len_t m, len_t n, __half *data)
+  inline __global__ void kernel_fill_linspace(const __half min, const __half max, len_t m, len_t n, __half *data)
   {
     int i = blockDim.x*blockIdx.x + threadIdx.x;
     int j = blockDim.y*blockIdx.y + threadIdx.y;
