@@ -273,9 +273,9 @@ void gpumat<REAL>::fill_val(const REAL v)
 template <typename REAL>
 void gpumat<REAL>::fill_linspace(REAL min, REAL max)
 {
-  if (min == max)
-    this->fill_val(min);
-  else
+  // if (min == max)
+  //   this->fill_val(min);
+  // else
   {
     
   }
