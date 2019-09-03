@@ -13,6 +13,13 @@
 
 namespace gpuhelpers
 {
+  inline std::shared_ptr<card> new_card(int id)
+  {
+    return std::make_shared<card>(id);
+  }
+  
+  
+  
   __global__ void kernel_copy(len_t m, len_t n, __half *in, float *out)
   {
     int i = blockDim.x*blockIdx.x + threadIdx.x;
