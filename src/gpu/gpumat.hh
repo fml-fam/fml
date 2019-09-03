@@ -220,8 +220,8 @@ void gpumat<REAL>::print(uint8_t ndigits) const
     for (int j=0; j<this->n; j++)
     {
       REAL tmp;
-      cudaMemcpy(&tmp, this->data + (i + this->m*j), sizeof(REAL), cudaMemcpyDeviceToHost);
-      printf("%.*f ", ndigits, tmp);
+      this->c->mem_gpu2cpu(&tmp, this->data + (i + this->m*j), sizeof(REAL));
+      this->printval(tmp, ndigits);
     }
   
     putchar('\n');
@@ -341,6 +341,27 @@ void gpumat<REAL>::free()
 {
   if (this->free_data)
     this->c->mem_free(this->data);
+}
+
+
+
+template <>
+inline void gpumat<int>::printval(const int val, uint8_t ndigits) const
+{
+  (void)ndigits;
+  printf("%d ", val);
+}
+
+template <>
+inline void gpumat<__half>::printval(const __half val, uint8_t ndigits) const
+{
+  printf("%.*f ", ndigits, (float)val);
+}
+
+template <typename REAL>
+void gpumat<REAL>::printval(const REAL val, uint8_t ndigits) const
+{
+  printf("%.*f ", ndigits, val);
 }
 
 
