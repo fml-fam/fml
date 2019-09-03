@@ -11,14 +11,22 @@ int main()
   c->info();
   
   len_t n = 5;
-  gpumat<__half> x(c, n, n);
-  x.fill_zero();
+  gpumat<float> x(c, n, n);
+  x.fill_linspace(1.f, (float) n*n);
   
-  gpumat<__half> y(c, n, n);
-  y.fill_zero();
+  gpumat<float> y(c, n, n);
+  y.fill_linspace(1.f, (float) n*n);
   
-  gpumat<__half> z = linalg::matmult(false, false, (__half)1.f, x, y);
+  gpumat<__half> xh, yh;
+  gpuhelpers::copy(x, xh);
+  gpuhelpers::copy(y, yh);
+  
+  gpumat<__half> zh = linalg::matmult(false, false, (__half)1.f, xh, yh);
+  gpumat<float> z;
+  
+  gpuhelpers::copy(zh, z);
   z.info();
+  z.print(0);
   
   return 0;
 }
