@@ -235,6 +235,11 @@ inline void card::check()
 
 inline void card::init()
 {
+  if (_id == UNINITIALIZED_CARD)
+    throw std::runtime_error("invalid card (uninitialized)");
+  else if (_id == DESTROYED_CARD)
+    throw std::runtime_error("invalid card (destroyed)");
+  
   cerr = cudaSetDevice(_id);
   check_cuda_error();
 }
