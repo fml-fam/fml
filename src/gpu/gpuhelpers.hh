@@ -20,7 +20,7 @@ namespace gpuhelpers
   
   
   
-  inline __global__ void kernel_copy(len_t m, len_t n, __half *in, float *out)
+  inline __device__ void kernel_copy(len_t m, len_t n, __half *in, float *out)
   {
     int i = blockDim.x*blockIdx.x + threadIdx.x;
     int j = blockDim.y*blockIdx.y + threadIdx.y;
@@ -29,7 +29,7 @@ namespace gpuhelpers
       out[i + m*j] = __half2float(in[i + m*j]);
   }
   
-  inline __global__ void kernel_copy(len_t m, len_t n, float *in, __half *out)
+  inline __device__ void kernel_copy(len_t m, len_t n, float *in, __half *out)
   {
     int i = blockDim.x*blockIdx.x + threadIdx.x;
     int j = blockDim.y*blockIdx.y + threadIdx.y;
