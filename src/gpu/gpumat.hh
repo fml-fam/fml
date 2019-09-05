@@ -20,6 +20,7 @@ class gpumat : public unimat<REAL>
     gpumat(std::shared_ptr<card> gpu);
     gpumat(std::shared_ptr<card> gpu, len_t nrows, len_t ncols);
     gpumat(std::shared_ptr<card> gpu, REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
+    gpumat(const gpumat &x);
     ~gpumat();
     
     void resize(len_t nrows, len_t ncols);
@@ -127,6 +128,20 @@ gpumat<REAL>::gpumat(std::shared_ptr<card> gpu, REAL *data_, len_t nrows, len_t 
   this->data = data_;
   
   this->free_data = free_on_destruct;
+}
+
+
+
+template <typename REAL>
+gpumat<REAL>::gpumat(const gpumat<REAL> &x)
+{
+  this->m = x.nrows();
+  this->n = x.ncols();
+  this->data = x.data_ptr();
+  
+  this->c = x.get_card();
+  
+  this->free_data = x.should_free();
 }
 
 
