@@ -34,9 +34,12 @@ class card
     void synch();
     void check();
     
+    int device_id() {return _id;};
     int device_id() const {return _id;};
     cublasHandle_t cb_handle() {return _cb_handle;};
+    cublasHandle_t cb_handle() const {return _cb_handle;};
     cusolverDnHandle_t cs_handle() {return _cs_handle;};
+    cusolverDnHandle_t cs_handle() const {return _cs_handle;};
     
     bool valid_card() const {return (_id!=UNINITIALIZED_CARD && _id!=DESTROYED_CARD);};
   
