@@ -262,7 +262,6 @@ inline void card::cleanup()
     _cb_handle = NULL;
   }
   
-  cerr = cudaSetDevice(_id);
   cerr = cudaDeviceReset();
   
   _id = DESTROYED_CARD;
