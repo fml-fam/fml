@@ -17,6 +17,7 @@ class card
   public:
     card();
     card(int id=0);
+    card(const card &x);
     ~card();
     
     void set(int id);
@@ -69,6 +70,8 @@ inline card::card()
   _cs_handle = NULL;
 }
 
+
+
 inline card::card(int id)
 {
   _id = id;
@@ -81,6 +84,15 @@ inline card::card(int id)
   cusolverStatus_t cs_status = cusolverDnCreate(&_cs_handle);
   if (cs_status != CUSOLVER_STATUS_SUCCESS)
     throw std::runtime_error("unable to initialize cuSOLVER");
+}
+
+
+
+inline card::card(const card &x)
+{
+  _id = x.device_id();
+  _cb_handle = x.cb_handle();
+  _cs_handle = x.cs_handle();
 }
 
 
