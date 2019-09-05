@@ -150,6 +150,7 @@ template <typename REAL>
 gpumat<REAL>::~gpumat()
 {
   this->free();
+  c = NULL;
 }
 
 
