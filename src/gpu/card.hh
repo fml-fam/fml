@@ -180,8 +180,6 @@ inline void card::mem_free(void *ptr)
   {
     cerr = cudaFree(ptr);
     check_cuda_error();
-    
-    ptr = NULL;
   }
 }
 
