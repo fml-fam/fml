@@ -30,7 +30,9 @@ class gpuvec : public univec<T>
     void fill_one();
     void fill_val(const T v);
     void fill_linspace(const T start, const T stop);
+    
     void scale(const T s);
+    void rev();
     
     T& operator()(len_t i);
     const T& operator()(len_t i) const;
@@ -233,6 +235,15 @@ template <typename T>
 void gpuvec<T>::scale(const T s)
 {
   
+}
+
+
+
+template <typename T>
+void gpuvec<T>::rev()
+{
+  kernelfuns::kernel_rev_vec<<<1, this->_size>>>(this->_size, this->data);
+  this->c->check();
 }
 
 

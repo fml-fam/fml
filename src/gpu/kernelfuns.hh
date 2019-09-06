@@ -10,6 +10,21 @@
 namespace kernelfuns
 {
   template <typename REAL>
+  __device__ void kernel_rev_vec(len_t n, REAL *data)
+  {
+    __shared__ REAL shmem[64];
+    
+    int ind = threadIdx.x;
+    int ind_rev = n - ind - 1;
+    
+    shmem[ind] = data[ind];
+    __syncthreads();
+    data[ind] = shmem[ind_rev];
+  }
+  
+  
+  
+  template <typename REAL>
   __global__ void kernel_fill_eye(len_t m, len_t n, REAL *data)
   {
     int i = blockDim.x*blockIdx.x + threadIdx.x;
