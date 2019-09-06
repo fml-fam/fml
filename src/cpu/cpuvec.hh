@@ -37,7 +37,9 @@ class cpuvec : public univec<T>
     void fill_one();
     void fill_val(const T v);
     void fill_linspace(const T start, const T stop);
+    
     void scale(const T s);
+    void rev();
     
     T& operator()(len_t i);
     const T& operator()(len_t i) const;
@@ -262,6 +264,23 @@ void cpuvec<T>::scale(const T s)
   #pragma omp parallel for simd if(this->_size > omputils::OMP_MIN_SIZE)
   for (len_t i=0; i<this->_size; i++)
     this->data[i] *= s;
+}
+
+
+
+template <typename T>
+void cpuvec<T>::rev()
+{
+  len_t j = this->_size - 1;
+  
+  for (len_t i=0; i<this->_size/2; i++)
+  {
+    const T tmp = this->data[i];
+    this->data[i] = this->data[j];
+    this->data[j] = tmp;
+    j--;
+  }
+
 }
 
 
