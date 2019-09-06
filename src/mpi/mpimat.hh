@@ -79,8 +79,8 @@ class mpimat : public unimat<REAL>
   private:
     void free();
     void printval(REAL, uint8_t ndigits) const;
-    REAL get_val_from_global_index(len_t gi, len_t gj) const;
     void check_params(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols);
+    REAL get_val_from_global_index(len_t gi, len_t gj) const;
 };
 
 
@@ -632,6 +632,21 @@ void mpimat<REAL>::printval(REAL val, uint8_t ndigits) const
 
 
 template <typename REAL>
+void mpimat<REAL>::check_params(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols)
+{
+  if (!blacs_grid.valid_grid())
+    throw std::runtime_error("invalid blacs grid");
+  
+  if (nrows < 0 || ncols < 0)
+    throw std::runtime_error("invalid dimensions");
+  
+  if (bf_rows <= 0 || bf_cols <= 0)
+    throw std::runtime_error("invalid blocking factor");
+}
+
+
+
+template <typename REAL>
 REAL mpimat<REAL>::get_val_from_global_index(len_t gi, len_t gj) const
 {
   REAL ret;
@@ -650,21 +665,6 @@ REAL mpimat<REAL>::get_val_from_global_index(len_t gi, len_t gj) const
   g.allreduce(1, 1, &ret, 'A');
   
   return ret;
-}
-
-
-
-template <typename REAL>
-void mpimat<REAL>::check_params(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols)
-{
-  if (!blacs_grid.valid_grid())
-    throw std::runtime_error("invalid blacs grid");
-  
-  if (nrows < 0 || ncols < 0)
-    throw std::runtime_error("invalid dimensions");
-  
-  if (bf_rows <= 0 || bf_cols <= 0)
-    throw std::runtime_error("invalid blocking factor");
 }
 
 
