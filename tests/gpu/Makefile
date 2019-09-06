@@ -17,11 +17,11 @@ OBJS = $(SRCS:.cu=.o)
 	$(NVCC) $(NVCCFLAGS) -Xcompiler "$(CXXFLAGS) $(WARNFLAGS) $(OMPFLAGS)" -c $< -o $@
 
 gpumat: $(OBJS)
-	$(NVCC) test-main.o gpumat.o card.o -o gpumat $(NV_LDFLAGS) -Xcompiler "$(OMPFLAGS)"
+	$(NVCC) test-main.o card.o gpumat.o linalg.o -o gpumat $(NV_LDFLAGS) -Xcompiler "$(OMPFLAGS)"
 
 
 miniclean:
-	rm -rf gpumat gpumat.o card.o
+	rm -rf gpumat card.o gpumat.o linalg.o
 
 clean:
 	rm -rf *.o gpumat
