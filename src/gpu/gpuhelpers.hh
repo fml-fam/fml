@@ -129,7 +129,7 @@ namespace gpuhelpers
   template <typename REAL>
   gpuvec<REAL> cpu2gpu(std::shared_ptr<card> c, cpuvec<REAL> &cpu)
   {
-    gpuvec<REAL> gpu(c, cpu.nrows(), cpu.ncols());
+    gpuvec<REAL> gpu(c, cpu.size());
     cpu2gpu(cpu, gpu);
     return gpu;
   }
