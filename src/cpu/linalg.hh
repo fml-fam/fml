@@ -55,20 +55,6 @@ namespace linalg
   
   // lower triangle of t(x) %*% x
   template <typename REAL>
-  cpumat<REAL> crossprod(const REAL alpha, const cpumat<REAL> &x)
-  {
-    const len_t m = x.nrows();
-    const len_t n = x.ncols();
-    
-    cpumat<REAL> ret(n, n);
-    ret.fill_zero();
-    
-    lapack::syrk('L', 'T', n, m, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), n);
-    
-    return ret;
-  }
-  
-  template <typename REAL>
   void crossprod(const REAL alpha, const cpumat<REAL> &x, cpumat<REAL> &ret)
   {
     const len_t m = x.nrows();
@@ -80,21 +66,20 @@ namespace linalg
     lapack::syrk('L', 'T', n, m, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), n);
   }
   
-  
-  
   template <typename REAL>
-  cpumat<REAL> tcrossprod(const REAL alpha, const cpumat<REAL> &x)
+  cpumat<REAL> crossprod(const REAL alpha, const cpumat<REAL> &x)
   {
-    const len_t m = x.nrows();
     const len_t n = x.ncols();
     
-    cpumat<REAL> ret(m, m);
+    cpumat<REAL> ret(n, n);
     ret.fill_zero();
     
-    lapack::syrk('L', 'N', m, n, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), m);
+    crossprod(alpha, x, ret);
     
     return ret;
   }
+  
+  
   
   template <typename REAL>
   void tcrossprod(const REAL alpha, const cpumat<REAL> &x, cpumat<REAL> &ret)
@@ -106,6 +91,19 @@ namespace linalg
       throw std::runtime_error("non-conformable arguments");
     
     lapack::syrk('L', 'N', m, n, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), m);
+  }
+  
+  template <typename REAL>
+  cpumat<REAL> tcrossprod(const REAL alpha, const cpumat<REAL> &x)
+  {
+    const len_t m = x.nrows();
+    
+    cpumat<REAL> ret(m, m);
+    ret.fill_zero();
+    
+    tcrossprod(alpha, x, ret);
+    
+    return ret;
   }
   
   

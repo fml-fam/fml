@@ -55,20 +55,6 @@ namespace linalg
   
   // upper triangle
   template <typename REAL>
-  mpimat<REAL> crossprod(const REAL alpha, const mpimat<REAL> &x)
-  {
-    const len_t n = x.ncols();
-    grid g = x.get_grid();
-    
-    mpimat<REAL> ret(g, n, n, x.bf_rows(), x.bf_cols());
-    ret.fill_zero();
-    
-    scalapack::syrk('L', 'T', n, x.nrows(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
-    
-    return ret;
-  }
-  
-  template <typename REAL>
   void crossprod(const REAL alpha, const mpimat<REAL> &x, mpimat<REAL> &ret)
   {
     const len_t n = x.ncols();
@@ -79,7 +65,32 @@ namespace linalg
     scalapack::syrk('L', 'T', n, x.nrows(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
   }
   
+  template <typename REAL>
+  mpimat<REAL> crossprod(const REAL alpha, const mpimat<REAL> &x)
+  {
+    const len_t n = x.ncols();
+    grid g = x.get_grid();
+    
+    mpimat<REAL> ret(g, n, n, x.bf_rows(), x.bf_cols());
+    ret.fill_zero();
+    
+    crossprod(alpha, x, ret);
+    
+    return ret;
+  }
   
+  
+  
+  template <typename REAL>
+  void tcrossprod(const REAL alpha, const mpimat<REAL> &x, mpimat<REAL> &ret)
+  {
+    const len_t m = x.nrows();
+    
+    if (m != ret.nrows() || m != ret.ncols())
+      throw std::runtime_error("non-conformable arguments");
+    
+    scalapack::syrk('L', 'N', m, x.ncols(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
+  }
   
   template <typename REAL>
   mpimat<REAL> tcrossprod(const REAL alpha, const mpimat<REAL> &x)
@@ -90,20 +101,9 @@ namespace linalg
     mpimat<REAL> ret(g, n, n, x.bf_rows(), x.bf_cols());
     ret.fill_zero();
     
-    scalapack::syrk('L', 'N', n, x.ncols(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
+    tcrossprod(alpha, x, ret);
     
     return ret;
-  }
-  
-  template <typename REAL>
-  void tcrossprod(const REAL alpha, const mpimat<REAL> &x, mpimat<REAL> &ret)
-  {
-    const len_t n = x.nrows();
-    
-    if (n != ret.nrows() || n != ret.ncols())
-      throw std::runtime_error("non-conformable arguments");
-    
-    scalapack::syrk('L', 'N', n, x.ncols(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
   }
   
   
