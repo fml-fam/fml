@@ -56,8 +56,6 @@ class cpumat : public unimat<REAL>
     bool operator!=(const cpumat<REAL> &x) const;
   
   private:
-    bool free_data;
-    bool should_free() const {return free_data;};
     void free();
     void printval(const REAL val, uint8_t ndigits) const;
     void check_params(len_t nrows, len_t ncols);

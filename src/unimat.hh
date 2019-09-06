@@ -18,6 +18,8 @@ class unimat
     len_t m;
     len_t n;
     REAL *data;
+    bool free_data;
+    bool should_free() const {return free_data;};
 };
 
 

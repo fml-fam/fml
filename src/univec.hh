@@ -15,6 +15,8 @@ class univec
   protected:
     len_t _size;
     T *data;
+    bool free_data;
+    bool should_free() const {return free_data;};
 };
 
 

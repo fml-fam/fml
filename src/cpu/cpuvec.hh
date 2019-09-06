@@ -46,8 +46,6 @@ class cpuvec : public univec<T>
     bool operator!=(const cpuvec<T> &x) const;
   
   private:
-    bool free_data;
-    bool should_free() const {return free_data;};
     void free();
     void printval(const T val, uint8_t ndigits) const;
     void check_params(len_t size);

@@ -39,11 +39,11 @@ class gpuvec : public univec<T>
     bool operator!=(const gpuvec<T> &x) const;
     
     std::shared_ptr<card> get_card() const {return c;};
+    
+  protected:
+    std::shared_ptr<card> c;
   
   private:
-    std::shared_ptr<card> c;
-    bool free_data;
-    bool should_free() const {return free_data;};
     void free();
     void printval(const T val, uint8_t ndigits) const;
     void check_params(len_t size);

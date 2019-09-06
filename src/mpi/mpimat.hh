@@ -77,8 +77,6 @@ class mpimat : public unimat<REAL>
     grid g;
     
   private:
-    bool free_data;
-    bool should_free() const {return free_data;};
     void free();
     void printval(REAL, uint8_t ndigits) const;
     REAL get_val_from_global_index(len_t gi, len_t gj) const;
