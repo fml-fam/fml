@@ -2,9 +2,12 @@
 #define FML_LINALGUTILS_H
 
 
+#include "types.hh"
+
+
 namespace linalgutils
 {
-  inline void matmult_params(const bool transx, const bool transy, const int mx, const int nx, const int my, const int ny, int *m, int *n, int *k)
+  inline void matmult_params(const bool transx, const bool transy, const len_t mx, const len_t nx, const len_t my, const len_t ny, len_t *m, len_t *n, len_t *k)
   {
     // m = # rows of op(x)
     // n = # cols of op(y)
