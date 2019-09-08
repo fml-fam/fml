@@ -150,6 +150,31 @@ namespace linalg
     
     return ret;
   }
+  
+  
+  
+  template <typename REAL>
+  void xpose(const gpumat<REAL> &x, gpumat<REAL> &tx)
+  {
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
+    
+    if (m != tx.ncols() || n != tx.nrows())
+      throw std::runtime_error("non-conformable arguments");
+    
+    auto cbh = x.get_card()->cb_handle();
+    
+    cublasStatus_t check = culapack::geam(cbh, CUBLAS_OP_T, CUBLAS_OP_N, n, m, (REAL)1.0, x.data_ptr(), m, (REAL) 0.0, tx.data_ptr(), n, tx.data_ptr(), n);
+    check_cublas_ret(check, "geam");
+  }
+  
+  template <typename REAL>
+  gpumat<REAL> xpose(const gpumat<REAL> &x)
+  {
+    gpumat<REAL> tx(x.get_card(), x.ncols(), x.nrows());
+    xpose(x, tx);
+    return tx;
+  }
 }
 
 
