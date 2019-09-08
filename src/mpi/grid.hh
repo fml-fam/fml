@@ -52,7 +52,7 @@ class grid
     void inherit_grid(int blacs_context);
     
     void exit();
-    void finalize(int mpi_continue=0);
+    void finalize(bool mpi_continue=false);
     
     void printf(int row, int col, const char *fmt, ...) const;
     void info() const;
@@ -80,13 +80,23 @@ class grid
     void bcast(int m, int n, float *x, char scope, int rsrc, int csrc) const;
     void bcast(int m, int n, double *x, char scope, int rsrc, int csrc) const;
     
-    int ictxt() const {return _ictxt;};
-    int nprocs() const {return _nprocs;};
-    int nprow() const {return _nprow;};
-    int npcol() const {return _npcol;};
-    int myrow() const {return _myrow;};
-    int mycol() const {return _mycol;};
     
+    ///@{
+    /// The BLACS integer context.
+    int ictxt() const {return _ictxt;};
+    /// The total number of processes bound to the BLACS context.
+    int nprocs() const {return _nprocs;};
+    /// The number of processes rows in the BLACS context.
+    int nprow() const {return _nprow;};
+    /// The number of processes columns in the BLACS context.
+    int npcol() const {return _npcol;};
+    /// The process row (0-based index) of the calling process.
+    int myrow() const {return _myrow;};
+    /// The process column (0-based index) of the calling process.
+    int mycol() const {return _mycol;};
+    ///@}
+    
+    /// Is the BLACS grid valid
     bool valid_grid() const {return (_ictxt!=UNINITIALIZED_GRID && _ictxt!=EXITED_GRID);};
   
   protected:
@@ -112,6 +122,9 @@ class grid
 
 // constructors/destructor
 
+/**
+ * @brief Create a new grid object. Does not initialize any BLACS or MPI data.
+*/
 inline grid::grid()
 {
   _ictxt = UNINITIALIZED_GRID;
@@ -120,6 +133,12 @@ inline grid::grid()
 
 
 
+/**
+ * @brief Create a new grid object by initializing a new BLACS process grid.
+ * 
+ * @param[in] gridtype Should be one of PROC_GRID_SQUARE, PROC_GRID_WIDE, or
+ * PROC_GRID_TALL. Otherwise this will throw a 'runtime_error' exception.
+*/
 inline grid::grid(int gridtype)
 {
   char order = 'R';
@@ -148,10 +167,19 @@ inline grid::grid(int gridtype)
 
 
 
+/**
+ * @brief Create a grid object from an existing BLACS process grid.
+ * 
+ * @param blacs_context The BLACS integer context number.
+*/
 inline void grid::inherit_grid(int blacs_context)
 {
   _ictxt = blacs_context;
   Cblacs_gridinfo(_ictxt, &_nprow, &_npcol, &_myrow, &_mycol);
+  
+  if (_nprow == -1)
+    throw std::runtime_error("context handle does not point at a valid context");
+  
   _nprocs = _nprow * _npcol;
 }
 
@@ -159,6 +187,9 @@ inline void grid::inherit_grid(int blacs_context)
 
 // mpi/blacs cleanup
 
+/**
+ * @brief Exits the BLACS grid, but does not shutdown BLACS/MPI.
+*/
 inline void grid::exit()
 {
   if (_ictxt != EXITED_GRID && _ictxt != UNINITIALIZED_GRID)
@@ -170,16 +201,32 @@ inline void grid::exit()
 
 
 
-inline void grid::finalize(int mpi_continue)
+/**
+ * @brief Shuts down BLACS, and optionally MPI.
+ * 
+ * @param mpi_continue Should MPI continue, i.e., not be shut down too?
+*/
+inline void grid::finalize(bool mpi_continue)
 {
   exit();
-  Cblacs_exit(mpi_continue);
+  
+  int cont = (int) mpi_continue;
+  Cblacs_exit(cont);
 }
 
 
 
 // printers
 
+/**
+ * @brief Helper wrapper around the C standard I/O 'printf()' function.
+ * Conceptually similar to guarding a normal 'printf()' function with a check
+ * for 'row==myrow() && col==mycol()'.
+ * 
+ * @param[in] row,col The process row/column that should do the printing.
+ * @param[in] fmt The printf format string.
+ * @param[in] ... additional arguments to printf.
+*/
 inline void grid::printf(int row, int col, const char *fmt, ...) const
 {
   if (_myrow == row && _mycol == col)
@@ -194,6 +241,10 @@ inline void grid::printf(int row, int col, const char *fmt, ...) const
 
 
 
+/**
+ * @brief Print some brief information about the BLACS grid. The printing is
+ * done by row 0 and col 0.
+*/
 inline void grid::info() const
 {
   printf(0, 0, "## Grid %d %dx%d\n\n", _ictxt, _nprow, _npcol);
@@ -203,6 +254,10 @@ inline void grid::info() const
 
 // misc
 
+/**
+ * @brief Check if the executing process is rank 0, i.e., if the process row and
+ * column are 0.
+*/
 inline bool grid::rank0() const
 {
   return (_myrow==0 && _mycol==0);
@@ -210,6 +265,12 @@ inline bool grid::rank0() const
 
 
 
+/**
+ * @brief Execute a barrier across the specified scope of the BLACS grid.
+ * 
+ * @param scope The scope of the operation. For just rows use 'R', just columns
+ use 'C', and for all processes use 'A'.
+*/
 inline void grid::barrier(char scope) const
 {
   Cblacs_barrier(_ictxt, &scope);
@@ -217,8 +278,14 @@ inline void grid::barrier(char scope) const
 
 
 
-// send/recv
-
+/**
+ * @brief Point-to-point send. Should be matched by a corresponding 'recv' call.
+ * 
+ * @param[in] m,n Dimensions (number of rows/cols) of the data 'x'.
+ * @param[in] x The data to send.
+ * @param[in] rdest,cdest The row/col destination in the BLACS grid.
+*/
+///@{
 inline void grid::send(int m, int n, int *x, int rdest, int cdest) const
 {
   Cigesd2d(_ictxt, m, n, x, m, rdest, cdest);
@@ -233,9 +300,19 @@ inline void grid::send(int m, int n, double *x, int rdest, int cdest) const
 {
   Cdgesd2d(_ictxt, m, n, x, m, rdest, cdest);
 }
+///@}
 
 
 
+/**
+ * @brief Point-to-point receive. Should be matched by a corresponding 'send'
+ call.
+ * 
+ * @param[in] m,n Dimensions (number of rows/cols) of the data 'x'.
+ * @param[in] x The data to receive.
+ * @param[in] rdest,cdest The row/col destination in the BLACS grid.
+*/
+///@{
 inline void grid::recv(int m, int n, int *x, int rsrc, int csrc) const
 {
   Cigerv2d(_ictxt, m, n, x, m, rsrc, csrc);
@@ -250,11 +327,19 @@ inline void grid::recv(int m, int n, double *x, int rsrc, int csrc) const
 {
   Cdgerv2d(_ictxt, m, n, x, m, rsrc, csrc);
 }
+///@}
 
 
 
-// reductions
-
+/**
+ * @brief Sum reduce operation across all processes in the grid.
+ * 
+ * @param[in] m,n Dimensions (number of rows/cols) of the data 'x'.
+ * @param[in,out] x The data to reduce.
+ * @param scope The scope of the operation. For just rows use 'R', just columns
+ use 'C', and for all processes use 'A'.
+*/
+///@{
 inline void grid::allreduce(int m, int n, int *x, char scope) const
 {
   char top = ' ';
@@ -272,9 +357,21 @@ inline void grid::allreduce(int m, int n, double *x, char scope) const
   char top = ' ';
   Cdgsum2d(_ictxt, &scope, &top, m, n, x, m, -1, -1);
 }
+///@}
 
 
 
+/**
+ * @brief Sum reduce operation.
+ * 
+ * @param[in] m,n Dimensions (number of rows/cols) of the data 'x'.
+ * @param[in,out] x The data to reduce.
+ * @param scope The scope of the operation. For just rows use 'R', just columns
+ use 'C', and for all processes use 'A'.
+ * @param[in] rdest,cdest The row/column of the BLACS grid to receive the final
+ answer.
+*/
+///@{
 inline void grid::reduce(int m, int n, int *x, char scope, int rdest, int cdest) const
 {
   char top = ' ';
@@ -292,9 +389,21 @@ inline void grid::reduce(int m, int n, double *x, char scope, int rdest, int cde
   char top = ' ';
   Cdgsum2d(_ictxt, &scope, &top, m, n, x, m, rdest, cdest);
 }
+///@}
 
 
 
+/**
+ * @brief Broadcast.
+ * 
+ * @param[in] m,n Dimensions (number of rows/cols) of the data 'x'.
+ * @param[in,out] x The data to reduce.
+ * @param scope The scope of the operation. For just rows use 'R', just columns
+ use 'C', and for all processes use 'A'.
+ * @param[in] rsrc,csrc The process row/column of the BLACS grid that is
+ broadcasting.
+*/
+///@{
 inline void grid::bcast(int m, int n, int *x, char scope, int rsrc, int csrc) const
 {
   char top = ' ';
@@ -321,6 +430,7 @@ inline void grid::bcast(int m, int n, double *x, char scope, int rsrc, int csrc)
   else
     Cdgebr2d(_ictxt, &scope, &top, m, n, x, m, rsrc, csrc);
 }
+///@}
 
 
 
