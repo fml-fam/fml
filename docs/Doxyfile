@@ -56,6 +56,9 @@ EXTRA_PACKAGES         =
 # Project related configuration options
 #---------------------------------------------------------------------------
 
+ALIASES += impl="\par Implementation Details\n"
+ALIASES += comm="\par Communication Details\n"
+
 # The STRIP_FROM_PATH tag can be used to strip a user-defined part of the path.
 # Stripping is only done if one of the specified strings matches the left-hand
 # part of the path. The tag can be used to show relative paths in the file list.
@@ -131,18 +134,6 @@ SEPARATE_MEMBER_PAGES  = NO
 # Minimum value: 1, maximum value: 16, default value: 4.
 
 TAB_SIZE               = 4
-
-# This tag can be used to specify a number of aliases that act as commands in
-# the documentation. An alias has the form:
-# name=value
-# For example adding
-# "sideeffect=@par Side Effects:\n"
-# will allow you to put the command \sideeffect (or @sideeffect) in the
-# documentation, which will result in a user-defined paragraph with heading
-# "Side Effects:". You can put \n's in the value part of an alias to insert
-# newlines.
-
-ALIASES                = 
 
 # This tag can be used to specify a number of word-keyword mappings (TCL only).
 # A mapping has the form "name=value". For example adding "class=itcl::class"
