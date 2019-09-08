@@ -106,19 +106,22 @@ TEMPLATE_TEST_CASE("crossprod and tcrossprod", "[linalg]", float, double)
 
 
 
-// TEMPLATE_TEST_CASE("xpose", "[linalg]", float, double)
-// {
-//   len_t m = 3;
-//   len_t n = 2;
-// 
-//   cpumat<TestType> x(m, n);
-//   x.fill_linspace(1.f, (TestType) m*n);
-// 
-//   cpumat<TestType> tx = linalg::xpose(x);
-//   REQUIRE( tx.nrows() == x.ncols() );
-//   REQUIRE( tx.ncols() == x.nrows() );
-// 
-//   REQUIRE( fltcmp::eq(x(0, 0), tx(0, 0)) );
-//   REQUIRE( fltcmp::eq(x(1, 0), tx(0, 1)) );
-//   REQUIRE( fltcmp::eq(x(2, 1), tx(1, 2)) );
-// }
+TEMPLATE_TEST_CASE("xpose", "[linalg]", float, double)
+{
+  len_t m = 3;
+  len_t n = 2;
+  
+  gpumat<TestType> x(c, m, n);
+  x.fill_linspace(1.f, (TestType) m*n);
+  
+  gpumat<TestType> tx = linalg::xpose(x);
+  REQUIRE( tx.nrows() == x.ncols() );
+  REQUIRE( tx.ncols() == x.nrows() );
+  
+  cpumat<TestType> x_cpu = gpuhelpers::gpu2cpu(x);
+  cpumat<TestType> tx_cpu = gpuhelpers::gpu2cpu(tx);
+  
+  REQUIRE( fltcmp::eq(x_cpu(0, 0), tx_cpu(0, 0)) );
+  REQUIRE( fltcmp::eq(x_cpu(1, 0), tx_cpu(0, 1)) );
+  REQUIRE( fltcmp::eq(x_cpu(2, 1), tx_cpu(1, 2)) );
+}
