@@ -13,6 +13,9 @@
 #include "lapack.hh"
 
 
+/**
+ * @brief Linear algebra functions.
+*/
 namespace linalg
 {
   template <typename REAL>
