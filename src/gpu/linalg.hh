@@ -86,7 +86,7 @@ namespace linalg
   
   
   template <typename REAL>
-  gpumat<REAL> matmult(const bool transx, const bool transy, const REAL alpha, gpumat<REAL> &x, gpumat<REAL> &y)
+  gpumat<REAL> matmult(const bool transx, const bool transy, const REAL alpha, const gpumat<REAL> &x, const gpumat<REAL> &y)
   {
     int m, n, k;
     
@@ -104,7 +104,7 @@ namespace linalg
   }
   
   template <typename REAL>
-  void matmult(const bool transx, const bool transy, const REAL alpha, gpumat<REAL> &x, gpumat<REAL> &y, gpumat<REAL> &ret)
+  void matmult(const bool transx, const bool transy, const REAL alpha, const gpumat<REAL> &x, const gpumat<REAL> &y, gpumat<REAL> &ret)
   {
     int m, n, k;
     
