@@ -1,5 +1,5 @@
-CXX=clang++
-#CXX=g++
+CXX=g++
+#CXX=clang++
 CXXFLAGS = -O2 -march=native
 
 OMPFLAGS = -fopenmp 
