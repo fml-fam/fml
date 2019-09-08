@@ -1,36 +1,39 @@
 # Doxyfile 1.8.13
-
 DOXYFILE_ENCODING      = UTF-8
 
-PROJECT_NAME           = fml
+
+#---------------------------------------------------------------------------
+# project
+#---------------------------------------------------------------------------
+
 PROJECT_NUMBER         = 0.1-0
+
+PROJECT_NAME           = fml
 PROJECT_BRIEF          = "Fused Matrix Library"
 PROJECT_LOGO           = ./logo/fml_small.png
-INPUT                  = ../src
 
+
+#---------------------------------------------------------------------------
+# inputs
+#---------------------------------------------------------------------------
+
+INPUT                  = ../src
 OUTPUT_DIRECTORY       = ./
+
+FILE_PATTERNS          = *.c *.cpp *.h *.hh *.cu
+RECURSIVE              = YES
+
+EXCLUDE                = 
+EXCLUDE_PATTERNS       = 
+
+
+#---------------------------------------------------------------------------
+# render
+#---------------------------------------------------------------------------
 
 CREATE_SUBDIRS         = NO
 ALLOW_UNICODE_NAMES    = NO
 OUTPUT_LANGUAGE        = English
-
-BRIEF_MEMBER_DESC      = YES
-REPEAT_BRIEF           = YES
-
-ABBREVIATE_BRIEF       = "The $name class" \
-                         "The $name widget" \
-                         "The $name file" \
-                         is \
-                         provides \
-                         specifies \
-                         contains \
-                         represents \
-                         a \
-                         an \
-                         the
-
-ALWAYS_DETAILED_SEC    = NO
-INLINE_INHERITED_MEMB  = NO
 FULL_PATH_NAMES        = YES
 
 OPTIMIZE_OUTPUT_FOR_C  = NO
@@ -43,6 +46,10 @@ MATHJAX_FORMAT         = HTML-CSS
 MATHJAX_RELPATH        = http://cdn.mathjax.org/mathjax/latest
 MATHJAX_EXTENSIONS     = 
 MATHJAX_CODEFILE       = 
+
+GENERATE_LATEX         = NO
+EXTRA_PACKAGES         = 
+
 
 
 #---------------------------------------------------------------------------
