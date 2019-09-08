@@ -36,12 +36,12 @@ namespace linalg
   template <typename REAL>
   void matmult(const bool transx, const bool transy, const REAL alpha, const mpimat<REAL> &x, const mpimat<REAL> &y, mpimat<REAL> &ret)
   {
-    if (x.ncols() != ret.nrows() || ret.ncols() != y.nrows())
-      throw std::runtime_error("non-conformable arguments");
-    
     int m, n, k;
     
     linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
+    
+    if (m != ret.nrows() || n != ret.ncols())
+      throw std::runtime_error("non-conformable arguments");
     
     const char ctransx = transx ? 'T' : 'N';
     const char ctransy = transy ? 'T' : 'N';

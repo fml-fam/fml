@@ -110,6 +110,9 @@ namespace linalg
     
     linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
     
+    if (m != ret.nrows() || n != ret.ncols())
+      throw std::runtime_error("non-conformable arguments");
+    
     cublasOperation_t cbtransx = transx ? CUBLAS_OP_T : CUBLAS_OP_N;
     cublasOperation_t cbtransy = transy ? CUBLAS_OP_T : CUBLAS_OP_N;
     
