@@ -143,7 +143,7 @@ namespace linalg
     
     p.resize(lipiv);
     
-    scalapack::getrf(m, x.ncols(), x.data_ptr(), m, p.data_ptr(), &info);
+    scalapack::getrf(m, x.ncols(), x.data_ptr(), x.desc_ptr(), p.data_ptr(), &info);
     
     return info;
   }
