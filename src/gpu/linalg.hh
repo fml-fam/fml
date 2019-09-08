@@ -208,6 +208,47 @@ namespace linalg
     xpose(x, tx);
     return tx;
   }
+  
+  
+  
+  template <typename REAL>
+  int lu(gpumat<REAL> &x, gpuvec<int> &p)
+  {
+    int info = 0;
+    const int m = x.nrows();
+    auto c = x.get_card();
+    
+    const len_t lipiv = std::min(m, x.ncols());
+    if (!p.get_card()->valid_card())
+      p.set(c);
+    
+    p.resize(lipiv);
+    
+    int lwork;
+    cusolverStatus_t check = culapack::getrf_buflen(c->cs_handle(), m, m, x.data_ptr(), m, &lwork);
+    check_cusolver_ret(check, "getrf_bufferSize");
+    
+    REAL *work = (REAL*) c->mem_alloc(lwork*sizeof(*work));
+    int *info_device = (int*) c->mem_alloc(sizeof(*info_device));
+    
+    c->mem_cpu2gpu(info_device, &info, sizeof(info));
+    check = culapack::getrf(c->cs_handle(), m, m, x.data_ptr(), m, work, p.data_ptr(), info_device);
+    c->mem_gpu2cpu(&info, info_device, sizeof(info));
+    
+    c->mem_free(work);
+    c->mem_free(info_device);
+    
+    check_cusolver_ret(check, "getrf");
+    
+    return info;
+  }
+  
+  template <typename REAL>
+  int lu(gpumat<REAL> &x)
+  {
+    gpuvec<int> p(x.get_card());
+    return lu(x, p);
+  }
 }
 
 
