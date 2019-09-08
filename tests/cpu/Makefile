@@ -1,8 +1,6 @@
-CXX = g++
-CXXFLAGS = -I../../src -O2
-OMPFLAGS = -fopenmp 
-LDFLAGS = -llapack -lblas
+-include ../make.inc
 
+CPPFLAGS = -I../../src
 WARNFLAGS = -Wall -pedantic -Wextra
 
 
@@ -12,10 +10,10 @@ SRCS=$(wildcard *.cpp)
 OBJS=$(SRCS:.cpp=.o )
 
 %.o: %.cpp 
-	$(CXX) $(CXXFLAGS) $(WARNFLAGS) $(OMPFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(WARNFLAGS) $(OMPFLAGS) -c $< -o $@
 
 cpumat: $(OBJS)
-	$(CXX) test-main.o cpumat.o linalg.o -o cpumat $(OMPFLAGS) $(LDFLAGS)
+	$(CXX) test-main.o cpumat.o linalg.o -o cpumat $(OMPFLAGS) $(CPU_LDFLAGS)
 
 
 miniclean:

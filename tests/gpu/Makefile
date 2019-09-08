@@ -1,10 +1,9 @@
-CXX = g++
-NVCC = nvcc
-CXXFLAGS = -I../../src
-OMPFLAGS = -fopenmp
-NVCCFLAGS = -arch=sm_61
-NV_LDFLAGS = -lcudart -lcublas -lcusolver -lnvidia-ml
+-include ../make.inc
 
+NVCC = nvcc
+NVCCFLAGS = -arch=sm_61
+
+CPPFLAGS = -I../../src
 WARNFLAGS = -Wall -Wextra
 
 
@@ -14,10 +13,10 @@ SRCS = $(wildcard *.cu)
 OBJS = $(SRCS:.cu=.o)
 
 %.o: %.cu 
-	$(NVCC) $(NVCCFLAGS) -Xcompiler "$(CXXFLAGS) $(WARNFLAGS) $(OMPFLAGS)" -c $< -o $@
+	$(NVCC) $(NVCCFLAGS) -Xcompiler "$(CXXFLAGS) $(CPPFLAGS) $(WARNFLAGS) $(OMPFLAGS)" -c $< -o $@
 
 gpumat: $(OBJS)
-	$(NVCC) test-main.o card.o gpumat.o linalg.o -o gpumat $(NV_LDFLAGS) -Xcompiler "$(OMPFLAGS)"
+	$(NVCC) test-main.o card.o gpumat.o linalg.o -o gpumat $(GPU_LDFLAGS) -Xcompiler "$(OMPFLAGS)"
 
 
 miniclean:

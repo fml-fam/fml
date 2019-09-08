@@ -1,9 +1,9 @@
-MPICXX = mpicxx
-CXXFLAGS = -O2
-CPPFLAGS = -I../../src
-OMPFLAGS = -fopenmp 
-MPI_LDFLAGS = -lscalapack-openmpi
+-include ../make.inc
 
+MPICXX = mpicxx
+OMPI_CXX = $(CXX)
+
+CPPFLAGS = -I../../src
 WARNFLAGS = -Wall -pedantic -Wextra
 
 
