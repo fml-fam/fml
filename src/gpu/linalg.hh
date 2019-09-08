@@ -3,6 +3,7 @@
 
 
 #include <stdexcept>
+#include <string>
 
 #include "../linalgutils.hh"
 #include "culapack.hh"
@@ -11,6 +12,46 @@
 
 namespace linalg
 {
+  namespace
+  {
+    inline std::string get_cublas_error_msg(cublasStatus_t check)
+    {
+      if (check == CUBLAS_STATUS_SUCCESS)
+        return "";
+      else if (check == CUBLAS_STATUS_NOT_INITIALIZED)
+        return "cuBLAS not initialized";
+      else if (check == CUBLAS_STATUS_ALLOC_FAILED)
+        return "internal cuBLAS memory allocation failed";
+      else if (check == CUBLAS_STATUS_INVALID_VALUE)
+        return "unsupported parameter";
+      else if (check == CUBLAS_STATUS_ARCH_MISMATCH)
+        return "function requires feature missing from device architecture";
+      else if (check == CUBLAS_STATUS_MAPPING_ERROR)
+        return "access to GPU memory space failed";
+      else if (check == CUBLAS_STATUS_EXECUTION_FAILED)
+        return "GPU program failed to execute";
+      else if (check == CUBLAS_STATUS_INTERNAL_ERROR)
+        return "internal cuBLAS operation failed";
+      else if (check == CUBLAS_STATUS_NOT_SUPPORTED)
+        return "requested functionality is not supported";
+      else if (check == CUBLAS_STATUS_LICENSE_ERROR)
+        return "error with cuBLAS license check";
+      else
+        return "error unknown to fml developers";
+    }
+    
+    inline void check_cublas_ret(cublasStatus_t check, std::string op)
+    {
+      if (check != CUBLAS_STATUS_SUCCESS)
+      {
+        std::string msg = "cuBLAS " + op + "() failed with error: " + get_cublas_error_msg(check);
+        throw std::runtime_error(msg);
+      }
+    }
+  }
+  
+  
+  
   template <typename REAL>
   gpumat<REAL> matmult(const bool transx, const bool transy, const REAL alpha, gpumat<REAL> &x, gpumat<REAL> &y)
   {
@@ -24,8 +65,7 @@ namespace linalg
     cublasOperation_t cbtransy = transy ? CUBLAS_OP_T : CUBLAS_OP_N;
     
     cublasStatus_t check = culapack::gemm(c->cb_handle(), cbtransx, cbtransy, m, n, k, alpha, x.data_ptr(), x.nrows(), y.data_ptr(), y.nrows(), (REAL)0, ret.data_ptr(), m);
-    if (check != CUBLAS_STATUS_SUCCESS)
-      throw std::runtime_error("asdf");
+    check_cublas_ret(check, "gemm");
     
     return ret;
   }
@@ -41,8 +81,7 @@ namespace linalg
     cublasOperation_t cbtransy = transy ? CUBLAS_OP_T : CUBLAS_OP_N;
     
     cublasStatus_t check = culapack::gemm(x.get_card()->cb_handle(), cbtransx, cbtransy, m, n, k, alpha, x.data_ptr(), x.nrows(), y.data_ptr(), y.nrows(), (REAL)0, ret.data_ptr(), m);
-    if (check != CUBLAS_STATUS_SUCCESS)
-      throw std::runtime_error("asdf");
+    check_cublas_ret(check, "gemm");
   }
   
   
@@ -61,7 +100,8 @@ namespace linalg
     cublasOperation_t trans = CUBLAS_OP_T;
     cublasFillMode_t uplo = CUBLAS_FILL_MODE_LOWER;
     
-    culapack::syrk(cbh, uplo, trans, n, m, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), n);
+    cublasStatus_t check = culapack::syrk(cbh, uplo, trans, n, m, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), n);
+    check_cublas_ret(check, "syrk");
   }
   
   template <typename REAL>
@@ -93,7 +133,8 @@ namespace linalg
     cublasOperation_t trans = CUBLAS_OP_N;
     cublasFillMode_t uplo = CUBLAS_FILL_MODE_LOWER;
     
-    culapack::syrk(cbh, uplo, trans, m, n, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), m);
+    cublasStatus_t check = culapack::syrk(cbh, uplo, trans, m, n, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), m);
+    check_cublas_ret(check, "syrk");
   }
   
   template <typename REAL>
