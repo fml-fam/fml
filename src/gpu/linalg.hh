@@ -85,6 +85,22 @@ namespace linalg
   
   
   
+  /**
+   * @brief Returns alpha*op(x)*op(y) where op(A) is A or A^T
+   * 
+   * @param[in] transx Should x^T be used?
+   * @param[in] transy Should y^T be used?
+   * @param[in] alpha Scalar.
+   * @param[in] x Left multiplicand.
+   * @param[in] y Right multiplicand.
+   * 
+   * @details If x and y are inappropriately sized for a matrix product, the
+     method will throw a 'runtime_error' exception. Likewise for ret.
+   * 
+   * @impl Uses the cuBLAS function cublasXgemm().
+   * 
+   * @tparam REAL should be '__half', 'float', or 'double'.
+   */
   template <typename REAL>
   gpumat<REAL> matmult(const bool transx, const bool transy, const REAL alpha, const gpumat<REAL> &x, const gpumat<REAL> &y)
   {
@@ -103,6 +119,23 @@ namespace linalg
     return ret;
   }
   
+  /**
+   * @brief Computes ret = alpha*op(x)*op(y) where op(A) is A or A^T
+   * 
+   * @param[in] transx Should x^T be used?
+   * @param[in] transy Should y^T be used?
+   * @param[in] alpha Scalar.
+   * @param[in] x Left multiplicand.
+   * @param[in] y Right multiplicand.
+   * @param[out] ret The product.
+   * 
+   * @details If x and y are inappropriately sized for a matrix product, the
+     method will throw a 'runtime_error' exception. Likewise for ret.
+   * 
+   * @impl Uses the cuBLAS function cublasXgemm().
+   * 
+   * @tparam REAL should be '__half', 'float', or 'double'.
+   */
   template <typename REAL>
   void matmult(const bool transx, const bool transy, const REAL alpha, const gpumat<REAL> &x, const gpumat<REAL> &y, gpumat<REAL> &ret)
   {

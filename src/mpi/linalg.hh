@@ -13,6 +13,24 @@
 
 namespace linalg
 {
+  /**
+   * @brief Returns alpha*op(x)*op(y) where op(A) is A or A^T
+   * 
+   * @param[in] transx Should x^T be used?
+   * @param[in] transy Should y^T be used?
+   * @param[in] alpha Scalar.
+   * @param[in] x Left multiplicand.
+   * @param[in] y Right multiplicand.
+   * 
+   * @details If x and y are inappropriately sized for a matrix product, the
+     method will throw a 'runtime_error' exception. Likewise for ret.
+   * 
+   * @impl Uses the PBLAS function pXgemm().
+   * 
+   * @comm The method will communicate across all processes in the BLACS grid.
+   * 
+   * @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   mpimat<REAL> matmult(const bool transx, const bool transy, const REAL alpha, const mpimat<REAL> &x, const mpimat<REAL> &y)
   {
@@ -33,6 +51,25 @@ namespace linalg
     return ret;
   }
   
+  /**
+   * @brief Computes ret = alpha*op(x)*op(y) where op(A) is A or A^T
+   * 
+   * @param[in] transx Should x^T be used?
+   * @param[in] transy Should y^T be used?
+   * @param[in] alpha Scalar.
+   * @param[in] x Left multiplicand.
+   * @param[in] y Right multiplicand.
+   * @param[out] ret The product.
+   * 
+   * @details If x and y are inappropriately sized for a matrix product, the
+     method will throw a 'runtime_error' exception. Likewise for ret.
+   * 
+   * @impl Uses the PBLAS function pXgemm().
+   * 
+   * @comm The method will communicate across all processes in the BLACS grid.
+   * 
+   * @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   void matmult(const bool transx, const bool transy, const REAL alpha, const mpimat<REAL> &x, const mpimat<REAL> &y, mpimat<REAL> &ret)
   {
