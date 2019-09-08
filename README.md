@@ -30,9 +30,9 @@ There are no external header dependencies, but there are some shared libraries y
 * GPU code needs [CUDA](https://developer.nvidia.com/cuda-downloads)
 * MPI code needs [ScaLAPACK](http://performance.netlib.org/scalapack/)
 
-Other software:
+Other software we use:
 
-* Tests use [catch2](https://github.com/catchorg/Catch2)
+* Tests use [catch2](https://github.com/catchorg/Catch2) (a copy of which is included under `tests/`).
 
 You can find some examples of how to use the library in the `examples/` tree. Right now there is no real build system beyond some ad hoc makefiles; but ad hoc is better than no hoc.
 
