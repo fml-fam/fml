@@ -37,7 +37,7 @@ namespace linalg
       else if (check == CUBLAS_STATUS_LICENSE_ERROR)
         return "error with cuBLAS license check";
       else
-        return "error unknown to fml developers";
+        return "unknown cuBLAS error occurred";
     }
     
     inline void check_cublas_ret(cublasStatus_t check, std::string op)
