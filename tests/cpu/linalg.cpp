@@ -109,3 +109,20 @@ TEMPLATE_TEST_CASE("xpose", "[linalg]", float, double)
   REQUIRE( fltcmp::eq(x(1, 0), tx(0, 1)) );
   REQUIRE( fltcmp::eq(x(2, 1), tx(1, 2)) );
 }
+
+
+
+TEMPLATE_TEST_CASE("lu", "[linalg]", float, double)
+{
+  len_t n = 2;
+  
+  cpumat<TestType> x(n, n);
+  x.fill_linspace(1.f, (TestType) n*n);
+  
+  linalg::lu(x);
+  
+  REQUIRE( fltcmp::eq(x(0, 0), 2) );
+  REQUIRE( fltcmp::eq(x(0, 1), 4) );
+  REQUIRE( fltcmp::eq(x(1, 0), 0.5) );
+  REQUIRE( fltcmp::eq(x(1, 1), 1) );
+}
