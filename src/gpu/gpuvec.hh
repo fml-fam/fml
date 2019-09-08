@@ -128,7 +128,7 @@ void gpuvec<T>::resize(len_t size)
   T *realloc_ptr;
   realloc_ptr = (T*) this->c->mem_alloc(len);
   
-  size_t oldlen = (size_t) this->size * sizeof(T);
+  size_t oldlen = (size_t) this->_size * sizeof(T);
   size_t copylen = std::min(len, oldlen);
   this->c->mem_gpu2gpu(realloc_ptr, this->data, copylen);
   this->c->mem_free(this->data);
