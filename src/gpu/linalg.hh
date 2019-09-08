@@ -48,6 +48,39 @@ namespace linalg
         throw std::runtime_error(msg);
       }
     }
+    
+    
+    
+    inline std::string get_cusolver_error_msg(cusolverStatus_t check)
+    {
+      if (check == CUSOLVER_STATUS_SUCCESS)
+        return "";
+      else if (check == CUSOLVER_STATUS_NOT_INITIALIZED)
+        return "cuSOLVER not initialized";
+      else if (check == CUSOLVER_STATUS_ALLOC_FAILED)
+        return "internal cuSOLVER memory allocation failed";
+      else if (check == CUSOLVER_STATUS_INVALID_VALUE)
+        return "unsupported parameter";
+      else if (check == CUSOLVER_STATUS_ARCH_MISMATCH)
+        return "function requires feature missing from device architecture";
+      else if (check == CUSOLVER_STATUS_EXECUTION_FAILED)
+        return "GPU program failed to execute";
+      else if (check == CUSOLVER_STATUS_INTERNAL_ERROR)
+        return "internal cuSOLVER operation failed";
+      else if (check == CUSOLVER_STATUS_MATRIX_TYPE_NOT_SUPPORTED)
+        return "matrix type not supported";
+      else
+        return "unknown cuSOLVER error occurred";
+    }
+    
+    inline void check_cusolver_ret(cusolverStatus_t check, std::string op)
+    {
+      if (check != CUSOLVER_STATUS_SUCCESS)
+      {
+        std::string msg = "cuSOLVER " + op + "() failed with error: " + get_cusolver_error_msg(check);
+        throw std::runtime_error(msg);
+      }
+    }
   }
   
   
