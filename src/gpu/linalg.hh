@@ -155,7 +155,20 @@ namespace linalg
   
   
   
-  // lower triangle of t(x) %*% x
+  /**
+   * @brief Computes lower triangle of alpha*x^T*x
+   * 
+   * @param[in] alpha Scalar.
+   * @param[in] x Input data matrix.
+   * @param[out] ret The product.
+   * 
+   * @details If ret is inappropriately sized for the product, the method will
+     throw a 'runtime_error' exception.
+   * 
+   * @impl Uses the BLAS function cublasXsyrk().
+   * 
+   * @tparam REAL should be '__half', 'float', or 'double'.
+   */
   template <typename REAL>
   void crossprod(const REAL alpha, const gpumat<REAL> &x, gpumat<REAL> &ret)
   {
@@ -173,6 +186,16 @@ namespace linalg
     check_cublas_ret(check, "syrk");
   }
   
+  /**
+   * @brief Returns lower triangle of alpha*x^T*x
+   * 
+   * @param[in] alpha Scalar.
+   * @param[in] x Input data matrix.
+   * 
+   * @impl Uses the BLAS function cublasXsyrk().
+   * 
+   * @tparam REAL should be '__half', 'float', or 'double'.
+   */
   template <typename REAL>
   gpumat<REAL> crossprod(const REAL alpha, const gpumat<REAL> &x)
   {

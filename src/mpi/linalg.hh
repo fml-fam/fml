@@ -90,7 +90,22 @@ namespace linalg
   
   
   
-  // upper triangle
+  /**
+   * @brief Computes lower triangle of alpha*x^T*x
+   * 
+   * @param[in] alpha Scalar.
+   * @param[in] x Input data matrix.
+   * @param[out] ret The product.
+   * 
+   * @details If ret is inappropriately sized for the product, the method will
+     throw a 'runtime_error' exception.
+   * 
+   * @impl Uses the BLAS function pXsyrk().
+   * 
+   * @comm The method will communicate across all processes in the BLACS grid.
+   * 
+   * @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   void crossprod(const REAL alpha, const mpimat<REAL> &x, mpimat<REAL> &ret)
   {
@@ -102,6 +117,18 @@ namespace linalg
     scalapack::syrk('L', 'T', n, x.nrows(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
   }
   
+  /**
+   * @brief Returns lower triangle of alpha*x^T*x
+   * 
+   * @param[in] alpha Scalar.
+   * @param[in] x Input data matrix.
+   * 
+   * @impl Uses the BLAS function pXsyrk().
+   * 
+   * @comm The method will communicate across all processes in the BLACS grid.
+   * 
+   * @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   mpimat<REAL> crossprod(const REAL alpha, const mpimat<REAL> &x)
   {

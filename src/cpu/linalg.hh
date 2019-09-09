@@ -89,7 +89,20 @@ namespace linalg
   
   
   
-  // lower triangle of t(x) %*% x
+  /**
+   * @brief Computes lower triangle of alpha*x^T*x
+   * 
+   * @param[in] alpha Scalar.
+   * @param[in] x Input data matrix.
+   * @param[out] ret The product.
+   * 
+   * @details If ret is inappropriately sized for the product, the method will
+     throw a 'runtime_error' exception.
+   * 
+   * @impl Uses the BLAS function Xsyrk().
+   * 
+   * @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   void crossprod(const REAL alpha, const cpumat<REAL> &x, cpumat<REAL> &ret)
   {
@@ -102,6 +115,16 @@ namespace linalg
     lapack::syrk('L', 'T', n, m, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), n);
   }
   
+  /**
+   * @brief Returns lower triangle of alpha*x^T*x
+   * 
+   * @param[in] alpha Scalar.
+   * @param[in] x Input data matrix.
+   * 
+   * @impl Uses the BLAS function Xsyrk().
+   * 
+   * @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   cpumat<REAL> crossprod(const REAL alpha, const cpumat<REAL> &x)
   {
