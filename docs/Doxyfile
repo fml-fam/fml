@@ -58,6 +58,7 @@ EXTRA_PACKAGES         =
 
 ALIASES += impl="\par Implementation Details\n"
 ALIASES += comm="\par Communication Details\n"
+ALIASES += except="\par Exceptions\n"
 
 # The STRIP_FROM_PATH tag can be used to strip a user-defined part of the path.
 # Stripping is only done if one of the specified strings matches the left-hand

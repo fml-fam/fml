@@ -137,7 +137,10 @@ inline grid::grid()
  * @brief Create a new grid object by initializing a new BLACS process grid.
  * 
  * @param[in] gridtype Should be one of PROC_GRID_SQUARE, PROC_GRID_WIDE, or
- * PROC_GRID_TALL. Otherwise this will throw a 'runtime_error' exception.
+ * PROC_GRID_TALL.
+ * 
+ * @except If 'gridtype' is not one of PROC_GRID_SQUARE, PROC_GRID_WIDE, or
+ * PROC_GRID_TALL, the method will throw a 'runtime_error' exception.
 */
 inline grid::grid(const int gridtype)
 {

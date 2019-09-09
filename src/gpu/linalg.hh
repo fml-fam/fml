@@ -94,7 +94,7 @@ namespace linalg
    * @param[in] x Left multiplicand.
    * @param[in] y Right multiplicand.
    * 
-   * @details If x and y are inappropriately sized for a matrix product, the
+   * @except If x and y are inappropriately sized for a matrix product, the
      method will throw a 'runtime_error' exception. Likewise for ret.
    * 
    * @impl Uses the cuBLAS function cublasXgemm().
@@ -129,7 +129,7 @@ namespace linalg
    * @param[in] y Right multiplicand.
    * @param[out] ret The product.
    * 
-   * @details If x and y are inappropriately sized for a matrix product, the
+   * @except If x and y are inappropriately sized for a matrix product, the
      method will throw a 'runtime_error' exception. Likewise for ret.
    * 
    * @impl Uses the cuBLAS function cublasXgemm().
@@ -162,7 +162,7 @@ namespace linalg
    * @param[in] x Input data matrix.
    * @param[out] ret The product.
    * 
-   * @details If ret is inappropriately sized for the product, the method will
+   * @except If ret is inappropriately sized for the product, the method will
      throw a 'runtime_error' exception.
    * 
    * @impl Uses the BLAS function cublasXsyrk().
