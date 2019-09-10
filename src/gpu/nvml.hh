@@ -14,6 +14,10 @@
 #define NVML_MAX_STRLEN 128
 
 
+/**
+ * @brief NVIDIA Management Library (NVML) interface.
+ * @except Each function can throw a 'runtime_error' exception.
+ */
 namespace nvml
 {
   namespace
@@ -76,11 +80,19 @@ namespace nvml
   
   
   
+  /**
+   * @brief Initialize NVML.
+   * @details Call once before calling other NVML methods.
+   */
   inline void init()
   {
     CHECK_NVML( nvmlInit() );
   }
   
+  /**
+   * @brief Shut down NVML.
+   * @details Call when you are finished.
+   */
   inline void shutdown()
   {
     CHECK_NVML( nvmlShutdown() );
@@ -91,8 +103,16 @@ namespace nvml
 
 namespace nvml
 {
+  /**
+   * @brief NVML queries against the system, independent of any GPU devices.
+   * @details Only query methods are available.
+   */
   namespace system
   {
+    /**
+     * @brief System CUDA driver version.
+     * @return The version is encoded as (major*1000) + (minor*10).
+     */
     inline int get_cuda_driver_version()
     {
       int ret;
@@ -100,6 +120,9 @@ namespace nvml
       return ret;
     }
     
+    /**
+     * @brief System graphics driver version.
+     */
     inline std::string get_driver_version()
     {
       std::string ret;
@@ -108,6 +131,9 @@ namespace nvml
       return ret;
     }
     
+    /**
+     * @brief Version of the NVML library.
+     */
     inline std::string get_nvml_version()
     {
       std::string ret;
@@ -116,6 +142,11 @@ namespace nvml
       return ret;
     }
     
+    /**
+     * @brief Process name.
+     * @param[in] pid Process ID.
+     * @return Process name.
+     */
     inline std::string get_process_name(unsigned int pid)
     {
       std::string ret;
@@ -130,6 +161,10 @@ namespace nvml
 
 namespace nvml
 {
+  /**
+   * @brief NVML queries against GPU devices.
+   * @details Only query methods are available.
+  */
   namespace device
   {
     inline std::string get_board_part_number(nvmlDevice_t device)
