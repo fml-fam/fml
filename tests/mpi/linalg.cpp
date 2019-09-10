@@ -9,6 +9,43 @@
 extern grid g;
 
 
+TEMPLATE_TEST_CASE("matrix addition", "[linalg]", float, double)
+{
+  len_t n = 2;
+  
+  mpimat<TestType> x(g, n, n, 1, 1);
+  mpimat<TestType> y(g, n, n, 1, 1);
+  x.fill_linspace(1.f, (TestType) n*n);
+  y.fill_linspace((TestType) n*n, 1.f);
+  
+  auto z = linalg::add(false, false, (TestType)1.f, (TestType)1.f, x, y);
+  
+  TestType v = (TestType) n*n + 1;
+  REQUIRE( fltcmp::eq(z(0, 0), v) );
+  REQUIRE( fltcmp::eq(z(1, 0), v) );
+  REQUIRE( fltcmp::eq(z(0, 1), v) );
+  REQUIRE( fltcmp::eq(z(1, 1), v) );
+  
+  linalg::add(false, false, (TestType)1.f, (TestType)1.f, x, z, z);
+  
+  REQUIRE( fltcmp::eq(z(0, 0), v+1) );
+  REQUIRE( fltcmp::eq(z(1, 0), v+2) );
+  REQUIRE( fltcmp::eq(z(0, 1), v+3) );
+  REQUIRE( fltcmp::eq(z(1, 1), v+4) );
+  
+  linalg::add(false, true, (TestType)1.f, (TestType)1.f, x, y, z);
+  
+  REQUIRE( fltcmp::eq(z(1, 0), v-1) );
+  REQUIRE( fltcmp::eq(z(0, 1), v+1) );
+  
+  linalg::add(true, false, (TestType)1.f, (TestType)1.f, x, y, z);
+  
+  REQUIRE( fltcmp::eq(z(1, 0), v+1) );
+  REQUIRE( fltcmp::eq(z(0, 1), v-1) );
+}
+
+
+
 TEMPLATE_TEST_CASE("matrix multiplication", "[linalg]", float, double)
 {
   len_t n = 2;
