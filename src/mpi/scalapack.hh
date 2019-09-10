@@ -95,7 +95,28 @@ namespace scalapack
     int *descvt, double *work, int lwork, int *info)
   {
     int ij = 1;
-    pdgesvd_(&jobu, &jobvt, &m, &n, a, &ij, &ij, desca, s, u, &ij, &ij, descu, vt, &ij, &ij, descvt, work, &lwork, info);
+    pdgesvd_(&jobu, &jobvt, &m, &n, a, &ij, &ij, desca, s, u, &ij, &ij, descu,
+      vt, &ij, &ij, descvt, work, &lwork, info);
+  }
+  
+  
+  
+  inline void geadd(const char trans, const int m, const int n,
+    const float alpha, const float *a, const int *desca, const float beta,
+    float *c, const int *descc)
+  {
+    int ij = 1;
+    psgeadd_(&trans, &m, &n, &alpha, a, &ij, &ij, desca, &beta, c, &ij, &ij,
+      descc);
+  }
+  
+  inline void geadd(const char trans, const int m, const int n,
+    const double alpha, const double *a, const int *desca, const double beta,
+    double *c, const int *descc)
+  {
+    int ij = 1;
+    pdgeadd_(&trans, &m, &n, &alpha, a, &ij, &ij, desca, &beta, c, &ij, &ij,
+      descc);
   }
 }
 

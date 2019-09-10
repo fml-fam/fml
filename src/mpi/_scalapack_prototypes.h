@@ -63,7 +63,7 @@ extern void pdgetrf_(const int *m, const int *n, double *restrict a,
 
 extern void psgesvd_(const char *restrict jobu, const char *restrict jobvt,
   const int *restrict m, const int *restrict n, float *restrict a,
-  const int *restrict ia, const int *restrict ja, const int *restrict desca,
+  const int *ia, const int *ja, const int *restrict desca,
   float *restrict s, float *restrict u, const int *restrict iu,
   const int *restrict ju, const int *restrict descu, float *restrict vt,
   const int *restrict ivt, const int *restrict jvt, const int *restrict descvt,
@@ -71,11 +71,25 @@ extern void psgesvd_(const char *restrict jobu, const char *restrict jobvt,
 
 extern void pdgesvd_(const char *restrict jobu, const char *restrict jobvt,
   const int *restrict m, const int *restrict n, double *restrict a,
-  const int *restrict ia, const int *restrict ja, const int *restrict desca,
+  const int *ia, const int *ja, const int *restrict desca,
   double *restrict s, double *restrict u, const int *restrict iu,
   const int *restrict ju, const int *restrict descu, double *restrict vt,
   const int *restrict ivt, const int *restrict jvt, const int *restrict descvt,
   double *restrict work, const int *restrict lwork, int *restrict info);
+
+
+
+extern void psgeadd_(const char *restrict trans, const int *restrict m,
+  const int *restrict n, const float *restrict alpha, const float *restrict a,
+  const int *ia, const int *ja, const int *restrict desca,
+  const float *restrict beta, float *restrict c, const int *ic, const int *jc,
+  const int *restrict descc);
+
+extern void pdgeadd_(const char *restrict trans, const int *restrict m,
+  const int *restrict n, const double *restrict alpha, const double *restrict a,
+  const int *ia, const int *ja, const int *restrict desca,
+  const double *restrict beta, double *restrict c, const int *ic, const int *jc,
+  const int *restrict descc);
 
 
 #ifdef __cplusplus
