@@ -85,6 +85,37 @@ namespace linalg
   
   
   
+  // ret = alpha*op(x) + beta*op(y)
+  template <typename REAL>
+  void add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const gpumat<REAL> &x, const gpumat<REAL> &y, gpumat<REAL> &ret)
+  {
+    len_t m, n;
+    linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
+    
+    if (ret.nrows() != m || ret.ncols() != n)
+      throw std::runtime_error("non-conformable arguments");
+    
+    auto c = x.get_card();
+    cublasOperation_t cbtransx = transx ? CUBLAS_OP_T : CUBLAS_OP_N;
+    cublasOperation_t cbtransy = transy ? CUBLAS_OP_T : CUBLAS_OP_N;
+    
+    culapack::geam(c->cb_handle(), cbtransx, cbtransy, m, n, alpha, x.data_ptr(), x.nrows(), beta, y.data_ptr(), y.nrows(), ret.data_ptr(), m);
+  }
+  
+  template <typename REAL>
+  gpumat<REAL> add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const gpumat<REAL> &x, const gpumat<REAL> &y)
+  {
+    len_t m, n;
+    linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
+    
+    auto c = x.get_card();
+    gpumat<REAL> ret(c, m, n);
+    add(transx, transy, alpha, beta, x, y, ret);
+    return ret;
+  }
+  
+  
+  
   /**
    * @brief Returns alpha*op(x)*op(y) where op(A) is A or A^T
    * 
