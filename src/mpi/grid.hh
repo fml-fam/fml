@@ -96,7 +96,7 @@ class grid
     int mycol() const {return _mycol;};
     ///@}
     
-    /// Is the BLACS grid valid
+    /// Is the BLACS grid valid?
     bool valid_grid() const {return (_ictxt!=UNINITIALIZED_GRID && _ictxt!=EXITED_GRID);};
   
   protected:
