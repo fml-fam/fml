@@ -18,6 +18,75 @@
 */
 namespace linalg
 {
+  // ret = alpha*op(x) + beta*op(y)
+  template <typename REAL>
+  void add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const cpumat<REAL> &x, const cpumat<REAL> &y, cpumat<REAL> &ret)
+  {
+    len_t m, n;
+    linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
+    
+    if (ret.nrows() != m || ret.ncols() != n)
+      throw std::runtime_error("non-conformable arguments");
+    
+    const REAL *x_d = x.data_ptr();
+    const REAL *y_d = y.data_ptr();
+    REAL *ret_d = ret.data_ptr();
+    
+    if (!transx && !transy)
+    {
+      #pragma omp parallel for if(m*n > omputils::OMP_MIN_SIZE)
+      for (len_t j=0; j<n; j++)
+      {
+        #pragma omp simd
+        for (len_t i=0; i<m; i++)
+          ret_d[i + m*j] = alpha*x_d[i + m*j] + beta*y_d[i + m*j];
+      }
+    }
+    else if (transx && transy)
+    {
+      #pragma omp parallel for if(m*n > omputils::OMP_MIN_SIZE)
+      for (len_t j=0; j<m; j++)
+      {
+        #pragma omp simd
+        for (len_t i=0; i<n; i++)
+          ret_d[j + m*i] = alpha*x_d[i + n*j] + beta*y_d[i + n*j];
+      }
+    }
+    else if (transx && !transy)
+    {
+      #pragma omp parallel for if(m*n > omputils::OMP_MIN_SIZE)
+      for (len_t j=0; j<n; j++)
+      {
+        #pragma omp simd
+        for (len_t i=0; i<m; i++)
+          ret_d[i + m*j] = alpha*x_d[j + n*i] + beta*y_d[i + m*j];
+      }
+    }
+    else if (!transx && transy)
+    {
+      #pragma omp parallel for if(m*n > omputils::OMP_MIN_SIZE)
+      for (len_t j=0; j<n; j++)
+      {
+        #pragma omp simd
+        for (len_t i=0; i<m; i++)
+          ret_d[i + m*j] = alpha*x_d[i + m*j] + beta*y_d[j + n*i];
+      }
+    }
+  }
+  
+  template <typename REAL>
+  cpumat<REAL> add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const cpumat<REAL> &x, const cpumat<REAL> &y)
+  {
+    len_t m, n;
+    linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
+    
+    cpumat<REAL> ret(m, n);
+    add(transx, transy, alpha, beta, x, y, ret);
+    return ret;
+  }
+  
+  
+  
   /**
    * @brief Returns alpha*op(x)*op(y) where op(A) is A or A^T
    * 
