@@ -18,7 +18,6 @@ OBJS = $(SRCS:.cu=.o)
 gpumat: $(OBJS)
 	$(NVCC) test-main.o card.o gpumat.o linalg.o -o gpumat $(GPU_LDFLAGS) -Xcompiler "$(OMPFLAGS)"
 
-
 miniclean:
 	rm -rf gpumat card.o gpumat.o linalg.o
 
