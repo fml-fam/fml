@@ -8,6 +8,7 @@
 #include "../linalgutils.hh"
 #include "culapack.hh"
 #include "gpumat.hh"
+#include "gpuvec.hh"
 
 
 namespace linalg
