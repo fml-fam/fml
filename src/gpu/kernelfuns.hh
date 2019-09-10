@@ -53,31 +53,31 @@ namespace kernelfuns
   
   
   
-  inline __device__ void kernel_fill_linspace(const __half min, const __half max, len_t m, len_t n, __half *data)
+  static __global__ void kernel_fill_linspace(const __half start, const __half stop, len_t m, len_t n, __half *data)
   {
     int i = blockDim.x*blockIdx.x + threadIdx.x;
     int j = blockDim.y*blockIdx.y + threadIdx.y;
     
     if (i < m && j < n)
     {
-      float v_f = ((float)(max-min))/((float) m*n-1);
+      float v_f = ((float)(stop-start))/((float) m*n-1);
       __half v = (__half) v_f;
       len_t ind = i + m*j;
-      data[ind] = v*__int2half_rz(ind) + min;
+      data[ind] = v*__int2half_rz(ind) + start;
     }
   }
   
   template <typename REAL>
-  __global__ void kernel_fill_linspace(const REAL min, const REAL max, len_t m, len_t n, REAL *data)
+  __global__ void kernel_fill_linspace(const REAL start, const REAL stop, len_t m, len_t n, REAL *data)
   {
     int i = blockDim.x*blockIdx.x + threadIdx.x;
     int j = blockDim.y*blockIdx.y + threadIdx.y;
     
     if (i < m && j < n)
     {
-      REAL v = (max-min)/((REAL) m*n-1);
+      REAL v = (stop-start)/((REAL) m*n-1);
       len_t ind = i + m*j;
-      data[ind] = v*((REAL) ind) + min;
+      data[ind] = v*((REAL) ind) + start;
     }
   }
   
