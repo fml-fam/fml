@@ -12,7 +12,8 @@ namespace lapack
     const float *restrict a, const int lda, const float *restrict b,
     const int ldb, const float beta, float *restrict c, const int ldc)
   {
-    sgemm_(&transa, &transb, &m, &n, &k, &alpha, a, &lda, b, &ldb, &beta, c, &ldc);
+    sgemm_(&transa, &transb, &m, &n, &k, &alpha, a, &lda, b, &ldb, &beta, c,
+      &ldc);
   }
   
   inline void gemm(const char transa, const char transb, const int m,
@@ -20,7 +21,8 @@ namespace lapack
     const double *restrict a, const int lda, const double *restrict b,
     const int ldb, const double beta, double *restrict c, const int ldc)
   {
-    dgemm_(&transa, &transb, &m, &n, &k, &alpha, a, &lda, b, &ldb, &beta, c, &ldc);
+    dgemm_(&transa, &transb, &m, &n, &k, &alpha, a, &lda, b, &ldb, &beta, c,
+      &ldc);
   }
   
   
@@ -59,14 +61,38 @@ namespace lapack
     const int lda, float *s, float *u, const int ldu, float *vt,
     const int ldvt, float *work, const int lwork, int *iwork, int *info)
   {
-    sgesdd_(&jobz, &m, &n, a, &lda, s, u, &ldu, vt, &ldvt, work, &lwork, iwork, info);
+    sgesdd_(&jobz, &m, &n, a, &lda, s, u, &ldu, vt, &ldvt, work, &lwork, iwork,
+      info);
   }
   
   inline void gesdd(const char jobz, const int m, const int n, double *a,
     const int lda, double *s, double *u, const int ldu, double *vt,
     const int ldvt, double *work, const int lwork, int *iwork, int *info)
   {
-    dgesdd_(&jobz, &m, &n, a, &lda, s, u, &ldu, vt, &ldvt, work, &lwork, iwork, info);
+    dgesdd_(&jobz, &m, &n, a, &lda, s, u, &ldu, vt, &ldvt, work, &lwork, iwork,
+      info);
+  }
+  
+  
+  
+  inline void syevr(const char jobz, const char range, const char uplo,
+    const int n, float *a, const int lda, const float vl, const float vu,
+    const int il, const int iu, const float abstol, const int m, float *w,
+    float *z, const int ldz, int *isuppz, float *work, const int lwork,
+    int *iwork, const int liwork, int *info)
+  {
+    ssyevr_(&jobz, &range, &uplo, &n, a, &lda, &vl, &vu, &il, &iu, &abstol, &m,
+      w, z, &ldz, isuppz, work, &lwork, iwork, &liwork, info);
+  }
+  
+  inline void syevr(const char jobz, const char range, const char uplo,
+    const int n, double *a, const int lda, const double vl, const double vu,
+    const int il, const int iu, const double abstol, const int m, double *w,
+    double *z, const int ldz, int *isuppz, double *work, const int lwork,
+    int *iwork, const int liwork, int *info)
+  {
+    dsyevr_(&jobz, &range, &uplo, &n, a, &lda, &vl, &vu, &il, &iu, &abstol, &m,
+      w, z, &ldz, isuppz, work, &lwork, iwork, &liwork, info);
   }
 }
 

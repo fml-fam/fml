@@ -62,6 +62,24 @@ extern void dgesdd_(const char *const restrict jobz, const int *const restrict m
   int *const restrict iwork, int *const restrict info);
 
 
+
+extern void ssyevr_(const char *restrict jobz, const char *restrict range,
+  const char *restrict uplo, const int *restrict n, float *restrict a,
+  const int *restrict lda, const float *restrict vl, const float *restrict vu,
+  const int *restrict il, const int *restrict iu, const float *restrict abstol,
+  const int *restrict m, float *w, float *z, const int *restrict ldz,
+  int *isuppz, float *work, const int *lwork, int *iwork, const int *liwork,
+  int *info);
+
+extern void dsyevr_(const char *restrict jobz, const char *restrict range,
+  const char *restrict uplo, const int *restrict n, double *restrict a,
+  const int *restrict lda, const double *restrict vl, const double *restrict vu,
+  const int *restrict il, const int *restrict iu, const double *restrict abstol,
+  const int *restrict m, double *w, double *z, const int *restrict ldz,
+  int *isuppz, double *work, const int *lwork, int *iwork, const int *liwork,
+  int *info);
+
+
 #ifdef __cplusplus
 }
 #endif
