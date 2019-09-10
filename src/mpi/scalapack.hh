@@ -65,13 +65,15 @@ namespace scalapack
   
   
   
-  inline void getrf(const int m, const int n, float *a, int *desca, int *ipiv, int *info)
+  inline void getrf(const int m, const int n, float *a, int *desca, int *ipiv,
+    int *info)
   {
     int ij = 1;
     psgetrf_(&m, &n, a, &ij, &ij, desca, ipiv, info);
   }
   
-  inline void getrf(const int m, const int n, double *a, int *desca, int *ipiv, int *info)
+  inline void getrf(const int m, const int n, double *a, int *desca, int *ipiv,
+    int *info)
   {
     int ij = 1;
     pdgetrf_(&m, &n, a, &ij, &ij, desca, ipiv, info);
@@ -84,7 +86,8 @@ namespace scalapack
     int *descvt, float *work, int lwork, int *info)
   {
     int ij = 1;
-    psgesvd_(&jobu, &jobvt, &m, &n, a, &ij, &ij, desca, s, u, &ij, &ij, descu, vt, &ij, &ij, descvt, work, &lwork, info);
+    psgesvd_(&jobu, &jobvt, &m, &n, a, &ij, &ij, desca, s, u, &ij, &ij, descu,
+      vt, &ij, &ij, descvt, work, &lwork, info);
   }
   
   inline void gesvd(const char jobu, const char jobvt, const int m, const int n,
