@@ -12,6 +12,16 @@
 #include "nvml.hh"
 
 
+/**
+ * @brief GPU data and methods.
+ * 
+ * @impl Stores GPU ordinal and cuBLAS/cuSOLVER handles. Methods are wrappers
+   around core CUDA operations, like cudaMalloc(), cudaMemcpy(), etc.
+ * 
+ * @details You probably should not use these methods directly unless you know
+   what you are doing (in which case you probably do not even need them). Simply
+   pass a card object to a GPU object constructor and move on.
+ */
 class card
 {
   public:
@@ -34,13 +44,19 @@ class card
     void synch();
     void check();
     
+    ///@{
+    /// The ordinal number corresponding to the GPU device.
     int device_id() {return _id;};
     int device_id() const {return _id;};
+    /// cuBLAS handle.
     cublasHandle_t cb_handle() {return _cb_handle;};
     cublasHandle_t cb_handle() const {return _cb_handle;};
+    /// cuSOLVER handle.
     cusolverDnHandle_t cs_handle() {return _cs_handle;};
     cusolverDnHandle_t cs_handle() const {return _cs_handle;};
+    ///@}
     
+    /// Is the gpu data valid?
     bool valid_card() const {return (_id!=UNINITIALIZED_CARD && _id!=DESTROYED_CARD);};
   
   protected:
@@ -66,6 +82,9 @@ class card
 
 // constructors/destructor
 
+/**
+ * @brief Create a new card object. Does not initialize any GPU data.
+*/
 inline card::card()
 {
   _id = UNINITIALIZED_CARD;
@@ -75,6 +94,17 @@ inline card::card()
 
 
 
+/**
+ * @brief Create a new card object and set up internal CUDA data.
+ * 
+ * @details Sets the current device to the provided GPU id and initializes a
+   cuBLAS handle and a cuSOLVER handle.
+ * 
+ * @param[in] id Ordinal number corresponding to the desired GPU device.
+ * 
+ * @except If the GPU can not be initialized, or if the allocation of one of the
+   handles fails, the method will throw a 'runtime_error' exception.
+*/
 inline card::card(int id)
 {
   _id = id;
@@ -107,6 +137,18 @@ inline card::~card()
 
 
 
+/**
+ * @brief Sets up the existing card object.
+ * 
+ * @details For use with the no-argument constructor. Frees any existing GPU
+   data already allocated and stored in the object. Misuse of this could lead to
+   some seemingly strange errors.
+ * 
+ * @param[in] id Ordinal number corresponding to the desired GPU device.
+ * 
+ * @except If the GPU can not be initialized, or if the allocation of one of the
+   handles fails, the method will throw a 'runtime_error' exception.
+*/
 inline void card::set(int id)
 {
   cleanup();
@@ -127,6 +169,11 @@ inline void card::set(int id)
 
 // printers
 
+/**
+ * @brief Print some brief information about the GPU.
+ * 
+ * @impl Uses NVML.
+*/
 inline void card::info() const
 {
   nvml::init();
@@ -153,6 +200,16 @@ inline void card::info() const
 
 // gpu memory management
 
+/**
+ * @brief Allocate device memory.
+ * 
+ * @param[in] len Number of bytes of memory to allocate.
+ * @return Pointer to the newly allocated device memory.
+ * 
+ * @impl Wrapper around cudaMalloc().
+ * 
+ * @except If the allocation fails, this throws a 'runtime_error' exception.
+*/
 inline void* card::mem_alloc(size_t len)
 {
   init();
@@ -164,6 +221,20 @@ inline void* card::mem_alloc(size_t len)
 
 
 
+/**
+ * @brief Set device memory.
+ * 
+ * @param[in,out] ptr On entrance, the already-allocated block of memory to set.
+   On exit, blocks of length 'len' will be set to 'value'.
+ * @param[in] value The value to set.
+ * @param[in] len Number of bytes of the input 'ptr' to set to 'value'.
+ * @return Pointer to the newly allocated device memory.
+ * 
+ * @impl Wrapper around cudaMemset().
+ * 
+ * @except If the function fails (e.g., being by given non-device memory), this
+   throws a 'runtime_error' exception.
+*/
 inline void card::mem_set(void *ptr, int value, size_t len)
 {
   init();
@@ -173,6 +244,16 @@ inline void card::mem_set(void *ptr, int value, size_t len)
 
 
 
+/**
+ * @brief Free device memory.
+ * 
+ * @param[in] ptr The device memory you want to un-allocate.
+ * 
+ * @impl Wrapper around cudaFree().
+ * 
+ * @except If the function fails (e.g., being by given non-device memory), this
+   throws a 'runtime_error' exception.
+*/
 inline void card::mem_free(void *ptr)
 {
   init();
@@ -185,6 +266,18 @@ inline void card::mem_free(void *ptr)
 
 
 
+/**
+ * @brief Copy host (CPU) data to device (GPU) memory.
+ * 
+ * @param[in,out] dst The device memory you want to copy TO.
+ * @param[in] src The host memory you want to copy FROM.
+ * @param[in] len Number of bytes of each array to use.
+ * 
+ * @impl Wrapper around cudaMemcpy().
+ * 
+ * @except If the function fails (e.g., being by improperly using device
+   memory), this throws a 'runtime_error' exception.
+*/
 inline void card::mem_cpu2gpu(void *dst, void *src, size_t len)
 {
   init();
@@ -194,6 +287,18 @@ inline void card::mem_cpu2gpu(void *dst, void *src, size_t len)
 
 
 
+/**
+ * @brief Copy device (GPU) data to host (CPU) memory.
+ * 
+ * @param[in,out] dst The host memory you want to copy TO.
+ * @param[in] src The device memory you want to copy FROM.
+ * @param[in] len Number of bytes of each array to use.
+ * 
+ * @impl Wrapper around cudaMemcpy().
+ * 
+ * @except If the function fails (e.g., being by improperly using device
+   memory), this throws a 'runtime_error' exception.
+*/
 inline void card::mem_gpu2cpu(void *dst, void *src, size_t len)
 {
   init();
@@ -203,6 +308,18 @@ inline void card::mem_gpu2cpu(void *dst, void *src, size_t len)
 
 
 
+/**
+ * @brief Copy device (GPU) data to other device (GPU) memory.
+ * 
+ * @param[in,out] dst The device memory you want to copy TO.
+ * @param[in] src The device memory you want to copy FROM.
+ * @param[in] len Number of bytes of each array to use.
+ * 
+ * @impl Wrapper around cudaMemcpy().
+ * 
+ * @except If the function fails (e.g., being by improperly using device
+   memory), this throws a 'runtime_error' exception.
+*/
 inline void card::mem_gpu2gpu(void *dst, void *src, size_t len)
 {
   init();
@@ -212,6 +329,16 @@ inline void card::mem_gpu2gpu(void *dst, void *src, size_t len)
 
 
 
+/**
+ * @brief Copy device (GPU) data to other device (GPU) memory.
+ * 
+ * @details Blocks further GPU execution until the device completes all
+   previously executed kernels.
+ * 
+ * @impl Wrapper around cudaDeviceSynchronize().
+ * 
+ * @except If a CUDA error is detected, this throws a 'runtime_error' exception.
+*/
 inline void card::synch()
 {
   init();
@@ -221,6 +348,13 @@ inline void card::synch()
 
 
 
+/**
+ * @brief Check for (and throw if found) a CUDA error.
+ * 
+ * @impl Wrapper around cudaGetLastError().
+ * 
+ * @except If a CUDA error is detected, this throws a 'runtime_error' exception.
+*/
 inline void card::check()
 {
   cerr = cudaGetLastError();
