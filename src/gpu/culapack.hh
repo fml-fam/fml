@@ -93,6 +93,40 @@ namespace culapack
   {
     return cusolverDnDgetrf(handle, m, n, A, lda, work, ipiv, info);
   }
+  
+  
+  
+  inline cusolverStatus_t gesvd_buflen(cusolverDnHandle_t handle, int m, int n,
+     float *A, int *lwork)
+  {
+    (void)A;
+    return cusolverDnSgesvd_bufferSize(handle, m, n, lwork);
+  }
+  
+  inline cusolverStatus_t gesvd_buflen(cusolverDnHandle_t handle, int m, int n,
+     double *A, int *lwork)
+  {
+    (void)A;
+    return cusolverDnDgesvd_bufferSize(handle, m, n, lwork);
+  }
+  
+  inline cusolverStatus_t gesvd(cusolverDnHandle_t handle, signed char jobu,
+    signed char jobvt, int m, int n, float *A, int lda, float *S, float *U,
+    int ldu, float *VT, int ldvt, float *work, int lwork, float *rwork,
+    int *info)
+  {
+    return cusolverDnSgesvd(handle, jobu, jobvt, m, n, A, lda, S, U, ldu, VT,
+      ldvt, work, lwork, rwork, info);
+  }
+  
+  inline cusolverStatus_t gesvd(cusolverDnHandle_t handle, signed char jobu,
+    signed char jobvt, int m, int n, double *A, int lda, double *S, double *U,
+    int ldu, double *VT, int ldvt, double *work, int lwork, double *rwork,
+    int *info)
+  {
+    return cusolverDnDgesvd(handle, jobu, jobvt, m, n, A, lda, S, U, ldu, VT,
+      ldvt, work, lwork, rwork, info);
+  }
 }
 
 
