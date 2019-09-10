@@ -13,6 +13,37 @@
 
 namespace linalg
 {
+  // ret = alpha*op(x) + beta*op(y)
+  template <typename REAL>
+  void add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const mpimat<REAL> &x, const mpimat<REAL> &y, mpimat<REAL> &ret)
+  {
+    len_t m, n;
+    linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
+    
+    if (ret.nrows() != m || ret.ncols() != n)
+      throw std::runtime_error("non-conformable arguments");
+    
+    char ctransx = transx ? 'T' : 'N';
+    char ctransy = transy ? 'T' : 'N';
+    
+    scalapack::geadd(ctransy, m, n, beta, y.data_ptr(), y.desc_ptr(), (REAL) 0.0f, ret.data_ptr(), ret.desc_ptr());
+    scalapack::geadd(ctransx, m, n, alpha, x.data_ptr(), x.desc_ptr(), (REAL) 1.0f, ret.data_ptr(), ret.desc_ptr());
+  }
+  
+  template <typename REAL>
+  mpimat<REAL> add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const mpimat<REAL> &x, const mpimat<REAL> &y)
+  {
+    len_t m, n;
+    linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
+    
+    grid g = x.get_grid();
+    mpimat<REAL> ret(g, m, n, x.bf_rows(), x.bf_cols());
+    add(transx, transy, alpha, beta, x, y, ret);
+    return ret;
+  }
+  
+  
+  
   /**
    * @brief Returns alpha*op(x)*op(y) where op(A) is A or A^T
    * 
