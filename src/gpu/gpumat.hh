@@ -5,13 +5,19 @@
 #include <cstdint>
 #include <cstdio>
 
-#include "card.hh"
-#include "kernelfuns.hh"
-
 #include "../types.hh"
 #include "../unimat.hh"
 
+#include "card.hh"
+#include "kernelfuns.hh"
+#include "gpuvec.hh"
 
+
+/**
+ * @brief Matrix class for data held on a single GPU. 
+ * 
+ * @tparam REAL should be '__half', 'float', or 'double'.
+ */
 template <typename REAL>
 class gpumat : public unimat<REAL>
 {
@@ -36,6 +42,7 @@ class gpumat : public unimat<REAL>
     void fill_val(const REAL v);
     void fill_linspace(const REAL start, const REAL stop);
     void fill_eye();
+    void fill_diag(const gpuvec<REAL> &v);
     void fill_runif(const uint32_t seed, const REAL min=0, const REAL max=1);
     void fill_runif(const REAL min=0, const REAL max=1);
     void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
@@ -307,7 +314,21 @@ void gpumat<REAL>::fill_linspace(REAL start, REAL stop)
 template <typename REAL>
 void gpumat<REAL>::fill_eye()
 {
-  
+  dim3 dim_block(16, 16);
+  dim3 dim_grid((this->m + 16 - 1) / 16, (this->n + 16 - 1) / 16);
+  kernelfuns::kernel_fill_eye<<<dim_grid, dim_block>>>(this->m, this->n, this->data);
+  this->c->check();
+}
+
+
+
+template <typename REAL>
+void gpumat<REAL>::fill_diag(const gpuvec<REAL> &v)
+{
+  dim3 dim_block(16, 16);
+  dim3 dim_grid((this->m + 16 - 1) / 16, (this->n + 16 - 1) / 16);
+  kernelfuns::kernel_fill_diag<<<dim_grid, dim_block>>>(v.size(), v.data_ptr(), this->m, this->n, this->data);
+  this->c->check();
 }
 
 
