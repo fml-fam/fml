@@ -43,14 +43,14 @@ namespace lapack
   
   
   
-  inline void getrf(const int m, const int n, float *a, const int lda, int *ipiv,
-    int *info)
+  inline void getrf(const int m, const int n, float *a, const int lda,
+    int *ipiv, int *info)
   {
     sgetrf_(&m, &n, a, &lda, ipiv, info);
   }
   
-  inline void getrf(const int m, const int n, double *a, const int lda, int *ipiv,
-    int *info)
+  inline void getrf(const int m, const int n, double *a, const int lda,
+    int *ipiv, int *info)
   {
     dgetrf_(&m, &n, a, &lda, ipiv, info);
   }
