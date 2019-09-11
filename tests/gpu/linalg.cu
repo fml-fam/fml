@@ -201,3 +201,27 @@ TEMPLATE_TEST_CASE("invert", "[linalg]", float, double)
   REQUIRE( fltcmp::eq(x_cpu(0, 1), 1.5) );
   REQUIRE( fltcmp::eq(x_cpu(1, 1), -0.5) );
 }
+
+
+
+TEMPLATE_TEST_CASE("solve", "[linalg]", float, double)
+{
+  len_t n = 2;
+  
+  cpuvec<TestType> y_cpu(n);
+  y_cpu(0) = (TestType) 1;
+  y_cpu(1) = (TestType) 1;
+  
+  cpumat<TestType> x_cpu(n, n);
+  x_cpu.fill_zero();
+  x_cpu(0, 0) = (TestType) 2;
+  x_cpu(1, 1) = (TestType) 3;
+  
+  auto x = gpuhelpers::cpu2gpu(c, x_cpu);
+  auto y = gpuhelpers::cpu2gpu(c, y_cpu);
+  linalg::solve(x, y);
+  
+  gpuhelpers::gpu2cpu(y, y_cpu);
+  REQUIRE( fltcmp::eq(y_cpu(0), 0.5) );
+  REQUIRE( fltcmp::eq(y_cpu(1), (TestType)1/3) );
+}

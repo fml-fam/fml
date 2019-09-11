@@ -182,3 +182,27 @@ TEMPLATE_TEST_CASE("invert", "[linalg]", float, double)
   REQUIRE( fltcmp::eq(x(0, 1), 1.5) );
   REQUIRE( fltcmp::eq(x(1, 1), -0.5) );
 }
+
+
+
+TEMPLATE_TEST_CASE("solve", "[linalg]", float, double)
+{
+  len_t n = 2;
+  
+  cpumat<TestType> y_cpu(n, 1);
+  y_cpu(0) = (TestType) 1;
+  y_cpu(1) = (TestType) 1;
+  
+  cpumat<TestType> x_cpu(n, n);
+  x_cpu.fill_zero();
+  x_cpu(0, 0) = (TestType) 2;
+  x_cpu(1, 1) = (TestType) 3;
+  
+  auto x = mpihelpers::cpu2mpi(x_cpu, g, 1, 1);
+  auto y = mpihelpers::cpu2mpi(y_cpu, g, 1, 1);
+  
+  linalg::solve(x, y);
+  
+  REQUIRE( fltcmp::eq(y(0, 0), 0.5) );
+  REQUIRE( fltcmp::eq(y(1, 0), (TestType)1/3) );
+}
