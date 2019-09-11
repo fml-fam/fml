@@ -9,6 +9,8 @@ template <typename REAL>
 class unimat
 {
   public:
+    bool is_square() const {return (this->m==this->n);};
+    
     len_t nrows() const {return m;};
     len_t ncols() const {return n;};
     REAL* data_ptr() {return data;};
