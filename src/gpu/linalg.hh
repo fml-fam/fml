@@ -351,6 +351,40 @@ namespace linalg
     gpuvec<int> p(x.get_card());
     return lu(x, p);
   }
+  
+  
+  
+  template <typename REAL>
+  void invert(gpumat<REAL> &x)
+  {
+    if (!x.is_square())
+      throw std::runtime_error("'x' must be a square matrix");
+    
+    // Factor x = LU
+    auto c = x.get_card();
+    gpuvec<int> p(c);
+    int info = lu(x, p);
+    check_info(info, "getrf");
+    
+    // Invert
+    const len_t n = x.nrows();
+    const len_t nrhs = n;
+    gpumat<REAL> inv(c, n, nrhs);
+    inv.fill_eye();
+    
+    int *info_device = (int*) c->mem_alloc(sizeof(*info_device));
+    c->mem_cpu2gpu(info_device, &info, sizeof(info));
+    
+    
+    cusolverStatus_t check = culapack::getrs(c->cs_handle(), CUBLAS_OP_N, n, nrhs, x.data_ptr(), n, p.data_ptr(), inv.data_ptr(), n, info_device);
+    c->mem_gpu2cpu(&info, info_device, sizeof(info));
+    c->mem_free(info_device);
+    
+    check_cusolver_ret(check, "getrs");
+    check_info(info, "getrs");
+    
+    gpuhelpers::copy(inv, x);
+  }
 }
 
 
