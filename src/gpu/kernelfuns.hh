@@ -10,7 +10,7 @@
 namespace kernelfuns
 {
   template <typename REAL>
-  __device__ void kernel_rev_vec(len_t n, REAL *data)
+  __device__ void kernel_rev_vec(const len_t n, REAL *data)
   {
     __shared__ REAL shmem[64];
     
@@ -25,7 +25,7 @@ namespace kernelfuns
   
   
   template <typename REAL>
-  __global__ void kernel_fill_eye(len_t m, len_t n, REAL *data)
+  __global__ void kernel_fill_eye(const len_t m, const len_t n, REAL *data)
   {
     int i = blockDim.x*blockIdx.x + threadIdx.x;
     int j = blockDim.y*blockIdx.y + threadIdx.y;
@@ -70,7 +70,7 @@ namespace kernelfuns
   
   
   
-  static __global__ void kernel_fill_linspace(const __half start, const __half stop, len_t m, len_t n, __half *data)
+  static __global__ void kernel_fill_linspace(const __half start, const __half stop, const len_t m, const len_t n, __half *data)
   {
     int i = blockDim.x*blockIdx.x + threadIdx.x;
     int j = blockDim.y*blockIdx.y + threadIdx.y;
@@ -85,7 +85,7 @@ namespace kernelfuns
   }
   
   template <typename REAL>
-  __global__ void kernel_fill_linspace(const REAL start, const REAL stop, len_t m, len_t n, REAL *data)
+  __global__ void kernel_fill_linspace(const REAL start, const REAL stop, const len_t m, const len_t n, REAL *data)
   {
     int i = blockDim.x*blockIdx.x + threadIdx.x;
     int j = blockDim.y*blockIdx.y + threadIdx.y;
@@ -101,7 +101,7 @@ namespace kernelfuns
   
   
   template <typename REAL>
-  __global__ void kernel_scale(const REAL s, len_t m, len_t n, REAL *data)
+  __global__ void kernel_scale(const REAL s, const len_t m, const len_t n, REAL *data)
   {
     int i = blockDim.x*blockIdx.x + threadIdx.x;
     int j = blockDim.y*blockIdx.y + threadIdx.y;
