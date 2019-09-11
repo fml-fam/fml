@@ -14,6 +14,8 @@
 #include "../types.hh"
 #include "../unimat.hh"
 
+#include "cpuvec.hh"
+
 
 /**
  * @brief Matrix class for data held on a single CPU.
@@ -42,6 +44,7 @@ class cpumat : public unimat<REAL>
     void fill_val(const REAL v);
     void fill_linspace(const REAL start, const REAL stop);
     void fill_eye();
+    void fill_diag(const cpuvec<REAL> &v);
     void fill_runif(const uint32_t seed, const REAL min=0, const REAL max=1);
     void fill_runif(const REAL min=0, const REAL max=1);
     void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
@@ -307,10 +310,24 @@ void cpumat<REAL>::fill_linspace(const REAL start, const REAL stop)
 template <typename REAL>
 void cpumat<REAL>::fill_eye()
 {
+  cpuvec<REAL> v(1);
+  v(0) = (REAL) 1;
+  this->fill_diag(v);
+}
+
+
+
+template <typename REAL>
+void cpumat<REAL>::fill_diag(const cpuvec<REAL> &v)
+{
   this->fill_zero();
   
-  for (len_t i=0; i<this->m && i<this->n; i++)
-    this->data[i + this->m*i] = (REAL) 1;
+  REAL *v_d = v.data_ptr();
+  len_t min = std::min(this->m, this->n);
+  
+  #pragma omp for simd
+  for (len_t i=0; i<min; i++)
+    this->data[i + this->m*i] = v_d[i % v.size()];
 }
 
 
