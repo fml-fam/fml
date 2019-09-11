@@ -46,7 +46,11 @@ class cpumat : public unimat<REAL>
     void fill_runif(const REAL min=0, const REAL max=1);
     void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
     void fill_rnorm(const REAL mean=0, const REAL sd=1);
+    
     void scale(const REAL s);
+    
+    bool any_inf() const;
+    bool any_nan() const;
     
     REAL& operator()(len_t i);
     const REAL& operator()(len_t i) const;
@@ -367,6 +371,40 @@ void cpumat<REAL>::scale(const REAL s)
     for (len_t i=0; i<this->m; i++)
       this->data[i + this->m*j] *= s;
   }
+}
+
+
+
+template <typename REAL>
+bool cpumat<REAL>::any_inf() const
+{
+  for (len_t j=0; j<this->n; j++)
+  {
+    for (len_t i=0; i<this->m; i++)
+    {
+      if (isinf(this->data[i + this->m*j]))
+        return true;
+    }
+  }
+  
+  return false;
+}
+
+
+
+template <typename REAL>
+bool cpumat<REAL>::any_nan() const
+{
+  for (len_t j=0; j<this->n; j++)
+  {
+    for (len_t i=0; i<this->m; i++)
+    {
+      if (isnan(this->data[i + this->m*j]))
+        return true;
+    }
+  }
+  
+  return false;
 }
 
 
