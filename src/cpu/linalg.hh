@@ -18,6 +18,20 @@
 */
 namespace linalg
 {
+  namespace
+  {
+    inline void check_info(const int info, std::string fun)
+    {
+      if (info != 0)
+      {
+        std::string msg = "LAPACK function " + fun + "() returned info=" + std::to_string(info);
+        throw std::runtime_error(msg);
+      }
+    }
+  }
+  
+  
+  
   // ret = alpha*op(x) + beta*op(y)
   template <typename REAL>
   void add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const cpumat<REAL> &x, const cpumat<REAL> &y, cpumat<REAL> &ret)
@@ -404,13 +418,15 @@ namespace linalg
   void svd(cpumat<REAL> &x, cpuvec<REAL> &s)
   {
     cpumat<REAL> ignored;
-    svd_internals(0, 0, x, s, ignored, ignored);
+    int info = svd_internals(0, 0, x, s, ignored, ignored);
+    check_info(info, "gesdd");
   }
   
   template <typename REAL>
   void svd(cpumat<REAL> &x, cpuvec<REAL> &s, cpumat<REAL> &u, cpumat<REAL> &vt)
   {
-    svd_internals(1, 1, x, s, u, vt);
+    int info = svd_internals(1, 1, x, s, u, vt);
+    check_info(info, "gesdd");
   }
 }
 
