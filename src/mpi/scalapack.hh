@@ -118,6 +118,22 @@ namespace scalapack
     pdgeadd_(&trans, &m, &n, &alpha, a, &ij, &ij, desca, &beta, c, &ij, &ij,
       descc);
   }
+  
+  
+  
+  inline void getri(const int n, float *a, const int *desca, int *ipiv,
+    float *work, const int lwork, int *iwork, const int liwork, int *info)
+  {
+    int ij = 1;
+    psgetri_(&n, a, &ij, &ij, desca, ipiv, work, &lwork, iwork, &liwork, info);
+  }
+  
+  inline void getri(const int n, double *a, const int *desca, int *ipiv,
+    double *work, const int lwork, int *iwork, const int liwork, int *info)
+  {
+    int ij = 1;
+    pdgetri_(&n, a, &ij, &ij, desca, ipiv, work, &lwork, iwork, &liwork, info);
+  }
 }
 
 

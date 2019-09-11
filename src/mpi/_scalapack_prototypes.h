@@ -92,6 +92,18 @@ extern void pdgeadd_(const char *restrict trans, const int *restrict m,
   const int *restrict descc);
 
 
+
+extern void psgetri_(const int *n, float *restrict a, const int *ia,
+  const int *ja, const int *restrict desca, int *restrict ipiv,
+  float *restrict work, const int *restrict lwork, int *restrict iwork,
+  const int *restrict liwork, int *restrict info);
+
+extern void pdgetri_(const int *n, double *restrict a, const int *ia,
+  const int *ja, const int *restrict desca, int *restrict ipiv,
+  double *restrict work, const int *restrict lwork, int *restrict iwork,
+  const int *restrict liwork, int *restrict info);
+
+
 #ifdef __cplusplus
 }
 #endif
