@@ -104,6 +104,18 @@ extern void pdgetri_(const int *n, double *restrict a, const int *ia,
   const int *restrict liwork, int *restrict info);
 
 
+
+extern void psgesv_(const int *n, const int *nrhs, float *restrict a,
+  const int *ia, const int *ja, const int *restrict desca, int *restrict ipvt,
+  float *restrict b, const int *ib, const int *jb, const int *restrict descb,
+  int *info);
+
+extern void pdgesv_(const int *n, const int *nrhs, double *restrict a,
+  const int *ia, const int *ja, const int *restrict desca, int *restrict ipvt,
+  double *restrict b, const int *ib, const int *jb, const int *restrict descb,
+  int *info);
+
+
 #ifdef __cplusplus
 }
 #endif

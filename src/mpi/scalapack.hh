@@ -134,6 +134,22 @@ namespace scalapack
     int ij = 1;
     pdgetri_(&n, a, &ij, &ij, desca, ipiv, work, &lwork, iwork, &liwork, info);
   }
+  
+  
+  
+  inline void gesv(const int n, const int nrhs, float *a, const int *desca,
+    int *ipvt, float *b, const int *descb, int *info)
+  {
+    int ij = 1;
+    psgesv_(&n, &nrhs, a, &ij, &ij, desca, ipvt, b, &ij, &ij, descb, info);
+  }
+  
+  inline void gesv(const int n, const int nrhs, double *a, const int *desca,
+    int *ipvt, double *b, const int *descb, int *info)
+  {
+    int ij = 1;
+    pdgesv_(&n, &nrhs, a, &ij, &ij, desca, ipvt, b, &ij, &ij, descb, info);
+  }
 }
 
 
