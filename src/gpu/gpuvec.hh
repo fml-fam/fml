@@ -21,6 +21,7 @@ class gpuvec : public univec<T>
     ~gpuvec();
     
     void resize(len_t size);
+    void resize(std::shared_ptr<card> gpu, len_t size);
     void set(std::shared_ptr<card> gpu);
     void set(std::shared_ptr<card> gpu, T *data, len_t size, bool free_on_destruct=false);
     gpuvec<T> dupe() const;
@@ -150,6 +151,15 @@ void gpuvec<T>::resize(len_t size)
   this->data = realloc_ptr;
   
   this->_size = size;
+}
+
+
+
+template <typename T>
+void gpuvec<T>::resize(std::shared_ptr<card> gpu, len_t size)
+{
+  this->c = gpu;
+  this->resize(size);
 }
 
 
