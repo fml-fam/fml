@@ -90,6 +90,16 @@ extern void dgetri_(const int *n, double *restrict a, const int *lda,
   int *info);
 
 
+
+extern void sgesv_(const int *n, const int *restrict nrhs, float *restrict a,
+  const int *lda, int *restrict ipiv, float *restrict b, const int *ldb,
+  int *restrict info);
+
+extern void dgesv_(const int *n, const int *restrict nrhs, double *restrict a,
+  const int *lda, int *restrict ipiv, double *restrict b, const int *ldb,
+  int *restrict info);
+
+
 #ifdef __cplusplus
 }
 #endif

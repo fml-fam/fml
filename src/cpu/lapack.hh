@@ -108,6 +108,20 @@ namespace lapack
   {
     dgetri_(&n, a, &lda, ipiv, work, &lwork, info);
   }
+  
+  
+  
+  inline void gesv(const int n, const int nrhs, float *a, const int lda,
+    int *ipiv, float *b, const int ldb, int *info)
+  {
+    sgesv_(&n, &nrhs, a, &lda, ipiv, b, &ldb, info);
+  }
+  
+  inline void gesv(const int n, const int nrhs, double *a, const int lda,
+    int *ipiv, double *b, const int ldb, int *info)
+  {
+    dgesv_(&n, &nrhs, a, &lda, ipiv, b, &ldb, info);
+  }
 }
 
 
