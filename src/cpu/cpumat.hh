@@ -48,6 +48,8 @@ class cpumat : public unimat<REAL>
     void fill_rnorm(const REAL mean=0, const REAL sd=1);
     void scale(const REAL s);
     
+    bool is_square() const {return (this->m==this->n);};
+    
     REAL& operator()(len_t i);
     const REAL& operator()(len_t i) const;
     REAL& operator()(len_t i, len_t j);
