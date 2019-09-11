@@ -330,14 +330,13 @@ namespace linalg
     cusolverStatus_t check = culapack::getrf_buflen(c->cs_handle(), m, m, x.data_ptr(), m, &lwork);
     check_cusolver_ret(check, "getrf_bufferSize");
     
-    REAL *work = (REAL*) c->mem_alloc(lwork*sizeof(*work));
+    gpuvec<REAL> work(c, lwork);
     int *info_device = (int*) c->mem_alloc(sizeof(*info_device));
-    
     c->mem_cpu2gpu(info_device, &info, sizeof(info));
-    check = culapack::getrf(c->cs_handle(), m, m, x.data_ptr(), m, work, p.data_ptr(), info_device);
-    c->mem_gpu2cpu(&info, info_device, sizeof(info));
     
-    c->mem_free(work);
+    check = culapack::getrf(c->cs_handle(), m, m, x.data_ptr(), m, work.data_ptr(), p.data_ptr(), info_device);
+    
+    c->mem_gpu2cpu(&info, info_device, sizeof(info));
     c->mem_free(info_device);
     
     check_cusolver_ret(check, "getrf");
