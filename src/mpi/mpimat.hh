@@ -50,7 +50,11 @@ class mpimat : public unimat<REAL>
     void fill_runif(const REAL min=0, const REAL max=1);
     void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
     void fill_rnorm(const REAL mean=0, const REAL sd=1);
+    
     void scale(const REAL s);
+    
+    bool any_inf() const;
+    bool any_nan() const;
     
     REAL operator()(len_t i);
     const REAL operator()(len_t i) const;
@@ -501,6 +505,52 @@ void mpimat<REAL>::scale(const REAL s)
     for (len_local_t i=0; i<this->m_local; i++)
       this->data[i + this->m_local*j] *= s;
   }
+}
+
+
+
+template <typename REAL>
+bool mpimat<REAL>::any_inf() const
+{
+  int found_inf = 0;
+  for (len_local_t j=0; j<n_local; j++)
+  {
+    for (len_local_t i=0; i<m_local; i++)
+    {
+      if (isinf(this->data[i + this->m_local*j]))
+      {
+        found_inf = 1;
+        break;
+      }
+    }
+  }
+  
+  this->g.allreduce(1, 1, &found_inf, 'A');
+  
+  return ((bool) found_inf);
+}
+
+
+
+template <typename REAL>
+bool mpimat<REAL>::any_nan() const
+{
+  int found_nan = 0;
+  for (len_local_t j=0; j<n_local; j++)
+  {
+    for (len_local_t i=0; i<m_local; i++)
+    {
+      if (isnan(this->data[i + this->m_local*j]))
+      {
+        found_nan = 1;
+        break;
+      }
+    }
+  }
+  
+  this->g.allreduce(1, 1, &found_nan, 'A');
+  
+  return ((bool) found_nan);
 }
 
 
