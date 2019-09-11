@@ -314,8 +314,7 @@ namespace linalg
   void det(cpumat<REAL> &x, int &sign, REAL &modulus)
   {
     const len_t m = x.nrows();
-    const len_t n = x.ncols();
-    if (m != n)
+    if (!x.is_square())
       throw std::runtime_error("'x' must be a square matrix");
     
     cpuvec<int> p;
