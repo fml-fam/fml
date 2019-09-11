@@ -352,6 +352,23 @@ namespace linalg
     scalapack::getri(n, x.data_ptr(), x.desc_ptr(), p.data_ptr(), work.data_ptr(), lwork, iwork.data_ptr(), liwork, &info);
     check_info(info, "getri");
   }
+  
+  
+  
+  template <typename REAL>
+  void solve(mpimat<REAL> &x, mpimat<REAL> &y)
+  {
+    const len_t n = x.nrows();
+    if (!x.is_square())
+      throw std::runtime_error("'x' must be a square matrix");
+    if (n != y.nrows())
+      throw std::runtime_error("rhs 'y' must be compatible with data matrix 'x'");
+    
+    int info;
+    cpuvec<int> p(n);
+    scalapack::gesv(n, y.ncols(), x.data_ptr(), x.desc_ptr(), p.data_ptr(), y.data_ptr(), y.desc_ptr(), &info);
+    check_info(info, "gesv");
+  }
 }
 
 
