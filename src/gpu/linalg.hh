@@ -374,7 +374,6 @@ namespace linalg
     int *info_device = (int*) c->mem_alloc(sizeof(*info_device));
     c->mem_cpu2gpu(info_device, &info, sizeof(info));
     
-    
     cusolverStatus_t check = culapack::getrs(c->cs_handle(), CUBLAS_OP_N, n, nrhs, x.data_ptr(), n, p.data_ptr(), inv.data_ptr(), n, info_device);
     c->mem_gpu2cpu(&info, info_device, sizeof(info));
     c->mem_free(info_device);
@@ -383,6 +382,50 @@ namespace linalg
     check_info(info, "getrs");
     
     gpuhelpers::copy(inv, x);
+  }
+  
+  
+  
+  namespace
+  {
+    template <typename REAL>
+    void solver(gpumat<REAL> &x, len_t ylen, len_t nrhs, REAL *y_d)
+    {
+      const len_t n = x.nrows();
+      if (!x.is_square())
+        throw std::runtime_error("'x' must be a square matrix");
+      if (n != ylen)
+        throw std::runtime_error("rhs 'y' must be compatible with data matrix 'x'");
+      
+      // Factor x = LU
+      auto c = x.get_card();
+      gpuvec<int> p(c);
+      int info = lu(x, p);
+      check_info(info, "getrf");
+      
+      // Solve xb = y
+      int *info_device = (int*) c->mem_alloc(sizeof(*info_device));
+      c->mem_cpu2gpu(info_device, &info, sizeof(info));
+      
+      cusolverStatus_t check = culapack::getrs(c->cs_handle(), CUBLAS_OP_N, n, nrhs, x.data_ptr(), n, p.data_ptr(), y_d, n, info_device);
+      c->mem_gpu2cpu(&info, info_device, sizeof(info));
+      c->mem_free(info_device);
+      
+      check_cusolver_ret(check, "getrs");
+      check_info(info, "getrs");
+    }
+  }
+  
+  template <typename REAL>
+  void solve(gpumat<REAL> &x, gpuvec<REAL> &y)
+  {
+    solver(x, y.size(), 1, y.data_ptr());
+  }
+  
+  template <typename REAL>
+  void solve(gpumat<REAL> &x, gpumat<REAL> &y)
+  {
+    solver(x, y.nrows(), y.ncols(), y.data_ptr());
   }
 }
 
