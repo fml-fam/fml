@@ -92,6 +92,36 @@ namespace kernelfuns
     if (i < m && j < n)
       data[i + m*j] *= s;
   }
+  
+  
+  
+  template <typename REAL>
+  __global__ void kernel_any_inf(const len_t m, const len_t n, const REAL *data, int *has_inf)
+  {
+    int i = blockDim.x*blockIdx.x + threadIdx.x;
+    int j = blockDim.y*blockIdx.y + threadIdx.y;
+    
+    if (i < m && j < n)
+    {
+      if (isinf(data[i + m*j]))
+        atomicMax(has_inf, 1);
+    }
+  }
+  
+  
+  
+  template <typename REAL>
+  __global__ void kernel_any_nan(const len_t m, const len_t n, const REAL *data, int *has_nan)
+  {
+    int i = blockDim.x*blockIdx.x + threadIdx.x;
+    int j = blockDim.y*blockIdx.y + threadIdx.y;
+    
+    if (i < m && j < n)
+    {
+      if (isnan(data[i + m*j]))
+        atomicMax(has_nan, 1);
+    }
+  }
 }
 
 

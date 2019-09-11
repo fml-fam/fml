@@ -40,7 +40,11 @@ class gpumat : public unimat<REAL>
     void fill_runif(const REAL min=0, const REAL max=1);
     void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
     void fill_rnorm(const REAL mean=0, const REAL sd=1);
+    
     void scale(const REAL s);
+    
+    bool any_inf() const;
+    bool any_nan() const;
     
     REAL& operator()(len_t i);
     const REAL& operator()(len_t i) const;
@@ -339,6 +343,48 @@ template <typename REAL>
 void gpumat<REAL>::scale(const REAL s)
 {
   
+}
+
+
+
+template <typename REAL>
+bool gpumat<REAL>::any_inf() const
+{
+  int has_inf = 0;
+  int *has_inf_gpu = (int*) this->c->mem_alloc(sizeof(*has_inf_gpu));
+  this->c->mem_cpu2gpu(has_inf_gpu, &has_inf, sizeof(has_inf));
+  
+  dim3 dim_block(16, 16);
+  dim3 dim_grid((this->m + 16 - 1) / 16, (this->n + 16 - 1) / 16);
+  kernelfuns::kernel_any_inf<<<dim_grid, dim_block>>>(this->m, this->n, this->data, has_inf_gpu);
+  
+  this->c->mem_gpu2cpu(&has_inf, has_inf_gpu, sizeof(has_inf));
+  this->c->mem_free(has_inf_gpu);
+  
+  this->c->check();
+  
+  return (bool) has_inf;
+}
+
+
+
+template <typename REAL>
+bool gpumat<REAL>::any_nan() const
+{
+  int has_nan = 0;
+  int *has_nan_gpu = (int*) this->c->mem_alloc(sizeof(*has_nan_gpu));
+  this->c->mem_cpu2gpu(has_nan_gpu, &has_nan, sizeof(has_nan));
+  
+  dim3 dim_block(16, 16);
+  dim3 dim_grid((this->m + 16 - 1) / 16, (this->n + 16 - 1) / 16);
+  kernelfuns::kernel_any_nan<<<dim_grid, dim_block>>>(this->m, this->n, this->data, has_nan_gpu);
+  
+  this->c->mem_gpu2cpu(&has_nan, has_nan_gpu, sizeof(has_nan));
+  this->c->mem_free(has_nan_gpu);
+  
+  this->c->check();
+  
+  return (bool) has_nan;
 }
 
 
