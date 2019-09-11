@@ -80,6 +80,16 @@ extern void dsyevr_(const char *restrict jobz, const char *restrict range,
   int *info);
 
 
+
+extern void sgetri_(const int *n, float *restrict a, const int *lda, 
+  int *restrict ipiv, float *restrict work, const int *restrict lwork,
+  int *info);
+
+extern void dgetri_(const int *n, double *restrict a, const int *lda, 
+  int *restrict ipiv, double *restrict work, const int *restrict lwork,
+  int *info);
+
+
 #ifdef __cplusplus
 }
 #endif

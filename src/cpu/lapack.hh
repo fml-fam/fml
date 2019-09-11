@@ -94,6 +94,20 @@ namespace lapack
     dsyevr_(&jobz, &range, &uplo, &n, a, &lda, &vl, &vu, &il, &iu, &abstol, &m,
       w, z, &ldz, isuppz, work, &lwork, iwork, &liwork, info);
   }
+  
+  
+  
+  inline void getri(const int n, float *a, const int lda, int *ipiv,
+    float *work, const int lwork, int *info)
+  {
+    sgetri_(&n, a, &lda, ipiv, work, &lwork, info);
+  }
+  
+  inline void getri(const int n, double *a, const int lda, int *ipiv,
+    double *work, const int lwork, int *info)
+  {
+    dgetri_(&n, a, &lda, ipiv, work, &lwork, info);
+  }
 }
 
 
