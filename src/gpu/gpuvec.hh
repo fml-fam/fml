@@ -202,7 +202,7 @@ gpuvec<T> gpuvec<T>::dupe() const
 template <typename T>
 void gpuvec<T>::print(uint8_t ndigits) const
 {
-  for (int i=0; i<this->n; i++)
+  for (int i=0; i<this->_size; i++)
   {
     T tmp;
     this->c->mem_gpu2cpu(&tmp, this->data + i, sizeof(T));
