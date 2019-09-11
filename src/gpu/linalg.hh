@@ -353,6 +353,77 @@ namespace linalg
   
   
   
+  namespace
+  {
+    template <typename REAL>
+    int svd_internals(const int nu, const int nv, gpumat<REAL> &x, gpuvec<REAL> &s, gpumat<REAL> &u, gpumat<REAL> &vt)
+    {
+      int info = 0;
+      signed char jobu, jobvt;
+      
+      auto c = x.get_card();
+      
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      const len_t minmn = std::min(m, n);
+      
+      s.resize(c, minmn);
+      
+      if (nu == 0 && nv == 0)
+      {
+        jobu = 'N';
+        jobvt = 'N';
+      }
+      else if (nu <= minmn && nv <= minmn)
+      {
+        jobu = 'V';
+        jobvt = 'V';
+        
+        u.resize(c, m, minmn);
+        vt.resize(c, minmn, n);
+      }
+      
+      int lwork;
+      cusolverStatus_t check = culapack::gesvd_buflen(c->cs_handle(), m, n,
+        x.data_ptr(), &lwork);
+      check_cusolver_ret(check, "gesvd_bufferSize");
+      
+      gpuvec<REAL> work(c, lwork);
+      gpuvec<REAL> rwork(c, minmn-1);
+      
+      int *info_device = (int*) c->mem_alloc(sizeof(*info_device));
+      c->mem_cpu2gpu(info_device, &info, sizeof(info));
+      
+      check = culapack::gesvd(c->cs_handle(), jobu, jobvt, m, n, x.data_ptr(),
+        m, s.data_ptr(), u.data_ptr(), m, vt.data_ptr(), minmn, work.data_ptr(),
+        lwork, rwork.data_ptr(), info_device);
+      
+      c->mem_gpu2cpu(&info, info_device, sizeof(info));
+      c->mem_free(info_device);
+      
+      check_cusolver_ret(check, "gesvd");
+      
+      return info;
+    }
+  }
+  
+  template <typename REAL>
+  void svd(gpumat<REAL> &x, gpuvec<REAL> &s)
+  {
+    gpumat<REAL> ignored;
+    int info = svd_internals(0, 0, x, s, ignored, ignored);
+    check_info(info, "gesvd");
+  }
+  
+  template <typename REAL>
+  void svd(gpumat<REAL> &x, gpuvec<REAL> &s, gpumat<REAL> &u, gpumat<REAL> &vt)
+  {
+    int info = svd_internals(1, 1, x, s, u, vt);
+    check_info(info, "gesvd");
+  }
+  
+  
+  
   template <typename REAL>
   void invert(gpumat<REAL> &x)
   {

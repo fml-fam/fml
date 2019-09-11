@@ -111,18 +111,18 @@ namespace culapack
   }
   
   inline cusolverStatus_t gesvd(cusolverDnHandle_t handle, signed char jobu,
-    signed char jobvt, int m, int n, float *A, int lda, float *S, float *U,
-    int ldu, float *VT, int ldvt, float *work, int lwork, float *rwork,
-    int *info)
+    signed char jobvt, const int m, const int n, float *A, const int lda,
+    float *S, float *U, const int ldu, float *VT, const int ldvt, float *work,
+    const int lwork, float *rwork, int *info)
   {
     return cusolverDnSgesvd(handle, jobu, jobvt, m, n, A, lda, S, U, ldu, VT,
       ldvt, work, lwork, rwork, info);
   }
   
   inline cusolverStatus_t gesvd(cusolverDnHandle_t handle, signed char jobu,
-    signed char jobvt, int m, int n, double *A, int lda, double *S, double *U,
-    int ldu, double *VT, int ldvt, double *work, int lwork, double *rwork,
-    int *info)
+    signed char jobvt, const int m, const int n, double *A, const int lda,
+    double *S, double *U, const int ldu, double *VT, const int ldvt, double *work,
+    const int lwork, double *rwork, int *info)
   {
     return cusolverDnDgesvd(handle, jobu, jobvt, m, n, A, lda, S, U, ldu, VT,
       ldvt, work, lwork, rwork, info);
