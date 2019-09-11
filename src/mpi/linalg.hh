@@ -13,6 +13,20 @@
 
 namespace linalg
 {
+  namespace
+  {
+    inline void check_info(const int info, std::string fun)
+    {
+      if (info != 0)
+      {
+        std::string msg = "ScaLAPACK function " + fun + "() returned info=" + std::to_string(info);
+        throw std::runtime_error(msg);
+      }
+    }
+  }
+  
+  
+  
   // ret = alpha*op(x) + beta*op(y)
   template <typename REAL>
   void add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const mpimat<REAL> &x, const mpimat<REAL> &y, mpimat<REAL> &ret)
@@ -302,13 +316,15 @@ namespace linalg
   void svd(mpimat<REAL> &x, cpuvec<REAL> &s)
   {
     mpimat<REAL> ignored;
-    svd_internals(0, 0, x, s, ignored, ignored);
+    int info = svd_internals(0, 0, x, s, ignored, ignored);
+    check_info(info, "gesvd");
   }
   
   template <typename REAL>
   void svd(mpimat<REAL> &x, cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
   {
-    svd_internals(1, 1, x, s, u, vt);
+    int info = svd_internals(1, 1, x, s, u, vt);
+    check_info(info, "gesvd");
   }
 }
 
