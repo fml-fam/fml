@@ -451,6 +451,38 @@ namespace linalg
     lapack::getri(n, x.data_ptr(), n, p.data_ptr(), work.data_ptr(), lwork, &info);
     check_info(info, "getri");
   }
+  
+  
+  
+  namespace
+  {
+    template <typename REAL>
+    void solver(cpumat<REAL> &x, len_t ylen, len_t nrhs, REAL *y_d)
+    {
+      const len_t n = x.nrows();
+      if (!x.is_square())
+        throw std::runtime_error("'x' must be a square matrix");
+      if (n != ylen)
+        throw std::runtime_error("rhs 'y' must be compatible with data matrix 'x'");
+      
+      int info;
+      cpuvec<int> p(n);
+      lapack::gesv(n, nrhs, x.data_ptr(), n, p.data_ptr(), y_d, n, &info);
+      check_info(info, "gesv");
+    }
+  }
+  
+  template <typename REAL>
+  void solve(cpumat<REAL> &x, cpuvec<REAL> &y)
+  {
+    solver(x, y.size(), 1, y.data_ptr());
+  }
+  
+  template <typename REAL>
+  void solve(cpumat<REAL> &x, cpumat<REAL> &y)
+  {
+    solver(x, y.nrows(), y.ncols(), y.data_ptr());
+  }
 }
 
 
