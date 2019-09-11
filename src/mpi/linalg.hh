@@ -326,6 +326,32 @@ namespace linalg
     int info = svd_internals(1, 1, x, s, u, vt);
     check_info(info, "gesvd");
   }
+  
+  
+  
+  template <typename REAL>
+  void invert(mpimat<REAL> &x)
+  {
+    if (!x.is_square())
+      throw std::runtime_error("'x' must be a square matrix");
+    
+    // Factor x = LU
+    cpuvec<int> p;
+    int info = lu(x, p);
+    check_info(info, "getrf");
+    
+    // Invert
+    const len_t n = x.nrows();
+    REAL tmp;
+    int liwork;
+    scalapack::getri(n, x.data_ptr(), x.desc_ptr(), p.data_ptr(), &tmp, -1, &liwork, -1, &info);
+    int lwork = (int) tmp;
+    cpuvec<REAL> work(lwork);
+    cpuvec<int> iwork(liwork);
+    
+    scalapack::getri(n, x.data_ptr(), x.desc_ptr(), p.data_ptr(), work.data_ptr(), lwork, iwork.data_ptr(), liwork, &info);
+    check_info(info, "getri");
+  }
 }
 
 
