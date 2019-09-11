@@ -82,6 +82,17 @@ namespace linalg
         throw std::runtime_error(msg);
       }
     }
+    
+    
+    
+    inline void check_info(const int info, std::string fun)
+    {
+      if (info != 0)
+      {
+        std::string msg = "CUDA function " + fun + "() returned info=" + std::to_string(info);
+        throw std::runtime_error(msg);
+      }
+    }
   }
   
   
