@@ -2,6 +2,7 @@
 #define FML_MPI_MPIMAT_H
 
 
+#include <algorithm>
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
@@ -15,6 +16,8 @@
 #include "../omputils.hh"
 #include "../types.hh"
 #include "../unimat.hh"
+
+#include "../cpu/cpuvec.hh"
 
 
 /**
@@ -46,6 +49,7 @@ class mpimat : public unimat<REAL>
     void fill_val(const REAL v);
     void fill_linspace(const REAL start, const REAL stop);
     void fill_eye();
+    void fill_diag(const cpuvec<REAL> &v);
     void fill_runif(const uint32_t seed, const REAL min=0, const REAL max=1);
     void fill_runif(const REAL min=0, const REAL max=1);
     void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
@@ -431,7 +435,19 @@ void mpimat<REAL>::fill_linspace(const REAL start, const REAL stop)
 template <typename REAL>
 void mpimat<REAL>::fill_eye()
 {
-  #pragma omp parallel for simd if((this->m_local)*(this->n_local) > omputils::OMP_MIN_SIZE)
+  cpuvec<REAL> v(1);
+  v(0) = (REAL) 1;
+  this->fill_diag(v);
+}
+
+
+
+template <typename REAL>
+void mpimat<REAL>::fill_diag(const cpuvec<REAL> &v)
+{
+  REAL *v_d = v.data_ptr();
+  
+  #pragma omp parallel for if((this->m_local)*(this->n_local) > omputils::OMP_MIN_SIZE)
   for (len_local_t j=0; j<n_local; j++)
   {
     for (len_local_t i=0; i<m_local; i++)
@@ -440,9 +456,9 @@ void mpimat<REAL>::fill_eye()
       const int gj = bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
       
       if (gi == gj)
-        this->data[i + m_local*j] = 1;
+        this->data[i + this->m_local*j] = v_d[gi % v.size()];
       else
-        this->data[i + m_local*j] = 0;
+        this->data[i + this->m_local*j] = 0;
     }
   }
 }
