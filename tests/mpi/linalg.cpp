@@ -1,6 +1,6 @@
 #include "../catch.hpp"
-#include "../fltcmp.hh"
 
+#include <fltcmp.hh>
 #include <mpi/grid.hh>
 #include <mpi/linalg.hh>
 #include <mpi/mpimat.hh>

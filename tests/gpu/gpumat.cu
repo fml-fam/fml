@@ -1,8 +1,11 @@
 #include "../catch.hpp"
-#include "../fltcmp.hh"
 
+#include <fltcmp.hh>
+#include <cpu/cpumat.hh>
 #include <gpu/card.hh>
+#include <gpu/gpuhelpers.hh>
 #include <gpu/gpumat.hh>
+
 
 extern std::shared_ptr<card> c;
 

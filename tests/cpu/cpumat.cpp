@@ -1,6 +1,6 @@
 #include "../catch.hpp"
-#include "../fltcmp.hh"
 
+#include <fltcmp.hh>
 #include <cpu/cpumat.hh>
 
 

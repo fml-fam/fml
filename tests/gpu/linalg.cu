@@ -1,6 +1,6 @@
 #include "../catch.hpp"
-#include "../fltcmp.hh"
 
+#include <fltcmp.hh>
 #include <gpu/gpuhelpers.hh>
 #include <gpu/gpumat.hh>
 #include <gpu/linalg.hh>
