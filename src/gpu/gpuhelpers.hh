@@ -147,7 +147,7 @@ namespace gpuhelpers
   }
   
   template <typename REAL>
-  gpumat<REAL> cpu2gpu(cpumat<REAL> &cpu, std::shared_ptr<card> c)
+  gpumat<REAL> cpu2gpu(std::shared_ptr<card> c, cpumat<REAL> &cpu)
   {
     gpumat<REAL> gpu(c, cpu.nrows(), cpu.ncols());
     cpu2gpu(cpu, gpu);
