@@ -127,6 +127,42 @@ namespace culapack
     return cusolverDnDgesvd(handle, jobu, jobvt, m, n, A, lda, S, U, ldu, VT,
       ldvt, work, lwork, rwork, info);
   }
+  
+  
+  
+  inline cublasStatus_t getri_batched(cublasHandle_t handle, const int n,
+    const float **Aarray, const int lda, const int *devIpiv, float **Carray,
+    const int ldb, int *info, const int batchSize)
+  {
+    return cublasSgetriBatched(handle, n, Aarray, lda, devIpiv, Carray, ldb,
+      info, batchSize);
+  }
+  
+  inline cublasStatus_t getri_batched(cublasHandle_t handle, const int n,
+    const double **Aarray, const int lda, const int *devIpiv, double **Carray,
+    const int ldb, int *info, const int batchSize)
+  {
+    return cublasDgetriBatched(handle, n, Aarray, lda, devIpiv, Carray, ldb,
+      info, batchSize);
+  }
+  
+  
+  
+  inline cusolverStatus_t getrs(cusolverDnHandle_t handle,
+    cublasOperation_t trans, const int n, const int nrhs, const float *A,
+    const int lda, const int *devIpiv, float *B, const int ldb, int *info)
+  {
+    return cusolverDnSgetrs(handle, trans, n, nrhs, A, lda, devIpiv, B, ldb,
+      info);
+  }
+  
+  inline cusolverStatus_t getrs(cusolverDnHandle_t handle,
+    cublasOperation_t trans, const int n, const int nrhs, const double *A,
+    const int lda, const int *devIpiv, double *B, const int ldb, int *info)
+  {
+    return cusolverDnDgetrs(handle, trans, n, nrhs, A, lda, devIpiv, B, ldb,
+      info);
+  }
 }
 
 
