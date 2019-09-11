@@ -164,6 +164,26 @@ TEMPLATE_TEST_CASE("lu", "[linalg]", float, double)
 
 
 
+TEMPLATE_TEST_CASE("svd", "[linalg]", float, double)
+{
+  len_t n = 2;
+  
+  cpuvec<TestType> v(n);
+  v(0) = (TestType) 2;
+  v(1) = (TestType) 5;
+  
+  cpumat<TestType> x(n, n);
+  x.fill_diag(v);
+  
+  cpuvec<TestType> s;
+  linalg::svd(x, s);
+  
+  v.rev();
+  REQUIRE( v == s );
+}
+
+
+
 TEMPLATE_TEST_CASE("invert", "[linalg]", float, double)
 {
   len_t n = 2;
