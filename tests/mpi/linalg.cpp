@@ -4,7 +4,6 @@
 #include <mpi/grid.hh>
 #include <mpi/linalg.hh>
 #include <mpi/mpimat.hh>
-#include <mpi/mpihelpers.hh>
 
 extern grid g;
 
@@ -209,17 +208,14 @@ TEMPLATE_TEST_CASE("solve", "[linalg]", float, double)
 {
   len_t n = 2;
   
-  cpumat<TestType> y_cpu(n, 1);
-  y_cpu(0) = (TestType) 1;
-  y_cpu(1) = (TestType) 1;
+  mpimat<TestType> y(g, n, n, 1, 1);
+  y(0) = (TestType) 1;
+  y(1) = (TestType) 1;
   
-  cpumat<TestType> x_cpu(n, n);
-  x_cpu.fill_zero();
-  x_cpu(0, 0) = (TestType) 2;
-  x_cpu(1, 1) = (TestType) 3;
-  
-  auto x = mpihelpers::cpu2mpi(x_cpu, g, 1, 1);
-  auto y = mpihelpers::cpu2mpi(y_cpu, g, 1, 1);
+  mpimat<TestType> x(g, n, n, 1, 1);
+  x.fill_zero();
+  x(0, 0) = (TestType) 2;
+  x(1, 1) = (TestType) 3;
   
   linalg::solve(x, y);
   
