@@ -2,7 +2,7 @@
 #define FML_GPU_CARD_H
 
 
-#include <cublas_v2.h>
+#include <cublas.h>
 #include <cuda_runtime.h>
 #include <cusolverDn.h>
 

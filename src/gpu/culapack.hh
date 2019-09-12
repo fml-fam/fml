@@ -2,6 +2,7 @@
 #define FML_GPU_CUSOLVER_H
 
 
+#include <cublas.h>
 #include <cusolverDn.h>
 
 
