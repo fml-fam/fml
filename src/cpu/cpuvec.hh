@@ -41,8 +41,8 @@ class cpuvec : public univec<T>
     void scale(const T s);
     void rev();
     
-    T& operator()(len_t i);
-    const T& operator()(len_t i) const;
+    const T operator()(len_t i) const; // getter
+    T& operator()(len_t i); // setter
     
     bool operator==(const cpuvec<T> &x) const;
     bool operator!=(const cpuvec<T> &x) const;
@@ -289,19 +289,17 @@ void cpuvec<T>::rev()
 // operators
 
 template <typename T>
-T& cpuvec<T>::operator()(len_t i)
+const T cpuvec<T>::operator()(len_t i) const
 {
-  if (i < 0 || i >= this->_size)
-    throw std::runtime_error("index out of bounds");
+  this->check_index(i);
   
   return this->data[i];
 }
 
 template <typename T>
-const T& cpuvec<T>::operator()(len_t i) const
+T& cpuvec<T>::operator()(len_t i)
 {
-  if (i < 0 || i >= this->_size)
-    throw std::runtime_error("index out of bounds");
+  this->check_index(i);
   
   return this->data[i];
 }
@@ -313,8 +311,7 @@ bool cpuvec<T>::operator==(const cpuvec<T> &x) const
 {
   if (this->_size != x.size())
     return false;
-  
-  if (this->data == x.data_ptr())
+  else if (this->data == x.data_ptr())
     return true;
   
   const T *x_d = x.data_ptr();

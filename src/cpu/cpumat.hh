@@ -55,10 +55,10 @@ class cpumat : public unimat<REAL>
     bool any_inf() const;
     bool any_nan() const;
     
-    REAL& operator()(len_t i);
-    const REAL& operator()(len_t i) const;
+    const REAL operator()(len_t i) const; // getters
+    const REAL operator()(len_t i, len_t j) const;
+    REAL& operator()(len_t i); // setters
     REAL& operator()(len_t i, len_t j);
-    const REAL& operator()(len_t i, len_t j) const;
     
     bool operator==(const cpumat<REAL> &x) const;
     bool operator!=(const cpumat<REAL> &x) const;
@@ -429,40 +429,30 @@ bool cpumat<REAL>::any_nan() const
 // operators
 
 template <typename REAL>
-REAL& cpumat<REAL>::operator()(len_t i)
+const REAL cpumat<REAL>::operator()(len_t i) const
 {
-  if (i < 0 || i >= (this->m * this->n))
-    throw std::runtime_error("index out of bounds");
-  
+  this->check_index(i);
   return this->data[i];
 }
 
 template <typename REAL>
-const REAL& cpumat<REAL>::operator()(len_t i) const
+const REAL cpumat<REAL>::operator()(len_t i, len_t j) const
 {
-  if (i < 0 || i >= (this->m * this->n))
-    throw std::runtime_error("index out of bounds");
-  
-  return this->data[i];
-}
-
-
-
-template <typename REAL>
-REAL& cpumat<REAL>::operator()(len_t i, len_t j)
-{
-  if (i < 0 || i >= this->m || j < 0 || j >= this->n)
-    throw std::runtime_error("index out of bounds");
-  
+  this->check_index(i, j);
   return this->data[i + (this->m)*j];
 }
 
 template <typename REAL>
-const REAL& cpumat<REAL>::operator()(len_t i, len_t j) const
+REAL& cpumat<REAL>::operator()(len_t i)
 {
-  if (i < 0 || i >= this->m || j < 0 || j >= this->n)
-    throw std::runtime_error("index out of bounds");
-  
+  this->check_index(i);
+  return this->data[i];
+}
+
+template <typename REAL>
+REAL& cpumat<REAL>::operator()(len_t i, len_t j)
+{
+  this->check_index(i, j);
   return this->data[i + (this->m)*j];
 }
 
@@ -473,8 +463,7 @@ bool cpumat<REAL>::operator==(const cpumat<REAL> &x) const
 {
   if (this->m != x.nrows() || this->n != x.ncols())
     return false;
-  
-  if (this->data == x.data_ptr())
+  else if (this->data == x.data_ptr())
     return true;
   
   const REAL *x_d = x.data_ptr();
