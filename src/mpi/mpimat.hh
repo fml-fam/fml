@@ -60,10 +60,10 @@ class mpimat : public unimat<REAL>
     bool any_inf() const;
     bool any_nan() const;
     
-    REAL operator()(len_t i);
-    const REAL operator()(len_t i) const;
-    REAL operator()(len_t i, len_t j);
+    const REAL operator()(len_t i) const; // getters
     const REAL operator()(len_t i, len_t j) const;
+    REAL& operator()(len_t i); // setters
+    REAL& operator()(len_t i, len_t j);
     
     bool operator==(const mpimat<REAL> &x) const;
     bool operator!=(const mpimat<REAL> &x) const;
@@ -85,6 +85,7 @@ class mpimat : public unimat<REAL>
     grid g;
     
   private:
+    REAL _getter;
     void free();
     void check_params(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols);
     REAL get_val_from_global_index(len_t gi, len_t gj) const;
@@ -574,51 +575,61 @@ bool mpimat<REAL>::any_nan() const
 // operators
 
 template <typename REAL>
-REAL mpimat<REAL>::operator()(len_t i)
-{
-  if (i < 0 || i >= (this->m * this->n))
-    throw std::runtime_error("index out of bounds");
-  
-  int gi = i % this->m;
-  int gj = i / this->m;
-  
-  REAL ret = this->get_val_from_global_index(gi, gj);
-  return ret;
-}
-
-template <typename REAL>
 const REAL mpimat<REAL>::operator()(len_t i) const
 {
-  if (i < 0 || i >= (this->m * this->n))
-    throw std::runtime_error("index out of bounds");
+  this->check_index(i);
   
   int gi = i % this->m;
   int gj = i / this->m;
   
   REAL ret = this->get_val_from_global_index(gi, gj);
-  return ret;
-}
-
-
-
-template <typename REAL>
-REAL mpimat<REAL>::operator()(len_t i, len_t j)
-{
-  if (i < 0 || i >= this->m || j < 0 || j >= this->n)
-    throw std::runtime_error("index out of bounds");
-  
-  REAL ret = this->get_val_from_global_index(i, j);
   return ret;
 }
 
 template <typename REAL>
 const REAL mpimat<REAL>::operator()(len_t i, len_t j) const
 {
-  if (i < 0 || i >= this->m || j < 0 || j >= this->n)
-    throw std::runtime_error("index out of bounds");
+  this->check_index(i, j);
   
   REAL ret = this->get_val_from_global_index(i, j);
   return ret;
+}
+
+template <typename REAL>
+REAL& mpimat<REAL>::operator()(len_t i)
+{
+  this->check_index(i);
+  
+  int gi = i % this->m;
+  int gj = i / this->m;
+  
+  int pr = bcutils::g2p(gi, this->mb, this->g.nprow());
+  int pc = bcutils::g2p(gj, this->nb, this->g.npcol());
+  
+  int li = bcutils::g2l(gi, this->mb, this->g.nprow());
+  int lj = bcutils::g2l(gj, this->nb, this->g.npcol());
+  
+  if (pr == this->g.myrow() && pc == this->g.mycol())
+    return this->data[li + (this->m_local)*lj];
+  else
+    return this->_getter;
+}
+
+template <typename REAL>
+REAL& mpimat<REAL>::operator()(len_t i, len_t j)
+{
+  this->check_index(i, j);
+  
+  int pr = bcutils::g2p(i, this->mb, this->g.nprow());
+  int pc = bcutils::g2p(j, this->nb, this->g.npcol());
+  
+  int li = bcutils::g2l(i, this->mb, this->g.nprow());
+  int lj = bcutils::g2l(j, this->nb, this->g.npcol());
+  
+  if (pr == this->g.myrow() && pc == this->g.mycol())
+    return this->data[li + (this->m_local)*lj];
+  else
+    return this->_getter;
 }
 
 
@@ -629,11 +640,9 @@ bool mpimat<REAL>::operator==(const mpimat<REAL> &x) const
   // same dim, same blocking, same grid
   if (this->m != x.nrows() || this->n != x.ncols())
     return false;
-  
-  if (this->mb != x.bf_rows() || this->nb != x.bf_cols())
+  else if (this->mb != x.bf_rows() || this->nb != x.bf_cols())
     return false;
-  
-  if (this->g.ictxt() != x.g.ictxt())
+  else if (this->g.ictxt() != x.g.ictxt())
     return false;
   
   const REAL *x_d = x.data_ptr();
