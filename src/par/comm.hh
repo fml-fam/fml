@@ -10,7 +10,12 @@
 #include <stdexcept>
 #include <vector>
 
+#include "../types.hh"
 
+
+/**
+ * @brief MPI communicator data and helpers. 
+ */
 class comm
 {
   public:
@@ -24,7 +29,7 @@ class comm
     void info();
     
     bool rank0();
-    std::vector<int> jid(int n);
+    std::vector<int> jid(const int n);
     void barrier();
     
     void send(int n, int *data, int dest, int tag=0);
@@ -36,10 +41,12 @@ class comm
     void recv(int n, double *data, int source, int tag=0);
     
     void allreduce(int n, int *data);
+    void allreduce(int n, len_global_t *data);
     void allreduce(int n, float *data);
     void allreduce(int n, double *data);
     
     void reduce(int n, int *data, int root=0);
+    void reduce(int n, len_global_t *data, int root=0);
     void reduce(int n, float *data, int root=0);
     void reduce(int n, double *data, int root=0);
     
@@ -47,9 +54,14 @@ class comm
     void bcast(int n, float *data, int root);
     void bcast(int n, double *data, int root);
     
+    ///@{
+    /// The MPI communicator.
     MPI_Comm get_comm() const {return _comm;};
+    /// Calling process rank (0-based index) in the MPI communicator.
     int rank() const {return _rank;};
+    /// Total number of ranks in the MPI communicator.
     int size() const {return _size;};
+    ///@}
   
   protected:
     MPI_Comm _comm;
@@ -70,7 +82,11 @@ class comm
 
 // constructors/destructor
 
-comm::comm()
+/**
+ * @brief Create a new comm object and uses 'MPI_COMM_WORLD' as the
+   communicator.
+ */
+inline comm::comm()
 {
   init();
   
@@ -81,7 +97,12 @@ comm::comm()
 
 
 
-void comm::inherit_comm(MPI_Comm comm)
+/**
+ * @brief Change communicator to an existing one.
+ * 
+ * @param comm An MPI communicator.
+ */
+inline void comm::inherit_comm(MPI_Comm comm)
 {
   _comm = comm;
   set_metadata();
@@ -89,7 +110,10 @@ void comm::inherit_comm(MPI_Comm comm)
 
 
 
-void comm::finalize()
+/**
+ * @brief Shut down MPI.
+ */
+inline void comm::finalize()
 {
   int ret = MPI_Finalize();
   check_ret(ret);
@@ -99,7 +123,16 @@ void comm::finalize()
 
 // printers
 
-void comm::printf(int rank, const char *fmt, ...)
+/**
+ * @brief Helper wrapper around the C standard I/O 'printf()' function.
+ * Conceptually similar to guarding a normal 'printf()' function with a check
+ * for 'rank==rank()'.
+ * 
+ * @param[in] rank The process that should do the printing.
+ * @param[in] fmt The printf format string.
+ * @param[in] ... additional arguments to printf.
+ */
+inline void comm::printf(int rank, const char *fmt, ...)
 {
   if (_rank == rank)
   {
@@ -113,7 +146,11 @@ void comm::printf(int rank, const char *fmt, ...)
 
 
 
-void comm::info()
+/**
+ * @brief Print some brief information about the MPI communicator. The printing
+   is done by rank 0.
+ */
+inline void comm::info()
 {
   printf(0, "## MPI on %d ranks\n\n", _size);
 }
@@ -122,14 +159,25 @@ void comm::info()
 
 // misc
 
-bool comm::rank0()
+/**
+ * @brief Check if the executing process is rank 0.
+ */
+inline bool comm::rank0()
 {
   return (_rank == 0);
 }
 
 
 
-std::vector<int> comm::jid(int n)
+/**
+ * @brief 
+ * 
+ * @param[in] n The number of tasks.
+ * @return A std::vector of task numbers.
+ * 
+ * @comm The method has no communication.
+ */
+inline std::vector<int> comm::jid(const int n)
 {
   std::vector<int> ret;
   
@@ -167,7 +215,10 @@ std::vector<int> comm::jid(int n)
 
 
 
-void comm::barrier()
+/**
+ * @brief Execute a barrier.
+ */
+inline void comm::barrier()
 {
   int ret = MPI_Barrier(_comm);
   check_ret(ret);
@@ -177,107 +228,166 @@ void comm::barrier()
 
 // send/recv
 
-void comm::send(int n, int *data, int dest, int tag)
+/**
+ * @brief Point-to-point send. Should be matched by a corresponding 'recv' call.
+ * 
+ * @param[in] n Number of elements of 'data'.
+ * @param[in] data The data to send.
+ * @param[in] dest The process destination in the MPI communicator.
+ * @param[in] tag Optional MPI tag (default=0).
+ */
+///@{
+inline void comm::send(int n, int *data, int dest, int tag)
 {
   int ret = MPI_Send(data, n, MPI_INT, dest, tag, _comm);
   check_ret(ret);
 }
 
-void comm::send(int n, float *data, int dest, int tag)
+inline void comm::send(int n, float *data, int dest, int tag)
 {
   int ret = MPI_Send(data, n, MPI_FLOAT, dest, tag, _comm);
   check_ret(ret);
 }
 
-void comm::send(int n, double *data, int dest, int tag)
+inline void comm::send(int n, double *data, int dest, int tag)
 {
   int ret = MPI_Send(data, n, MPI_DOUBLE, dest, tag, _comm);
   check_ret(ret);
 }
+///@}
 
 
 
-void comm::recv(int n, int *data, int source, int tag)
+/**
+ * @brief Point-to-point receive. Should be matched by a corresponding 'send'
+   call.
+ * 
+ * @param[in] n Number of elements of 'data'.
+ * @param[in] data The data to send.
+ * @param[in] source The process source in the MPI communicator.
+ * @param[in] tag Optional MPI tag (default=0).
+ */
+///@{
+inline void comm::recv(int n, int *data, int source, int tag)
 {
   int ret = MPI_Recv(data, n, MPI_INT, source, tag, _comm, MPI_STATUS_IGNORE);
   check_ret(ret);
 }
 
-void comm::recv(int n, float *data, int source, int tag)
+inline void comm::recv(int n, float *data, int source, int tag)
 {
   int ret = MPI_Recv(data, n, MPI_FLOAT, source, tag, _comm, MPI_STATUS_IGNORE);
   check_ret(ret);
 }
 
-void comm::recv(int n, double *data, int source, int tag)
+inline void comm::recv(int n, double *data, int source, int tag)
 {
   int ret = MPI_Recv(data, n, MPI_DOUBLE, source, tag, _comm, MPI_STATUS_IGNORE);
   check_ret(ret);
 }
+///@}
 
 
 
 // reductions
 
-void comm::allreduce(int n, int *data)
+/**
+ * @brief Sum reduce operation across all processes in the MPI communicator.
+ * 
+ * @param[in] n Number of elemends of 'data'.
+ * @param[in,out] data The data to reduce.
+ */
+///@{
+inline void comm::allreduce(int n, int *data)
 {
   int ret = MPI_Allreduce(MPI_IN_PLACE, data, n, MPI_INT, MPI_SUM, _comm);
   check_ret(ret);
 }
 
-void comm::allreduce(int n, float *data)
+inline void comm::allreduce(int n, len_global_t *data)
+{
+  int ret = MPI_Allreduce(MPI_IN_PLACE, data, n, MPI_LENGLOBAL_T, MPI_SUM, _comm);
+  check_ret(ret);
+}
+
+inline void comm::allreduce(int n, float *data)
 {
   int ret = MPI_Allreduce(MPI_IN_PLACE, data, n, MPI_FLOAT, MPI_SUM, _comm);
   check_ret(ret);
 }
 
-void comm::allreduce(int n, double *data)
+inline void comm::allreduce(int n, double *data)
 {
   int ret = MPI_Allreduce(MPI_IN_PLACE, data, n, MPI_DOUBLE, MPI_SUM, _comm);
   check_ret(ret);
 }
+///@}
 
 
 
-void comm::reduce(int n, int *data, int root)
+/**
+ * @brief Sum reduce operation across all processes in the MPI communicator.
+ * 
+ * @param[in] n Number of elemends of 'data'.
+ * @param[in,out] data The data to reduce.
+ * @param[in] root The rank in the MPI communicator to receive the final answer.
+ */
+///@{
+inline void comm::reduce(int n, int *data, int root)
 {
   int ret = MPI_Reduce(MPI_IN_PLACE, data, n, MPI_INT, MPI_SUM, root, _comm);
   check_ret(ret);
 }
 
-void comm::reduce(int n, float *data, int root)
+inline void comm::reduce(int n, len_global_t *data, int root)
+{
+  int ret = MPI_Reduce(MPI_IN_PLACE, data, n, MPI_LENGLOBAL_T, MPI_SUM, root, _comm);
+  check_ret(ret);
+}
+
+inline void comm::reduce(int n, float *data, int root)
 {
   int ret = MPI_Reduce(MPI_IN_PLACE, data, n, MPI_FLOAT, MPI_SUM, root, _comm);
   check_ret(ret);
 }
 
-void comm::reduce(int n, double *data, int root)
+inline void comm::reduce(int n, double *data, int root)
 {
   int ret = MPI_Reduce(MPI_IN_PLACE, data, n, MPI_DOUBLE, MPI_SUM, root, _comm);
   check_ret(ret);
 }
+///@}
 
 
 
 // broadcasters
 
-void comm::bcast(int n, int *data, int root)
+/**
+ * @brief Broadcast.
+ * 
+ * @param[in] n Number of elemends of 'data'.
+ * @param[in,out] data The data to broadcast.
+ * @param[in] root The rank in the MPI communicator that does the broadcasting.
+ */
+///@{
+inline void comm::bcast(int n, int *data, int root)
 {
   int ret = MPI_Bcast(data, n, MPI_INT, root, _comm);
   check_ret(ret);
 }
 
-void comm::bcast(int n, float *data, int root)
+inline void comm::bcast(int n, float *data, int root)
 {
   int ret = MPI_Bcast(data, n, MPI_FLOAT, root, _comm);
   check_ret(ret);
 }
 
-void comm::bcast(int n, double *data, int root)
+inline void comm::bcast(int n, double *data, int root)
 {
   int ret = MPI_Bcast(data, n, MPI_DOUBLE, root, _comm);
   check_ret(ret);
 }
+///@}
 
 
 
@@ -285,7 +395,7 @@ void comm::bcast(int n, double *data, int root)
 // private
 // -----------------------------------------------------------------------------
 
-void comm::init()
+inline void comm::init()
 {
   int ret;
   int flag;
@@ -302,7 +412,7 @@ void comm::init()
 
 
 
-void comm::set_metadata()
+inline void comm::set_metadata()
 {
   int ret;
   
@@ -315,7 +425,7 @@ void comm::set_metadata()
 
 
 
-void comm::check_ret(int ret)
+inline void comm::check_ret(int ret)
 {
   if (ret != MPI_SUCCESS && _rank == 0)
   {
