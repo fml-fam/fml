@@ -10,7 +10,7 @@
 namespace kernelfuns
 {
   template <typename REAL>
-  __device__ void kernel_rev_vec(const len_t n, REAL *data)
+  __global__ void kernel_rev_vec(const len_t n, REAL *data)
   {
     __shared__ REAL shmem[64];
     
