@@ -139,6 +139,21 @@ namespace kernelfuns
         atomicMax(has_nan, 1);
     }
   }
+  
+  
+  
+  template <typename REAL>
+  __global__ void kernel_all_eq(const len_t m, const len_t n, const REAL *x, const REAL *y, int *all_eq)
+  {
+    int i = blockDim.x*blockIdx.x + threadIdx.x;
+    int j = blockDim.y*blockIdx.y + threadIdx.y;
+    
+    if (i < m && j < n)
+    {
+      if (x[i + m*j] != y[i + m*j])
+        atomicMin(all_eq, 0);
+    }
+  }
 }
 
 

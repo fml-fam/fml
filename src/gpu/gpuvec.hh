@@ -308,6 +308,38 @@ const REAL gpuvec<REAL>::operator()(len_t i) const
 
 
 
+template <typename T>
+bool gpuvec<T>::operator==(const gpuvec<T> &x) const
+{
+  if (this->_size != x.size())
+    return false;
+  else if (this->c->device_id() != x.get_card()->device_id())
+    return false;
+  else if (this->data == x.data_ptr())
+    return true;
+  
+  int all_eq = 1;
+  int *all_eq_gpu = (int*) this->c->mem_alloc(sizeof(*all_eq_gpu));
+  this->c->mem_cpu2gpu(all_eq_gpu, &all_eq, sizeof(all_eq));
+  
+  kernelfuns::kernel_all_eq<<<1, this->_size>>>(this->_size, 1, this->data, x.data_ptr(), all_eq_gpu);
+  
+  this->c->mem_gpu2cpu(&all_eq, all_eq_gpu, sizeof(all_eq));
+  this->c->mem_free(all_eq_gpu);
+  
+  this->c->check();
+  
+  return (bool) all_eq;
+}
+
+template <typename T>
+bool gpuvec<T>::operator!=(const gpuvec<T> &x) const
+{
+  return !(*this == x);
+}
+
+
+
 // -----------------------------------------------------------------------------
 // private
 // -----------------------------------------------------------------------------

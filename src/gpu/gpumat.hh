@@ -447,17 +447,37 @@ const REAL gpumat<REAL>::operator()(len_t i, len_t j) const
 // }
 
 
-template <>
-inline void gpumat<int>::printval(const int val, uint8_t ndigits) const
+
+template <typename T>
+bool gpumat<T>::operator==(const gpumat<T> &x) const
 {
-  (void)ndigits;
-  printf("%d ", val);
+  if (this->m != x.nrows() || this->n != x.ncols())
+    return false;
+  else if (this->c->device_id() != x.get_card()->device_id())
+    return false;
+  else if (this->data == x.data_ptr())
+    return true;
+  
+  int all_eq = 1;
+  int *all_eq_gpu = (int*) this->c->mem_alloc(sizeof(*all_eq_gpu));
+  this->c->mem_cpu2gpu(all_eq_gpu, &all_eq, sizeof(all_eq));
+  
+  dim3 dim_block(16, 16);
+  dim3 dim_grid((this->m + 16 - 1) / 16, (this->n + 16 - 1) / 16);
+  kernelfuns::kernel_all_eq<<<dim_grid, dim_block>>>(this->m, this->n, this->data, x.data_ptr(), all_eq_gpu);
+  
+  this->c->mem_gpu2cpu(&all_eq, all_eq_gpu, sizeof(all_eq));
+  this->c->mem_free(all_eq_gpu);
+  
+  this->c->check();
+  
+  return (bool) all_eq;
 }
 
-template <>
-inline void gpumat<__half>::printval(const __half val, uint8_t ndigits) const
+template <typename T>
+bool gpumat<T>::operator!=(const gpumat<T> &x) const
 {
-  printf("%.*f ", ndigits, (float)val);
+  return !(*this == x);
 }
 
 
