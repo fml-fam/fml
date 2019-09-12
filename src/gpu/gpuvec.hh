@@ -26,7 +26,7 @@ class gpuvec : public univec<T>
     void set(std::shared_ptr<card> gpu, T *data, len_t size, bool free_on_destruct=false);
     gpuvec<T> dupe() const;
     
-    void print(uint8_t ndigits=4) const;
+    void print(uint8_t ndigits=4, bool add_final_blank=true) const;
     void info() const;
     
     void fill_zero();
@@ -208,17 +208,18 @@ gpuvec<T> gpuvec<T>::dupe() const
 
 // printers
 
-template <typename T>
-void gpuvec<T>::print(uint8_t ndigits) const
+template <typename REAL>
+void gpuvec<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 {
   for (int i=0; i<this->_size; i++)
   {
-    T tmp;
-    this->c->mem_gpu2cpu(&tmp, this->data + i, sizeof(T));
-    printf("%.*f ", ndigits, tmp);
+    REAL tmp;
+    this->c->mem_gpu2cpu(&tmp, this->data + i, sizeof(REAL));
+    this->printval(tmp, ndigits);
   }
   
-  printf("\n\n");
+  if (add_final_blank)
+    putchar('\n');
 }
 
 

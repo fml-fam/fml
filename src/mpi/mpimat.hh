@@ -41,7 +41,7 @@ class mpimat : public unimat<REAL>
     void set(grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct=false);
     mpimat<REAL> dupe() const;
     
-    void print(uint8_t ndigits=4) const;
+    void print(uint8_t ndigits=4, bool add_final_blank=true) const;
     void info() const;
     
     void fill_zero();
@@ -296,7 +296,7 @@ mpimat<REAL> mpimat<REAL>::dupe() const
 // printers
 
 template <typename REAL>
-void mpimat<REAL>::print(uint8_t ndigits) const
+void mpimat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 {
   for (len_t gi=0; gi<this->m; gi++)
   {
@@ -328,7 +328,8 @@ void mpimat<REAL>::print(uint8_t ndigits) const
     this->g.printf(0, 0, "\n");
   }
   
-  this->g.printf(0, 0, "\n");
+  if (add_final_blank)
+    this->g.printf(0, 0, "\n");
 }
 
 

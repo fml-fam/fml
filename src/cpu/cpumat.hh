@@ -36,7 +36,7 @@ class cpumat : public unimat<REAL>
     void set(REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
     cpumat<REAL> dupe() const;
     
-    void print(uint8_t ndigits=4) const;
+    void print(uint8_t ndigits=4, bool add_final_blank=true) const;
     void info() const;
     
     void fill_zero();
@@ -201,17 +201,18 @@ cpumat<REAL> cpumat<REAL>::dupe() const
 // printers
 
 template <typename REAL>
-void cpumat<REAL>::print(uint8_t ndigits) const
+void cpumat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 {
   for (len_t i=0; i<this->m; i++)
   {
     for (len_t j=0; j<this->n; j++)
-      printval(this->data[i + this->m*j], ndigits);
+      this->printval(this->data[i + this->m*j], ndigits);
     
     putchar('\n');
   }
   
-  putchar('\n');
+  if (add_final_blank)
+    putchar('\n');
 }
 
 

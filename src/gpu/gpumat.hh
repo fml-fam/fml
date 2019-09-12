@@ -34,7 +34,7 @@ class gpumat : public unimat<REAL>
     void set(std::shared_ptr<card> gpu, REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
     gpumat<REAL> dupe() const;
     
-    void print(uint8_t ndigits=4) const;
+    void print(uint8_t ndigits=4, bool add_final_blank=true) const;
     void info() const;
     
     void fill_zero();
@@ -239,7 +239,7 @@ gpumat<REAL> gpumat<REAL>::dupe() const
 // printers
 
 template <typename REAL>
-void gpumat<REAL>::print(uint8_t ndigits) const
+void gpumat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 {
   for (int i=0; i<this->m; i++)
   {
@@ -253,7 +253,8 @@ void gpumat<REAL>::print(uint8_t ndigits) const
     putchar('\n');
   }
   
-  putchar('\n');
+  if (add_final_blank)
+    putchar('\n');
 }
 
 

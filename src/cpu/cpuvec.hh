@@ -30,7 +30,7 @@ class cpuvec : public univec<T>
     void set(T *data, len_t size, bool free_on_destruct=false);
     cpuvec<T> dupe() const;
     
-    void print(uint8_t ndigits=4) const;
+    void print(uint8_t ndigits=4, bool add_final_blank=true) const;
     void info() const;
     
     void fill_zero();
@@ -174,12 +174,14 @@ cpuvec<T> cpuvec<T>::dupe() const
 // printers
 
 template <typename T>
-void cpuvec<T>::print(uint8_t ndigits) const
+void cpuvec<T>::print(uint8_t ndigits, bool add_final_blank) const
 {
   for (len_t i=0; i<this->_size; i++)
-    printval(this->data[i], ndigits);
+    this->printval(this->data[i], ndigits);
   
-  printf("\n\n");
+  putchar('\n');
+  if (add_final_blank)
+    putchar('\n');
 }
 
 
