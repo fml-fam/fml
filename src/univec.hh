@@ -2,7 +2,10 @@
 #define FML_UNIVEC_H
 
 
+#include <stdexcept>
+
 #include "types.hh"
+
 
 template <typename T>
 class univec
@@ -17,8 +20,18 @@ class univec
     T *data;
     bool free_data;
     bool should_free() const {return free_data;};
+    void check_index(const len_t i) const;
     void printval(const T val, uint8_t ndigits) const;
 };
+
+
+
+template <typename REAL>
+void univec<REAL>::check_index(const len_t i) const
+{
+  if (i < 0 || i >= this->_size)
+    throw std::runtime_error("index out of bounds");
+}
 
 
 

@@ -6,6 +6,8 @@
 #include <cublas.h>
 #endif
 
+#include <stdexcept>
+
 #include "types.hh"
 
 
@@ -26,8 +28,26 @@ class unimat
     REAL *data;
     bool free_data;
     bool should_free() const {return free_data;};
+    void check_index(const len_t i) const;
+    void check_index(const len_t i, const len_t j) const;
     void printval(const REAL val, uint8_t ndigits) const;
 };
+
+
+
+template <typename REAL>
+void unimat<REAL>::check_index(const len_t i) const
+{
+  if (i < 0 || i >= (this->m * this->n))
+    throw std::runtime_error("index out of bounds");
+}
+
+template <typename REAL>
+void unimat<REAL>::check_index(const len_t i, const len_t j) const
+{
+  if (i < 0 || i >= this->m || j < 0 || j >= this->n)
+    throw std::runtime_error("index out of bounds");
+}
 
 
 
