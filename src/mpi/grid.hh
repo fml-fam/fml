@@ -124,7 +124,7 @@ class grid
 
 /**
  * @brief Create a new grid object. Does not initialize any BLACS or MPI data.
-*/
+ */
 inline grid::grid()
 {
   _ictxt = UNINITIALIZED_GRID;
@@ -137,11 +137,11 @@ inline grid::grid()
  * @brief Create a new grid object by initializing a new BLACS process grid.
  * 
  * @param[in] gridtype Should be one of PROC_GRID_SQUARE, PROC_GRID_WIDE, or
- * PROC_GRID_TALL.
+   PROC_GRID_TALL.
  * 
  * @except If 'gridtype' is not one of PROC_GRID_SQUARE, PROC_GRID_WIDE, or
- * PROC_GRID_TALL, the method will throw a 'runtime_error' exception.
-*/
+   PROC_GRID_TALL, the method will throw a 'runtime_error' exception.
+ */
 inline grid::grid(const int gridtype)
 {
   char order = 'R';
@@ -174,7 +174,7 @@ inline grid::grid(const int gridtype)
  * @brief Create a grid object from an existing BLACS process grid.
  * 
  * @param blacs_context The BLACS integer context number.
-*/
+ */
 inline void grid::inherit_grid(const int blacs_context)
 {
   _ictxt = blacs_context;
@@ -192,7 +192,7 @@ inline void grid::inherit_grid(const int blacs_context)
 
 /**
  * @brief Exits the BLACS grid, but does not shutdown BLACS/MPI.
-*/
+ */
 inline void grid::exit()
 {
   if (_ictxt != EXITED_GRID && _ictxt != UNINITIALIZED_GRID)
@@ -208,7 +208,7 @@ inline void grid::exit()
  * @brief Shuts down BLACS, and optionally MPI.
  * 
  * @param mpi_continue Should MPI continue, i.e., not be shut down too?
-*/
+ */
 inline void grid::finalize(const bool mpi_continue)
 {
   exit();
@@ -223,13 +223,13 @@ inline void grid::finalize(const bool mpi_continue)
 
 /**
  * @brief Helper wrapper around the C standard I/O 'printf()' function.
- * Conceptually similar to guarding a normal 'printf()' function with a check
- * for 'row==myrow() && col==mycol()'.
+   Conceptually similar to guarding a normal 'printf()' function with a check
+   for 'row==myrow() && col==mycol()'.
  * 
  * @param[in] row,col The process row/column that should do the printing.
  * @param[in] fmt The printf format string.
  * @param[in] ... additional arguments to printf.
-*/
+ */
 inline void grid::printf(const int row, const int col, const char *fmt, ...) const
 {
   if (_myrow == row && _mycol == col)
@@ -246,8 +246,8 @@ inline void grid::printf(const int row, const int col, const char *fmt, ...) con
 
 /**
  * @brief Print some brief information about the BLACS grid. The printing is
- * done by row 0 and col 0.
-*/
+   done by row 0 and col 0.
+ */
 inline void grid::info() const
 {
   printf(0, 0, "## Grid %d %dx%d\n\n", _ictxt, _nprow, _npcol);
@@ -259,8 +259,8 @@ inline void grid::info() const
 
 /**
  * @brief Check if the executing process is rank 0, i.e., if the process row and
- * column are 0.
-*/
+   column are 0.
+ */
 inline bool grid::rank0() const
 {
   return (_myrow==0 && _mycol==0);
@@ -272,8 +272,8 @@ inline bool grid::rank0() const
  * @brief Execute a barrier across the specified scope of the BLACS grid.
  * 
  * @param scope The scope of the operation. For just rows use 'R', just columns
- use 'C', and for all processes use 'A'.
-*/
+   use 'C', and for all processes use 'A'.
+ */
 inline void grid::barrier(const char scope) const
 {
   Cblacs_barrier(_ictxt, &scope);
@@ -287,7 +287,7 @@ inline void grid::barrier(const char scope) const
  * @param[in] m,n Dimensions (number of rows/cols) of the data 'x'.
  * @param[in] x The data to send.
  * @param[in] rdest,cdest The row/col destination in the BLACS grid.
-*/
+ */
 ///@{
 inline void grid::send(const int m, const int n, const int *x, const int rdest, const int cdest) const
 {
@@ -309,12 +309,12 @@ inline void grid::send(const int m, const int n, const double *x, const int rdes
 
 /**
  * @brief Point-to-point receive. Should be matched by a corresponding 'send'
- call.
+   call.
  * 
  * @param[in] m,n Dimensions (number of rows/cols) of the data 'x'.
  * @param[in] x The data to receive.
- * @param[in] rdest,cdest The row/col destination in the BLACS grid.
-*/
+ * @param[in] rsrc,csrc The row/col source in the BLACS grid.
+ */
 ///@{
 inline void grid::recv(const int m, const int n, int *x, const int rsrc, const int csrc) const
 {
@@ -340,8 +340,8 @@ inline void grid::recv(const int m, const int n, double *x, const int rsrc, cons
  * @param[in] m,n Dimensions (number of rows/cols) of the data 'x'.
  * @param[in,out] x The data to reduce.
  * @param scope The scope of the operation. For just rows use 'R', just columns
- use 'C', and for all processes use 'A'.
-*/
+   use 'C', and for all processes use 'A'.
+ */
 ///@{
 inline void grid::allreduce(const int m, const int n, int *x, const char scope) const
 {
@@ -370,10 +370,10 @@ inline void grid::allreduce(const int m, const int n, double *x, const char scop
  * @param[in] m,n Dimensions (number of rows/cols) of the data 'x'.
  * @param[in,out] x The data to reduce.
  * @param scope The scope of the operation. For just rows use 'R', just columns
- use 'C', and for all processes use 'A'.
+   use 'C', and for all processes use 'A'.
  * @param[in] rdest,cdest The row/column of the BLACS grid to receive the final
- answer.
-*/
+   answer.
+ */
 ///@{
 inline void grid::reduce(const int m, const int n, int *x, const char scope, const int rdest, const int cdest) const
 {
@@ -400,12 +400,12 @@ inline void grid::reduce(const int m, const int n, double *x, const char scope, 
  * @brief Broadcast.
  * 
  * @param[in] m,n Dimensions (number of rows/cols) of the data 'x'.
- * @param[in,out] x The data to reduce.
+ * @param[in,out] x The data to broadcast.
  * @param scope The scope of the operation. For just rows use 'R', just columns
- use 'C', and for all processes use 'A'.
+   use 'C', and for all processes use 'A'.
  * @param[in] rsrc,csrc The process row/column of the BLACS grid that is
- broadcasting.
-*/
+   broadcasting.
+ */
 ///@{
 inline void grid::bcast(const int m, const int n, int *x, const char scope, const int rsrc, const int csrc) const
 {
