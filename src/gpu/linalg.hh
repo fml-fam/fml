@@ -374,7 +374,7 @@ namespace linalg
         jobu = 'N';
         jobvt = 'N';
       }
-      else if (nu <= minmn && nv <= minmn)
+      else //if (nu <= minmn && nv <= minmn)
       {
         jobu = 'V';
         jobvt = 'V';
