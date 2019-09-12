@@ -65,7 +65,6 @@ class cpumat : public unimat<REAL>
   
   private:
     void free();
-    void printval(const REAL val, uint8_t ndigits) const;
     void check_params(len_t nrows, len_t ncols);
 };
 
@@ -510,21 +509,6 @@ void cpumat<REAL>::free()
     std::free(this->data);
     this->data = NULL;
   }
-}
-
-
-
-template <>
-inline void cpumat<int>::printval(const int val, uint8_t ndigits) const
-{
-  (void)ndigits;
-  printf("%d ", val);
-}
-
-template <typename REAL>
-void cpumat<REAL>::printval(const REAL val, uint8_t ndigits) const
-{
-  printf("%.*f ", ndigits, val);
 }
 
 

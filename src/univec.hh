@@ -17,7 +17,23 @@ class univec
     T *data;
     bool free_data;
     bool should_free() const {return free_data;};
+    void printval(const T val, uint8_t ndigits) const;
 };
+
+
+
+template <>
+inline void univec<int>::printval(const int val, uint8_t ndigits) const
+{
+  (void)ndigits;
+  printf("%d ", val);
+}
+
+template <typename T>
+void univec<T>::printval(const T val, uint8_t ndigits) const
+{
+  printf("%.*f ", ndigits, val);
+}
 
 
 #endif

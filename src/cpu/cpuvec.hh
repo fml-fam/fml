@@ -49,7 +49,6 @@ class cpuvec : public univec<T>
   
   private:
     void free();
-    void printval(const T val, uint8_t ndigits) const;
     void check_params(len_t size);
 };
 
@@ -346,21 +345,6 @@ void cpuvec<T>::free()
     std::free(this->data);
     this->data = NULL;
   }
-}
-
-
-
-template <>
-inline void cpuvec<int>::printval(const int val, uint8_t ndigits) const
-{
-  (void)ndigits;
-  printf("%d ", val);
-}
-
-template <typename T>
-void cpuvec<T>::printval(const T val, uint8_t ndigits) const
-{
-  printf("%.*f ", ndigits, val);
 }
 
 

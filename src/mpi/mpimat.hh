@@ -86,7 +86,6 @@ class mpimat : public unimat<REAL>
     
   private:
     void free();
-    void printval(REAL, uint8_t ndigits) const;
     void check_params(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols);
     REAL get_val_from_global_index(len_t gi, len_t gj) const;
 };
@@ -678,21 +677,6 @@ void mpimat<REAL>::free()
     std::free(this->data);
     this->data = NULL;
   }
-}
-
-
-
-template <>
-inline void mpimat<int>::printval(int val, uint8_t ndigits) const
-{
-  (void)ndigits;
-  printf("%d ", val);
-}
-
-template <typename REAL>
-void mpimat<REAL>::printval(REAL val, uint8_t ndigits) const
-{
-  printf("%.*f ", ndigits, val);
 }
 
 

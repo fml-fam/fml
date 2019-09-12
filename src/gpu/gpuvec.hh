@@ -50,7 +50,6 @@ class gpuvec : public univec<T>
   
   private:
     void free();
-    void printval(const T val, uint8_t ndigits) const;
     void check_params(len_t size);
 };
 

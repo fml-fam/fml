@@ -68,7 +68,6 @@ class gpumat : public unimat<REAL>
   
   private:
     void free();
-    void printval(const REAL val, uint8_t ndigits) const;
     void check_params(len_t nrows, len_t ncols);
 };
 
