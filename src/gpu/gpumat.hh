@@ -53,10 +53,10 @@ class gpumat : public unimat<REAL>
     bool any_inf() const;
     bool any_nan() const;
     
-    REAL& operator()(len_t i);
-    const REAL& operator()(len_t i) const;
-    REAL& operator()(len_t i, len_t j);
-    const REAL& operator()(len_t i, len_t j) const;
+    const REAL operator()(len_t i) const; // getters
+    const REAL operator()(len_t i, len_t j) const;
+    // REAL& operator()(len_t i); // setters
+    // REAL& operator()(len_t i, len_t j);
     
     bool operator==(const gpumat<REAL> &x) const;
     bool operator!=(const gpumat<REAL> &x) const;
@@ -412,23 +412,39 @@ bool gpumat<REAL>::any_nan() const
 
 // operators
 
-
-
-
-// -----------------------------------------------------------------------------
-// private
-// -----------------------------------------------------------------------------
-
 template <typename REAL>
-void gpumat<REAL>::free()
+const REAL gpumat<REAL>::operator()(len_t i) const
 {
-  if (this->free_data && this->data)
-  {
-    this->c->mem_free(this->data);
-    this->data = NULL;
-  }
+  this->check_index(i);
+  
+  REAL ret;
+  this->c->mem_gpu2cpu(&ret, this->data + i, sizeof(REAL));
+  return ret;
 }
 
+template <typename REAL>
+const REAL gpumat<REAL>::operator()(len_t i, len_t j) const
+{
+  this->check_index(i, j);
+  
+  REAL ret;
+  this->c->mem_gpu2cpu(&ret, this->data + (i + this->m*j), sizeof(REAL));
+  return ret;
+}
+
+// template <typename REAL>
+// REAL& gpumat<REAL>::operator()(len_t i)
+// {
+//   this->check_index(i);
+// 
+// }
+// 
+// template <typename REAL>
+// REAL& gpumat<REAL>::operator()(len_t i, len_t j)
+// {
+//   this->check_index(i, j);
+// 
+// }
 
 
 template <>
@@ -444,10 +460,20 @@ inline void gpumat<__half>::printval(const __half val, uint8_t ndigits) const
   printf("%.*f ", ndigits, (float)val);
 }
 
+
+
+// -----------------------------------------------------------------------------
+// private
+// -----------------------------------------------------------------------------
+
 template <typename REAL>
-void gpumat<REAL>::printval(const REAL val, uint8_t ndigits) const
+void gpumat<REAL>::free()
 {
-  printf("%.*f ", ndigits, val);
+  if (this->free_data && this->data)
+  {
+    this->c->mem_free(this->data);
+    this->data = NULL;
+  }
 }
 
 

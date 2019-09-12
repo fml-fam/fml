@@ -37,8 +37,8 @@ class gpuvec : public univec<T>
     void scale(const T s);
     void rev();
     
-    T& operator()(len_t i);
-    const T& operator()(len_t i) const;
+    const T operator()(len_t i) const; // getter
+    // T& operator()(len_t i); // setter
     
     bool operator==(const gpuvec<T> &x) const;
     bool operator!=(const gpuvec<T> &x) const;
@@ -289,6 +289,22 @@ void gpuvec<T>::rev()
 
 // operators
 
+template <typename REAL>
+const REAL gpuvec<REAL>::operator()(len_t i) const
+{
+  this->check_index(i);
+  
+  REAL ret;
+  this->c->mem_gpu2cpu(&ret, this->data + i, sizeof(REAL));
+  return ret;
+}
+
+// template <typename REAL>
+// REAL& mpimat<REAL>::operator()(len_t i)
+// {
+//   this->check_index(i);
+// 
+// }
 
 
 
