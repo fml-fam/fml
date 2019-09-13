@@ -127,7 +127,7 @@ cpumat<REAL>::cpumat(const cpumat<REAL> &x)
   this->n = x.ncols();
   this->data = x.data_ptr();
   
-  this->free_data = x.should_free();
+  this->free_data = false;
 }
 
 

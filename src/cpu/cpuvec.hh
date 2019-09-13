@@ -107,7 +107,7 @@ cpuvec<T>::cpuvec(const cpuvec<T> &x)
   this->_size = x.size();
   this->data = x.data_ptr();
   
-  this->free_data = x.should_free();
+  this->free_data = false;
 }
 
 

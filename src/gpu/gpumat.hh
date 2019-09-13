@@ -151,7 +151,7 @@ gpumat<REAL>::gpumat(const gpumat<REAL> &x)
   
   this->c = x.get_card();
   
-  this->free_data = x.should_free();
+  this->free_data = false;
 }
 
 

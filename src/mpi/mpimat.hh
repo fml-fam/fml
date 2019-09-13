@@ -205,7 +205,7 @@ mpimat<REAL>::mpimat(const mpimat<REAL> &x)
   
   this->data = x.data_ptr();
   
-  this->free_data = x.should_free();
+  this->free_data = false;
 }
 
 

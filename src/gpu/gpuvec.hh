@@ -18,6 +18,7 @@ class gpuvec : public univec<T>
     gpuvec(std::shared_ptr<card> gpu);
     gpuvec(std::shared_ptr<card> gpu, len_t size);
     gpuvec(std::shared_ptr<card> gpu, T *data, len_t size, bool free_on_destruct=false);
+    gpuvec(const gpuvec &x);
     ~gpuvec();
     
     void resize(len_t size);
@@ -116,6 +117,19 @@ gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, T *data_, len_t size, bool free_on_
   this->data = data_;
   
   this->free_data = free_on_destruct;
+}
+
+
+
+template <typename REAL>
+gpuvec<REAL>::gpuvec(const gpuvec<REAL> &x)
+{
+  this->_size = x.size();
+  this->data = x.data_ptr();
+  
+  this->c = x.get_card();
+  
+  this->free_data = false;
 }
 
 
