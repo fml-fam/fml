@@ -68,6 +68,8 @@ class mpimat : public unimat<REAL>
     bool operator==(const mpimat<REAL> &x) const;
     bool operator!=(const mpimat<REAL> &x) const;
     
+    mpimat<REAL>& operator=(const mpimat<REAL> &x);
+    
     len_local_t nrows_local() const {return m_local;};
     len_local_t ncols_local() const {return n_local;};
     int bf_rows() const {return mb;};
@@ -671,6 +673,28 @@ template <typename REAL>
 bool mpimat<REAL>::operator!=(const mpimat<REAL> &x) const
 {
   return !(*this == x);
+}
+
+
+
+template <typename REAL>
+mpimat<REAL>& mpimat<REAL>::operator=(const mpimat<REAL> &x)
+{
+  this->g = x.get_grid();
+  
+  this->m = x.nrows();
+  this->n = x.ncols();
+  this->data = x.data_ptr();
+  
+  this->m_local = x.nrows_local();
+  this->n_local = x.ncols_local();
+  this->mb = x.bf_rows();
+  this->nb = x.bf_cols();
+  
+  memcpy(this->desc, x.desc_ptr(), 9*sizeof(int));
+  
+  this->free_data = false;
+  return *this;
 }
 
 

@@ -44,6 +44,8 @@ class gpuvec : public univec<T>
     bool operator==(const gpuvec<T> &x) const;
     bool operator!=(const gpuvec<T> &x) const;
     
+    gpuvec<T>& operator=(const gpuvec<T> &x);
+    
     std::shared_ptr<card> get_card() const {return c;};
     
   protected:
@@ -350,6 +352,19 @@ template <typename T>
 bool gpuvec<T>::operator!=(const gpuvec<T> &x) const
 {
   return !(*this == x);
+}
+
+
+
+template <typename T>
+gpuvec<T>& gpuvec<T>::operator=(const gpuvec<T> &x)
+{
+  this->c = x.get_card();
+  this->_size = x.size();
+  this->data = x.data_ptr();
+  
+  this->free_data = false;
+  return *this;
 }
 
 

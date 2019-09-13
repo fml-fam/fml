@@ -61,6 +61,8 @@ class gpumat : public unimat<REAL>
     bool operator==(const gpumat<REAL> &x) const;
     bool operator!=(const gpumat<REAL> &x) const;
     
+    gpumat<REAL>& operator=(const gpumat<REAL> &x);
+    
     std::shared_ptr<card> get_card() const {return c;};
     
   protected:
@@ -478,6 +480,21 @@ template <typename T>
 bool gpumat<T>::operator!=(const gpumat<T> &x) const
 {
   return !(*this == x);
+}
+
+
+
+template <typename REAL>
+gpumat<REAL>& gpumat<REAL>::operator=(const gpumat<REAL> &x)
+{
+  this->c = x.get_card();
+  
+  this->m = x.nrows();
+  this->n = x.ncols();
+  this->data = x.data_ptr();
+  
+  this->free_data = false;
+  return *this;
 }
 
 

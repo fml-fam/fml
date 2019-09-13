@@ -62,6 +62,8 @@ class cpumat : public unimat<REAL>
     
     bool operator==(const cpumat<REAL> &x) const;
     bool operator!=(const cpumat<REAL> &x) const;
+    
+    cpumat<REAL>& operator=(const cpumat<REAL> &x);
   
   private:
     void free();
@@ -483,6 +485,19 @@ template <typename REAL>
 bool cpumat<REAL>::operator!=(const cpumat<REAL> &x) const
 {
   return !(*this == x);
+}
+
+
+
+template <typename REAL>
+cpumat<REAL>& cpumat<REAL>::operator=(const cpumat<REAL> &x)
+{
+  this->m = x.nrows();
+  this->n = x.ncols();
+  this->data = x.data_ptr();
+  
+  this->free_data = false;
+  return *this;
 }
 
 

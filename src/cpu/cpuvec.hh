@@ -46,6 +46,8 @@ class cpuvec : public univec<T>
     
     bool operator==(const cpuvec<T> &x) const;
     bool operator!=(const cpuvec<T> &x) const;
+    
+    cpuvec<T>& operator=(const cpuvec<T> &x);
   
   private:
     void free();
@@ -328,6 +330,18 @@ template <typename T>
 bool cpuvec<T>::operator!=(const cpuvec<T> &x) const
 {
   return !(*this == x);
+}
+
+
+
+template <typename T>
+cpuvec<T>& cpuvec<T>::operator=(const cpuvec<T> &x)
+{
+  this->_size = x.size();
+  this->data = x.data_ptr();
+  
+  this->free_data = false;
+  return *this;
 }
 
 
