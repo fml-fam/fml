@@ -6,11 +6,10 @@
 #include <mpi.h>
 
 #include <cstdarg>
+#include <cstdint>
 #include <cstdio>
 #include <stdexcept>
 #include <vector>
-
-#include "../types.hh"
 
 
 /**
@@ -33,20 +32,22 @@ class comm
     void barrier();
     
     void send(int n, int *data, int dest, int tag=0);
+    void send(int n, uint64_t *data, int dest, int tag=0);
     void send(int n, float *data, int dest, int tag=0);
     void send(int n, double *data, int dest, int tag=0);
     
     void recv(int n, int *data, int source, int tag=0);
+    void recv(int n, uint64_t *data, int source, int tag=0);
     void recv(int n, float *data, int source, int tag=0);
     void recv(int n, double *data, int source, int tag=0);
     
     void allreduce(int n, int *data);
-    void allreduce(int n, len_global_t *data);
+    void allreduce(int n, uint64_t *data);
     void allreduce(int n, float *data);
     void allreduce(int n, double *data);
     
     void reduce(int n, int *data, int root=0);
-    void reduce(int n, len_global_t *data, int root=0);
+    void reduce(int n, uint64_t *data, int root=0);
     void reduce(int n, float *data, int root=0);
     void reduce(int n, double *data, int root=0);
     
@@ -243,6 +244,12 @@ inline void comm::send(int n, int *data, int dest, int tag)
   check_ret(ret);
 }
 
+inline void comm::send(int n, uint64_t *data, int dest, int tag)
+{
+  int ret = MPI_Send(data, n, MPI_UINT64_T, dest, tag, _comm);
+  check_ret(ret);
+}
+
 inline void comm::send(int n, float *data, int dest, int tag)
 {
   int ret = MPI_Send(data, n, MPI_FLOAT, dest, tag, _comm);
@@ -271,6 +278,12 @@ inline void comm::send(int n, double *data, int dest, int tag)
 inline void comm::recv(int n, int *data, int source, int tag)
 {
   int ret = MPI_Recv(data, n, MPI_INT, source, tag, _comm, MPI_STATUS_IGNORE);
+  check_ret(ret);
+}
+
+inline void comm::recv(int n, uint64_t *data, int source, int tag)
+{
+  int ret = MPI_Recv(data, n, MPI_UINT64_T, source, tag, _comm, MPI_STATUS_IGNORE);
   check_ret(ret);
 }
 
@@ -304,9 +317,9 @@ inline void comm::allreduce(int n, int *data)
   check_ret(ret);
 }
 
-inline void comm::allreduce(int n, len_global_t *data)
+inline void comm::allreduce(int n, uint64_t *data)
 {
-  int ret = MPI_Allreduce(MPI_IN_PLACE, data, n, MPI_LENGLOBAL_T, MPI_SUM, _comm);
+  int ret = MPI_Allreduce(MPI_IN_PLACE, data, n, MPI_UINT64_T, MPI_SUM, _comm);
   check_ret(ret);
 }
 
@@ -339,9 +352,9 @@ inline void comm::reduce(int n, int *data, int root)
   check_ret(ret);
 }
 
-inline void comm::reduce(int n, len_global_t *data, int root)
+inline void comm::reduce(int n, uint64_t *data, int root)
 {
-  int ret = MPI_Reduce(MPI_IN_PLACE, data, n, MPI_LENGLOBAL_T, MPI_SUM, root, _comm);
+  int ret = MPI_Reduce(MPI_IN_PLACE, data, n, MPI_UINT64_T, MPI_SUM, root, _comm);
   check_ret(ret);
 }
 
