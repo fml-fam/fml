@@ -358,8 +358,6 @@ namespace linalg
     template <typename REAL>
     int svd_internals(const int nu, const int nv, gpumat<REAL> &x, gpuvec<REAL> &s, gpumat<REAL> &u, gpumat<REAL> &vt)
     {
-      int info = 0;
-      signed char jobu, jobvt;
       
       auto c = x.get_card();
       
@@ -369,6 +367,7 @@ namespace linalg
       
       s.resize(c, minmn);
       
+      signed char jobu, jobvt;
       if (nu == 0 && nv == 0)
       {
         jobu = 'N';
@@ -391,6 +390,7 @@ namespace linalg
       gpuvec<REAL> work(c, lwork);
       gpuvec<REAL> rwork(c, minmn-1);
       
+      int info = 0;
       int *info_device = (int*) c->mem_alloc(sizeof(*info_device));
       c->mem_cpu2gpu(info_device, &info, sizeof(info));
       
