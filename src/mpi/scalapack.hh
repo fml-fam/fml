@@ -101,6 +101,30 @@ namespace scalapack
   
   
   
+  inline void syevr(const char jobz, const char range, const char uplo,
+    const int n, float *a, const int *desca, const float vl, const float vu,
+    const int il, const int iu, int *m, int *nz, float *w, float *z,
+    const int *descz, float *work, const int lwork, int *iwork,
+    const int liwork, int *info)
+  {
+    int ij = 1;
+    pssyevr_(&jobz, &range, &uplo, &n, a, &ij, &ij, desca, &vl, &vu, &il, &iu,
+      m, nz, w, z, &ij, &ij, descz, work, &lwork, iwork, &liwork, info);
+  }
+  
+  inline void syevr(const char jobz, const char range, const char uplo,
+    const int n, double *a, const int *desca, const double vl, const double vu,
+    const int il, const int iu, int *m, int *nz, double *w, double *z,
+    const int *descz, double *work, const int lwork, int *iwork,
+    const int liwork, int *info)
+  {
+    int ij = 1;
+    pdsyevr_(&jobz, &range, &uplo, &n, a, &ij, &ij, desca, &vl, &vu, &il, &iu,
+      m, nz, w, z, &ij, &ij, descz, work, &lwork, iwork, &liwork, info);
+  }
+  
+  
+  
   inline void geadd(const char trans, const int m, const int n,
     const float alpha, const float *a, const int *desca, const float beta,
     float *c, const int *descc)

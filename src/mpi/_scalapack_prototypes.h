@@ -79,6 +79,24 @@ extern void pdgesvd_(const char *restrict jobu, const char *restrict jobvt,
 
 
 
+extern void pssyevr_(const char *restrict jobz, const char *restrict range,
+  const char *restrict uplo, const int *n, float *restrict a, const int *ia,
+  const int *ja, const int *restrict desca, const float *vl, const float *vu,
+  const int *il, const int *iu, int *m, int *nz, float *w, float *z,
+  const int *iz, const int *jz, const int *restrict descz,
+  float *restrict work, const int *restrict lwork, int *restrict iwork,
+  const int *restrict liwork, int *restrict info);
+
+extern void pdsyevr_(const char *restrict jobz, const char *restrict range,
+  const char *restrict uplo, const int *n, double *restrict a, const int *ia,
+  const int *ja, const int *restrict desca, const double *vl, const double *vu,
+  const int *il, const int *iu, int *m, int *nz, double *w, double *z,
+  const int *iz, const int *jz, const int *restrict descz,
+  double *restrict work, const int *restrict lwork, int *restrict iwork,
+  const int *restrict liwork, int *restrict info);
+
+
+
 extern void psgeadd_(const char *restrict trans, const int *restrict m,
   const int *restrict n, const float *restrict alpha, const float *restrict a,
   const int *ia, const int *ja, const int *restrict desca,
