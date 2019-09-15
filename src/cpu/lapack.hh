@@ -77,21 +77,21 @@ namespace lapack
   
   inline void syevr(const char jobz, const char range, const char uplo,
     const int n, float *a, const int lda, const float vl, const float vu,
-    const int il, const int iu, const float abstol, const int m, float *w,
+    const int il, const int iu, const float abstol, int *m, float *w,
     float *z, const int ldz, int *isuppz, float *work, const int lwork,
     int *iwork, const int liwork, int *info)
   {
-    ssyevr_(&jobz, &range, &uplo, &n, a, &lda, &vl, &vu, &il, &iu, &abstol, &m,
+    ssyevr_(&jobz, &range, &uplo, &n, a, &lda, &vl, &vu, &il, &iu, &abstol, m,
       w, z, &ldz, isuppz, work, &lwork, iwork, &liwork, info);
   }
   
   inline void syevr(const char jobz, const char range, const char uplo,
     const int n, double *a, const int lda, const double vl, const double vu,
-    const int il, const int iu, const double abstol, const int m, double *w,
+    const int il, const int iu, const double abstol, int *m, double *w,
     double *z, const int ldz, int *isuppz, double *work, const int lwork,
     int *iwork, const int liwork, int *info)
   {
-    dsyevr_(&jobz, &range, &uplo, &n, a, &lda, &vl, &vu, &il, &iu, &abstol, &m,
+    dsyevr_(&jobz, &range, &uplo, &n, a, &lda, &vl, &vu, &il, &iu, &abstol, m,
       w, z, &ldz, isuppz, work, &lwork, iwork, &liwork, info);
   }
   
