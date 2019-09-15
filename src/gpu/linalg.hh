@@ -424,6 +424,91 @@ namespace linalg
   
   
   
+  namespace
+  {
+    template <typename REAL>
+    int eig_sym_internals(const bool only_values, gpumat<REAL> &x,
+      gpuvec<REAL> &values, gpumat<REAL> &vectors)
+    {
+      if (!x.is_square())
+        throw std::runtime_error("'x' must be a square matrix");
+      
+      auto c = x.get_card();
+      
+      len_t n = x.nrows();
+      values.resize(c, n);
+      
+      cusolverEigMode_t jobz;
+      if (only_values)
+        jobz = CUSOLVER_EIG_MODE_NOVECTOR;
+      else
+        jobz = CUSOLVER_EIG_MODE_VECTOR;
+      
+      int lwork;
+      cusolverStatus_t check = culapack::syevd_buflen(c->cs_handle(), jobz,
+        CUBLAS_FILL_MODE_UPPER, n, x.data_ptr(), n, values.data_ptr(), &lwork);
+      check_cusolver_ret(check, "syevd_bufferSize");
+      
+      gpuvec<REAL> work(c, lwork);
+      
+      int info = 0;
+      int *info_device = (int*) c->mem_alloc(sizeof(*info_device));
+      c->mem_cpu2gpu(info_device, &info, sizeof(info));
+      
+      check = culapack::syevd(c->cs_handle(), jobz, CUBLAS_FILL_MODE_UPPER, n,
+        x.data_ptr(), n, values.data_ptr(), work.data_ptr(), lwork,
+        info_device);
+      
+      c->mem_gpu2cpu(&info, info_device, sizeof(info));
+      c->mem_free(info_device);
+      
+      check_cusolver_ret(check, "syevd");
+      
+      values.rev();
+      
+      if (!only_values)
+      {
+        vectors.resize(c, n, n);
+        gpuhelpers::copy(x, vectors);
+        // TODO reverse columns
+      }
+      
+      return info;
+    }
+  }
+  
+  template <typename REAL>
+  void eigen(bool symmetric, gpumat<REAL> &x, gpuvec<REAL> &values)
+  {
+    gpumat<REAL> ignored;
+    if (symmetric)
+    {
+      int info = eig_sym_internals(true, x, values, ignored);
+      check_info(info, "syevd");
+    }
+    else
+    {
+      // TODO
+    }
+  }
+  
+  template <typename REAL>
+  void eigen(bool symmetric, gpumat<REAL> &x, gpuvec<REAL> &values,
+    gpumat<REAL> &vectors)
+  {
+    if (symmetric)
+    {
+      int info = eig_sym_internals(false, x, values, vectors);
+      check_info(info, "syevd");
+    }
+    else
+    {
+      // TODO
+    }
+  }
+  
+  
+  
   template <typename REAL>
   void invert(gpumat<REAL> &x)
   {
