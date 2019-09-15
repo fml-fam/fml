@@ -329,6 +329,90 @@ namespace linalg
   
   
   
+  namespace
+  {
+    template <typename REAL>
+    int eig_sym_internals(const bool only_values, mpimat<REAL> &x,
+      cpuvec<REAL> &values, mpimat<REAL> &vectors)
+    {
+      if (!x.is_square())
+        throw std::runtime_error("'x' must be a square matrix");
+      
+      int info = 0;
+      int val_found, vec_found;
+      char jobz;
+      
+      len_t n = x.nrows();
+      values.resize(n);
+      
+      if (only_values)
+        jobz = 'N';
+      else
+      {
+        jobz = 'V';
+        vectors.resize(n, n, x.bf_rows(), x.bf_cols());
+      }
+      
+      REAL worksize;
+      int lwork, liwork;
+      
+      scalapack::syevr(jobz, 'A', 'U', n, x.data_ptr(), x.desc_ptr(),
+        (REAL) 0.f, (REAL) 0.f, 0, 0, &val_found, &vec_found,
+        values.data_ptr(), vectors.data_ptr(), vectors.desc_ptr(),
+        &worksize, -1, &liwork, -1, &info);
+      
+      lwork = (int) worksize;
+      cpuvec<REAL> work(lwork);
+      cpuvec<int> iwork(liwork);
+      
+      scalapack::syevr(jobz, 'A', 'U', n, x.data_ptr(), x.desc_ptr(),
+        (REAL) 0.f, (REAL) 0.f, 0, 0, &val_found, &vec_found,
+        values.data_ptr(), vectors.data_ptr(), vectors.desc_ptr(),
+        work.data_ptr(), lwork, iwork.data_ptr(), liwork, &info);
+      
+      values.rev();
+      
+      if (!only_values)
+      {
+        // TODO reverse columns
+      }
+      
+      return info;
+    }
+  }
+  
+  template <typename REAL>
+  void eigen(bool symmetric, mpimat<REAL> &x, cpuvec<REAL> &values)
+  {
+    mpimat<REAL> ignored;
+    if (symmetric)
+    {
+      int info = eig_sym_internals(true, x, values, ignored);
+      check_info(info, "syevr");
+    }
+    else
+    {
+      // TODO
+    }
+  }
+  
+  template <typename REAL>
+  void eigen(bool symmetric, mpimat<REAL> &x, cpuvec<REAL> &values,
+    mpimat<REAL> &vectors)
+  {
+    if (symmetric)
+    {
+      int info = eig_sym_internals(true, x, values, vectors);
+      check_info(info, "syevr");
+    }
+    else
+    {
+      // TODO
+    }
+  }
+  
+  
+  
   template <typename REAL>
   void invert(mpimat<REAL> &x)
   {
