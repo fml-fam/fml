@@ -189,6 +189,28 @@ TEMPLATE_TEST_CASE("svd", "[linalg]", float, double)
 
 
 
+TEMPLATE_TEST_CASE("eigen", "[linalg]", float, double)
+{
+  len_t n = 2;
+  
+  cpuvec<TestType> v_cpu(n);
+  v_cpu(0) = (TestType) 2;
+  v_cpu(1) = (TestType) 5;
+  
+  gpuvec<TestType> v = gpuhelpers::cpu2gpu(c, v_cpu);
+  
+  gpumat<TestType> x(c, n, n);
+  x.fill_diag(v);
+  
+  gpuvec<TestType> values;
+  linalg::eigen(true, x, values);
+  
+  v.rev();
+  REQUIRE( v == values );
+}
+
+
+
 TEMPLATE_TEST_CASE("invert", "[linalg]", float, double)
 {
   len_t n = 2;

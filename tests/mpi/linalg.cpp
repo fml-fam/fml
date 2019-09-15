@@ -187,6 +187,26 @@ TEMPLATE_TEST_CASE("svd", "[linalg]", float, double)
 
 
 
+TEMPLATE_TEST_CASE("eigen", "[linalg]", float, double)
+{
+  len_t n = 2;
+  
+  cpuvec<TestType> v(n);
+  v(0) = (TestType) 2;
+  v(1) = (TestType) 5;
+  
+  mpimat<TestType> x(g, n, n, 1, 1);
+  x.fill_diag(v);
+  
+  cpuvec<TestType> values;
+  linalg::eigen(true, x, values);
+  
+  v.rev();
+  REQUIRE( v == values );
+}
+
+
+
 TEMPLATE_TEST_CASE("invert", "[linalg]", float, double)
 {
   len_t n = 2;
