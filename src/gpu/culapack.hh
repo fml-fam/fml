@@ -131,6 +131,40 @@ namespace culapack
   
   
   
+  inline cusolverStatus_t syevd_buflen(cusolverDnHandle_t handle,
+    cusolverEigMode_t jobz, cublasFillMode_t uplo, int n, const float *A,
+    int lda, const float *W, int *lwork)
+  {
+    return cusolverDnSsyevd_bufferSize(handle, jobz, uplo, n, A, lda, W,
+      lwork);
+  }
+  
+  inline cusolverStatus_t syevd_buflen(cusolverDnHandle_t handle,
+    cusolverEigMode_t jobz, cublasFillMode_t uplo, int n, const double *A,
+    int lda, const double *W, int *lwork)
+  {
+    return cusolverDnDsyevd_bufferSize(handle, jobz, uplo, n, A, lda, W,
+      lwork);
+  }
+  
+  inline cusolverStatus_t syevd(cusolverDnHandle_t handle,
+    cusolverEigMode_t jobz, cublasFillMode_t uplo, int n, float *A, int lda,
+    float *W, float *work, int lwork, int *devInfo)
+  {
+    return cusolverDnSsyevd(handle, jobz, uplo, n, A, lda, W, work, lwork,
+      devInfo);
+  }
+  
+  inline cusolverStatus_t syevd(cusolverDnHandle_t handle,
+    cusolverEigMode_t jobz, cublasFillMode_t uplo, int n, double *A, int lda,
+    double *W, double *work, int lwork, int *devInfo)
+  {
+    return cusolverDnDsyevd(handle, jobz, uplo, n, A, lda, W, work, lwork,
+      devInfo);
+  }
+  
+  
+  
   inline cublasStatus_t getri_batched(cublasHandle_t handle, const int n,
     const float **Aarray, const int lda, const int *devIpiv, float **Carray,
     const int ldb, int *info, const int batchSize)
