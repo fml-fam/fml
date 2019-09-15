@@ -430,6 +430,91 @@ namespace linalg
   
   
   
+  namespace
+  {
+    template <typename REAL>
+    int eig_sym_internals(const bool only_values, cpumat<REAL> &x,
+      cpuvec<REAL> &values, cpumat<REAL> &vectors)
+    {
+      if (!x.is_square())
+        throw std::runtime_error("'x' must be a square matrix");
+      
+      int info = 0;
+      int nfound;
+      char jobz;
+      
+      len_t n = x.nrows();
+      values.resize(n);
+      cpuvec<int> support;
+      
+      if (only_values)
+        jobz = 'N';
+      else
+      {
+        jobz = 'V';
+        vectors.resize(n, n);
+        support.resize(2*n);
+      }
+      
+      REAL worksize;
+      int lwork, liwork;
+      lapack::syevr(jobz, 'A', 'U', n, x.data_ptr(), n, (REAL) 0.f, (REAL) 0.f,
+        0, 0, (REAL) 0.f, &nfound, values.data_ptr(), vectors.data_ptr(), n,
+        support.data_ptr(), &worksize, -1, &liwork, -1,
+        &info);
+      
+      lwork = (int) worksize;
+      cpuvec<REAL> work(lwork);
+      cpuvec<int> iwork(liwork);
+      
+      lapack::syevr(jobz, 'A', 'U', n, x.data_ptr(), n, (REAL) 0.f, (REAL) 0.f,
+        0, 0, (REAL) 0.f, &nfound, values.data_ptr(), vectors.data_ptr(), n,
+        support.data_ptr(), work.data_ptr(), lwork, iwork.data_ptr(), liwork,
+        &info);
+      
+      values.rev();
+      
+      if (!only_values)
+      {
+        // TODO reverse columns
+      }
+      
+      return info;
+    }
+  }
+  
+  template <typename REAL>
+  void eigen(bool symmetric, cpumat<REAL> &x, cpuvec<REAL> &values)
+  {
+    cpumat<REAL> ignored;
+    if (symmetric)
+    {
+      int info = eig_sym_internals(true, x, values, ignored);
+      check_info(info, "syevr");
+    }
+    else
+    {
+      // TODO
+    }
+  }
+  
+  template <typename REAL>
+  void eigen(bool symmetric, cpumat<REAL> &x, cpuvec<REAL> &values,
+    cpuvec<REAL> &vectors)
+  {
+    if (symmetric)
+    {
+      int info = eig_sym_internals(true, x, values, vectors);
+      check_info(info, "syevr");
+    }
+    else
+    {
+      // TODO
+    }
+  }
+  
+  
+  
   template <typename REAL>
   void invert(cpumat<REAL> &x)
   {
