@@ -81,6 +81,20 @@ extern void dsyevr_(const char *restrict jobz, const char *restrict range,
 
 
 
+extern void sgeev_(const char *restrict jobvl, const char *restrict jobvr,
+  const int *n, float *restrict a, const int *lda, float *restrict wr,
+  float *restrict wi, float *restrict vl, const int *ldvl,
+  float *restrict vr, const int *ldvr, float *restrict work,
+  const int *restrict lwork, int *restrict info);
+
+extern void dgeev_(const char *restrict jobvl, const char *restrict jobvr,
+  const int *n, double *restrict a, const int *lda, double *restrict wr,
+  double *restrict wi, double *restrict vl, const int *ldvl,
+  double *restrict vr, const int *ldvr, double *restrict work,
+  const int *restrict lwork, int *restrict info);
+
+
+
 extern void sgetri_(const int *n, float *restrict a, const int *lda, 
   int *restrict ipiv, float *restrict work, const int *restrict lwork,
   int *info);

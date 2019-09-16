@@ -97,6 +97,24 @@ namespace lapack
   
   
   
+  inline void geev(const char jobvl, const char jobvr, const int n, float *a,
+    const int lda, float *wr, float *wi, float *vl, const int ldvl, float *vr,
+    const int ldvr, float *work, const int lwork, int *info)
+    {
+      sgeev_(&jobvl, &jobvr, &n, a, &lda, wr, wi, vl, &ldvl, vr, &ldvr, work,
+        &lwork, info);
+    }
+  
+  inline void geev(const char jobvl, const char jobvr, const int n, double *a,
+    const int lda, double *wr, double *wi, double *vl, const int ldvl, double *vr,
+    const int ldvr, double *work, const int lwork, int *info)
+    {
+      dgeev_(&jobvl, &jobvr, &n, a, &lda, wr, wi, vl, &ldvl, vr, &ldvr, work,
+        &lwork, info);
+    }
+  
+  
+  
   inline void getri(const int n, float *a, const int lda, int *ipiv,
     float *work, const int lwork, int *info)
   {
