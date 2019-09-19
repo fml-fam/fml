@@ -51,6 +51,7 @@ class cpumat : public unimat<REAL>
     void fill_rnorm(const REAL mean=0, const REAL sd=1);
     
     void scale(const REAL s);
+    void rev_cols();
     
     bool any_inf() const;
     bool any_nan() const;
@@ -389,6 +390,27 @@ void cpumat<REAL>::scale(const REAL s)
     #pragma omp simd
     for (len_t i=0; i<this->m; i++)
       this->data[i + this->m*j] *= s;
+  }
+}
+
+
+
+template <typename REAL>
+void cpumat<REAL>::rev_cols()
+{
+  len_t last = this->n - 1;
+  
+  for (len_t j=0; j<this->n/2; j++)
+  {
+    #pragma omp parallel for if((this->m)*(this->n) > omputils::OMP_MIN_SIZE)
+    for (len_t i=0; i<this->m; i++)
+    {
+      const REAL tmp = this->data[i + this->m*j];
+      this->data[i + this->m*j] = this->data[i + this->m*last];
+      this->data[i + this->m*last] = tmp;
+    }
+    
+    last--;
   }
 }
 
