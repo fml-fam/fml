@@ -56,6 +56,7 @@ class mpimat : public unimat<REAL>
     void fill_rnorm(const REAL mean=0, const REAL sd=1);
     
     void scale(const REAL s);
+    void rev_cols();
     
     bool any_inf() const;
     bool any_nan() const;
@@ -91,6 +92,8 @@ class mpimat : public unimat<REAL>
     void free();
     void check_params(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols);
     REAL get_val_from_global_index(len_t gi, len_t gj) const;
+    void copy_colchunk_to_buf(const len_t len, REAL *buf, const len_t row_offset, const len_t column);
+    void copy_buf_to_colchunk(const len_t len, REAL *buf, const len_t row_offset, const len_t column);
 };
 
 
@@ -529,6 +532,75 @@ void mpimat<REAL>::scale(const REAL s)
 
 
 template <typename REAL>
+void mpimat<REAL>::rev_cols()
+{
+  len_t buf_len = this->mb;
+  REAL *rev_buf = (REAL*) malloc(buf_len * sizeof(*rev_buf));
+  REAL *tmp = (REAL*) malloc(buf_len * sizeof(*rev_buf));
+  if (rev_buf == NULL || tmp == NULL)
+  {
+    if (rev_buf) std::free(rev_buf);
+    if (tmp) std::free(tmp);
+    throw std::bad_alloc();
+  }
+  
+  for (len_t j=0; j<this->n_local; j++)
+  {
+    for (len_t i=0; i<this->m_local; i+=this->mb)
+    {
+      const int gj = bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
+      if (gj >= this->n/2)
+        break;
+      
+      const int gj_rev = this->n - gj - 1;
+      
+      const int pr = this->g.myrow();
+      const int pc_rev = bcutils::g2p(gj_rev, this->nb, this->g.npcol());
+      
+      if (pc_rev == this->g.mycol())
+      {
+        const int j_rev = bcutils::g2l(gj_rev, this->nb, this->g.npcol());
+        
+        if (j != j_rev)
+        {
+          len_t copylen = std::min(this->mb, this->m-i);
+          this->copy_colchunk_to_buf(copylen, tmp, i, j_rev);
+          this->copy_colchunk_to_buf(copylen, rev_buf, i, j);
+          
+          this->copy_buf_to_colchunk(copylen, rev_buf, i, j_rev);
+          this->copy_buf_to_colchunk(copylen, tmp, i, j);
+        }
+      }
+      else
+      {
+        len_t copylen = std::min(this->mb, this->m-i);
+        this->copy_colchunk_to_buf(copylen, tmp, i, j);
+        
+        // lower indexed column sends/recvs and higher recvs/sends to avoid race condition
+        if (gj < gj_rev)
+        {
+          this->g.send(copylen, 1, tmp, pr, pc_rev);
+          this->g.recv(copylen, 1, rev_buf, pr, pc_rev);
+        }
+        else
+        {
+          this->g.recv(copylen, 1, rev_buf, pr, pc_rev);
+          this->g.send(copylen, 1, tmp, pr, pc_rev);
+        }
+        
+        this->copy_buf_to_colchunk(copylen, rev_buf, i, j);
+      }
+    }
+  }
+  
+  
+  std::free(rev_buf);
+  std::free(tmp);
+}
+
+
+
+template <typename REAL>
 bool mpimat<REAL>::any_inf() const
 {
   int found_inf = 0;
@@ -749,6 +821,24 @@ REAL mpimat<REAL>::get_val_from_global_index(len_t gi, len_t gj) const
   g.allreduce(1, 1, &ret, 'A');
   
   return ret;
+}
+
+
+
+template <typename REAL>
+void mpimat<REAL>::copy_colchunk_to_buf(const len_t len, REAL *buf, const len_t row_offset, const len_t column)
+{
+  for (int i=0; i<len; i++)
+    buf[i] = this->data[row_offset+i + this->m_local*column];
+}
+
+
+
+template <typename REAL>
+void mpimat<REAL>::copy_buf_to_colchunk(const len_t len, REAL *buf, const len_t row_offset, const len_t column)
+{
+  for (int i=0; i<len; i++)
+    this->data[row_offset+i + this->m_local*column] = buf[i];
 }
 
 
