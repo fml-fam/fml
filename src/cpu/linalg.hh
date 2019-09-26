@@ -475,9 +475,7 @@ namespace linalg
       values.rev();
       
       if (!only_values)
-      {
-        // TODO reverse columns
-      }
+        vectors.rev_cols();
       
       return info;
     }
@@ -500,11 +498,11 @@ namespace linalg
   
   template <typename REAL>
   void eigen(bool symmetric, cpumat<REAL> &x, cpuvec<REAL> &values,
-    cpuvec<REAL> &vectors)
+    cpumat<REAL> &vectors)
   {
     if (symmetric)
     {
-      int info = eig_sym_internals(true, x, values, vectors);
+      int info = eig_sym_internals(false, x, values, vectors);
       check_info(info, "syevr");
     }
     else
