@@ -373,9 +373,7 @@ namespace linalg
       values.rev();
       
       if (!only_values)
-      {
-        // TODO reverse columns
-      }
+        vectors.rev_cols();
       
       return info;
     }
@@ -402,7 +400,7 @@ namespace linalg
   {
     if (symmetric)
     {
-      int info = eig_sym_internals(true, x, values, vectors);
+      int info = eig_sym_internals(false, x, values, vectors);
       check_info(info, "syevr");
     }
     else
