@@ -49,6 +49,7 @@ class gpumat : public unimat<REAL>
     void fill_rnorm(const REAL mean=0, const REAL sd=1);
     
     void scale(const REAL s);
+    void rev_rows();
     void rev_cols();
     
     bool any_inf() const;
@@ -367,6 +368,17 @@ template <typename REAL>
 void gpumat<REAL>::scale(const REAL s)
 {
   
+}
+
+
+
+template <typename REAL>
+void gpumat<REAL>::rev_rows()
+{
+  dim3 dim_block(16, 16);
+  dim3 dim_grid((this->m + 16 - 1) / 16, (this->n + 16 - 1) / 16);
+  kernelfuns::kernel_rev_rows<<<dim_grid, dim_block>>>(this->m, this->n, this->data);
+  this->c->check();
 }
 
 

@@ -10,6 +10,22 @@
 namespace kernelfuns
 {
   template <typename REAL>
+  __global__ void kernel_rev_rows(const len_t m, const len_t n, REAL *data)
+  {
+    int i = blockDim.x*blockIdx.x + threadIdx.x;
+    int j = blockDim.y*blockIdx.y + threadIdx.y;
+    
+    if (i < m/2 && j < n)
+    {
+      REAL tmp = data[i + m*j];
+      data[i + m*j] = data[m-i-1 + m*j];
+      data[m-i-1 + m*j] = tmp;
+    }
+  }
+  
+  
+  
+  template <typename REAL>
   __global__ void kernel_rev_cols(const len_t m, const len_t n, REAL *data)
   {
     int i = blockDim.x*blockIdx.x + threadIdx.x;
