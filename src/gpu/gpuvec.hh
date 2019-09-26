@@ -297,7 +297,7 @@ void gpuvec<T>::scale(const T s)
 template <typename T>
 void gpuvec<T>::rev()
 {
-  kernelfuns::kernel_rev_vec<<<1, this->_size>>>(this->_size, this->data);
+  kernelfuns::kernel_rev_cols<<<this->_size, 1>>>(this->_size, 1, this->data);
   this->c->check();
 }
 

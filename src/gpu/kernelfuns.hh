@@ -10,16 +10,17 @@
 namespace kernelfuns
 {
   template <typename REAL>
-  __global__ void kernel_rev_vec(const len_t n, REAL *data)
+  __global__ void kernel_rev_cols(const len_t m, const len_t n, REAL *data)
   {
-    __shared__ REAL shmem[64];
+    int i = blockDim.x*blockIdx.x + threadIdx.x;
+    int j = blockDim.y*blockIdx.y + threadIdx.y;
     
-    int ind = threadIdx.x;
-    int ind_rev = n - ind - 1;
-    
-    shmem[ind] = data[ind];
-    __syncthreads();
-    data[ind] = shmem[ind_rev];
+    if (i < m && j < n/2)
+    {
+      REAL tmp = data[i + m*j];
+      data[i + m*j] = data[i + m*(n-j-1)];
+      data[i + m*(n-j-1)] = tmp;
+    }
   }
   
   
