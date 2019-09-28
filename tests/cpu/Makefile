@@ -16,7 +16,7 @@ cpumat: $(OBJS)
 	$(CXX) $(OBJS) -o cpumat $(OMPFLAGS) $(CPU_LDFLAGS)
 
 miniclean:
-	rm -rf cpumat cpumat.o linalg.o
+	( ls *.o | grep -v test-main | xargs rm -f )
 
 clean:
 	rm -rf *.o cpumat

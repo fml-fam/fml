@@ -19,7 +19,7 @@ gpumat: $(OBJS)
 	$(NVCC) $(OBJS) -o gpumat $(GPU_LDFLAGS) -Xcompiler "$(OMPFLAGS)"
 
 miniclean:
-	rm -rf gpumat card.o gpumat.o linalg.o
+	( ls *.o | grep -v test-main | xargs rm -f )
 
 clean:
 	rm -rf *.o gpumat

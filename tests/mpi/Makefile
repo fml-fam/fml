@@ -19,7 +19,7 @@ mpimat: $(OBJS)
 	$(MPICXX) $(CXXFLAGS) $(OBJS) -o mpimat $(OMPFLAGS) $(MPI_LDFLAGS)
 
 miniclean:
-	rm -rf linalg.o mpimat.o mpimat
+	( ls *.o | grep -v test-main | xargs rm -f )
 
 clean:
 	rm -rf *.o mpimat
