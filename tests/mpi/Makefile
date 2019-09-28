@@ -16,7 +16,7 @@ OBJS=$(SRCS:.cpp=.o )
 	$(MPICXX) $(CXXFLAGS) $(CPPFLAGS) $(WARNFLAGS) $(OMPFLAGS) -c $< -o $@
 
 mpimat: $(OBJS)
-	$(MPICXX) $(CXXFLAGS) test-main.o mpimat.o linalg.o -o mpimat $(OMPFLAGS) $(MPI_LDFLAGS)
+	$(MPICXX) $(CXXFLAGS) $(OBJS) -o mpimat $(OMPFLAGS) $(MPI_LDFLAGS)
 
 miniclean:
 	rm -rf linalg.o mpimat.o mpimat
