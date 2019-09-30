@@ -50,6 +50,8 @@ class cpumat : public unimat<REAL>
     void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
     void fill_rnorm(const REAL mean=0, const REAL sd=1);
     
+    void diag(cpuvec<REAL> &v);
+    void antidiag(cpuvec<REAL> &v);
     void scale(const REAL s);
     void rev_cols();
     
@@ -377,6 +379,34 @@ void cpumat<REAL>::fill_rnorm(const REAL mean, const REAL sd)
 {
   uint32_t seed = fmlutils::get_seed();
   this->fill_rnorm(seed, mean, sd);
+}
+
+
+
+template <typename REAL>
+void cpumat<REAL>::diag(cpuvec<REAL> &v)
+{
+  const len_t minmn = std::min(this->m, this->n);
+  v.resize(minmn);
+  REAL *v_ptr = v.data_ptr();
+  
+  #pragma omp for simd
+  for (len_t i=0; i<minmn; i++)
+    v_ptr[i] = this->data[i + this->m*i];
+}
+
+
+
+template <typename REAL>
+void cpumat<REAL>::antidiag(cpuvec<REAL> &v)
+{
+  const len_t minmn = std::min(this->m, this->n);
+  v.resize(minmn);
+  REAL *v_ptr = v.data_ptr();
+  
+  #pragma omp for simd
+  for (len_t i=0; i<minmn; i++)
+    v_ptr[i] = this->data[(this->m-1-i) + this->m*i];
 }
 
 
