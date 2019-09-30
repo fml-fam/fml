@@ -129,3 +129,25 @@ TEMPLATE_TEST_CASE("indexing", "[mpimat]", float, double)
   y.fill_val(1.f);
   REQUIRE( (x != y) );
 }
+
+
+
+TEMPLATE_TEST_CASE("diag", "[cpumat]", float, double)
+{
+  len_t m = 4;
+  len_t n = 3;
+  
+  mpimat<TestType> x(g, m, n, 1, 1);
+  x.fill_linspace(1, m*n);
+  
+  cpuvec<TestType> v;
+  x.diag(v);
+  REQUIRE( fltcmp::eq(v(0), 1) );
+  REQUIRE( fltcmp::eq(v(1), 6) );
+  REQUIRE( fltcmp::eq(v(2), 11) );
+  
+  x.antidiag(v);
+  REQUIRE( fltcmp::eq(v(0), 4) );
+  REQUIRE( fltcmp::eq(v(1), 7) );
+  REQUIRE( fltcmp::eq(v(2), 10) );
+}

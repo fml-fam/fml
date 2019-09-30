@@ -55,6 +55,8 @@ class mpimat : public unimat<REAL>
     void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
     void fill_rnorm(const REAL mean=0, const REAL sd=1);
     
+    void diag(cpuvec<REAL> &v);
+    void antidiag(cpuvec<REAL> &v);
     void scale(const REAL s);
     void rev_cols();
     
@@ -513,6 +515,58 @@ void mpimat<REAL>::fill_rnorm(const REAL mean, const REAL sd)
 {
   uint32_t seed = fmlutils::get_seed() + (g.myrow() + g.nprow()*g.mycol());
   this->fill_rnorm(seed, mean, sd);
+}
+
+
+
+template <typename REAL>
+void mpimat<REAL>::diag(cpuvec<REAL> &v)
+{
+  const len_t minmn = std::min(this->m, this->n);
+  v.resize(minmn);
+  v.fill_zero();
+  REAL *v_ptr = v.data_ptr();
+  
+  for (len_t gi=0; gi<minmn; gi++)
+  {
+    const len_local_t i = bcutils::g2l(gi, this->mb, this->g.nprow());
+    const len_local_t j = bcutils::g2l(gi, this->nb, this->g.npcol());
+    
+    const int pr = bcutils::g2p(gi, this->mb, this->g.nprow());
+    const int pc = bcutils::g2p(gi, this->nb, this->g.npcol());
+    
+    if (pr == this->g.myrow() && pc == this->g.mycol())
+      v_ptr[gi] = this->data[i + this->m_local*j];
+  }
+  
+  
+  this->g.allreduce(minmn, 1, v_ptr, 'A');
+}
+
+
+
+template <typename REAL>
+void mpimat<REAL>::antidiag(cpuvec<REAL> &v)
+{
+  const len_t minmn = std::min(this->m, this->n);
+  v.resize(minmn);
+  v.fill_zero();
+  REAL *v_ptr = v.data_ptr();
+  
+  for (len_t gi=0; gi<minmn; gi++)
+  {
+    const len_local_t i = bcutils::g2l(this->m-1-gi, this->mb, this->g.nprow());
+    const len_local_t j = bcutils::g2l(gi, this->nb, this->g.npcol());
+    
+    const int pr = bcutils::g2p(this->m-1-gi, this->mb, this->g.nprow());
+    const int pc = bcutils::g2p(gi, this->nb, this->g.npcol());
+    
+    if (pr == this->g.myrow() && pc == this->g.mycol())
+      v_ptr[gi] = this->data[i + this->m_local*j];
+  }
+  
+  
+  this->g.allreduce(minmn, 1, v_ptr, 'A');
 }
 
 
