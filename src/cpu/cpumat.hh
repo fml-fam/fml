@@ -53,6 +53,7 @@ class cpumat : public unimat<REAL>
     void diag(cpuvec<REAL> &v);
     void antidiag(cpuvec<REAL> &v);
     void scale(const REAL s);
+    void rev_rows();
     void rev_cols();
     
     bool any_inf() const;
@@ -426,13 +427,31 @@ void cpumat<REAL>::scale(const REAL s)
 
 
 template <typename REAL>
+void cpumat<REAL>::rev_rows()
+{
+  for (len_t j=0; j<this->n; j++)
+  {
+    len_t last = this->m - 1;
+    for (len_t i=0; i<this->m/2; i++)
+    {
+      const REAL tmp = this->data[i + this->m*j];
+      this->data[i + this->m*j] = this->data[last + this->m*j];
+      this->data[last + this->m*j] = tmp;
+    }
+    
+    last--;
+  }
+}
+
+
+
+template <typename REAL>
 void cpumat<REAL>::rev_cols()
 {
   len_t last = this->n - 1;
   
   for (len_t j=0; j<this->n/2; j++)
   {
-    #pragma omp parallel for if((this->m)*(this->n) > omputils::OMP_MIN_SIZE)
     for (len_t i=0; i<this->m; i++)
     {
       const REAL tmp = this->data[i + this->m*j];
