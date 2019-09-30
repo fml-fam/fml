@@ -87,7 +87,7 @@ TEMPLATE_TEST_CASE("indexing", "[cpumat]", float, double)
   for (len_t i=0; i<n*n; i++)
     x(i) = (TestType) i+1;
   
-  y.fill_linspace(1.f, (TestType) n*n);
+  y.fill_linspace(1, n*n);
   REQUIRE( (x == y) );
   
   y.fill_val(1.f);

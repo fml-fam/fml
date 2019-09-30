@@ -123,7 +123,7 @@ TEMPLATE_TEST_CASE("indexing", "[mpimat]", float, double)
   mpimat<TestType> x = mpihelpers::cpu2mpi(x_cpu, g, 1, 1);
   mpimat<TestType> y(g, n, n, 1, 1);
   
-  y.fill_linspace(1.f, (TestType) n*n);
+  y.fill_linspace(1, n*n);
   REQUIRE( (x == y) );
   
   y.fill_val(1.f);

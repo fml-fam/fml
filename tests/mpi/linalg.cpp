@@ -14,8 +14,8 @@ TEMPLATE_TEST_CASE("matrix addition", "[linalg]", float, double)
   
   mpimat<TestType> x(g, n, n, 1, 1);
   mpimat<TestType> y(g, n, n, 1, 1);
-  x.fill_linspace(1.f, (TestType) n*n);
-  y.fill_linspace((TestType) n*n, 1.f);
+  x.fill_linspace(1, n*n);
+  y.fill_linspace(n*n, 1);
   
   auto z = linalg::add(false, false, (TestType)1.f, (TestType)1.f, x, y);
   
@@ -51,8 +51,8 @@ TEMPLATE_TEST_CASE("matrix multiplication", "[linalg]", float, double)
   
   mpimat<TestType> x(g, n, n, 1, 1);
   mpimat<TestType> y(g, n, n, 1, 1);
-  x.fill_linspace(1.f, (TestType) n*n);
-  y.fill_linspace((TestType) n*n, 1.f);
+  x.fill_linspace(1, n*n);
+  y.fill_linspace(n*n, 1);
   
   mpimat<TestType> z = linalg::matmult(false, false, (TestType)1, x, y);
   REQUIRE( z.nrows() == n );
@@ -90,7 +90,7 @@ TEMPLATE_TEST_CASE("crossprod and tcrossprod", "[linalg]", float, double)
   len_t n = 2;
   
   mpimat<TestType> x(g, m, n, 1, 1);
-  x.fill_linspace(1.f, (TestType) m*n);
+  x.fill_linspace(1, m*n);
   
   // regular api
   mpimat<TestType> x_cp = linalg::crossprod((TestType)1, x);
@@ -113,7 +113,7 @@ TEMPLATE_TEST_CASE("crossprod and tcrossprod", "[linalg]", float, double)
   REQUIRE( fltcmp::eq(x_tcp(2, 2), 45) );
   
   // noalloc api
-  x.fill_linspace((TestType) m*n, 1.f);
+  x.fill_linspace(m*n, 1);
   
   linalg::crossprod((TestType)1, x, x_cp);
   REQUIRE( fltcmp::eq(x_cp(0, 0), 77) );
@@ -137,7 +137,7 @@ TEMPLATE_TEST_CASE("xpose", "[linalg]", float, double)
   len_t n = 2;
   
   mpimat<TestType> x(g, m, n, 1, 1);
-  x.fill_linspace(1.f, (TestType) m*n);
+  x.fill_linspace(1, m*n);
   
   mpimat<TestType> tx = linalg::xpose(x);
   REQUIRE( tx.nrows() == x.ncols() );
@@ -155,7 +155,7 @@ TEMPLATE_TEST_CASE("lu", "[linalg]", float, double)
   len_t n = 2;
   
   mpimat<TestType> x(g, n, n, 1, 1);
-  x.fill_linspace(1.f, (TestType) n*n);
+  x.fill_linspace(1, n*n);
   
   linalg::lu(x);
   
@@ -212,7 +212,7 @@ TEMPLATE_TEST_CASE("invert", "[linalg]", float, double)
   len_t n = 2;
   
   mpimat<TestType> x(g, n, n, 1, 1);
-  x.fill_linspace(1.f, (TestType) n*n);
+  x.fill_linspace(1, n*n);
   
   linalg::invert(x);
   
