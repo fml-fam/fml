@@ -167,6 +167,20 @@ TEMPLATE_TEST_CASE("lu", "[linalg]", float, double)
 
 
 
+TEMPLATE_TEST_CASE("trace", "[linalg]", float, double)
+{
+  len_t n = 2;
+  
+  mpimat<TestType> x(g, n, n, 1, 1);
+  x.fill_linspace(1, n*n);
+  
+  TestType tr = linalg::trace(x);
+  
+  REQUIRE( fltcmp::eq(tr, 5) );
+}
+
+
+
 TEMPLATE_TEST_CASE("svd", "[linalg]", float, double)
 {
   len_t n = 2;

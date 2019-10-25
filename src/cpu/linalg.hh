@@ -365,6 +365,22 @@ namespace linalg
   
   
   
+  template <typename REAL>
+  REAL trace(const cpumat<REAL> &x)
+  {
+    const REAL *x_d = x.data_ptr();
+    const len_t m = x.nrows();
+    const len_t minmn = std::min(m, x.ncols());
+    
+    REAL tr = 0;
+    for (len_t i=0; i<minmn; i++)
+      tr += x_d[i + i*m];
+    
+    return tr;
+  }
+  
+  
+  
   namespace
   {
     template <typename REAL>
