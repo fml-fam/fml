@@ -464,13 +464,10 @@ namespace linalg
       
       check_cusolver_ret(check, "syevd");
       
-      values.rev();
-      
       if (!only_values)
       {
         vectors.resize(c, n, n);
         gpuhelpers::copy(x, vectors);
-        // TODO reverse columns
       }
       
       return info;

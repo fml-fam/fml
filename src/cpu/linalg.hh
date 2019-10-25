@@ -472,11 +472,6 @@ namespace linalg
         support.data_ptr(), work.data_ptr(), lwork, iwork.data_ptr(), liwork,
         &info);
       
-      values.rev();
-      
-      if (!only_values)
-        vectors.rev_cols();
-      
       return info;
     }
   }

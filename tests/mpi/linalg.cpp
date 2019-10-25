@@ -201,7 +201,6 @@ TEMPLATE_TEST_CASE("eigen", "[linalg]", float, double)
   cpuvec<TestType> values;
   linalg::eigen(true, x, values);
   
-  v.rev();
   REQUIRE( v == values );
 }
 
