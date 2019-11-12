@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <stdexcept>
+#include <typeinfo>
 #include <vector>
 
 
@@ -31,29 +32,20 @@ class comm
     std::vector<int> jid(const int n);
     void barrier();
     
-    void send(int n, int *data, int dest, int tag=0);
-    void send(int n, uint64_t *data, int dest, int tag=0);
-    void send(int n, float *data, int dest, int tag=0);
-    void send(int n, double *data, int dest, int tag=0);
+    template <typename T>
+    void send(int n, T *data, int dest, int tag=0);
     
-    void recv(int n, int *data, int source, int tag=0);
-    void recv(int n, uint64_t *data, int source, int tag=0);
-    void recv(int n, float *data, int source, int tag=0);
-    void recv(int n, double *data, int source, int tag=0);
+    template <typename T>
+    void recv(int n, T *data, int source, int tag=0);
     
-    void allreduce(int n, int *data);
-    void allreduce(int n, uint64_t *data);
-    void allreduce(int n, float *data);
-    void allreduce(int n, double *data);
+    template <typename T>
+    void allreduce(int n, T *data);
     
-    void reduce(int n, int *data, int root=0);
-    void reduce(int n, uint64_t *data, int root=0);
-    void reduce(int n, float *data, int root=0);
-    void reduce(int n, double *data, int root=0);
+    template <typename T>
+    void reduce(int n, T *data, int root=0);
     
-    void bcast(int n, int *data, int root);
-    void bcast(int n, float *data, int root);
-    void bcast(int n, double *data, int root);
+    template <typename T>
+    void bcast(int n, T *data, int root);
     
     ///@{
     /// The MPI communicator.
@@ -73,6 +65,8 @@ class comm
     void init();
     void set_metadata();
     void check_ret(int ret);
+    template <typename T>
+    MPI_Datatype mpi_type_lookup(T *x) const;
 };
 
 
@@ -238,27 +232,11 @@ inline void comm::barrier()
  * @param[in] tag Optional MPI tag (default=0).
  */
 ///@{
-inline void comm::send(int n, int *data, int dest, int tag)
+template <typename T>
+inline void comm::send(int n, T *data, int dest, int tag)
 {
-  int ret = MPI_Send(data, n, MPI_INT, dest, tag, _comm);
-  check_ret(ret);
-}
-
-inline void comm::send(int n, uint64_t *data, int dest, int tag)
-{
-  int ret = MPI_Send(data, n, MPI_UINT64_T, dest, tag, _comm);
-  check_ret(ret);
-}
-
-inline void comm::send(int n, float *data, int dest, int tag)
-{
-  int ret = MPI_Send(data, n, MPI_FLOAT, dest, tag, _comm);
-  check_ret(ret);
-}
-
-inline void comm::send(int n, double *data, int dest, int tag)
-{
-  int ret = MPI_Send(data, n, MPI_DOUBLE, dest, tag, _comm);
+  MPI_Datatype type = mpi_type_lookup(data);
+  int ret = MPI_Send(data, n, type, dest, tag, _comm);
   check_ret(ret);
 }
 ///@}
@@ -275,27 +253,11 @@ inline void comm::send(int n, double *data, int dest, int tag)
  * @param[in] tag Optional MPI tag (default=0).
  */
 ///@{
-inline void comm::recv(int n, int *data, int source, int tag)
+template <typename T>
+inline void comm::recv(int n, T *data, int source, int tag)
 {
-  int ret = MPI_Recv(data, n, MPI_INT, source, tag, _comm, MPI_STATUS_IGNORE);
-  check_ret(ret);
-}
-
-inline void comm::recv(int n, uint64_t *data, int source, int tag)
-{
-  int ret = MPI_Recv(data, n, MPI_UINT64_T, source, tag, _comm, MPI_STATUS_IGNORE);
-  check_ret(ret);
-}
-
-inline void comm::recv(int n, float *data, int source, int tag)
-{
-  int ret = MPI_Recv(data, n, MPI_FLOAT, source, tag, _comm, MPI_STATUS_IGNORE);
-  check_ret(ret);
-}
-
-inline void comm::recv(int n, double *data, int source, int tag)
-{
-  int ret = MPI_Recv(data, n, MPI_DOUBLE, source, tag, _comm, MPI_STATUS_IGNORE);
+  MPI_Datatype type = mpi_type_lookup(data);
+  int ret = MPI_Recv(data, n, type, source, tag, _comm, MPI_STATUS_IGNORE);
   check_ret(ret);
 }
 ///@}
@@ -311,27 +273,11 @@ inline void comm::recv(int n, double *data, int source, int tag)
  * @param[in,out] data The data to reduce.
  */
 ///@{
-inline void comm::allreduce(int n, int *data)
+template <typename T>
+inline void comm::allreduce(int n, T *data)
 {
-  int ret = MPI_Allreduce(MPI_IN_PLACE, data, n, MPI_INT, MPI_SUM, _comm);
-  check_ret(ret);
-}
-
-inline void comm::allreduce(int n, uint64_t *data)
-{
-  int ret = MPI_Allreduce(MPI_IN_PLACE, data, n, MPI_UINT64_T, MPI_SUM, _comm);
-  check_ret(ret);
-}
-
-inline void comm::allreduce(int n, float *data)
-{
-  int ret = MPI_Allreduce(MPI_IN_PLACE, data, n, MPI_FLOAT, MPI_SUM, _comm);
-  check_ret(ret);
-}
-
-inline void comm::allreduce(int n, double *data)
-{
-  int ret = MPI_Allreduce(MPI_IN_PLACE, data, n, MPI_DOUBLE, MPI_SUM, _comm);
+  MPI_Datatype type = mpi_type_lookup(data);
+  int ret = MPI_Allreduce(MPI_IN_PLACE, data, n, type, MPI_SUM, _comm);
   check_ret(ret);
 }
 ///@}
@@ -346,27 +292,11 @@ inline void comm::allreduce(int n, double *data)
  * @param[in] root The rank in the MPI communicator to receive the final answer.
  */
 ///@{
-inline void comm::reduce(int n, int *data, int root)
+template <typename T>
+inline void comm::reduce(int n, T *data, int root)
 {
-  int ret = MPI_Reduce(MPI_IN_PLACE, data, n, MPI_INT, MPI_SUM, root, _comm);
-  check_ret(ret);
-}
-
-inline void comm::reduce(int n, uint64_t *data, int root)
-{
-  int ret = MPI_Reduce(MPI_IN_PLACE, data, n, MPI_UINT64_T, MPI_SUM, root, _comm);
-  check_ret(ret);
-}
-
-inline void comm::reduce(int n, float *data, int root)
-{
-  int ret = MPI_Reduce(MPI_IN_PLACE, data, n, MPI_FLOAT, MPI_SUM, root, _comm);
-  check_ret(ret);
-}
-
-inline void comm::reduce(int n, double *data, int root)
-{
-  int ret = MPI_Reduce(MPI_IN_PLACE, data, n, MPI_DOUBLE, MPI_SUM, root, _comm);
+  MPI_Datatype type = mpi_type_lookup(data);
+  int ret = MPI_Reduce(MPI_IN_PLACE, data, n, type, MPI_SUM, root, _comm);
   check_ret(ret);
 }
 ///@}
@@ -383,21 +313,11 @@ inline void comm::reduce(int n, double *data, int root)
  * @param[in] root The rank in the MPI communicator that does the broadcasting.
  */
 ///@{
-inline void comm::bcast(int n, int *data, int root)
+template <typename T>
+inline void comm::bcast(int n, T *data, int root)
 {
-  int ret = MPI_Bcast(data, n, MPI_INT, root, _comm);
-  check_ret(ret);
-}
-
-inline void comm::bcast(int n, float *data, int root)
-{
-  int ret = MPI_Bcast(data, n, MPI_FLOAT, root, _comm);
-  check_ret(ret);
-}
-
-inline void comm::bcast(int n, double *data, int root)
-{
-  int ret = MPI_Bcast(data, n, MPI_DOUBLE, root, _comm);
+  MPI_Datatype type = mpi_type_lookup(data);
+  int ret = MPI_Bcast(data, n, type, root, _comm);
   check_ret(ret);
 }
 ///@}
@@ -449,6 +369,64 @@ inline void comm::check_ret(int ret)
     throw std::runtime_error(s);
   }
 }
+
+
+
+template <typename T>
+inline MPI_Datatype comm::mpi_type_lookup(T *x) const
+{
+  (void) x;
+  
+  // C types
+  if (typeid(T) == typeid(char))
+    return MPI_CHAR;
+  else if (typeid(T) == typeid(double))
+    return MPI_DOUBLE;
+  else if (typeid(T) == typeid(float))
+    return MPI_FLOAT;
+  else if (typeid(T) == typeid(int))
+    return MPI_INT;
+  else if (typeid(T) == typeid(long))
+    return MPI_LONG;
+  else if (typeid(T) == typeid(long double))
+    return MPI_LONG_DOUBLE;
+  else if (typeid(T) == typeid(long long))
+    return MPI_LONG_LONG_INT;
+  else if (typeid(T) == typeid(short))
+    return MPI_SHORT;
+  else if (typeid(T) == typeid(unsigned int))
+    return MPI_UNSIGNED;
+  else if (typeid(T) == typeid(unsigned char))
+    return MPI_UNSIGNED_CHAR;
+  else if (typeid(T) == typeid(unsigned long))
+    return MPI_UNSIGNED_LONG;
+  else if (typeid(T) == typeid(unsigned short))
+    return MPI_UNSIGNED_SHORT;
+  else if (typeid(T) == typeid(uint32_t))
+    return MPI_UINT32_T;
+  
+  // stdint types
+  else if (typeid(T) == typeid(int8_t))
+    return MPI_INT8_T;
+  else if (typeid(T) == typeid(int16_t))
+    return MPI_INT16_T;
+  else if (typeid(T) == typeid(int32_t))
+    return MPI_INT32_T;
+  else if (typeid(T) == typeid(int64_t))
+    return MPI_INT64_T;
+  else if (typeid(T) == typeid(uint8_t))
+    return MPI_UINT8_T;
+  else if (typeid(T) == typeid(uint16_t))
+    return MPI_UINT16_T;
+  else if (typeid(T) == typeid(uint32_t))
+    return MPI_UINT32_T;
+  else if (typeid(T) == typeid(uint64_t))
+    return MPI_UINT64_T;
+  
+  else
+    return MPI_DATATYPE_NULL;
+}
+
 
 
 #endif
