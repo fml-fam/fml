@@ -25,7 +25,7 @@ class comm
     
     comm create(MPI_Group group);
     comm split(int color, int key);
-    
+    void free();
     void finalize();
     
     void printf(int rank, const char *fmt, ...);
@@ -147,6 +147,21 @@ inline comm comm::split(int color, int key)
   
   comm ret(newcomm);
   return ret;
+}
+
+
+
+/**
+ * @brief Destroy communicator.
+ */
+inline void comm::free()
+{
+  int mpi_ret = MPI_Comm_free(&_comm);
+  check_ret(mpi_ret);
+  
+  _comm = MPI_COMM_NULL;
+  _rank = -1;
+  _size = -1;
 }
 
 
