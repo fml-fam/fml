@@ -39,6 +39,17 @@ enum gridshape
   PROC_GRID_TALL
 };
 
+/**
+ * @ingroup Enumerations
+ * @brief Supported operations in reduce/allreduce.
+ */
+enum blacsops
+{
+  BLACS_SUM,
+  BLACS_MAX,
+  BLACS_MIN
+};
+
 
 /**
  * @brief 2-dimensional MPI process grid. 
@@ -46,39 +57,41 @@ enum gridshape
 class grid
 {
   public:
+    // constructors/destructor and comm management
     grid();
     grid(const gridshape gridtype);
-    
-    void inherit_grid(const int blacs_context);
-    
+    void set(const int blacs_context);
     void exit();
     void finalize(const bool mpi_continue=false);
     
+    // utilities
     void printf(const int row, const int col, const char *fmt, ...) const;
     void info() const;
-    
     bool rank0() const;
+    
+    // send/recv
+    void send(const int m, const int n, const int *x, const int rdest=0, const int cdest=0) const;
+    void send(const int m, const int n, const float *x, const int rdest=0, const int cdest=0) const;
+    void send(const int m, const int n, const double *x, const int rdest=0, const int cdest=0) const;
+    
+    void recv(const int m, const int n, int *x, const int rsrc=0, const int csrc=0) const;
+    void recv(const int m, const int n, float *x, const int rsrc=0, const int csrc=0) const;
+    void recv(const int m, const int n, double *x, const int rsrc=0, const int csrc=0) const;
+    
+    // collectives
     void barrier(const char scope) const;
     
-    void send(const int m, const int n, const int *x, const int rdest, const int cdest) const;
-    void send(const int m, const int n, const float *x, const int rdest, const int cdest) const;
-    void send(const int m, const int n, const double *x, const int rdest, const int cdest) const;
+    void allreduce(const int m, const int n, int *x, const char scope, const blacsops op=BLACS_SUM) const;
+    void allreduce(const int m, const int n, float *x, const char scope, const blacsops op=BLACS_SUM) const;
+    void allreduce(const int m, const int n, double *x, const char scope, const blacsops op=BLACS_SUM) const;
     
-    void recv(const int m, const int n, int *x, const int rdest, const int cdest) const;
-    void recv(const int m, const int n, float *x, const int rdest, const int cdest) const;
-    void recv(const int m, const int n, double *x, const int rdest, const int cdest) const;
+    void reduce(const int m, const int n, int *x, const char scope, const blacsops op=BLACS_SUM, const int rdest=0, const int cdest=0) const;
+    void reduce(const int m, const int n, float *x, const char scope, const blacsops op=BLACS_SUM, const int rdest=0, const int cdest=0) const;
+    void reduce(const int m, const int n, double *x, const char scope, const blacsops op=BLACS_SUM, const int rdest=0, const int cdest=0) const;
     
-    void allreduce(const int m, const int n, int *x, const char scope) const;
-    void allreduce(const int m, const int n, float *x, const char scope) const;
-    void allreduce(const int m, const int n, double *x, const char scope) const;
-    
-    void reduce(const int m, const int n, int *x, const char scope, const int rdest, const int cdest) const;
-    void reduce(const int m, const int n, float *x, const char scope, const int rdest, const int cdest) const;
-    void reduce(const int m, const int n, double *x, const char scope, const int rdest, const int cdest) const;
-    
-    void bcast(const int m, const int n, int *x, const char scope, const int rsrc, const int csrc) const;
-    void bcast(const int m, const int n, float *x, const char scope, const int rsrc, const int csrc) const;
-    void bcast(const int m, const int n, double *x, const char scope, const int rsrc, const int csrc) const;
+    void bcast(const int m, const int n, int *x, const char scope, const int rsrc=0, const int csrc=0) const;
+    void bcast(const int m, const int n, float *x, const char scope, const int rsrc=0, const int csrc=0) const;
+    void bcast(const int m, const int n, double *x, const char scope, const int rsrc=0, const int csrc=0) const;
     
     
     ///@{
@@ -120,7 +133,7 @@ class grid
 // public
 // -----------------------------------------------------------------------------
 
-// constructors/destructor
+// constructors/destructor and grid management
 
 /**
  * @brief Create a new grid object. Does not initialize any BLACS or MPI data.
@@ -175,7 +188,7 @@ inline grid::grid(const gridshape gridtype)
  * 
  * @param blacs_context The BLACS integer context number.
  */
-inline void grid::inherit_grid(const int blacs_context)
+inline void grid::set(const int blacs_context)
 {
   _ictxt = blacs_context;
   Cblacs_gridinfo(_ictxt, &_nprow, &_npcol, &_myrow, &_mycol);
@@ -187,8 +200,6 @@ inline void grid::inherit_grid(const int blacs_context)
 }
 
 
-
-// mpi/blacs cleanup
 
 /**
  * @brief Exits the BLACS grid, but does not shutdown BLACS/MPI.
@@ -219,7 +230,7 @@ inline void grid::finalize(const bool mpi_continue)
 
 
 
-// printers
+// utilities
 
 /**
  * @brief Helper wrapper around the C standard I/O 'printf()' function.
@@ -255,8 +266,6 @@ inline void grid::info() const
 
 
 
-// misc
-
 /**
  * @brief Check if the executing process is rank 0, i.e., if the process row and
    column are 0.
@@ -268,18 +277,7 @@ inline bool grid::rank0() const
 
 
 
-/**
- * @brief Execute a barrier across the specified scope of the BLACS grid.
- * 
- * @param scope The scope of the operation. For just rows use 'R', just columns
-   use 'C', and for all processes use 'A'.
- */
-inline void grid::barrier(const char scope) const
-{
-  Cblacs_barrier(_ictxt, &scope);
-}
-
-
+// send/recv
 
 /**
  * @brief Point-to-point send. Should be matched by a corresponding 'recv' call.
@@ -334,6 +332,21 @@ inline void grid::recv(const int m, const int n, double *x, const int rsrc, cons
 
 
 
+// collectives
+
+/**
+ * @brief Execute a barrier across the specified scope of the BLACS grid.
+ * 
+ * @param scope The scope of the operation. For just rows use 'R', just columns
+   use 'C', and for all processes use 'A'.
+ */
+inline void grid::barrier(const char scope) const
+{
+  Cblacs_barrier(_ictxt, &scope);
+}
+
+
+
 /**
  * @brief Sum reduce operation across all processes in the grid.
  * 
@@ -343,22 +356,19 @@ inline void grid::recv(const int m, const int n, double *x, const int rsrc, cons
    use 'C', and for all processes use 'A'.
  */
 ///@{
-inline void grid::allreduce(const int m, const int n, int *x, const char scope) const
+inline void grid::allreduce(const int m, const int n, int *x, const char scope, const blacsops op) const
 {
-  char top = ' ';
-  Cigsum2d(_ictxt, &scope, &top, m, n, x, m, -1, -1);
+  reduce(m, n, x, scope, op, -1, -1);
 }
 
-inline void grid::allreduce(const int m, const int n, float *x, const char scope) const
+inline void grid::allreduce(const int m, const int n, float *x, const char scope, const blacsops op) const
 {
-  char top = ' ';
-  Csgsum2d(_ictxt, &scope, &top, m, n, x, m, -1, -1);
+  reduce(m, n, x, scope, op, -1, -1);
 }
 
-inline void grid::allreduce(const int m, const int n, double *x, const char scope) const
+inline void grid::allreduce(const int m, const int n, double *x, const char scope, const blacsops op) const
 {
-  char top = ' ';
-  Cdgsum2d(_ictxt, &scope, &top, m, n, x, m, -1, -1);
+  reduce(m, n, x, scope, op, -1, -1);
 }
 ///@}
 
@@ -375,22 +385,40 @@ inline void grid::allreduce(const int m, const int n, double *x, const char scop
    answer.
  */
 ///@{
-inline void grid::reduce(const int m, const int n, int *x, const char scope, const int rdest, const int cdest) const
+inline void grid::reduce(const int m, const int n, int *x, const char scope, const blacsops op, const int rdest, const int cdest) const
 {
   char top = ' ';
-  Cigsum2d(_ictxt, &scope, &top, m, n, x, m, rdest, cdest);
+  
+  if (op == BLACS_SUM)
+    Cigsum2d(_ictxt, &scope, &top, m, n, x, m, rdest, cdest);
+  else if (op == BLACS_MAX)
+    Cigamx2d(_ictxt, &scope, &top, m, n, x, m, NULL, NULL, -1, rdest, cdest);
+  else if (op == BLACS_MIN)
+    Cigamn2d(_ictxt, &scope, &top, m, n, x, m, NULL, NULL, -1, rdest, cdest);
 }
 
-inline void grid::reduce(const int m, const int n, float *x, const char scope, const int rdest, const int cdest) const
+inline void grid::reduce(const int m, const int n, float *x, const char scope, const blacsops op, const int rdest, const int cdest) const
 {
   char top = ' ';
-  Csgsum2d(_ictxt, &scope, &top, m, n, x, m, rdest, cdest);
+  
+  if (op == BLACS_SUM)
+    Csgsum2d(_ictxt, &scope, &top, m, n, x, m, rdest, cdest);
+  else if (op == BLACS_MAX)
+    Csgamx2d(_ictxt, &scope, &top, m, n, x, m, NULL, NULL, -1, rdest, cdest);
+  else if (op == BLACS_MIN)
+    Csgamn2d(_ictxt, &scope, &top, m, n, x, m, NULL, NULL, -1, rdest, cdest);
 }
 
-inline void grid::reduce(const int m, const int n, double *x, const char scope, const int rdest, const int cdest) const
+inline void grid::reduce(const int m, const int n, double *x, const char scope, const blacsops op, const int rdest, const int cdest) const
 {
   char top = ' ';
-  Cdgsum2d(_ictxt, &scope, &top, m, n, x, m, rdest, cdest);
+  
+  if (op == BLACS_SUM)
+    Cdgsum2d(_ictxt, &scope, &top, m, n, x, m, rdest, cdest);
+  else if (op == BLACS_MAX)
+    Cdgamx2d(_ictxt, &scope, &top, m, n, x, m, NULL, NULL, -1, rdest, cdest);
+  else if (op == BLACS_MIN)
+    Cdgamn2d(_ictxt, &scope, &top, m, n, x, m, NULL, NULL, -1, rdest, cdest);
 }
 ///@}
 
