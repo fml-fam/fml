@@ -19,7 +19,7 @@
 class comm
 {
   public:
-    comm();
+    comm(MPI_Comm comm=MPI_COMM_WORLD);
     
     void inherit_comm(MPI_Comm comm);
     
@@ -81,11 +81,11 @@ class comm
  * @brief Create a new comm object and uses 'MPI_COMM_WORLD' as the
    communicator.
  */
-inline comm::comm()
+inline comm::comm(MPI_Comm comm)
 {
   init();
   
-  _comm = MPI_COMM_WORLD;
+  _comm = comm;
   
   set_metadata();
 }
