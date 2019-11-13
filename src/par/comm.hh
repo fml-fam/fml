@@ -87,6 +87,8 @@ class comm
 /**
  * @brief Create a new comm object and uses 'MPI_COMM_WORLD' as the
    communicator.
+ * 
+ * @param[in] comm An MPI communicator. Default is MPI_COMM_WORLD.
  */
 inline comm::comm(MPI_Comm comm)
 {
@@ -102,7 +104,7 @@ inline comm::comm(MPI_Comm comm)
 /**
  * @brief Change communicator to an existing one.
  * 
- * @param comm An MPI communicator.
+ * @param[in] comm An MPI communicator.
  */
 inline void comm::set(MPI_Comm comm)
 {
@@ -115,7 +117,8 @@ inline void comm::set(MPI_Comm comm)
 /**
  * @brief Create new communicator based on color/key.
  * 
- * @param group 
+ * @param[in] group 
+ * @return The new communicator managed in a new comm object.
  */
 inline comm comm::create(MPI_Group group)
 {
@@ -132,8 +135,9 @@ inline comm comm::create(MPI_Group group)
 /**
  * @brief Create new communicator based on color/key.
  * 
- * @param color The new communicator the. Should be non-negative.
- * @param key 
+ * @param[in] color 
+ * @param[in] key 
+ * @return The new communicator managed in a new comm object.
  */
 inline comm comm::split(int color, int key)
 {
@@ -329,6 +333,7 @@ inline void comm::irecv(int n, T *data, int source, int tag)
  * 
  * @param[in] n Number of elemends of 'data'.
  * @param[in,out] data The data to reduce.
+ * @param[in] op MPI reduction operation. Default is MPI_SUM.
  */
 ///@{
 template <typename T>
