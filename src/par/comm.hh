@@ -20,9 +20,7 @@ class comm
 {
   public:
     comm(MPI_Comm comm=MPI_COMM_WORLD);
-    
     void set(MPI_Comm comm);
-    
     comm create(MPI_Group group);
     comm split(int color, int key);
     void free();
@@ -30,27 +28,23 @@ class comm
     
     void printf(int rank, const char *fmt, ...);
     void info();
-    
     bool rank0();
     std::vector<int> jid(const int n);
-    void barrier();
     
     template <typename T>
     void send(int n, T *data, int dest, int tag=0);
     template <typename T>
     void isend(int n, T *data, int dest, int tag=0);
-    
     template <typename T>
     void recv(int n, T *data, int source, int tag=0);
     template <typename T>
     void irecv(int n, T *data, int source, int tag=0);
     
+    void barrier();
     template <typename T>
     void allreduce(int n, T *data, MPI_Op op=MPI_SUM);
-    
     template <typename T>
     void reduce(int n, T *data, MPI_Op op=MPI_SUM, int root=0);
-    
     template <typename T>
     void bcast(int n, T *data, int root);
     
@@ -82,7 +76,7 @@ class comm
 // public
 // -----------------------------------------------------------------------------
 
-// constructors/destructor
+// constructors/destructor and comm management
 
 /**
  * @brief Create a new comm object and uses 'MPI_COMM_WORLD' as the
@@ -177,7 +171,7 @@ inline void comm::finalize()
 
 
 
-// printers
+// utilities
 
 /**
  * @brief Helper wrapper around the C standard I/O 'printf()' function.
@@ -212,8 +206,6 @@ inline void comm::info()
 }
 
 
-
-// misc
 
 /**
  * @brief Check if the executing process is rank 0.
@@ -267,17 +259,6 @@ inline std::vector<int> comm::jid(const int n)
   }
   
   return ret;
-}
-
-
-
-/**
- * @brief Execute a barrier.
- */
-inline void comm::barrier()
-{
-  int ret = MPI_Barrier(_comm);
-  check_ret(ret);
 }
 
 
@@ -341,7 +322,18 @@ inline void comm::irecv(int n, T *data, int source, int tag)
 
 
 
-// reductions
+// collectives
+
+/**
+ * @brief Execute a barrier.
+ */
+inline void comm::barrier()
+{
+  int ret = MPI_Barrier(_comm);
+  check_ret(ret);
+}
+
+
 
 /**
  * @brief Sum reduce operation across all processes in the MPI communicator.
@@ -380,8 +372,6 @@ inline void comm::reduce(int n, T *data, MPI_Op op, int root)
 ///@}
 
 
-
-// broadcasters
 
 /**
  * @brief Broadcast.
