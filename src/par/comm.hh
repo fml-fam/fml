@@ -23,6 +23,9 @@ class comm
     
     void set(MPI_Comm comm);
     
+    comm create(MPI_Group group);
+    comm split(int color, int key);
+    
     void finalize();
     
     void printf(int rank, const char *fmt, ...);
@@ -101,6 +104,41 @@ inline void comm::set(MPI_Comm comm)
 {
   _comm = comm;
   set_metadata();
+}
+
+
+
+/**
+ * @brief Create new communicator based on color/key.
+ * 
+ * @param group 
+ */
+inline comm comm::create(MPI_Group group)
+{
+  MPI_Comm newcomm;
+  int mpi_ret = MPI_Comm_create(_comm, group, &newcomm);
+  check_ret(mpi_ret);
+  
+  comm ret(newcomm);
+  return ret;
+}
+
+
+
+/**
+ * @brief Create new communicator based on color/key.
+ * 
+ * @param color The new communicator the. Should be non-negative.
+ * @param key 
+ */
+inline comm comm::split(int color, int key)
+{
+  MPI_Comm newcomm;
+  int mpi_ret = MPI_Comm_split(_comm, color, key, &newcomm);
+  check_ret(mpi_ret);
+  
+  comm ret(newcomm);
+  return ret;
 }
 
 
