@@ -46,10 +46,10 @@ class comm
     void irecv(int n, T *data, int source, int tag=0);
     
     template <typename T>
-    void allreduce(int n, T *data);
+    void allreduce(int n, T *data, MPI_Op op=MPI_SUM);
     
     template <typename T>
-    void reduce(int n, T *data, int root=0);
+    void reduce(int n, T *data, MPI_Op op=MPI_SUM, int root=0);
     
     template <typename T>
     void bcast(int n, T *data, int root);
@@ -332,10 +332,10 @@ inline void comm::irecv(int n, T *data, int source, int tag)
  */
 ///@{
 template <typename T>
-inline void comm::allreduce(int n, T *data)
+inline void comm::allreduce(int n, T *data, MPI_Op op)
 {
   MPI_Datatype type = mpi_type_lookup(data);
-  int ret = MPI_Allreduce(MPI_IN_PLACE, data, n, type, MPI_SUM, _comm);
+  int ret = MPI_Allreduce(MPI_IN_PLACE, data, n, type, op, _comm);
   check_ret(ret);
 }
 ///@}
@@ -351,10 +351,10 @@ inline void comm::allreduce(int n, T *data)
  */
 ///@{
 template <typename T>
-inline void comm::reduce(int n, T *data, int root)
+inline void comm::reduce(int n, T *data, MPI_Op op, int root)
 {
   MPI_Datatype type = mpi_type_lookup(data);
-  int ret = MPI_Reduce(MPI_IN_PLACE, data, n, type, MPI_SUM, root, _comm);
+  int ret = MPI_Reduce(MPI_IN_PLACE, data, n, type, op, root, _comm);
   check_ret(ret);
 }
 ///@}
