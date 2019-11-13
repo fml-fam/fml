@@ -37,9 +37,13 @@ class comm
     
     template <typename T>
     void send(int n, T *data, int dest, int tag=0);
+    template <typename T>
+    void isend(int n, T *data, int dest, int tag=0);
     
     template <typename T>
     void recv(int n, T *data, int source, int tag=0);
+    template <typename T>
+    void irecv(int n, T *data, int source, int tag=0);
     
     template <typename T>
     void allreduce(int n, T *data);
@@ -277,6 +281,14 @@ inline void comm::send(int n, T *data, int dest, int tag)
   int ret = MPI_Send(data, n, type, dest, tag, _comm);
   check_ret(ret);
 }
+
+template <typename T>
+inline void comm::isend(int n, T *data, int dest, int tag)
+{
+  MPI_Datatype type = mpi_type_lookup(data);
+  int ret = MPI_Isend(data, n, type, dest, tag, _comm);
+  check_ret(ret);
+}
 ///@}
 
 
@@ -296,6 +308,14 @@ inline void comm::recv(int n, T *data, int source, int tag)
 {
   MPI_Datatype type = mpi_type_lookup(data);
   int ret = MPI_Recv(data, n, type, source, tag, _comm, MPI_STATUS_IGNORE);
+  check_ret(ret);
+}
+
+template <typename T>
+inline void comm::irecv(int n, T *data, int source, int tag)
+{
+  MPI_Datatype type = mpi_type_lookup(data);
+  int ret = MPI_Irecv(data, n, type, source, tag, _comm, MPI_STATUS_IGNORE);
   check_ret(ret);
 }
 ///@}
