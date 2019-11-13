@@ -19,6 +19,7 @@
 class comm
 {
   public:
+    // constructors/destructor and comm management
     comm(MPI_Comm comm=MPI_COMM_WORLD);
     void set(MPI_Comm comm);
     comm create(MPI_Group group);
@@ -26,11 +27,13 @@ class comm
     void free();
     void finalize();
     
+    // utilities
     void printf(int rank, const char *fmt, ...) const;
     void info() const;
     bool rank0() const;
     std::vector<int> jid(const int n) const;
     
+    // send/recv
     template <typename T>
     void send(int n, const T *data, int dest, int tag=0) const;
     template <typename T>
@@ -40,6 +43,7 @@ class comm
     template <typename T>
     void irecv(int n, T *data, int source, int tag=0) const;
     
+    // collectives
     void barrier() const;
     template <typename T>
     void allreduce(int n, T *data, MPI_Op op=MPI_SUM) const;
