@@ -26,27 +26,27 @@ class comm
     void free();
     void finalize();
     
-    void printf(int rank, const char *fmt, ...);
-    void info();
-    bool rank0();
-    std::vector<int> jid(const int n);
+    void printf(int rank, const char *fmt, ...) const;
+    void info() const;
+    bool rank0() const;
+    std::vector<int> jid(const int n) const;
     
     template <typename T>
-    void send(int n, T *data, int dest, int tag=0);
+    void send(int n, T *data, int dest, int tag=0) const;
     template <typename T>
-    void isend(int n, T *data, int dest, int tag=0);
+    void isend(int n, T *data, int dest, int tag=0) const;
     template <typename T>
-    void recv(int n, T *data, int source, int tag=0);
+    void recv(int n, T *data, int source, int tag=0) const;
     template <typename T>
-    void irecv(int n, T *data, int source, int tag=0);
+    void irecv(int n, T *data, int source, int tag=0) const;
     
-    void barrier();
+    void barrier() const;
     template <typename T>
-    void allreduce(int n, T *data, MPI_Op op=MPI_SUM);
+    void allreduce(int n, T *data, MPI_Op op=MPI_SUM) const;
     template <typename T>
-    void reduce(int n, T *data, MPI_Op op=MPI_SUM, int root=0);
+    void reduce(int n, T *data, MPI_Op op=MPI_SUM, int root=0) const;
     template <typename T>
-    void bcast(int n, T *data, int root);
+    void bcast(int n, T *data, int root) const;
     
     ///@{
     /// The MPI communicator.
@@ -65,7 +65,7 @@ class comm
   private:
     void init();
     void set_metadata();
-    void check_ret(int ret);
+    void check_ret(int ret) const;
     template <typename T>
     MPI_Datatype mpi_type_lookup(T *x) const;
 };
@@ -182,7 +182,7 @@ inline void comm::finalize()
  * @param[in] fmt The printf format string.
  * @param[in] ... additional arguments to printf.
  */
-inline void comm::printf(int rank, const char *fmt, ...)
+inline void comm::printf(int rank, const char *fmt, ...) const
 {
   if (_rank == rank)
   {
@@ -200,7 +200,7 @@ inline void comm::printf(int rank, const char *fmt, ...)
  * @brief Print some brief information about the MPI communicator. The printing
    is done by rank 0.
  */
-inline void comm::info()
+inline void comm::info() const
 {
   printf(0, "## MPI on %d ranks\n\n", _size);
 }
@@ -210,7 +210,7 @@ inline void comm::info()
 /**
  * @brief Check if the executing process is rank 0.
  */
-inline bool comm::rank0()
+inline bool comm::rank0() const
 {
   return (_rank == 0);
 }
@@ -225,7 +225,7 @@ inline bool comm::rank0()
  * 
  * @comm The method has no communication.
  */
-inline std::vector<int> comm::jid(const int n)
+inline std::vector<int> comm::jid(const int n) const
 {
   std::vector<int> ret;
   
@@ -275,7 +275,7 @@ inline std::vector<int> comm::jid(const int n)
  */
 ///@{
 template <typename T>
-inline void comm::send(int n, T *data, int dest, int tag)
+inline void comm::send(int n, T *data, int dest, int tag) const
 {
   MPI_Datatype type = mpi_type_lookup(data);
   int ret = MPI_Send(data, n, type, dest, tag, _comm);
@@ -283,7 +283,7 @@ inline void comm::send(int n, T *data, int dest, int tag)
 }
 
 template <typename T>
-inline void comm::isend(int n, T *data, int dest, int tag)
+inline void comm::isend(int n, T *data, int dest, int tag) const
 {
   MPI_Datatype type = mpi_type_lookup(data);
   int ret = MPI_Isend(data, n, type, dest, tag, _comm);
@@ -304,7 +304,7 @@ inline void comm::isend(int n, T *data, int dest, int tag)
  */
 ///@{
 template <typename T>
-inline void comm::recv(int n, T *data, int source, int tag)
+inline void comm::recv(int n, T *data, int source, int tag) const
 {
   MPI_Datatype type = mpi_type_lookup(data);
   int ret = MPI_Recv(data, n, type, source, tag, _comm, MPI_STATUS_IGNORE);
@@ -312,7 +312,7 @@ inline void comm::recv(int n, T *data, int source, int tag)
 }
 
 template <typename T>
-inline void comm::irecv(int n, T *data, int source, int tag)
+inline void comm::irecv(int n, T *data, int source, int tag) const
 {
   MPI_Datatype type = mpi_type_lookup(data);
   int ret = MPI_Irecv(data, n, type, source, tag, _comm, MPI_STATUS_IGNORE);
@@ -327,7 +327,7 @@ inline void comm::irecv(int n, T *data, int source, int tag)
 /**
  * @brief Execute a barrier.
  */
-inline void comm::barrier()
+inline void comm::barrier() const
 {
   int ret = MPI_Barrier(_comm);
   check_ret(ret);
@@ -344,7 +344,7 @@ inline void comm::barrier()
  */
 ///@{
 template <typename T>
-inline void comm::allreduce(int n, T *data, MPI_Op op)
+inline void comm::allreduce(int n, T *data, MPI_Op op) const
 {
   MPI_Datatype type = mpi_type_lookup(data);
   int ret = MPI_Allreduce(MPI_IN_PLACE, data, n, type, op, _comm);
@@ -363,7 +363,7 @@ inline void comm::allreduce(int n, T *data, MPI_Op op)
  */
 ///@{
 template <typename T>
-inline void comm::reduce(int n, T *data, MPI_Op op, int root)
+inline void comm::reduce(int n, T *data, MPI_Op op, int root) const
 {
   MPI_Datatype type = mpi_type_lookup(data);
   int ret = MPI_Reduce(MPI_IN_PLACE, data, n, type, op, root, _comm);
@@ -382,7 +382,7 @@ inline void comm::reduce(int n, T *data, MPI_Op op, int root)
  */
 ///@{
 template <typename T>
-inline void comm::bcast(int n, T *data, int root)
+inline void comm::bcast(int n, T *data, int root) const
 {
   MPI_Datatype type = mpi_type_lookup(data);
   int ret = MPI_Bcast(data, n, type, root, _comm);
@@ -426,7 +426,7 @@ inline void comm::set_metadata()
 
 
 
-inline void comm::check_ret(int ret)
+inline void comm::check_ret(int ret) const
 {
   if (ret != MPI_SUCCESS && _rank == 0)
   {
