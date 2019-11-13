@@ -21,7 +21,7 @@ class comm
   public:
     comm(MPI_Comm comm=MPI_COMM_WORLD);
     
-    void inherit_comm(MPI_Comm comm);
+    void set(MPI_Comm comm);
     
     void finalize();
     
@@ -97,7 +97,7 @@ inline comm::comm(MPI_Comm comm)
  * 
  * @param comm An MPI communicator.
  */
-inline void comm::inherit_comm(MPI_Comm comm)
+inline void comm::set(MPI_Comm comm)
 {
   _comm = comm;
   set_metadata();
