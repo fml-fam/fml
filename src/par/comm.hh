@@ -32,9 +32,9 @@ class comm
     std::vector<int> jid(const int n) const;
     
     template <typename T>
-    void send(int n, T *data, int dest, int tag=0) const;
+    void send(int n, const T *data, int dest, int tag=0) const;
     template <typename T>
-    void isend(int n, T *data, int dest, int tag=0) const;
+    void isend(int n, const T *data, int dest, int tag=0) const;
     template <typename T>
     void recv(int n, T *data, int source, int tag=0) const;
     template <typename T>
@@ -65,9 +65,9 @@ class comm
   private:
     void init();
     void set_metadata();
-    void check_ret(int ret) const;
+    void check_ret(const int ret) const;
     template <typename T>
-    MPI_Datatype mpi_type_lookup(T *x) const;
+    MPI_Datatype mpi_type_lookup(const T *x) const;
 };
 
 
@@ -275,7 +275,7 @@ inline std::vector<int> comm::jid(const int n) const
  */
 ///@{
 template <typename T>
-inline void comm::send(int n, T *data, int dest, int tag) const
+inline void comm::send(int n, const T *data, int dest, int tag) const
 {
   MPI_Datatype type = mpi_type_lookup(data);
   int ret = MPI_Send(data, n, type, dest, tag, _comm);
@@ -283,7 +283,7 @@ inline void comm::send(int n, T *data, int dest, int tag) const
 }
 
 template <typename T>
-inline void comm::isend(int n, T *data, int dest, int tag) const
+inline void comm::isend(int n, const T *data, int dest, int tag) const
 {
   MPI_Datatype type = mpi_type_lookup(data);
   int ret = MPI_Isend(data, n, type, dest, tag, _comm);
@@ -426,7 +426,7 @@ inline void comm::set_metadata()
 
 
 
-inline void comm::check_ret(int ret) const
+inline void comm::check_ret(const int ret) const
 {
   if (ret != MPI_SUCCESS && _rank == 0)
   {
@@ -441,7 +441,7 @@ inline void comm::check_ret(int ret) const
 
 
 template <typename T>
-inline MPI_Datatype comm::mpi_type_lookup(T *x) const
+inline MPI_Datatype comm::mpi_type_lookup(const T *x) const
 {
   (void) x;
   
