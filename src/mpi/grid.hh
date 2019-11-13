@@ -47,7 +47,7 @@ class grid
 {
   public:
     grid();
-    grid(const int gridtype);
+    grid(const gridshape gridtype);
     
     void inherit_grid(const int blacs_context);
     
@@ -142,7 +142,7 @@ inline grid::grid()
  * @except If 'gridtype' is not one of PROC_GRID_SQUARE, PROC_GRID_WIDE, or
    PROC_GRID_TALL, the method will throw a 'runtime_error' exception.
  */
-inline grid::grid(const int gridtype)
+inline grid::grid(const gridshape gridtype)
 {
   char order = 'R';
   
