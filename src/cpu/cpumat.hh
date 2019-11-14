@@ -55,6 +55,8 @@ class cpumat : public unimat<REAL>
     void scale(const REAL s);
     void rev_rows();
     void rev_cols();
+    void get_row(len_t i, cpuvec<REAL> &v) const;
+    void get_col(len_t j, cpuvec<REAL> &v) const;
     
     bool any_inf() const;
     bool any_nan() const;
@@ -461,6 +463,30 @@ void cpumat<REAL>::rev_cols()
     
     last--;
   }
+}
+
+
+
+template <typename REAL>
+void cpumat<REAL>::get_row(len_t i, cpuvec<REAL> &v) const
+{
+  v.resize(this->n);
+  REAL *v_d = v.data_ptr();
+  
+  for (len_t j=0; j<this->n; j++)
+    v_d[j] = this->data[i + this->m*j];
+}
+
+
+
+template <typename REAL>
+void cpumat<REAL>::get_col(len_t j, cpuvec<REAL> &v) const
+{
+  v.resize(this->m);
+  REAL *v_d = v.data_ptr();
+  
+  for (len_t i=0; i<this->m; i++)
+    v_d[j] = this->data[i + this->m*j];
 }
 
 
