@@ -81,17 +81,17 @@ class grid
     // collectives
     void barrier(const char scope) const;
     
-    void allreduce(const int m, const int n, int *x, const char scope, const blacsops op=BLACS_SUM) const;
-    void allreduce(const int m, const int n, float *x, const char scope, const blacsops op=BLACS_SUM) const;
-    void allreduce(const int m, const int n, double *x, const char scope, const blacsops op=BLACS_SUM) const;
+    void allreduce(const int m, const int n, int *x, const char scope='A', const blacsops op=BLACS_SUM) const;
+    void allreduce(const int m, const int n, float *x, const char scope='A', const blacsops op=BLACS_SUM) const;
+    void allreduce(const int m, const int n, double *x, const char scope='A', const blacsops op=BLACS_SUM) const;
     
-    void reduce(const int m, const int n, int *x, const char scope, const blacsops op=BLACS_SUM, const int rdest=0, const int cdest=0) const;
-    void reduce(const int m, const int n, float *x, const char scope, const blacsops op=BLACS_SUM, const int rdest=0, const int cdest=0) const;
-    void reduce(const int m, const int n, double *x, const char scope, const blacsops op=BLACS_SUM, const int rdest=0, const int cdest=0) const;
+    void reduce(const int m, const int n, int *x, const char scope='A', const blacsops op=BLACS_SUM, const int rdest=0, const int cdest=0) const;
+    void reduce(const int m, const int n, float *x, const char scope='A', const blacsops op=BLACS_SUM, const int rdest=0, const int cdest=0) const;
+    void reduce(const int m, const int n, double *x, const char scope='A', const blacsops op=BLACS_SUM, const int rdest=0, const int cdest=0) const;
     
-    void bcast(const int m, const int n, int *x, const char scope, const int rsrc=0, const int csrc=0) const;
-    void bcast(const int m, const int n, float *x, const char scope, const int rsrc=0, const int csrc=0) const;
-    void bcast(const int m, const int n, double *x, const char scope, const int rsrc=0, const int csrc=0) const;
+    void bcast(const int m, const int n, int *x, const char scope='A', const int rsrc=0, const int csrc=0) const;
+    void bcast(const int m, const int n, float *x, const char scope='A', const int rsrc=0, const int csrc=0) const;
+    void bcast(const int m, const int n, double *x, const char scope='A', const int rsrc=0, const int csrc=0) const;
     
     
     ///@{
