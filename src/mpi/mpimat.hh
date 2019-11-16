@@ -59,6 +59,8 @@ class mpimat : public unimat<REAL>
     void antidiag(cpuvec<REAL> &v);
     void scale(const REAL s);
     void rev_cols();
+    void get_row(len_t i, cpuvec<REAL> &v) const;
+    void get_col(len_t j, cpuvec<REAL> &v) const;
     
     bool any_inf() const;
     bool any_nan() const;
@@ -650,6 +652,56 @@ void mpimat<REAL>::rev_cols()
   
   std::free(rev_buf);
   std::free(tmp);
+}
+
+
+
+template <typename REAL>
+void mpimat<REAL>::get_row(len_t i, cpuvec<REAL> &v) const
+{
+  v.resize(this->n);
+  v.fill_zero();
+  REAL *v_ptr = v.data_ptr();
+  
+  for (len_t j=0; j<this->n; j++)
+  {
+    const len_local_t i_local = bcutils::g2l(i, this->mb, this->g.nprow());
+    const len_local_t j_local = bcutils::g2l(j, this->nb, this->g.npcol());
+    
+    const int pr = bcutils::g2p(i, this->mb, this->g.nprow());
+    const int pc = bcutils::g2p(j, this->nb, this->g.npcol());
+    
+    if (pr == this->g.myrow() && pc == this->g.mycol())
+      v_ptr[j] = this->data[i_local + this->m_local*j_local];
+  }
+  
+  
+  this->g.allreduce(this->n, 1, v_ptr, 'A');
+}
+
+
+
+template <typename REAL>
+void mpimat<REAL>::get_col(len_t j, cpuvec<REAL> &v) const
+{
+  v.resize(this->m);
+  v.fill_zero();
+  REAL *v_ptr = v.data_ptr();
+  
+  for (len_t i=0; i<this->m; i++)
+  {
+    const len_local_t i_local = bcutils::g2l(i, this->mb, this->g.nprow());
+    const len_local_t j_local = bcutils::g2l(j, this->nb, this->g.npcol());
+    
+    const int pr = bcutils::g2p(i, this->mb, this->g.nprow());
+    const int pc = bcutils::g2p(j, this->nb, this->g.npcol());
+    
+    if (pr == this->g.myrow() && pc == this->g.mycol())
+      v_ptr[i] = this->data[i_local + this->m_local*j_local];
+  }
+  
+  
+  this->g.allreduce(this->m, 1, v_ptr, 'A');
 }
 
 
