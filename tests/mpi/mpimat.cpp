@@ -151,3 +151,21 @@ TEMPLATE_TEST_CASE("diag", "[cpumat]", float, double)
   REQUIRE( fltcmp::eq(v(1), 7) );
   REQUIRE( fltcmp::eq(v(2), 10) );
 }
+
+
+
+TEMPLATE_TEST_CASE("rev", "[cpumat]", float, double)
+{
+  len_t n = 2;
+  
+  mpimat<TestType> x(g, n, n, 1, 1);
+  x.fill_linspace(1, n*n);
+  
+  x.rev_cols();
+  REQUIRE( fltcmp::eq(x(0, 0), 3) );
+  REQUIRE( fltcmp::eq(x(1, 0), 4) );
+  
+  // x.rev_rows();
+  // REQUIRE( fltcmp::eq(x(0, 0), 4) );
+  // REQUIRE( fltcmp::eq(x(1, 0), 3) );
+}
