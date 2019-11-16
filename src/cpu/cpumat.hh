@@ -486,7 +486,7 @@ void cpumat<REAL>::get_col(len_t j, cpuvec<REAL> &v) const
   REAL *v_d = v.data_ptr();
   
   for (len_t i=0; i<this->m; i++)
-    v_d[j] = this->data[i + this->m*j];
+    v_d[i] = this->data[i + this->m*j];
 }
 
 
