@@ -30,10 +30,9 @@ template <typename REAL>
 class mpimat : public unimat<REAL>
 {
   public:
-    mpimat();
-    mpimat(grid &blacs_grid);
-    mpimat(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows=16, int bf_cols=16);
-    mpimat(grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct=false);
+    mpimat(const grid &blacs_grid);
+    mpimat(const grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows=16, int bf_cols=16);
+    mpimat(const grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct=false);
     mpimat(const mpimat &x);
     ~mpimat();
     
@@ -94,7 +93,7 @@ class mpimat : public unimat<REAL>
   private:
     REAL _getter;
     void free();
-    void check_params(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols);
+    void check_params(const grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols);
     REAL get_val_from_global_index(len_t gi, len_t gj) const;
     void copy_colchunk_to_buf(const len_t len, REAL *buf, const len_t row_offset, const len_t column);
     void copy_buf_to_colchunk(const len_t len, REAL *buf, const len_t row_offset, const len_t column);
@@ -109,27 +108,7 @@ class mpimat : public unimat<REAL>
 // constructors/destructor
 
 template <typename REAL>
-mpimat<REAL>::mpimat()
-{
-  this->m = 0;
-  this->n = 0;
-  this->data = NULL;
-  
-  this->m_local = 0;
-  this->n_local = 0;
-  this->mb = 0;
-  this->nb = 0;
-  
-  grid g;
-  this->g = g;
-  
-  this->free_data = true;
-}
-
-
-
-template <typename REAL>
-mpimat<REAL>::mpimat(grid &blacs_grid)
+mpimat<REAL>::mpimat(const grid &blacs_grid)
 {
   this->m = 0;
   this->n = 0;
@@ -148,7 +127,7 @@ mpimat<REAL>::mpimat(grid &blacs_grid)
 
 
 template <typename REAL>
-mpimat<REAL>::mpimat(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols)
+mpimat<REAL>::mpimat(const grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols)
 {
   check_params(blacs_grid, nrows, ncols, bf_rows, bf_cols);
   
@@ -174,7 +153,7 @@ mpimat<REAL>::mpimat(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, in
 
 
 template <typename REAL>
-mpimat<REAL>::mpimat(grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct)
+mpimat<REAL>::mpimat(const grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct)
 {
   check_params(blacs_grid, nrows, ncols, bf_rows, bf_cols);
   
@@ -894,7 +873,7 @@ void mpimat<REAL>::free()
 
 
 template <typename REAL>
-void mpimat<REAL>::check_params(grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols)
+void mpimat<REAL>::check_params(const grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols)
 {
   if (!blacs_grid.valid_grid())
     throw std::runtime_error("invalid blacs grid");
