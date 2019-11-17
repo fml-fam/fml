@@ -58,6 +58,7 @@ class card
     
     /// Is the gpu data valid?
     bool valid_card() const {return (_id!=UNINITIALIZED_CARD && _id!=DESTROYED_CARD);};
+    int get_id() const {return _id;};
   
   protected:
     int _id;
