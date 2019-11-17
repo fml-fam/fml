@@ -23,6 +23,15 @@ namespace linalg
         throw std::runtime_error(msg);
       }
     }
+    
+    
+    
+    template <typename REAL>
+    void check_grid(const mpimat<REAL> &a, const mpimat<REAL> &b)
+    {
+      if (a.get_grid().get_ictxt() != b.get_grid().get_ictxt())
+        throw std::runtime_error("mpimat objects must be distributed on the same process grid");
+    }
   }
   
   
@@ -31,6 +40,9 @@ namespace linalg
   template <typename REAL>
   void add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const mpimat<REAL> &x, const mpimat<REAL> &y, mpimat<REAL> &ret)
   {
+    check_grid(x, y);
+    check_grid(x, ret);
+    
     len_t m, n;
     linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
     
@@ -47,6 +59,8 @@ namespace linalg
   template <typename REAL>
   mpimat<REAL> add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const mpimat<REAL> &x, const mpimat<REAL> &y)
   {
+    check_grid(x, y);
+    
     len_t m, n;
     linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
     
@@ -79,8 +93,9 @@ namespace linalg
   template <typename REAL>
   mpimat<REAL> matmult(const bool transx, const bool transy, const REAL alpha, const mpimat<REAL> &x, const mpimat<REAL> &y)
   {
-    int m, n, k;
+    check_grid(x, y);
     
+    int m, n, k;
     linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
     
     grid g = x.get_grid();
@@ -118,8 +133,10 @@ namespace linalg
   template <typename REAL>
   void matmult(const bool transx, const bool transy, const REAL alpha, const mpimat<REAL> &x, const mpimat<REAL> &y, mpimat<REAL> &ret)
   {
-    int m, n, k;
+    check_grid(x, y);
+    check_grid(x, ret);
     
+    int m, n, k;
     linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
     
     if (m != ret.nrows() || n != ret.ncols())
@@ -154,6 +171,8 @@ namespace linalg
   template <typename REAL>
   void crossprod(const REAL alpha, const mpimat<REAL> &x, mpimat<REAL> &ret)
   {
+    check_grid(x, ret);
+    
     const len_t n = x.ncols();
     
     if (n != ret.nrows() || n != ret.ncols())
@@ -193,6 +212,8 @@ namespace linalg
   template <typename REAL>
   void tcrossprod(const REAL alpha, const mpimat<REAL> &x, mpimat<REAL> &ret)
   {
+    check_grid(x, ret);
+    
     const len_t m = x.nrows();
     
     if (m != ret.nrows() || m != ret.ncols())
@@ -220,6 +241,8 @@ namespace linalg
   template <typename REAL>
   void xpose(const mpimat<REAL> &x, mpimat<REAL> &tx)
   {
+    check_grid(x, tx);
+    
     const len_t m = x.nrows();
     const len_t n = x.ncols();
     
@@ -345,7 +368,7 @@ namespace linalg
   template <typename REAL>
   void svd(mpimat<REAL> &x, cpuvec<REAL> &s)
   {
-    mpimat<REAL> ignored;
+    mpimat<REAL> ignored(x.get_grid());
     int info = svd_internals(0, 0, x, s, ignored, ignored);
     check_info(info, "gesvd");
   }
@@ -353,6 +376,9 @@ namespace linalg
   template <typename REAL>
   void svd(mpimat<REAL> &x, cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
   {
+    check_grid(x, u);
+    check_grid(x, vt);
+    
     int info = svd_internals(1, 1, x, s, u, vt);
     check_info(info, "gesvd");
   }
@@ -407,7 +433,7 @@ namespace linalg
   template <typename REAL>
   void eigen(bool symmetric, mpimat<REAL> &x, cpuvec<REAL> &values)
   {
-    mpimat<REAL> ignored;
+    mpimat<REAL> ignored(x.get_grid());
     if (symmetric)
     {
       int info = eig_sym_internals(true, x, values, ignored);
@@ -423,6 +449,8 @@ namespace linalg
   void eigen(bool symmetric, mpimat<REAL> &x, cpuvec<REAL> &values,
     mpimat<REAL> &vectors)
   {
+    check_grid(x, vectors);
+    
     if (symmetric)
     {
       int info = eig_sym_internals(false, x, values, vectors);
@@ -465,6 +493,8 @@ namespace linalg
   template <typename REAL>
   void solve(mpimat<REAL> &x, mpimat<REAL> &y)
   {
+    check_grid(x, y);
+    
     const len_t n = x.nrows();
     if (!x.is_square())
       throw std::runtime_error("'x' must be a square matrix");
