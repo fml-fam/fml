@@ -148,7 +148,6 @@ namespace linalg
   gpumat<REAL> matmult(const bool transx, const bool transy, const REAL alpha, const gpumat<REAL> &x, const gpumat<REAL> &y)
   {
     int m, n, k;
-    
     linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
     auto c = x.get_card();
     gpumat<REAL> ret(c, m, n);
@@ -183,7 +182,6 @@ namespace linalg
   void matmult(const bool transx, const bool transy, const REAL alpha, const gpumat<REAL> &x, const gpumat<REAL> &y, gpumat<REAL> &ret)
   {
     int m, n, k;
-    
     linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
     
     if (m != ret.nrows() || n != ret.ncols())
@@ -243,9 +241,8 @@ namespace linalg
   gpumat<REAL> crossprod(const REAL alpha, const gpumat<REAL> &x)
   {
     const len_t n = x.ncols();
-    auto c = x.get_card();
     
-    gpumat<REAL> ret(c, n, n);
+    gpumat<REAL> ret(x.get_card(), n, n);
     ret.fill_zero();
     
     crossprod(alpha, x, ret);
@@ -276,9 +273,8 @@ namespace linalg
   gpumat<REAL> tcrossprod(const REAL alpha, const gpumat<REAL> &x)
   {
     const len_t m = x.nrows();
-    auto c = x.get_card();
     
-    gpumat<REAL> ret(c, m, m);
+    gpumat<REAL> ret(x.get_card(), m, m);
     ret.fill_zero();
     
     tcrossprod(alpha, x, ret);
@@ -410,7 +406,7 @@ namespace linalg
   template <typename REAL>
   void svd(gpumat<REAL> &x, gpuvec<REAL> &s)
   {
-    gpumat<REAL> ignored;
+    gpumat<REAL> ignored(x.get_card());
     int info = svd_internals(0, 0, x, s, ignored, ignored);
     check_info(info, "gesvd");
   }
@@ -477,7 +473,7 @@ namespace linalg
   template <typename REAL>
   void eigen(bool symmetric, gpumat<REAL> &x, gpuvec<REAL> &values)
   {
-    gpumat<REAL> ignored;
+    gpumat<REAL> ignored(x.get_card());
     if (symmetric)
     {
       int info = eig_sym_internals(true, x, values, ignored);
