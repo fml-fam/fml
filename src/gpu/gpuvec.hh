@@ -14,7 +14,6 @@ template <typename T>
 class gpuvec : public univec<T>
 {
   public:
-    gpuvec();
     gpuvec(std::shared_ptr<card> gpu);
     gpuvec(std::shared_ptr<card> gpu, len_t size);
     gpuvec(std::shared_ptr<card> gpu, T *data, len_t size, bool free_on_destruct=false);
@@ -63,20 +62,6 @@ class gpuvec : public univec<T>
 // -----------------------------------------------------------------------------
 
 // constructors/destructor
-
-template <typename REAL>
-gpuvec<REAL>::gpuvec()
-{
-  std::shared_ptr<card> gpu;
-  this->c = gpu;
-  
-  this->_size = 0;
-  this->data = NULL;
-  
-  this->free_data = true;
-}
-
-
 
 template <typename T>
 gpuvec<T>::gpuvec(std::shared_ptr<card> gpu)
