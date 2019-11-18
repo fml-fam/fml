@@ -93,6 +93,15 @@ namespace linalg
         throw std::runtime_error(msg);
       }
     }
+    
+    
+    
+    template <typename REAL, class ARR>
+    void check_card(const gpumat<REAL> &a, const ARR &b)
+    {
+      if (a.get_card()->get_id() != b.get_card()->get_id())
+        throw std::runtime_error("gpumat/gpuvex objects must be allocated on the same gpu");
+    }
   }
   
   
@@ -101,6 +110,9 @@ namespace linalg
   template <typename REAL>
   void add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const gpumat<REAL> &x, const gpumat<REAL> &y, gpumat<REAL> &ret)
   {
+    check_card(x, y);
+    check_card(x, ret);
+    
     len_t m, n;
     linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
     
@@ -117,6 +129,8 @@ namespace linalg
   template <typename REAL>
   gpumat<REAL> add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const gpumat<REAL> &x, const gpumat<REAL> &y)
   {
+    check_card(x, y);
+    
     len_t m, n;
     linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
     
@@ -147,6 +161,8 @@ namespace linalg
   template <typename REAL>
   gpumat<REAL> matmult(const bool transx, const bool transy, const REAL alpha, const gpumat<REAL> &x, const gpumat<REAL> &y)
   {
+    check_card(x, y);
+    
     int m, n, k;
     linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
     auto c = x.get_card();
@@ -181,6 +197,9 @@ namespace linalg
   template <typename REAL>
   void matmult(const bool transx, const bool transy, const REAL alpha, const gpumat<REAL> &x, const gpumat<REAL> &y, gpumat<REAL> &ret)
   {
+    check_card(x, y);
+    check_card(x, ret);
+    
     int m, n, k;
     linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
     
@@ -213,6 +232,8 @@ namespace linalg
   template <typename REAL>
   void crossprod(const REAL alpha, const gpumat<REAL> &x, gpumat<REAL> &ret)
   {
+    check_card(x, ret);
+    
     const len_t m = x.nrows();
     const len_t n = x.ncols();
     
@@ -255,6 +276,8 @@ namespace linalg
   template <typename REAL>
   void tcrossprod(const REAL alpha, const gpumat<REAL> &x, gpumat<REAL> &ret)
   {
+    check_card(x, ret);
+    
     const len_t m = x.nrows();
     const len_t n = x.ncols();
     
@@ -287,6 +310,8 @@ namespace linalg
   template <typename REAL>
   void xpose(const gpumat<REAL> &x, gpumat<REAL> &tx)
   {
+    check_card(x, tx);
+    
     const len_t m = x.nrows();
     const len_t n = x.ncols();
     
@@ -312,6 +337,8 @@ namespace linalg
   template <typename REAL>
   int lu(gpumat<REAL> &x, gpuvec<int> &p)
   {
+    check_card(x, p);
+    
     int info = 0;
     const int m = x.nrows();
     auto c = x.get_card();
@@ -406,6 +433,8 @@ namespace linalg
   template <typename REAL>
   void svd(gpumat<REAL> &x, gpuvec<REAL> &s)
   {
+    check_card(x, s);
+    
     gpumat<REAL> ignored(x.get_card());
     int info = svd_internals(0, 0, x, s, ignored, ignored);
     check_info(info, "gesvd");
@@ -414,6 +443,10 @@ namespace linalg
   template <typename REAL>
   void svd(gpumat<REAL> &x, gpuvec<REAL> &s, gpumat<REAL> &u, gpumat<REAL> &vt)
   {
+    check_card(x, s);
+    check_card(x, u);
+    check_card(x, vt);
+    
     int info = svd_internals(1, 1, x, s, u, vt);
     check_info(info, "gesvd");
   }
@@ -473,6 +506,8 @@ namespace linalg
   template <typename REAL>
   void eigen(bool symmetric, gpumat<REAL> &x, gpuvec<REAL> &values)
   {
+    check_card(x, values);
+    
     gpumat<REAL> ignored(x.get_card());
     if (symmetric)
     {
@@ -489,6 +524,9 @@ namespace linalg
   void eigen(bool symmetric, gpumat<REAL> &x, gpuvec<REAL> &values,
     gpumat<REAL> &vectors)
   {
+    check_card(x, values);
+    check_card(x, vectors);
+    
     if (symmetric)
     {
       int info = eig_sym_internals(false, x, values, vectors);
@@ -568,12 +606,14 @@ namespace linalg
   template <typename REAL>
   void solve(gpumat<REAL> &x, gpuvec<REAL> &y)
   {
+    check_card(x, y);
     solver(x, y.size(), 1, y.data_ptr());
   }
   
   template <typename REAL>
   void solve(gpumat<REAL> &x, gpumat<REAL> &y)
   {
+    check_card(x, y);
     solver(x, y.nrows(), y.ncols(), y.data_ptr());
   }
 }
