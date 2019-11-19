@@ -10,6 +10,7 @@
 
 #include "card.hh"
 #include "kernelfuns.hh"
+#include "launcher.hh"
 #include "gpuvec.hh"
 
 
@@ -72,6 +73,8 @@ class gpumat : public unimat<REAL>
   private:
     void free();
     void check_params(len_t nrows, len_t ncols);
+    dim3 dim_block;
+    dim3 dim_grid;
 };
 
 
@@ -109,6 +112,9 @@ gpumat<REAL>::gpumat(std::shared_ptr<card> gpu, len_t nrows, len_t ncols)
   this->m = nrows;
   this->n = ncols;
   
+  dim_block = kernel_launcher::dim_block2();
+  dim_grid = kernel_launcher::dim_grid(this->m, this->n);
+  
   this->free_data = true;
 }
 
@@ -125,6 +131,9 @@ gpumat<REAL>::gpumat(std::shared_ptr<card> gpu, REAL *data_, len_t nrows, len_t 
   this->n = ncols;
   this->data = data_;
   
+  dim_block = kernel_launcher::dim_block2();
+  dim_grid = kernel_launcher::dim_grid(this->m, this->n);
+  
   this->free_data = free_on_destruct;
 }
 
@@ -136,6 +145,9 @@ gpumat<REAL>::gpumat(const gpumat<REAL> &x)
   this->m = x.nrows();
   this->n = x.ncols();
   this->data = x.data_ptr();
+  
+  dim_block = kernel_launcher::dim_block2();
+  dim_grid = kernel_launcher::dim_grid(this->m, this->n);
   
   this->c = x.get_card();
   
@@ -180,6 +192,9 @@ void gpumat<REAL>::resize(len_t nrows, len_t ncols)
   
   this->m = nrows;
   this->n = ncols;
+  
+  dim_block = kernel_launcher::dim_block2();
+  dim_grid = kernel_launcher::dim_grid(this->m, this->n);
 }
 
 
@@ -205,6 +220,9 @@ void gpumat<REAL>::set(std::shared_ptr<card> gpu, REAL *data, len_t nrows, len_t
   this->m = nrows;
   this->n = ncols;
   this->data = data;
+  
+  dim_block = kernel_launcher::dim_block2();
+  dim_grid = kernel_launcher::dim_grid(this->m, this->n);
   
   this->free_data = free_on_destruct;
 }
@@ -280,7 +298,8 @@ void gpumat<REAL>::fill_one()
 template <typename REAL>
 void gpumat<REAL>::fill_val(const REAL v)
 {
-  
+  kernelfuns::kernel_fill_val<<<dim_grid, dim_block>>>(v, this->m, this->n, this->data);
+  this->c->check();
 }
 
 
@@ -292,7 +311,8 @@ void gpumat<REAL>::fill_linspace(REAL start, REAL stop)
   //   this->fill_val(start);
   // else
   {
-    
+    kernelfuns::kernel_fill_linspace<<<dim_grid, dim_block>>>(start, stop, this->m, this->n, this->data);
+    this->c->check();
   }
 }
 
@@ -302,8 +322,6 @@ void gpumat<REAL>::fill_linspace(REAL start, REAL stop)
 template <typename REAL>
 void gpumat<REAL>::fill_eye()
 {
-  dim3 dim_block(16, 16);
-  dim3 dim_grid((this->m + 16 - 1) / 16, (this->n + 16 - 1) / 16);
   kernelfuns::kernel_fill_eye<<<dim_grid, dim_block>>>(this->m, this->n, this->data);
   this->c->check();
 }
@@ -313,8 +331,6 @@ void gpumat<REAL>::fill_eye()
 template <typename REAL>
 void gpumat<REAL>::fill_diag(const gpuvec<REAL> &v)
 {
-  dim3 dim_block(16, 16);
-  dim3 dim_grid((this->m + 16 - 1) / 16, (this->n + 16 - 1) / 16);
   kernelfuns::kernel_fill_diag<<<dim_grid, dim_block>>>(v.size(), v.data_ptr(), this->m, this->n, this->data);
   this->c->check();
 }
@@ -348,8 +364,16 @@ void gpumat<REAL>::fill_rnorm(REAL mean, REAL sd)
 
 
 
+
+
 template <typename REAL>
-void gpumat<REAL>::scale(const REAL s)
+void diag(cpuvec<REAL> &v)
+{
+  
+}
+
+template <typename REAL>
+void antidiag(cpuvec<REAL> &v)
 {
   
 }
@@ -357,10 +381,17 @@ void gpumat<REAL>::scale(const REAL s)
 
 
 template <typename REAL>
+void gpumat<REAL>::scale(const REAL s)
+{
+  kernelfuns::kernel_scale<<<dim_grid, dim_block>>>(s, this->m, this->n, this->data);
+  this->c->check();
+}
+
+
+
+template <typename REAL>
 void gpumat<REAL>::rev_rows()
 {
-  dim3 dim_block(16, 16);
-  dim3 dim_grid((this->m + 16 - 1) / 16, (this->n + 16 - 1) / 16);
   kernelfuns::kernel_rev_rows<<<dim_grid, dim_block>>>(this->m, this->n, this->data);
   this->c->check();
 }
@@ -370,8 +401,6 @@ void gpumat<REAL>::rev_rows()
 template <typename REAL>
 void gpumat<REAL>::rev_cols()
 {
-  dim3 dim_block(16, 16);
-  dim3 dim_grid((this->m + 16 - 1) / 16, (this->n + 16 - 1) / 16);
   kernelfuns::kernel_rev_cols<<<dim_grid, dim_block>>>(this->m, this->n, this->data);
   this->c->check();
 }
@@ -385,8 +414,6 @@ bool gpumat<REAL>::any_inf() const
   int *has_inf_gpu = (int*) this->c->mem_alloc(sizeof(*has_inf_gpu));
   this->c->mem_cpu2gpu(has_inf_gpu, &has_inf, sizeof(has_inf));
   
-  dim3 dim_block(16, 16);
-  dim3 dim_grid((this->m + 16 - 1) / 16, (this->n + 16 - 1) / 16);
   kernelfuns::kernel_any_inf<<<dim_grid, dim_block>>>(this->m, this->n, this->data, has_inf_gpu);
   
   this->c->mem_gpu2cpu(&has_inf, has_inf_gpu, sizeof(has_inf));
@@ -406,8 +433,6 @@ bool gpumat<REAL>::any_nan() const
   int *has_nan_gpu = (int*) this->c->mem_alloc(sizeof(*has_nan_gpu));
   this->c->mem_cpu2gpu(has_nan_gpu, &has_nan, sizeof(has_nan));
   
-  dim3 dim_block(16, 16);
-  dim3 dim_grid((this->m + 16 - 1) / 16, (this->n + 16 - 1) / 16);
   kernelfuns::kernel_any_nan<<<dim_grid, dim_block>>>(this->m, this->n, this->data, has_nan_gpu);
   
   this->c->mem_gpu2cpu(&has_nan, has_nan_gpu, sizeof(has_nan));
@@ -472,8 +497,6 @@ bool gpumat<T>::operator==(const gpumat<T> &x) const
   int *all_eq_gpu = (int*) this->c->mem_alloc(sizeof(*all_eq_gpu));
   this->c->mem_cpu2gpu(all_eq_gpu, &all_eq, sizeof(all_eq));
   
-  dim3 dim_block(16, 16);
-  dim3 dim_grid((this->m + 16 - 1) / 16, (this->n + 16 - 1) / 16);
   kernelfuns::kernel_all_eq<<<dim_grid, dim_block>>>(this->m, this->n, this->data, x.data_ptr(), all_eq_gpu);
   
   this->c->mem_gpu2cpu(&all_eq, all_eq_gpu, sizeof(all_eq));

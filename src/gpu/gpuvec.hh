@@ -53,6 +53,8 @@ class gpuvec : public univec<T>
   private:
     void free();
     void check_params(len_t size);
+    dim3 dim_block;
+    dim3 dim_grid;
 };
 
 
@@ -88,6 +90,9 @@ gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, len_t size)
   
   this->_size = size;
   
+  dim_block = kernel_launcher::dim_block1();
+  dim_grid = kernel_launcher::dim_grid(this->_size);
+  
   this->free_data = true;
 }
 
@@ -103,6 +108,9 @@ gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, T *data_, len_t size, bool free_on_
   this->_size = size;
   this->data = data_;
   
+  dim_block = kernel_launcher::dim_block1();
+  dim_grid = kernel_launcher::dim_grid(this->_size);
+  
   this->free_data = free_on_destruct;
 }
 
@@ -113,6 +121,9 @@ gpuvec<REAL>::gpuvec(const gpuvec<REAL> &x)
 {
   this->_size = x.size();
   this->data = x.data_ptr();
+  
+  dim_block = kernel_launcher::dim_block1();
+  dim_grid = kernel_launcher::dim_grid(this->_size);
   
   this->c = x.get_card();
   
@@ -151,6 +162,9 @@ void gpuvec<T>::resize(len_t size)
   this->data = realloc_ptr;
   
   this->_size = size;
+  
+  dim_block = kernel_launcher::dim_block1();
+  dim_grid = kernel_launcher::dim_grid(this->_size);
 }
 
 
@@ -188,6 +202,9 @@ void gpuvec<T>::set(std::shared_ptr<card> gpu, T *data, len_t size, bool free_on
   
   this->_size = size;
   this->data = data;
+  
+  dim_block = kernel_launcher::dim_block1();
+  dim_grid = kernel_launcher::dim_grid(this->_size);
   
   this->free_data = free_on_destruct;
 }
@@ -282,7 +299,7 @@ void gpuvec<T>::scale(const T s)
 template <typename T>
 void gpuvec<T>::rev()
 {
-  kernelfuns::kernel_rev_rows<<<1, this->_size>>>(this->_size, 1, this->data);
+  kernelfuns::kernel_rev_rows<<<dim_grid, dim_block>>>(this->_size, 1, this->data);
   this->c->check();
 }
 
@@ -323,7 +340,7 @@ bool gpuvec<T>::operator==(const gpuvec<T> &x) const
   int *all_eq_gpu = (int*) this->c->mem_alloc(sizeof(*all_eq_gpu));
   this->c->mem_cpu2gpu(all_eq_gpu, &all_eq, sizeof(all_eq));
   
-  kernelfuns::kernel_all_eq<<<1, this->_size>>>(this->_size, 1, this->data, x.data_ptr(), all_eq_gpu);
+  kernelfuns::kernel_all_eq<<<dim_grid, dim_block>>>(this->_size, 1, this->data, x.data_ptr(), all_eq_gpu);
   
   this->c->mem_gpu2cpu(&all_eq, all_eq_gpu, sizeof(all_eq));
   this->c->mem_free(all_eq_gpu);
