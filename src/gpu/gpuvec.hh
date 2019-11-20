@@ -275,7 +275,8 @@ void gpuvec<T>::fill_one()
 template <typename T>
 void gpuvec<T>::fill_val(const T v)
 {
-  
+  kernelfuns::kernel_fill_val<<<dim_grid, dim_block>>>(v, this->_size, 1, this->data);
+  this->c->check();
 }
 
 
@@ -283,7 +284,8 @@ void gpuvec<T>::fill_val(const T v)
 template <typename T>
 void gpuvec<T>::fill_linspace(const T start, const T stop)
 {
-  
+  kernelfuns::kernel_fill_linspace<<<dim_grid, dim_block>>>(start, stop, this->_size, 1, this->data);
+  this->c->check();
 }
 
 
@@ -291,7 +293,8 @@ void gpuvec<T>::fill_linspace(const T start, const T stop)
 template <typename T>
 void gpuvec<T>::scale(const T s)
 {
-  
+  kernelfuns::kernel_scale<<<dim_grid, dim_block>>>(s, this->_size, 1, this->data);
+  this->c->check();
 }
 
 
