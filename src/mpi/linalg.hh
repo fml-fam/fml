@@ -47,7 +47,7 @@ namespace linalg
     linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
     
     if (ret.nrows() != m || ret.ncols() != n)
-      throw std::runtime_error("non-conformable arguments");
+      ret.resize(m, n);
     
     char ctransx = transx ? 'T' : 'N';
     char ctransy = transy ? 'T' : 'N';
@@ -82,7 +82,7 @@ namespace linalg
    * @param[in] y Right multiplicand.
    * 
    * @except If x and y are inappropriately sized for a matrix product, the
-     method will throw a 'runtime_error' exception. Likewise for ret.
+     method will throw a 'runtime_error' exception.
    * 
    * @impl Uses the PBLAS function pXgemm().
    * 
@@ -122,7 +122,7 @@ namespace linalg
    * @param[out] ret The product.
    * 
    * @except If x and y are inappropriately sized for a matrix product, the
-     method will throw a 'runtime_error' exception. Likewise for ret.
+     method will throw a 'runtime_error' exception.
    * 
    * @impl Uses the PBLAS function pXgemm().
    * 
@@ -140,7 +140,7 @@ namespace linalg
     linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
     
     if (m != ret.nrows() || n != ret.ncols())
-      throw std::runtime_error("non-conformable arguments");
+      ret.resize(m, n);
     
     const char ctransx = transx ? 'T' : 'N';
     const char ctransy = transy ? 'T' : 'N';
@@ -159,9 +159,6 @@ namespace linalg
    * @param[in] x Input data matrix.
    * @param[out] ret The product.
    * 
-   * @except If ret is inappropriately sized for the product, the method will
-     throw a 'runtime_error' exception.
-   * 
    * @impl Uses the BLAS function pXsyrk().
    * 
    * @comm The method will communicate across all processes in the BLACS grid.
@@ -176,7 +173,7 @@ namespace linalg
     const len_t n = x.ncols();
     
     if (n != ret.nrows() || n != ret.ncols())
-      throw std::runtime_error("non-conformable arguments");
+      ret.resize(n, n);
     
     scalapack::syrk('L', 'T', n, x.nrows(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
   }
@@ -217,7 +214,7 @@ namespace linalg
     const len_t m = x.nrows();
     
     if (m != ret.nrows() || m != ret.ncols())
-      throw std::runtime_error("non-conformable arguments");
+      ret.resize(m, m);
     
     scalapack::syrk('L', 'N', m, x.ncols(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
   }
@@ -247,7 +244,7 @@ namespace linalg
     const len_t n = x.ncols();
     
     if (m != tx.ncols() || n != tx.nrows())
-      throw std::runtime_error("non-conformable arguments");
+      tx.resize(n, m);
     
     scalapack::tran(n, m, 1.f, x.data_ptr(), x.desc_ptr(), 0.f, tx.data_ptr(), tx.desc_ptr());
   }

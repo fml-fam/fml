@@ -40,7 +40,7 @@ namespace linalg
     linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
     
     if (ret.nrows() != m || ret.ncols() != n)
-      throw std::runtime_error("non-conformable arguments");
+      ret.resize(m, n);
     
     const REAL *x_d = x.data_ptr();
     const REAL *y_d = y.data_ptr();
@@ -111,7 +111,7 @@ namespace linalg
    * @param[in] y Right multiplicand.
    * 
    * @except If x and y are inappropriately sized for a matrix product, the
-     method will throw a 'runtime_error' exception. Likewise for ret.
+     method will throw a 'runtime_error' exception.
    * 
    * @impl Uses the BLAS function Xgemm().
    * 
@@ -146,7 +146,7 @@ namespace linalg
    * @param[out] ret The product.
    * 
    * @except If x and y are inappropriately sized for a matrix product, the
-     method will throw a 'runtime_error' exception. Likewise for ret.
+     method will throw a 'runtime_error' exception.
    * 
    * @impl Uses the BLAS function Xgemm().
    * 
@@ -162,7 +162,7 @@ namespace linalg
     linalgutils::matmult_params(transx, transy, mx, x.ncols(), my, y.ncols(), &m, &n, &k);
     
     if (m != ret.nrows() || n != ret.ncols())
-      throw std::runtime_error("non-conformable arguments");
+      ret.resize(m, n);
     
     const char ctransx = transx ? 'T' : 'N';
     const char ctransy = transy ? 'T' : 'N';
@@ -179,9 +179,6 @@ namespace linalg
    * @param[in] x Input data matrix.
    * @param[out] ret The product.
    * 
-   * @except If ret is inappropriately sized for the product, the method will
-     throw a 'runtime_error' exception.
-   * 
    * @impl Uses the BLAS function Xsyrk().
    * 
    * @tparam REAL should be 'float' or 'double'.
@@ -193,7 +190,7 @@ namespace linalg
     const len_t n = x.ncols();
     
     if (n != ret.nrows() || n != ret.ncols())
-      throw std::runtime_error("non-conformable arguments");
+      ret.resize(n, n);
     
     lapack::syrk('L', 'T', n, m, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), n);
   }
@@ -230,7 +227,7 @@ namespace linalg
     const len_t n = x.ncols();
     
     if (m != ret.nrows() || m != ret.ncols())
-      throw std::runtime_error("non-conformable arguments");
+      ret.resize(m, m);
     
     lapack::syrk('L', 'N', m, n, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), m);
   }
@@ -257,7 +254,7 @@ namespace linalg
     const len_t n = x.ncols();
     
     if (m != tx.ncols() || n != tx.nrows())
-      throw std::runtime_error("non-conformable arguments");
+      tx.resize(n, m);
     
     const int blocksize = 8;
     const REAL *x_d = x.data_ptr();

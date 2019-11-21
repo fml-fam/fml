@@ -117,7 +117,7 @@ namespace linalg
     linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
     
     if (ret.nrows() != m || ret.ncols() != n)
-      throw std::runtime_error("non-conformable arguments");
+      ret.resize(m, n);
     
     auto c = x.get_card();
     cublasOperation_t cbtransx = transx ? CUBLAS_OP_T : CUBLAS_OP_N;
@@ -152,7 +152,7 @@ namespace linalg
    * @param[in] y Right multiplicand.
    * 
    * @except If x and y are inappropriately sized for a matrix product, the
-     method will throw a 'runtime_error' exception. Likewise for ret.
+     method will throw a 'runtime_error' exception.
    * 
    * @impl Uses the cuBLAS function cublasXgemm().
    * 
@@ -188,7 +188,7 @@ namespace linalg
    * @param[out] ret The product.
    * 
    * @except If x and y are inappropriately sized for a matrix product, the
-     method will throw a 'runtime_error' exception. Likewise for ret.
+     method will throw a 'runtime_error' exception.
    * 
    * @impl Uses the cuBLAS function cublasXgemm().
    * 
@@ -204,7 +204,7 @@ namespace linalg
     linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
     
     if (m != ret.nrows() || n != ret.ncols())
-      throw std::runtime_error("non-conformable arguments");
+      ret.resize(m, n);
     
     cublasOperation_t cbtransx = transx ? CUBLAS_OP_T : CUBLAS_OP_N;
     cublasOperation_t cbtransy = transy ? CUBLAS_OP_T : CUBLAS_OP_N;
@@ -222,9 +222,6 @@ namespace linalg
    * @param[in] x Input data matrix.
    * @param[out] ret The product.
    * 
-   * @except If ret is inappropriately sized for the product, the method will
-     throw a 'runtime_error' exception.
-   * 
    * @impl Uses the BLAS function cublasXsyrk().
    * 
    * @tparam REAL should be '__half', 'float', or 'double'.
@@ -238,7 +235,7 @@ namespace linalg
     const len_t n = x.ncols();
     
     if (n != ret.nrows() || n != ret.ncols())
-      throw std::runtime_error("non-conformable arguments");
+      ret.resize(n, n);
     
     auto cbh = x.get_card()->cb_handle();
     cublasOperation_t trans = CUBLAS_OP_T;
@@ -282,7 +279,7 @@ namespace linalg
     const len_t n = x.ncols();
     
     if (m != ret.nrows() || m != ret.ncols())
-      throw std::runtime_error("non-conformable arguments");
+      ret.resize(m, m);
     
     auto cbh = x.get_card()->cb_handle();
     cublasOperation_t trans = CUBLAS_OP_N;
@@ -316,7 +313,7 @@ namespace linalg
     const len_t n = x.ncols();
     
     if (m != tx.ncols() || n != tx.nrows())
-      throw std::runtime_error("non-conformable arguments");
+      tx.resize(n, m);
     
     auto cbh = x.get_card()->cb_handle();
     
