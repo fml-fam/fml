@@ -237,6 +237,8 @@ namespace linalg
     if (n != ret.nrows() || n != ret.ncols())
       ret.resize(n, n);
     
+    ret.fill_zero();
+    
     auto cbh = x.get_card()->cb_handle();
     cublasOperation_t trans = CUBLAS_OP_T;
     cublasFillMode_t uplo = CUBLAS_FILL_MODE_LOWER;
@@ -259,9 +261,7 @@ namespace linalg
   gpumat<REAL> crossprod(const REAL alpha, const gpumat<REAL> &x)
   {
     const len_t n = x.ncols();
-    
     gpumat<REAL> ret(x.get_card(), n, n);
-    ret.fill_zero();
     
     crossprod(alpha, x, ret);
     
@@ -281,6 +281,8 @@ namespace linalg
     if (m != ret.nrows() || m != ret.ncols())
       ret.resize(m, m);
     
+    ret.fill_zero();
+    
     auto cbh = x.get_card()->cb_handle();
     cublasOperation_t trans = CUBLAS_OP_N;
     cublasFillMode_t uplo = CUBLAS_FILL_MODE_LOWER;
@@ -293,9 +295,7 @@ namespace linalg
   gpumat<REAL> tcrossprod(const REAL alpha, const gpumat<REAL> &x)
   {
     const len_t m = x.nrows();
-    
     gpumat<REAL> ret(x.get_card(), m, m);
-    ret.fill_zero();
     
     tcrossprod(alpha, x, ret);
     
