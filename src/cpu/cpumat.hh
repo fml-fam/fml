@@ -153,6 +153,7 @@ cpumat<REAL>::~cpumat()
 template <typename REAL>
 void cpumat<REAL>::resize(len_t nrows, len_t ncols)
 {
+  void *realloc_ptr;
   check_params(nrows, ncols);
   
   const size_t len = (size_t) nrows * ncols * sizeof(REAL);
@@ -164,10 +165,14 @@ void cpumat<REAL>::resize(len_t nrows, len_t ncols)
     this->n = ncols;
     return;
   }
-  
-  void *realloc_ptr = realloc(this->data, len);
-  if (realloc_ptr == NULL)
-    throw std::bad_alloc();
+  else if (oldlen == 0)
+    realloc_ptr = malloc(len);
+  else
+  {
+    realloc_ptr = realloc(this->data, len);
+    if (realloc_ptr == NULL)
+      throw std::bad_alloc();
+  }
   
   this->data = (REAL*) realloc_ptr;
   
