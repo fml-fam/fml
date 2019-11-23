@@ -175,6 +175,7 @@ namespace linalg
     if (n != ret.nrows() || n != ret.ncols())
       ret.resize(n, n);
     
+    ret.fill_zero();
     scalapack::syrk('L', 'T', n, x.nrows(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
   }
   
@@ -195,9 +196,7 @@ namespace linalg
   {
     const len_t n = x.ncols();
     grid g = x.get_grid();
-    
     mpimat<REAL> ret(g, n, n, x.bf_rows(), x.bf_cols());
-    ret.fill_zero();
     
     crossprod(alpha, x, ret);
     
@@ -216,6 +215,7 @@ namespace linalg
     if (m != ret.nrows() || m != ret.ncols())
       ret.resize(m, m);
     
+    ret.fill_zero();
     scalapack::syrk('L', 'N', m, x.ncols(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
   }
   
@@ -224,9 +224,7 @@ namespace linalg
   {
     const len_t n = x.nrows();
     grid g = x.get_grid();
-    
     mpimat<REAL> ret(g, n, n, x.bf_rows(), x.bf_cols());
-    ret.fill_zero();
     
     tcrossprod(alpha, x, ret);
     
