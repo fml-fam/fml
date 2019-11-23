@@ -192,6 +192,7 @@ namespace linalg
     if (n != ret.nrows() || n != ret.ncols())
       ret.resize(n, n);
     
+    ret.fill_zero();
     lapack::syrk('L', 'T', n, m, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), n);
   }
   
@@ -209,9 +210,7 @@ namespace linalg
   cpumat<REAL> crossprod(const REAL alpha, const cpumat<REAL> &x)
   {
     const len_t n = x.ncols();
-    
     cpumat<REAL> ret(n, n);
-    ret.fill_zero();
     
     crossprod(alpha, x, ret);
     
@@ -229,6 +228,7 @@ namespace linalg
     if (m != ret.nrows() || m != ret.ncols())
       ret.resize(m, m);
     
+    ret.fill_zero();
     lapack::syrk('L', 'N', m, n, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), m);
   }
   
@@ -236,9 +236,7 @@ namespace linalg
   cpumat<REAL> tcrossprod(const REAL alpha, const cpumat<REAL> &x)
   {
     const len_t m = x.nrows();
-    
     cpumat<REAL> ret(m, m);
-    ret.fill_zero();
     
     tcrossprod(alpha, x, ret);
     
