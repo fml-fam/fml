@@ -229,9 +229,15 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
   this->m_local = bcutils::numroc(nrows, this->mb, this->g.myrow(), 0, this->g.nprow());
   this->n_local = bcutils::numroc(ncols, this->nb, this->g.mycol(), 0, this->g.npcol());
   
-  void *realloc_ptr = realloc(this->data, len);
-  if (realloc_ptr == NULL)
-    throw std::bad_alloc();
+  void *realloc_ptr;
+  if (oldlen == 0)
+    realloc_ptr = malloc(len);
+  else
+  {
+    realloc_ptr = realloc(this->data, len);
+    if (realloc_ptr == NULL)
+      throw std::bad_alloc();
+  }
   
   this->data = (REAL*) realloc_ptr;
   
