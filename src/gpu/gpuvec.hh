@@ -8,6 +8,7 @@
 #include "../univec.hh"
 #include "card.hh"
 #include "kernelfuns.hh"
+#include "launcher.hh"
 
 
 template <typename T>
