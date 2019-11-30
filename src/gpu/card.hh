@@ -152,6 +152,9 @@ inline card::~card()
 */
 inline void card::set(int id)
 {
+  if (id == _id)
+    return;
+  
   cleanup();
   
   _id = id;
