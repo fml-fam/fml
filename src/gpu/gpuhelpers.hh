@@ -76,82 +76,42 @@ namespace gpuhelpers
   
   // gpu2cpu
   template <typename REAL>
-  void gpu2cpu(gpuvec<REAL> &gpu, cpuvec<REAL> &cpu)
+  void gpu2cpu(const gpuvec<REAL> &gpu, cpuvec<REAL> &cpu)
   {
-    if (gpu.size() != cpu.size())
-      throw std::runtime_error("non-conformable arguments");
+    cpu.resize(gpu.size());
     
     size_t len = gpu.size() * sizeof(REAL);
     gpu.get_card()->mem_gpu2cpu(cpu.data_ptr(), gpu.data_ptr(), len);
   }
   
   template <typename REAL>
-  cpuvec<REAL> gpu2cpu(gpuvec<REAL> &gpu)
+  void gpu2cpu(const gpumat<REAL> &gpu, cpumat<REAL> &cpu)
   {
-    cpuvec<REAL> cpu(gpu.size());
-    gpu2cpu(gpu, cpu);
-    return cpu;
-  }
-  
-  
-  
-  template <typename REAL>
-  void gpu2cpu(gpumat<REAL> &gpu, cpumat<REAL> &cpu)
-  {
-    if (gpu.nrows() != cpu.nrows() || gpu.ncols() != cpu.ncols())
-      throw std::runtime_error("non-conformable arguments");
+    cpu.resize(gpu.nrows(), gpu.ncols());
     
     size_t len = (size_t) gpu.nrows() * gpu.ncols() * sizeof(REAL);
     gpu.get_card()->mem_gpu2cpu(cpu.data_ptr(), gpu.data_ptr(), len);
-  }
-  
-  template <typename REAL>
-  cpumat<REAL> gpu2cpu(gpumat<REAL> &gpu)
-  {
-    cpumat<REAL> cpu(gpu.nrows(), gpu.ncols());
-    gpu2cpu(gpu, cpu);
-    return cpu;
   }
   
   
   
   // cpu2gpu
   template <typename REAL>
-  void cpu2gpu(cpuvec<REAL> &cpu, gpuvec<REAL> &gpu)
+  void cpu2gpu(const cpuvec<REAL> &cpu, gpuvec<REAL> &gpu)
   {
-    if (gpu.size() != cpu.size())
-      throw std::runtime_error("non-conformable arguments");
+    gpu.resize(cpu.size());
     
     size_t len = cpu.size() * sizeof(REAL);
     gpu.get_card()->mem_cpu2gpu(gpu.data_ptr(), cpu.data_ptr(), len);
   }
   
   template <typename REAL>
-  gpuvec<REAL> cpu2gpu(std::shared_ptr<card> c, cpuvec<REAL> &cpu)
+  void cpu2gpu(const cpumat<REAL> &cpu, gpumat<REAL> &gpu)
   {
-    gpuvec<REAL> gpu(c, cpu.size());
-    cpu2gpu(cpu, gpu);
-    return gpu;
-  }
-  
-  
-  
-  template <typename REAL>
-  void cpu2gpu(cpumat<REAL> &cpu, gpumat<REAL> &gpu)
-  {
-    if (gpu.nrows() != cpu.nrows() || gpu.ncols() != cpu.ncols())
-      throw std::runtime_error("non-conformable arguments");
+    gpu.resize(cpu.nrows(), cpu.ncols());
     
     size_t len = (size_t) gpu.nrows() * gpu.ncols() * sizeof(REAL);
     gpu.get_card()->mem_cpu2gpu(gpu.data_ptr(), cpu.data_ptr(), len);
-  }
-  
-  template <typename REAL>
-  gpumat<REAL> cpu2gpu(std::shared_ptr<card> c, cpumat<REAL> &cpu)
-  {
-    gpumat<REAL> gpu(c, cpu.nrows(), cpu.ncols());
-    cpu2gpu(cpu, gpu);
-    return gpu;
   }
 }
 
