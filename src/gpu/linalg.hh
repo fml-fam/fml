@@ -493,7 +493,7 @@ namespace linalg
       if (!only_values)
       {
         vectors.resize(c, n, n);
-        gpuhelpers::copy(x, vectors);
+        gpuhelpers::gpu2gpu(x, vectors);
       }
       
       return info;
@@ -565,7 +565,7 @@ namespace linalg
     check_cusolver_ret(check, "getrs");
     check_info(info, "getrs");
     
-    gpuhelpers::copy(inv, x);
+    gpuhelpers::gpu2gpu(inv, x);
   }
   
   
