@@ -1,7 +1,7 @@
 #include "../catch.hpp"
 
 #include <arraytools/src/arraytools.hpp>
-#include <mpi/bcutils.hh>
+#include <mpi/internals/bcutils.hh>
 #include <mpi/grid.hh>
 #include <mpi/mpihelpers.hh>
 #include <mpi/mpimat.hh>
