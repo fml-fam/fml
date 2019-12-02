@@ -15,8 +15,27 @@
 #include "cpuvec.hh"
 
 
+/**
+ * @brief CPU class helpers.
+*/
 namespace cpuhelpers
 {
+  /**
+   * @brief Copy a CPU class object to another.
+   * 
+   * @param[in] cpu_in Input data.
+   * @param[out] cpu_out Output. Dimensions should match those of the input
+   * data. If not, the matrix will automatically be resized.
+   * 
+   * @allocs If the output dimensions do not match those of the input, the
+   * internal data will automatically be re-allocated.
+   * 
+   * @except If a reallocation is triggered and fails, a 'bad_alloc' exception
+   * will be thrown.
+   * 
+   * @tparam REAL_IN and REAL_OUT should be 'float' or 'double' (but they can be
+   * different).
+  */
   template <typename REAL_IN, typename REAL_OUT>
   void cpu2cpu(const cpuvec<REAL_IN> &cpu_in, cpuvec<REAL_OUT> &cpu_out)
   {
@@ -25,6 +44,9 @@ namespace cpuhelpers
     arraytools::copy(cpu_in.size(), cpu_in.data_ptr(), cpu_out.data_ptr());
   }
   
+  /**
+   * \overload
+   */
   template <typename REAL_IN, typename REAL_OUT>
   void cpu2cpu(const cpumat<REAL_IN> &cpu_in, cpumat<REAL_OUT> &cpu_out)
   {
