@@ -41,7 +41,7 @@ TEMPLATE_TEST_CASE("inheriting memory", "[gpumat]", float, double)
   c->mem_gpu2cpu(&test_val, data+0, 1*sizeof(test_val));
   REQUIRE( fltcmp::eq(test_val, 1) );
   
-  gpumat<TestType> y;
+  gpumat<TestType> y(c);
   y.set(c, data, m, n);
   y.fill_zero();
   y.~gpumat();
