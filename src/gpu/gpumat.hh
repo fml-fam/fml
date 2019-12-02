@@ -14,8 +14,8 @@
 #include "../unimat.hh"
 
 #include "card.hh"
+#include "internals/launcher.hh"
 #include "kernelfuns.hh"
-#include "launcher.hh"
 #include "gpuvec.hh"
 
 

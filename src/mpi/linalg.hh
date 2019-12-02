@@ -12,8 +12,8 @@
 #include "../linalgutils.hh"
 #include "../cpu/cpuvec.hh"
 
+#include "internals/scalapack.hh"
 #include "mpimat.hh"
-#include "scalapack.hh"
 
 
 namespace linalg

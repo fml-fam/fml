@@ -15,7 +15,7 @@
 #include <cstdio>
 #include <stdexcept>
 
-#include "_blacs_prototypes.h"
+#include "internals/_blacs_prototypes.h"
 
 
 /**

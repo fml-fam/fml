@@ -15,7 +15,7 @@
 #include <stdexcept>
 
 #include "grid.hh"
-#include "bcutils.hh"
+#include "internals/bcutils.hh"
 
 #include "../fmlutils.hh"
 #include "../omputils.hh"

@@ -14,7 +14,7 @@
 #include <memory>
 #include <stdexcept>
 
-#include "nvml.hh"
+#include "internals/nvml.hh"
 
 
 /**

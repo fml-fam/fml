@@ -10,7 +10,7 @@
 #include <stdexcept>
 
 #include "../cpu/cpumat.hh"
-#include "bcutils.hh"
+#include "internals/bcutils.hh"
 #include "grid.hh"
 #include "mpimat.hh"
 

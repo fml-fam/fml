@@ -11,7 +11,7 @@
 #include <string>
 
 #include "../linalgutils.hh"
-#include "culapack.hh"
+#include "internals/culapack.hh"
 #include "gpumat.hh"
 #include "gpuvec.hh"
 
