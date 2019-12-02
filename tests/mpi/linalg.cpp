@@ -1,9 +1,11 @@
 #include "../catch.hpp"
 
-#include <fltcmp.hh>
+#include <arraytools/src/arraytools.hpp>
 #include <mpi/grid.hh>
 #include <mpi/linalg.hh>
 #include <mpi/mpimat.hh>
+
+using namespace arraytools;
 
 extern grid g;
 

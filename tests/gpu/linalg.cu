@@ -1,9 +1,11 @@
 #include "../catch.hpp"
 
-#include <fltcmp.hh>
+#include <arraytools/src/arraytools.hpp>
 #include <gpu/gpuhelpers.hh>
 #include <gpu/gpumat.hh>
 #include <gpu/linalg.hh>
+
+using namespace arraytools;
 
 extern std::shared_ptr<card> c;
 

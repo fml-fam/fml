@@ -1,14 +1,14 @@
 #include "../catch.hpp"
 
-#include <fltcmp.hh>
+#include <arraytools/src/arraytools.hpp>
 #include <mpi/bcutils.hh>
 #include <mpi/grid.hh>
 #include <mpi/mpihelpers.hh>
 #include <mpi/mpimat.hh>
 
+using namespace arraytools;
 
 extern grid g;
-
 
 
 TEMPLATE_TEST_CASE("basics", "[mpimat]", float, double)

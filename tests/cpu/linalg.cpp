@@ -1,8 +1,10 @@
 #include "../catch.hpp"
 
-#include <fltcmp.hh>
+#include <arraytools/src/arraytools.hpp>
 #include <cpu/cpumat.hh>
 #include <cpu/linalg.hh>
+
+using namespace arraytools;
 
 
 TEMPLATE_TEST_CASE("matrix addition", "[linalg]", float, double)

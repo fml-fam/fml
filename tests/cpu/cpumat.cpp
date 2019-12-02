@@ -1,7 +1,9 @@
 #include "../catch.hpp"
 
-#include <fltcmp.hh>
+#include <arraytools/src/arraytools.hpp>
 #include <cpu/cpumat.hh>
+
+using namespace arraytools;
 
 
 
