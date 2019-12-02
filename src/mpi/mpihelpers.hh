@@ -16,8 +16,30 @@
 #include "mpimat.hh"
 
 
+/**
+ * @brief MPI class helpers.
+*/
 namespace mpihelpers
 {
+  /**
+   * @brief Copy data from an MPI object to a CPU object.
+   * 
+   * @details Every process in the grid receives a copy of the data.
+   * 
+   * @param[in] mpi Input data.
+   * @param[out] cpu Output. Dimensions should match those of the input
+   * data. If not, the matrix will automatically be resized.
+   * 
+   * @allocs If the output dimensions do not match those of the input, the
+   * internal data will automatically be re-allocated.
+   * 
+   * @except If a reallocation is triggered and fails, a `bad_alloc` exception
+   * will be thrown.
+   * 
+   * @comm The method will communicate across all processes in the BLACS grid.
+   * 
+   * @tparam REAL Should be `float` or `double`.
+  */
   template <typename REAL>
   void mpi2cpu(const mpimat<REAL> &mpi, cpumat<REAL> &cpu)
   {
@@ -56,6 +78,27 @@ namespace mpihelpers
   
   
   
+  /**
+   * @brief Copy data from a CPU object to an MPI object.
+   * 
+   * @details The CPU matrix should be replicated across all processes in the
+   * grid. This is just for testing purposes and should not be used in
+   * production.
+   * 
+   * @param[in] cpu Input data.
+   * @param[out] mpi Output. Dimensions should match those of the input
+   * data. If not, the matrix will automatically be resized.
+   * 
+   * @allocs If the output dimensions do not match those of the input, the
+   * internal data will automatically be re-allocated.
+   * 
+   * @except If a reallocation is triggered and fails, a `bad_alloc` exception
+   * will be thrown.
+   * 
+   * @comm The method has no communication.
+   * 
+   * @tparam REAL Should be `float` or `double`.
+  */
   template <typename REAL>
   void cpu2mpi(const cpumat<REAL> &cpu, mpimat<REAL> &mpi)
   {
