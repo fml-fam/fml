@@ -120,7 +120,8 @@ TEMPLATE_TEST_CASE("indexing", "[mpimat]", float, double)
   for (len_t i=0; i<n*n; i++)
     x_d[i] = (TestType) i+1;
   
-  mpimat<TestType> x = mpihelpers::cpu2mpi(x_cpu, g, 1, 1);
+  mpimat<TestType> x(g, 1, 1);
+  mpihelpers::cpu2mpi(x_cpu, x);
   mpimat<TestType> y(g, n, n, 1, 1);
   
   y.fill_linspace(1, n*n);
