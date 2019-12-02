@@ -175,12 +175,13 @@ TEMPLATE_TEST_CASE("svd", "[linalg]", float, double)
   v_cpu(0) = (TestType) 2;
   v_cpu(1) = (TestType) 5;
   
-  gpuvec<TestType> v = gpuhelpers::cpu2gpu(c, v_cpu);
+  gpuvec<TestType> v(c);
+  gpuhelpers::cpu2gpu(v_cpu, v);
   
   gpumat<TestType> x(c, n, n);
   x.fill_diag(v);
   
-  gpuvec<TestType> s;
+  gpuvec<TestType> s(c);
   linalg::svd(x, s);
   
   v.rev();
@@ -197,12 +198,13 @@ TEMPLATE_TEST_CASE("eigen", "[linalg]", float, double)
   v_cpu(0) = (TestType) 2;
   v_cpu(1) = (TestType) 5;
   
-  gpuvec<TestType> v = gpuhelpers::cpu2gpu(c, v_cpu);
+  gpuvec<TestType> v(c);
+  gpuhelpers::cpu2gpu(v_cpu, v);
   
   gpumat<TestType> x(c, n, n);
   x.fill_diag(v);
   
-  gpuvec<TestType> values;
+  gpuvec<TestType> values(c);
   linalg::eigen(true, x, values);
   
   REQUIRE( v == values );
@@ -240,8 +242,10 @@ TEMPLATE_TEST_CASE("solve", "[linalg]", float, double)
   x_cpu(0, 0) = (TestType) 2;
   x_cpu(1, 1) = (TestType) 3;
   
-  auto x = gpuhelpers::cpu2gpu(c, x_cpu);
-  auto y = gpuhelpers::cpu2gpu(c, y_cpu);
+  gpumat<TestType> x(c);
+  gpuvec<TestType> y(c);
+  gpuhelpers::cpu2gpu(x_cpu, x);
+  gpuhelpers::cpu2gpu(y_cpu, y);
   linalg::solve(x, y);
   
   gpuhelpers::gpu2cpu(y, y_cpu);
