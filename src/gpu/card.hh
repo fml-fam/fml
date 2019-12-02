@@ -46,19 +46,17 @@ class card
     
     ///@{
     /// The ordinal number corresponding to the GPU device.
-    int device_id() {return _id;};
-    int device_id() const {return _id;};
+    int get_id() {return _id;};
+    int get_id() const {return _id;};
     /// cuBLAS handle.
     cublasHandle_t cb_handle() {return _cb_handle;};
     cublasHandle_t cb_handle() const {return _cb_handle;};
     /// cuSOLVER handle.
     cusolverDnHandle_t cs_handle() {return _cs_handle;};
     cusolverDnHandle_t cs_handle() const {return _cs_handle;};
-    ///@}
-    
     /// Is the gpu data valid?
     bool valid_card() const {return (_id!=UNINITIALIZED_CARD && _id!=DESTROYED_CARD);};
-    int get_id() const {return _id;};
+    ///@}
   
   protected:
     int _id;
@@ -124,7 +122,7 @@ inline card::card(int id)
 
 inline card::card(const card &x)
 {
-  _id = x.device_id();
+  _id = x.get_id();
   _cb_handle = x.cb_handle();
   _cs_handle = x.cs_handle();
 }

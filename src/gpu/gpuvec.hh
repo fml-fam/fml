@@ -337,7 +337,7 @@ bool gpuvec<T>::operator==(const gpuvec<T> &x) const
 {
   if (this->_size != x.size())
     return false;
-  else if (this->c->device_id() != x.get_card()->device_id())
+  else if (this->c->get_id() != x.get_card()->get_id())
     return false;
   else if (this->data == x.data_ptr())
     return true;

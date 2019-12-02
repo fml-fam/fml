@@ -490,7 +490,7 @@ bool gpumat<T>::operator==(const gpumat<T> &x) const
 {
   if (this->m != x.nrows() || this->n != x.ncols())
     return false;
-  else if (this->c->device_id() != x.get_card()->device_id())
+  else if (this->c->get_id() != x.get_card()->get_id())
     return false;
   else if (this->data == x.data_ptr())
     return true;
