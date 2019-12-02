@@ -24,7 +24,7 @@ FILE_PATTERNS          = *.c *.cpp *.h *.hh *.cu
 RECURSIVE              = YES
 
 EXCLUDE                = 
-EXCLUDE_PATTERNS       = 
+EXCLUDE_PATTERNS       = */arraytools/*
 
 
 #---------------------------------------------------------------------------
@@ -59,6 +59,7 @@ EXTRA_PACKAGES         =
 ALIASES += impl="\par Implementation Details\n"
 ALIASES += comm="\par Communication Details\n"
 ALIASES += except="\par Exceptions\n"
+ALIASES += allocs="\par Memory Allocations\n"
 
 # The STRIP_FROM_PATH tag can be used to strip a user-defined part of the path.
 # Stripping is only done if one of the specified strings matches the left-hand
@@ -741,15 +742,6 @@ EXCLUDE                =
 # The default value is: NO.
 
 EXCLUDE_SYMLINKS       = NO
-
-# If the value of the INPUT tag contains directories, you can use the
-# EXCLUDE_PATTERNS tag to specify one or more wildcard patterns to exclude
-# certain files from those directories.
-#
-# Note that the wildcards are matched against the file with absolute path, so to
-# exclude all test directories for example use the pattern */test/*
-
-EXCLUDE_PATTERNS       = 
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names
 # (namespaces, classes, functions, etc.) that should be excluded from the
