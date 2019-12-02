@@ -9,7 +9,7 @@
 
 #include <stdexcept>
 
-#include "../linalgutils.hh"
+#include "../_internals/linalgutils.hh"
 #include "../cpu/cpuvec.hh"
 
 #include "internals/scalapack.hh"

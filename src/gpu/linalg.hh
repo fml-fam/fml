@@ -10,8 +10,10 @@
 #include <stdexcept>
 #include <string>
 
-#include "../linalgutils.hh"
+#include "../_internals/linalgutils.hh"
+
 #include "internals/culapack.hh"
+
 #include "gpumat.hh"
 #include "gpuvec.hh"
 

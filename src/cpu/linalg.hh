@@ -10,12 +10,13 @@
 #include <cmath>
 #include <stdexcept>
 
-#include "../linalgutils.hh"
-#include "../omputils.hh"
+#include "../_internals/linalgutils.hh"
+#include "../_internals/omputils.hh"
+
+#include "internals/lapack.hh"
 
 #include "cpumat.hh"
 #include "cpuvec.hh"
-#include "internals/lapack.hh"
 
 
 /**

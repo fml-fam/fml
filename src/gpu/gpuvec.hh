@@ -10,9 +10,11 @@
 #include <cstdint>
 #include <cstdio>
 
-#include "../univec.hh"
-#include "card.hh"
+#include "../_internals/univec.hh"
+
 #include "internals/launcher.hh"
+
+#include "card.hh"
 #include "kernelfuns.hh"
 
 

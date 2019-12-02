@@ -9,7 +9,7 @@
 
 #include <cuda_runtime.h>
 
-#include "../types.hh"
+#include "../_internals/types.hh"
 
 
 namespace kernelfuns

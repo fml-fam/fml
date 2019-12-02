@@ -11,8 +11,8 @@
 
 #include "../arraytools/src/arraytools.hpp"
 
-#include "../cpu/cpumat.hh"
-#include "../cpu/cpuvec.hh"
+#include "cpumat.hh"
+#include "cpuvec.hh"
 
 
 namespace cpuhelpers

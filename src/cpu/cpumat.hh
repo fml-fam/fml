@@ -14,10 +14,10 @@
 #include <random>
 #include <stdexcept>
 
-#include "../fmlutils.hh"
-#include "../omputils.hh"
-#include "../types.hh"
-#include "../unimat.hh"
+#include "../_internals/fmlutils.hh"
+#include "../_internals/omputils.hh"
+#include "../_internals/types.hh"
+#include "../_internals/unimat.hh"
 
 #include "cpuvec.hh"
 

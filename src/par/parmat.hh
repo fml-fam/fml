@@ -12,7 +12,7 @@
 #include <cstring>
 #include <random>
 
-#include "../types.hh"
+#include "../_internals/types.hh"
 #include "comm.hh"
 
 

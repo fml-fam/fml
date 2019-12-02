@@ -10,11 +10,12 @@
 #include <cstdint>
 #include <cstdio>
 
-#include "../types.hh"
-#include "../unimat.hh"
+#include "../_internals/types.hh"
+#include "../_internals/unimat.hh"
+
+#include "internals/launcher.hh"
 
 #include "card.hh"
-#include "internals/launcher.hh"
 #include "kernelfuns.hh"
 #include "gpuvec.hh"
 

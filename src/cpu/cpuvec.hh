@@ -13,8 +13,8 @@
 #include <cstring>
 #include <stdexcept>
 
-#include "../omputils.hh"
-#include "../univec.hh"
+#include "../_internals/omputils.hh"
+#include "../_internals/univec.hh"
 
 
 /**
