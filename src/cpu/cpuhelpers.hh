@@ -1,5 +1,6 @@
 #ifndef FML_CPU_CPUHELPERS_H
 #define FML_CPU_CPUHELPERS_H
+#pragma once
 
 
 #include <stdexcept>

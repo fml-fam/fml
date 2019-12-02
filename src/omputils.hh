@@ -1,5 +1,6 @@
 #ifndef FML_OMPUTILS_H
 #define FML_OMPUTILS_H
+#pragma once
 
 
 namespace omputils

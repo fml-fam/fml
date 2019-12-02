@@ -1,5 +1,6 @@
 #ifndef FML_CPU_CPUMAT_H
 #define FML_CPU_CPUMAT_H
+#pragma once
 
 
 #include <cmath>

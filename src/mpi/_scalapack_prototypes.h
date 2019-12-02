@@ -1,5 +1,6 @@
 #ifndef FML_MPI__SCALAPACK_PROTOTYPES_H
 #define FML_MPI__SCALAPACK_PROTOTYPES_H
+#pragma once
 
 
 #ifndef restrict

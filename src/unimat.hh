@@ -1,5 +1,6 @@
 #ifndef FML_MATRIX_H
 #define FML_MATRIX_H
+#pragma once
 
 
 #ifdef __CUDACC__

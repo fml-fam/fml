@@ -1,5 +1,6 @@
 #ifndef FML_MPI_MPIHELPERS_H
 #define FML_MPI_MPIHELPERS_H
+#pragma once
 
 
 #include <stdexcept>

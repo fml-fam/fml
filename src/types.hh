@@ -1,5 +1,6 @@
 #ifndef FML_TYPES_H
 #define FML_TYPES_H
+#pragma once
 
 
 #define __STDC_FORMAT_MACROS

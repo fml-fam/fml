@@ -1,5 +1,6 @@
 #ifndef FML_GPU_GPUHELPERS_H
 #define FML_GPU_GPUHELPERS_H
+#pragma once
 
 
 #include <stdexcept>

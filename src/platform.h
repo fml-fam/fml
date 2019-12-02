@@ -1,5 +1,6 @@
 #ifndef FML_PLATFORM_H
 #define FML_PLATFORM_H
+#pragma once
 
 
 // "portability"

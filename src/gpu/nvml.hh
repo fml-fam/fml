@@ -1,5 +1,6 @@
 #ifndef FML_GPU_NVML_H
 #define FML_GPU_NVML_H
+#pragma once
 
 
 #include <climits>

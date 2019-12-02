@@ -1,5 +1,6 @@
 #ifndef FML_GPU_GPUMAT_H
 #define FML_GPU_GPUMAT_H
+#pragma once
 
 
 #include <cstdint>

@@ -1,5 +1,6 @@
 #ifndef FML_GPU_GPUVEC_H
 #define FML_GPU_GPUVEC_H
+#pragma once
 
 
 #include <cstdint>

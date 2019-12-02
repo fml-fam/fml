@@ -1,5 +1,6 @@
 #ifndef FML_CPU_LINALG_H
 #define FML_CPU_LINALG_H
+#pragma once
 
 
 #include <cmath>

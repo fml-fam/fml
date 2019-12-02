@@ -1,5 +1,6 @@
 #ifndef FML_LINALGUTILS_H
 #define FML_LINALGUTILS_H
+#pragma once
 
 
 #include <stdexcept>

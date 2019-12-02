@@ -1,5 +1,6 @@
 #ifndef FML_MPI_SCALAPACK_H
 #define FML_MPI_SCALAPACK_H
+#pragma once
 
 
 #include "_scalapack_prototypes.h"

@@ -1,5 +1,6 @@
 #ifndef FML_MPI_BCUTILS_H
 #define FML_MPI_BCUTILS_H
+#pragma once
 
 
 #include <cmath>

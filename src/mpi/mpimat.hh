@@ -1,5 +1,6 @@
 #ifndef FML_MPI_MPIMAT_H
 #define FML_MPI_MPIMAT_H
+#pragma once
 
 
 #include <algorithm>

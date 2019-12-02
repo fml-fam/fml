@@ -1,5 +1,6 @@
 #ifndef FML_GPU_LINALG_H
 #define FML_GPU_LINALG_H
+#pragma once
 
 
 #include <stdexcept>

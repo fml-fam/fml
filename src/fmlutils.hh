@@ -1,5 +1,6 @@
 #ifndef FML_FMLUTILS_H
 #define FML_FMLUTILS_H
+#pragma once
 
 
 #include <ctime>

@@ -1,5 +1,6 @@
 #ifndef FML_GPU_KERNELFUNS_H
 #define FML_GPU_KERNELFUNS_H
+#pragma once
 
 
 #include <cuda_runtime.h>

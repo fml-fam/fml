@@ -1,5 +1,6 @@
 #ifndef FML_MPI_LINALG_H
 #define FML_MPI_LINALG_H
+#pragma once
 
 
 #include <stdexcept>

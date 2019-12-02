@@ -1,5 +1,6 @@
 #ifndef FML_GPU_CUSOLVER_H
 #define FML_GPU_CUSOLVER_H
+#pragma once
 
 
 #include <cublas.h>

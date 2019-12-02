@@ -1,5 +1,6 @@
 #ifndef FML_GPU_LAUNCHER_H
 #define FML_GPU_LAUNCHER_H
+#pragma once
 
 
 // TODO

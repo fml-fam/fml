@@ -1,5 +1,6 @@
 #ifndef FML_CPU__LAPACK_PROTOTYPES_H
 #define FML_CPU__LAPACK_PROTOTYPES_H
+#pragma once
 
 
 #ifndef restrict

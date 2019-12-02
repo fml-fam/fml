@@ -1,5 +1,6 @@
 #ifndef FML_MPI_GRID_H
 #define FML_MPI_GRID_H
+#pragma once
 
 
 #define OMPI_SKIP_MPICXX 1

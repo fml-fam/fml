@@ -1,5 +1,6 @@
 #ifndef FML_CPU_LAPACK_H
 #define FML_CPU_LAPACK_H
+#pragma once
 
 
 #include "_lapack_prototypes.h"

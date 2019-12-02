@@ -1,5 +1,6 @@
 #ifndef FML_MPI__BLACS_PROTOTYPES_H
 #define FML_MPI__BLACS_PROTOTYPES_H
+#pragma once
 
 
 #ifdef __cplusplus

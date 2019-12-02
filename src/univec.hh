@@ -1,5 +1,6 @@
 #ifndef FML_UNIVEC_H
 #define FML_UNIVEC_H
+#pragma once
 
 
 #include <stdexcept>
