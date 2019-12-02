@@ -21,7 +21,7 @@
 namespace cpuhelpers
 {
   /**
-   * @brief Copy a CPU class object to another.
+   * @brief Copy data from a CPU object to another.
    * 
    * @param[in] cpu_in Input data.
    * @param[out] cpu_out Output. Dimensions should match those of the input
@@ -30,11 +30,11 @@ namespace cpuhelpers
    * @allocs If the output dimensions do not match those of the input, the
    * internal data will automatically be re-allocated.
    * 
-   * @except If a reallocation is triggered and fails, a 'bad_alloc' exception
+   * @except If a reallocation is triggered and fails, a `bad_alloc` exception
    * will be thrown.
    * 
-   * @tparam REAL_IN and REAL_OUT should be 'float' or 'double' (but they can be
-   * different).
+   * @tparam REAL_IN,REAL_OUT Should be `float` or `double`. They do not have to
+   * be the same type.
   */
   template <typename REAL_IN, typename REAL_OUT>
   void cpu2cpu(const cpuvec<REAL_IN> &cpu_in, cpuvec<REAL_OUT> &cpu_out)
