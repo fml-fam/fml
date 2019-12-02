@@ -47,6 +47,8 @@ class gpuvec : public univec<T>
     gpuvec<T>& operator=(const gpuvec<T> &x);
     
     std::shared_ptr<card> get_card() const {return c;};
+    dim3 get_blockdim() const {return dim_block;};
+    dim3 get_griddim() const {return dim_grid;};
     
   protected:
     std::shared_ptr<card> c;

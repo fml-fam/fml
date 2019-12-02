@@ -66,6 +66,8 @@ class gpumat : public unimat<REAL>
     gpumat<REAL>& operator=(const gpumat<REAL> &x);
     
     std::shared_ptr<card> get_card() const {return c;};
+    dim3 get_blockdim() const {return dim_block;};
+    dim3 get_griddim() const {return dim_grid;};
     
   protected:
     std::shared_ptr<card> c;
