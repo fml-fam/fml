@@ -1,0 +1,3 @@
+[submodule "src/arraytools"]
+	path = src/arraytools
+	url = git@github.com:wrathematics/arraytools
