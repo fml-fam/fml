@@ -54,19 +54,19 @@ class card
     int get_id() {return _id;};
     int get_id() const {return _id;};
     /// cuBLAS handle.
-    cublasHandle_t cb_handle() {return _cb_handle;};
-    cublasHandle_t cb_handle() const {return _cb_handle;};
+    cublasHandle_t blas_handle() {return _blas_handle;};
+    cublasHandle_t blas_handle() const {return _blas_handle;};
     /// cuSOLVER handle.
-    cusolverDnHandle_t cs_handle() {return _cs_handle;};
-    cusolverDnHandle_t cs_handle() const {return _cs_handle;};
+    cusolverDnHandle_t lapack_handle() {return _lapack_handle;};
+    cusolverDnHandle_t lapack_handle() const {return _lapack_handle;};
     /// Is the gpu data valid?
     bool valid_card() const {return (_id!=UNINITIALIZED_CARD && _id!=DESTROYED_CARD);};
     ///@}
   
   protected:
     int _id;
-    cublasHandle_t _cb_handle;
-    cusolverDnHandle_t _cs_handle;
+    cublasHandle_t _blas_handle;
+    cusolverDnHandle_t _lapack_handle;
   
   private:
     static const int UNINITIALIZED_CARD = -1;
@@ -92,8 +92,8 @@ class card
 inline card::card()
 {
   _id = UNINITIALIZED_CARD;
-  _cb_handle = NULL;
-  _cs_handle = NULL;
+  _blas_handle = NULL;
+  _lapack_handle = NULL;
 }
 
 
@@ -114,11 +114,11 @@ inline card::card(int id)
   _id = id;
   init();
   
-  cublasStatus_t cb_status = cublasCreate(&_cb_handle);
+  cublasStatus_t cb_status = cublasCreate(&_blas_handle);
   if (cb_status != CUBLAS_STATUS_SUCCESS)
     throw std::runtime_error("unable to initialize cuBLAS");
   
-  cusolverStatus_t cs_status = cusolverDnCreate(&_cs_handle);
+  cusolverStatus_t cs_status = cusolverDnCreate(&_lapack_handle);
   if (cs_status != CUSOLVER_STATUS_SUCCESS)
     throw std::runtime_error("unable to initialize cuSOLVER");
 }
@@ -128,8 +128,8 @@ inline card::card(int id)
 inline card::card(const card &x)
 {
   _id = x.get_id();
-  _cb_handle = x.cb_handle();
-  _cs_handle = x.cs_handle();
+  _blas_handle = x.blas_handle();
+  _lapack_handle = x.lapack_handle();
 }
 
 
@@ -163,11 +163,11 @@ inline void card::set(int id)
   _id = id;
   init();
   
-  cublasStatus_t cb_status = cublasCreate(&_cb_handle);
+  cublasStatus_t cb_status = cublasCreate(&_blas_handle);
   if (cb_status != CUBLAS_STATUS_SUCCESS)
     throw std::runtime_error("unable to initialize cuBLAS");
   
-  cusolverStatus_t cs_status = cusolverDnCreate(&_cs_handle);
+  cusolverStatus_t cs_status = cusolverDnCreate(&_lapack_handle);
   if (cs_status != CUSOLVER_STATUS_SUCCESS)
     throw std::runtime_error("unable to initialize cuSOLVER");
 }
@@ -391,16 +391,16 @@ inline void card::cleanup()
 {
   init();
   
-  if (_cs_handle)
+  if (_lapack_handle)
   {
-    cusolverDnDestroy(_cs_handle);
-    _cs_handle = NULL;
+    cusolverDnDestroy(_lapack_handle);
+    _lapack_handle = NULL;
   }
   
-  if (_cb_handle)
+  if (_blas_handle)
   {
-    cublasDestroy(_cb_handle);
-    _cb_handle = NULL;
+    cublasDestroy(_blas_handle);
+    _blas_handle = NULL;
   }
   
   cerr = cudaDeviceReset();
