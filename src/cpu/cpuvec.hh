@@ -139,7 +139,12 @@ void cpuvec<T>::resize(len_t size)
   
   const size_t len = (size_t) size * sizeof(T);
   
-  void *realloc_ptr = realloc(this->data, len);
+  void *realloc_ptr;
+  if (this->_size == 0)
+    realloc_ptr = malloc(len);
+  else
+    realloc_ptr = realloc(this->data, len);
+  
   if (realloc_ptr == NULL)
     throw std::bad_alloc();
   

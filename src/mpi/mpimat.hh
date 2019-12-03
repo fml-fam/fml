@@ -256,11 +256,10 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols)
   if (oldlen == 0)
     realloc_ptr = malloc(len);
   else
-  {
     realloc_ptr = realloc(this->data, len);
-    if (realloc_ptr == NULL)
-      throw std::bad_alloc();
-  }
+  
+  if (realloc_ptr == NULL)
+    throw std::bad_alloc();
   
   this->data = (REAL*) realloc_ptr;
   
@@ -297,11 +296,10 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
   if (oldlen == 0)
     realloc_ptr = malloc(len);
   else
-  {
     realloc_ptr = realloc(this->data, len);
-    if (realloc_ptr == NULL)
-      throw std::bad_alloc();
-  }
+  
+  if (realloc_ptr == NULL)
+    throw std::bad_alloc();
   
   this->data = (REAL*) realloc_ptr;
   
