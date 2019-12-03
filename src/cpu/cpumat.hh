@@ -480,6 +480,9 @@ void cpumat<REAL>::rev_cols()
 template <typename REAL>
 void cpumat<REAL>::get_row(len_t i, cpuvec<REAL> &v) const
 {
+  if (i < 0 || i >= this->m)
+    throw std::logic_error("invalid matrix row");
+  
   v.resize(this->n);
   REAL *v_d = v.data_ptr();
   
@@ -492,6 +495,9 @@ void cpumat<REAL>::get_row(len_t i, cpuvec<REAL> &v) const
 template <typename REAL>
 void cpumat<REAL>::get_col(len_t j, cpuvec<REAL> &v) const
 {
+  if (j < 0 || j >= this->n)
+    throw std::logic_error("invalid matrix column");
+  
   v.resize(this->m);
   REAL *v_d = v.data_ptr();
   
