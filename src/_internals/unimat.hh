@@ -16,14 +16,21 @@
 #include "types.hh"
 
 
+/**
+ * @brief Base matrix class. Not meant for direct use. Instead see `cpumat`,
+ * `gpumat`, and `mpimat`.
+ */
 template <typename REAL>
 class unimat
 {
   public:
+    /// Is the matrix square?
     bool is_square() const {return (this->m==this->n);};
-    
+    /// Number of rows.
     len_t nrows() const {return m;};
+    /// Number of columns.
     len_t ncols() const {return n;};
+    /// Pointer to the internal array.
     REAL* data_ptr() {return data;};
     REAL* data_ptr() const {return data;};
   

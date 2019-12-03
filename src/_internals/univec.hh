@@ -12,11 +12,17 @@
 #include "types.hh"
 
 
+/**
+ * @brief Base vector class. Not meant for direct use. Instead see `cpuvec`
+ * and `gpuvec`.
+ */
 template <typename T>
 class univec
 {
   public:
+    /// Number of elements in the vector.
     len_t size() const {return _size;};
+    /// Pointer to the internal array.
     T* data_ptr() {return data;};
     T* data_ptr() const {return data;};
   
