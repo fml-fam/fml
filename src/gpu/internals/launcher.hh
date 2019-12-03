@@ -2,8 +2,8 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_GPU_LAUNCHER_H
-#define FML_GPU_LAUNCHER_H
+#ifndef FML_GPU_INTERNALS_LAUNCHER_H
+#define FML_GPU_INTERNALS_LAUNCHER_H
 #pragma once
 
 
@@ -12,6 +12,16 @@
 
 
 #include <cstdarg>
+
+#if defined(FML_USE_CUDA)
+  #include "cuda/culapack.hh"
+  #include "cuda/nvml.hh"
+// #elif defined(FML_USE_HIP)
+// TODO
+#else
+  #error "Unsupported kernel launcher"
+#endif
+
 
 #if defined(FML_USE_CUDA)
   #define FML_LAUNCH_KERNEL(FML_KERNEL, FML_GRIDSIZE, FML_BLOCKSIZE, ...) \
