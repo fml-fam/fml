@@ -64,6 +64,62 @@ namespace linalg
     modulus = mod;
     sign = sgn;
   }
+  
+  
+  
+  namespace qr
+  {
+    template <typename REAL>
+    void qr(cpumat<REAL> &x, cpuvec<REAL> &qraux)
+    {
+      len_t m = x.nrows();
+      len_t n = x.ncols();
+      len_t minmn = std::min(m, n);
+      
+      qraux.resize(minmn);
+      
+      REAL tmp;
+      geqp3(m, n, 0.f, m, 0, 0.f, &tmp, -1, 0);
+      int lwork = std::max((int) tmp, 1);
+      cpuvec<REAL> work(lwork);
+      
+      cpuvec<int> pivot(n);
+      pivot.fill_zero();
+      
+      int info = 0;
+      geqp3(m, n, x.data_ptr(), m, pivot.data_ptr(), qraux.data_ptr(), work.data_ptr(), lwork, &info);
+      
+      if (info != 0)
+        error("sgeqp3() returned info=%d\n", info);
+    }
+    
+    template <typename REAL>
+    void q(const cpumat<REAL> &QR, const cpuvec<REAL> &qraux, cpumat<REAL> &Q)
+    {
+      len_t m = QR.nrows();
+      len_t n = QR.ncols();
+      
+      len_t nrhs = std::min(m, n);
+      Q.resize(m, nrhs);
+      Q.fill_zero();
+      
+      REAL *Q_d = Q.data_ptr();
+      for (len_t i=0; i<m*nrhs; i+=m+1)
+        Q_d[i] = 1.f;
+      
+      int info = 0;
+      float tmp;
+      int lwork = -1;
+      ormqr('L', 'N', m, nrhs, n, QR.data_ptr(), m, qraux.data_ptr(), Q_d, m, &tmp, lwork, &info);
+      lwork = (int) tmp;
+      cpumat<REAL> work(lwork);
+      
+      ormqr('L', 'N', m, nrhs, n, QR.data_ptr(), m, qraux.data_ptr(), Q_d, m, work.data_ptr(), lwork, &info);
+      
+      if (info != 0)
+        error("sormqr() returned info=%d\n", info);
+    }
+  }
 }
 
 
