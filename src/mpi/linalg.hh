@@ -89,7 +89,7 @@ namespace linalg
    * @except If x and y are inappropriately sized for a matrix product, the
      method will throw a 'runtime_error' exception.
    * 
-   * @impl Uses the PBLAS function pXgemm().
+   * @impl Uses the PBLAS function `pXgemm()`.
    * 
    * @comm The method will communicate across all processes in the BLACS grid.
    * 
@@ -129,7 +129,7 @@ namespace linalg
    * @except If x and y are inappropriately sized for a matrix product, the
      method will throw a 'runtime_error' exception.
    * 
-   * @impl Uses the PBLAS function pXgemm().
+   * @impl Uses the PBLAS function `pXgemm()`.
    * 
    * @comm The method will communicate across all processes in the BLACS grid.
    * 
@@ -164,7 +164,7 @@ namespace linalg
    * @param[in] x Input data matrix.
    * @param[out] ret The product.
    * 
-   * @impl Uses the BLAS function pXsyrk().
+   * @impl Uses the BLAS function `pXsyrk()`.
    * 
    * @comm The method will communicate across all processes in the BLACS grid.
    * 
@@ -185,16 +185,7 @@ namespace linalg
   }
   
   /**
-   * @brief Returns lower triangle of alpha*x^T*x
-   * 
-   * @param[in] alpha Scalar.
-   * @param[in] x Input data matrix.
-   * 
-   * @impl Uses the BLAS function pXsyrk().
-   * 
-   * @comm The method will communicate across all processes in the BLACS grid.
-   * 
-   * @tparam REAL should be 'float' or 'double'.
+   * \overload
    */
   template <typename REAL>
   mpimat<REAL> crossprod(const REAL alpha, const mpimat<REAL> &x)
@@ -210,6 +201,25 @@ namespace linalg
   
   
   
+  /**
+   * @brief Computes lower triangle of alpha*x*x^T
+   * 
+   * @param[in] alpha Scalar.
+   * @param[in] x Input data matrix.
+   * @param[out] ret The product.
+   * 
+   * @impl Uses the PBLAS function `pXsyrk()`.
+   * 
+   * @allocs If the output dimension is inappropriately sized, it will
+   * automatically be re-allocated.
+   * 
+   * @except If a reallocation is triggered and fails, a `bad_alloc` exception
+   * will be thrown.
+   * 
+   * @comm The method will communicate across all processes in the BLACS grid.
+   * 
+   * @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   void tcrossprod(const REAL alpha, const mpimat<REAL> &x, mpimat<REAL> &ret)
   {
@@ -224,6 +234,9 @@ namespace linalg
     scalapack::syrk('L', 'N', m, x.ncols(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
   }
   
+  /**
+   * \overload
+   */
   template <typename REAL>
   mpimat<REAL> tcrossprod(const REAL alpha, const mpimat<REAL> &x)
   {
@@ -238,6 +251,22 @@ namespace linalg
   
   
   
+  /**
+   * @brief Computes the transpose out-of-place (i.e. in a copy).
+   * 
+   * @param[in] x Input data matrix.
+   * @param[out] tx The transpose.
+   * 
+   * @impl Uses the PBLAS function `pXtran()`.
+   * 
+   * @allocs If the output dimension is inappropriately sized, it will
+   * automatically be re-allocated.
+   * 
+   * @except If a reallocation is triggered and fails, a `bad_alloc` exception
+   * will be thrown.
+   * 
+   * @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   void xpose(const mpimat<REAL> &x, mpimat<REAL> &tx)
   {
@@ -252,6 +281,9 @@ namespace linalg
     scalapack::tran(n, m, 1.f, x.data_ptr(), x.desc_ptr(), 0.f, tx.data_ptr(), tx.desc_ptr());
   }
   
+  /**
+   * \overload
+   */
   template <typename REAL>
   mpimat<REAL> xpose(const mpimat<REAL> &x)
   {
@@ -266,6 +298,26 @@ namespace linalg
   
   
   
+  /**
+   * @brief Computes the PLU factorization with partial pivoting.
+   * 
+   * @details The input is replaced by its LU factorization, with L
+   * unit-diagonal.
+   * 
+   * @param[inout] x Input data matrix, replaced by its LU factorization.
+   * @param[out] p Vector of pivots, representing the diagonal matrix P in the
+   * PLU.
+   * 
+   * @impl Uses the ScaLAPACK function `pXgetrf()`.
+   * 
+   * @allocs If the pivot vector is inappropriately sized, it will automatically
+   * be re-allocated.
+   * 
+   * @except If a reallocation is triggered and fails, a `bad_alloc` exception
+   * will be thrown.
+   * 
+   * @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   int lu(mpimat<REAL> &x, cpuvec<int> &p)
   {
@@ -280,6 +332,9 @@ namespace linalg
     return info;
   }
   
+  /**
+   * \overload
+   */
   template <typename REAL>
   int lu(mpimat<REAL> &x)
   {
@@ -365,6 +420,25 @@ namespace linalg
     }
   }
   
+  /**
+   * @brief Computes the singular value decomposition.
+   * 
+   * @param[inout] x Input data matrix. Values are overwritten.
+   * @param[out] s Vector of singular values.
+   * @param[out] u Matrix of left singular vectors.
+   * @param[out] vt Matrix of (transposed) right singnular vectors.
+   * 
+   * @impl Uses the ScaLAPACK function `pXgesvd()`.
+   * 
+   * @allocs If the any outputs are inappropriately sized, they will
+   * automatically be re-allocated. Additionally, some temporary work storage
+   * is needed.
+   * 
+   * @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+   * exception will be thrown.
+   * 
+   * @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   void svd(mpimat<REAL> &x, cpuvec<REAL> &s)
   {
@@ -373,6 +447,9 @@ namespace linalg
     check_info(info, "gesvd");
   }
   
+  /**
+   * \overload
+   */
   template <typename REAL>
   void svd(mpimat<REAL> &x, cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
   {
@@ -464,6 +541,23 @@ namespace linalg
   
   
   
+  /**
+   * @brief Compute the matrix inverse.
+   * 
+   * @details The input is replaced by its inverse, computed via a PLU.
+   * 
+   * @param[inout] x Input data matrix. Should be square.
+   * 
+   * @impl Uses the ScaLAPACK functions `pXgetrf()` (LU) and `pXgetri()`
+   * (inverse).
+   * 
+   * @allocs LU pivot data is allocated internally.
+   * 
+   * @except If the matrix is non-square, a `runtime_error` exception is thrown.
+   * If an allocation fails, a `bad_alloc` exception will be thrown.
+   * 
+   * @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   void invert(mpimat<REAL> &x)
   {

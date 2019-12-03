@@ -161,7 +161,7 @@ namespace linalg
    * @except If x and y are inappropriately sized for a matrix product, the
      method will throw a 'runtime_error' exception.
    * 
-   * @impl Uses the cuBLAS function cublasXgemm().
+   * @impl Uses the cuBLAS function `cublasXgemm()`.
    * 
    * @tparam REAL should be '__half', 'float', or 'double'.
    */
@@ -197,7 +197,7 @@ namespace linalg
    * @except If x and y are inappropriately sized for a matrix product, the
      method will throw a 'runtime_error' exception.
    * 
-   * @impl Uses the cuBLAS function cublasXgemm().
+   * @impl Uses the cuBLAS function `cublasXgemm()`.
    * 
    * @tparam REAL should be '__half', 'float', or 'double'.
    */
@@ -229,7 +229,13 @@ namespace linalg
    * @param[in] x Input data matrix.
    * @param[out] ret The product.
    * 
-   * @impl Uses the BLAS function cublasXsyrk().
+   * @impl Uses the cuBLAS function `cublasXsyrk()`.
+   * 
+   * @allocs If the output dimension is inappropriately sized, it will
+   * automatically be re-allocated.
+   * 
+   * @except If a reallocation is triggered and fails, a `bad_alloc` exception
+   * will be thrown.
    * 
    * @tparam REAL should be '__half', 'float', or 'double'.
    */
@@ -255,14 +261,7 @@ namespace linalg
   }
   
   /**
-   * @brief Returns lower triangle of alpha*x^T*x
-   * 
-   * @param[in] alpha Scalar.
-   * @param[in] x Input data matrix.
-   * 
-   * @impl Uses the BLAS function cublasXsyrk().
-   * 
-   * @tparam REAL should be '__half', 'float', or 'double'.
+   * \overload
    */
   template <typename REAL>
   gpumat<REAL> crossprod(const REAL alpha, const gpumat<REAL> &x)
@@ -277,6 +276,23 @@ namespace linalg
   
   
   
+  /**
+   * @brief Computes lower triangle of alpha*x*x^T
+   * 
+   * @param[in] alpha Scalar.
+   * @param[in] x Input data matrix.
+   * @param[out] ret The product.
+   * 
+   * @impl Uses the cuBLAS function `cublasXsyrk()`.
+   * 
+   * @allocs If the output dimension is inappropriately sized, it will
+   * automatically be re-allocated.
+   * 
+   * @except If a reallocation is triggered and fails, a `bad_alloc` exception
+   * will be thrown.
+   * 
+   * @tparam REAL should be '__half', 'float', or 'double'.
+   */
   template <typename REAL>
   void tcrossprod(const REAL alpha, const gpumat<REAL> &x, gpumat<REAL> &ret)
   {
@@ -298,6 +314,9 @@ namespace linalg
     check_cublas_ret(check, "syrk");
   }
   
+  /**
+   * \overload
+   */
   template <typename REAL>
   gpumat<REAL> tcrossprod(const REAL alpha, const gpumat<REAL> &x)
   {
@@ -311,6 +330,22 @@ namespace linalg
   
   
   
+  /**
+   * @brief Computes the transpose out-of-place (i.e. in a copy).
+   * 
+   * @param[in] x Input data matrix.
+   * @param[out] tx The transpose.
+   * 
+   * @impl Uses the cuBLAS function `cublasXgeam()`.
+   * 
+   * @allocs If the output dimension is inappropriately sized, it will
+   * automatically be re-allocated.
+   * 
+   * @except If a reallocation is triggered and fails, a `bad_alloc` exception
+   * will be thrown.
+   * 
+   * @tparam REAL should be '__half', 'float', or 'double'.
+   */
   template <typename REAL>
   void xpose(const gpumat<REAL> &x, gpumat<REAL> &tx)
   {
@@ -328,6 +363,9 @@ namespace linalg
     check_cublas_ret(check, "geam");
   }
   
+  /**
+   * \overload
+   */
   template <typename REAL>
   gpumat<REAL> xpose(const gpumat<REAL> &x)
   {
@@ -338,6 +376,26 @@ namespace linalg
   
   
   
+  /**
+   * @brief Computes the PLU factorization with partial pivoting.
+   * 
+   * @details The input is replaced by its LU factorization, with L
+   * unit-diagonal.
+   * 
+   * @param[inout] x Input data matrix, replaced by its LU factorization.
+   * @param[out] p Vector of pivots, representing the diagonal matrix P in the
+   * PLU.
+   * 
+   * @impl Uses the cuSOLVER function `cusolverDnXgetrf()`.
+   * 
+   * @allocs If the pivot vector is inappropriately sized, it will automatically
+   * be re-allocated.
+   * 
+   * @except If a reallocation is triggered and fails, a `bad_alloc` exception
+   * will be thrown.
+   * 
+   * @tparam REAL should be '__half', 'float', or 'double'.
+   */
   template <typename REAL>
   int lu(gpumat<REAL> &x, gpuvec<int> &p)
   {
@@ -371,6 +429,9 @@ namespace linalg
     return info;
   }
   
+  /**
+   * \overload
+   */
   template <typename REAL>
   int lu(gpumat<REAL> &x)
   {
@@ -434,6 +495,25 @@ namespace linalg
     }
   }
   
+  /**
+   * @brief Computes the singular value decomposition.
+   * 
+   * @param[inout] x Input data matrix. Values are overwritten.
+   * @param[out] s Vector of singular values.
+   * @param[out] u Matrix of left singular vectors.
+   * @param[out] vt Matrix of (transposed) right singnular vectors.
+   * 
+   * @impl Uses the cuSOLVER function `cusolverDnXgesvd()`.
+   * 
+   * @allocs If the any outputs are inappropriately sized, they will
+   * automatically be re-allocated. Additionally, some temporary work storage
+   * is needed.
+   * 
+   * @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+   * exception will be thrown.
+   * 
+   * @tparam REAL should be '__half', 'float', or 'double'.
+   */
   template <typename REAL>
   void svd(gpumat<REAL> &x, gpuvec<REAL> &s)
   {
@@ -444,6 +524,9 @@ namespace linalg
     check_info(info, "gesvd");
   }
   
+  /**
+   * \overload
+   */
   template <typename REAL>
   void svd(gpumat<REAL> &x, gpuvec<REAL> &s, gpumat<REAL> &u, gpumat<REAL> &vt)
   {
@@ -544,6 +627,24 @@ namespace linalg
   
   
   
+  
+  /**
+   * @brief Compute the matrix inverse.
+   * 
+   * @details The input is replaced by its inverse, computed via a PLU.
+   * 
+   * @param[inout] x Input data matrix. Should be square.
+   * 
+   * @impl Uses the cuSOLVER functions `cusolverDnXgetrf()` (LU) and
+   * `cusolverDnXgetrs()` (inverse).
+   * 
+   * @allocs LU pivot data is allocated internally.
+   * 
+   * @except If the matrix is non-square, a `runtime_error` exception is thrown.
+   * If an allocation fails, a `bad_alloc` exception will be thrown.
+   * 
+   * @tparam REAL should be '__half', 'float', or 'double'.
+   */
   template <typename REAL>
   void invert(gpumat<REAL> &x)
   {
