@@ -2,8 +2,8 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_CPU_UTILS_H
-#define FML_CPU_UTILS_H
+#ifndef FML_CPU_FUTURE_UTILS_H
+#define FML_CPU_FUTURE_UTILS_H
 #pragma once
 
 
