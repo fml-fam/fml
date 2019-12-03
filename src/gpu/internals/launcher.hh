@@ -16,7 +16,9 @@
 
 #if (defined(FML_USE_CUDA))
   #include "cuda/culapack.hh"
+  #include "cuda/gpuprims.hh"
   #include "cuda/nvml.hh"
+  #include "cuda/types.hh"
 #elif defined(FML_USE_HIP)
   #error "HIP is currently unsupported"
 #else

@@ -16,6 +16,7 @@
 
 #include "gpumat.hh"
 #include "gpuvec.hh"
+#include "kernelfuns.hh"
 
 
 namespace linalg
