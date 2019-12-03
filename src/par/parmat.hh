@@ -50,6 +50,8 @@ class parmat
     len_local_t nrows_local() const {return data.nrows();};
     len_local_t ncols() const {return data.ncols();};
     comm get_comm() const {return r;};
+    MAT& data_obj() const {return data;};
+    MAT& data_obj() {return data;};
     
   protected:
     MAT data;
