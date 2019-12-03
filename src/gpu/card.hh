@@ -14,7 +14,7 @@
 #include <memory>
 #include <stdexcept>
 
-#include "internals/nvml.hh"
+#include "internals/launcher.hh"
 
 
 /**

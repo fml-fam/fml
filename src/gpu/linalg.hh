@@ -12,7 +12,7 @@
 
 #include "../_internals/linalgutils.hh"
 
-#include "internals/culapack.hh"
+#include "internals/launcher.hh"
 
 #include "gpumat.hh"
 #include "gpuvec.hh"

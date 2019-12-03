@@ -14,6 +14,7 @@
 #include "../cpu/cpumat.hh"
 #include "../cpu/cpuvec.hh"
 
+#include "card.hh"
 #include "gpumat.hh"
 #include "gpuvec.hh"
 

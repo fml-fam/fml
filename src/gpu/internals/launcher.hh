@@ -7,17 +7,18 @@
 #pragma once
 
 
-// TODO
-#define FML_USE_CUDA
-
-
 #include <cstdarg>
+#include "../../_internals/types.hh"
 
-#if defined(FML_USE_CUDA)
+#if (!defined(FML_USE_CUDA) && !defined(FML_USE_HIP))
+  #define FML_USE_CUDA
+#endif
+
+#if (defined(FML_USE_CUDA))
   #include "cuda/culapack.hh"
   #include "cuda/nvml.hh"
-// #elif defined(FML_USE_HIP)
-// TODO
+#elif defined(FML_USE_HIP)
+  #error "HIP is currently unsupported"
 #else
   #error "Unsupported kernel launcher"
 #endif
