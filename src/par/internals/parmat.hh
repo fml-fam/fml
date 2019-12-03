@@ -2,8 +2,8 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_PAR_PARMAT_H
-#define FML_PAR_PARMAT_H
+#ifndef FML_PAR_INTERNALS_PARMAT_H
+#define FML_PAR_INTERNALS_PARMAT_H
 #pragma once
 
 
@@ -12,8 +12,8 @@
 #include <cstring>
 #include <random>
 
-#include "../_internals/types.hh"
-#include "comm.hh"
+#include "../../_internals/types.hh"
+#include "../comm.hh"
 
 
 template <class MAT, class VEC, typename REAL>
@@ -50,7 +50,7 @@ class parmat
     len_local_t nrows_local() const {return data.nrows();};
     len_local_t ncols() const {return data.ncols();};
     comm get_comm() const {return r;};
-    MAT& data_obj() const {return data;};
+    const MAT& data_obj() const {return data;};
     MAT& data_obj() {return data;};
     
   protected:
@@ -94,7 +94,6 @@ void parmat<MAT, VEC, REAL>::print(uint8_t ndigits, bool add_final_blank)
       len_t m = data.nrows();
       r.send(1, &m, 0);
       
-      REAL *d = data.data_ptr();
       for (int i=0; i<m; i++)
       {
         data.get_row(i, pv);
