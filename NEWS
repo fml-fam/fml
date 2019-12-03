@@ -1,0 +1,30 @@
+Release 0.1-0 (//):
+New:
+  * created cpumat and cpuvec classes
+  * created gpumat and gpuvec classes
+  * created mpimat class
+  * created parmat_cpu and parmat_gpu classes
+  * added to linalg namespace for cpumat, gpumat, and mpimat:
+      - add()
+      - matmult()
+      - crossprod()
+      - tcrossprod()
+      - xpose()
+      - lu()
+      - svd()
+      - eigen() (symmetric only)
+      - invert()
+      - solve()
+  * added to linalg namespace for parmat:
+      - crossprod()
+  * added to cpuhelpers namespace
+      - cpu2cpu()
+  * added to gpuhelpers namespace
+      - gpu2cpu()
+      - cpu2gpu()
+      - gpu2gpu()
+  * added to mpihelpers namespace
+      - mpi2cpu()
+      - cpu2mpi()
+API Changes: None
+Bug Fixes: None
