@@ -9,7 +9,7 @@
 
 <img align="right" src="./docs/logo/fml_med.png" />
 
-fml is the Fused Matrix Library, a multi-source, header-only C++ library for matrix computing. The emphasis is on real-valued matrix types (`float`, `double`, and `__half`) for numerical operations useful for data analysis.
+fml is the Fused Matrix Library, a multi-source, header-only C++ library for dense matrix computing. The emphasis is on real-valued matrix types (`float`, `double`, and `__half`) for numerical operations useful for data analysis.
 
 The library provides 4 main classes: `cpumat`, `gpumat`, `parmat`, and `mpimat`. These are mostly what they sound like, but the particular details are:
 
@@ -166,6 +166,12 @@ And here we see:
 
 
 
+## High-Level Language Bindings
+
+* R bindings: [fmlr](https://github.com/wrathematics/fmlr)
+
+
+
 ## Philosophy and Similar Projects
 
 Some similar C/C++ projects worth mentioning:
@@ -176,7 +182,7 @@ Some similar C/C++ projects worth mentioning:
 * [PETSc](https://www.mcs.anl.gov/petsc/)
 * [GSL](https://www.gnu.org/software/gsl/)
 
-These are all great libraries which have stood the test of time and have many happy users. Armadillo in particular is worthy of a look, as it has a very nice interface and very extensive set of functions. However, to my knowledge, all of these focus exclusively on CPU computing. You can use things like [nvblas](https://docs.nvidia.com/cuda/nvblas/index.html) to offload some computations to GPU (ones that are very `gemm` heavy can do well), but this doesn't always achieve good performance, and it doesn't include distributed computing.
+These are all great libraries which have stood the test of time. Armadillo in particular is worthy of a look, as it has a very nice interface and very extensive set of functions. However, to my knowledge, all of these focus exclusively on CPU computing. There are some extensions to Armadillo and Eigen for GPU computing. And for gemm-heavy codes, you can use [nvblas](https://docs.nvidia.com/cuda/nvblas/index.html) to offload some work to the GPU, but this doesn't always achieve good performance. And none of the above include distributed computing, except for PETSc which focuses on sparse matrices.
 
 There are probably many other C++ frameworks in this arena, but none to my knowledge have a similar scope.
 
@@ -189,8 +195,8 @@ Probably the biggest influence on my thinking for this library is the [pbdR pack
 The basic philosophy of fml is:
 
 * Be relatively small and self-contained.
-* Follow general C++ conventions by default (like RAII and exceptions), but give the ability to break these for the performance-minded.
+* Follow general C++ conventions by default (like RAII and exceptions), but give the ability to break these for the sake of performance.
 * Changing a code from one object type to another should be very simple, ideally with no changes to the source (the internals will simply **Do The Right Thing (tm)**), with the exception of:
     - object creation
-    - printing
+    - printing (e.g. printing on only one MPI rank)
 * Use a permissive open source license.
