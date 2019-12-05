@@ -38,7 +38,20 @@ namespace linalg
   
   
   
-  // ret = alpha*op(x) + beta*op(y)
+  /**
+    @brief Returns alpha*op(x) + beta*op(y) where op(A) is A or A^T
+    
+    @param[in] transx Should x^T be used?
+    @param[in] transy Should y^T be used?
+    @param[in] alpha,beta Scalars.
+    @param[in] x,y The inputs to the sum.
+    @param[out] ret The sum.
+    
+    @except If x and y are inappropriately sized for the sum, the method will
+    throw a 'runtime_error' exception.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   void add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const cpumat<REAL> &x, const cpumat<REAL> &y, cpumat<REAL> &ret)
   {
@@ -94,6 +107,7 @@ namespace linalg
     }
   }
   
+  /// \overload
   template <typename REAL>
   cpumat<REAL> add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const cpumat<REAL> &x, const cpumat<REAL> &y)
   {
@@ -108,20 +122,20 @@ namespace linalg
   
   
   /**
-   * @brief Returns alpha*op(x)*op(y) where op(A) is A or A^T
-   * 
-   * @param[in] transx Should x^T be used?
-   * @param[in] transy Should y^T be used?
-   * @param[in] alpha Scalar.
-   * @param[in] x Left multiplicand.
-   * @param[in] y Right multiplicand.
-   * 
-   * @except If x and y are inappropriately sized for a matrix product, the
-     method will throw a 'runtime_error' exception.
-   * 
-   * @impl Uses the BLAS function `Xgemm()`.
-   * 
-   * @tparam REAL should be 'float' or 'double'.
+    @brief Returns alpha*op(x)*op(y) where op(A) is A or A^T
+    
+    @param[in] transx Should x^T be used?
+    @param[in] transy Should y^T be used?
+    @param[in] alpha Scalar.
+    @param[in] x Left multiplicand.
+    @param[in] y Right multiplicand.
+    
+    @except If x and y are inappropriately sized for a matrix product, the
+    method will throw a 'runtime_error' exception.
+    
+    @impl Uses the BLAS function `Xgemm()`.
+    
+    @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
   cpumat<REAL> matmult(const bool transx, const bool transy, const REAL alpha, const cpumat<REAL> &x, const cpumat<REAL> &y)
@@ -142,21 +156,21 @@ namespace linalg
   }
   
   /**
-   * @brief Computes ret = alpha*op(x)*op(y) where op(A) is A or A^T
-   * 
-   * @param[in] transx Should x^T be used?
-   * @param[in] transy Should y^T be used?
-   * @param[in] alpha Scalar.
-   * @param[in] x Left multiplicand.
-   * @param[in] y Right multiplicand.
-   * @param[out] ret The product.
-   * 
-   * @except If x and y are inappropriately sized for a matrix product, the
-     method will throw a 'runtime_error' exception.
-   * 
-   * @impl Uses the BLAS function `Xgemm()`.
-   * 
-   * @tparam REAL should be 'float' or 'double'.
+    @brief Computes ret = alpha*op(x)*op(y) where op(A) is A or A^T
+    
+    @param[in] transx Should x^T be used?
+    @param[in] transy Should y^T be used?
+    @param[in] alpha Scalar.
+    @param[in] x Left multiplicand.
+    @param[in] y Right multiplicand.
+    @param[out] ret The product.
+    
+    @except If x and y are inappropriately sized for a matrix product, the
+    method will throw a 'runtime_error' exception.
+    
+    @impl Uses the BLAS function `Xgemm()`.
+    
+    @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
   void matmult(const bool transx, const bool transy, const REAL alpha, const cpumat<REAL> &x, const cpumat<REAL> &y, cpumat<REAL> &ret)
@@ -179,21 +193,21 @@ namespace linalg
   
   
   /**
-   * @brief Computes lower triangle of alpha*x^T*x
-   * 
-   * @param[in] alpha Scalar.
-   * @param[in] x Input data matrix.
-   * @param[out] ret The product.
-   * 
-   * @impl Uses the BLAS function `Xsyrk()`.
-   * 
-   * @allocs If the output dimension is inappropriately sized, it will
-   * automatically be re-allocated.
-   * 
-   * @except If a reallocation is triggered and fails, a `bad_alloc` exception
-   * will be thrown.
-   * 
-   * @tparam REAL should be 'float' or 'double'.
+    @brief Computes lower triangle of alpha*x^T*x
+    
+    @param[in] alpha Scalar.
+    @param[in] x Input data matrix.
+    @param[out] ret The product.
+    
+    @impl Uses the BLAS function `Xsyrk()`.
+    
+    @allocs If the output dimension is inappropriately sized, it will
+    automatically be re-allocated.
+    
+    @except If a reallocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
   void crossprod(const REAL alpha, const cpumat<REAL> &x, cpumat<REAL> &ret)
@@ -208,9 +222,7 @@ namespace linalg
     lapack::syrk('L', 'T', n, m, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), n);
   }
   
-  /**
-   * \overload
-   */
+  /// \overload
   template <typename REAL>
   cpumat<REAL> crossprod(const REAL alpha, const cpumat<REAL> &x)
   {
@@ -225,21 +237,21 @@ namespace linalg
   
   
   /**
-   * @brief Computes lower triangle of alpha*x*x^T
-   * 
-   * @param[in] alpha Scalar.
-   * @param[in] x Input data matrix.
-   * @param[out] ret The product.
-   * 
-   * @impl Uses the BLAS function `Xsyrk()`.
-   * 
-   * @allocs If the output dimension is inappropriately sized, it will
-   * automatically be re-allocated.
-   * 
-   * @except If a reallocation is triggered and fails, a `bad_alloc` exception
-   * will be thrown.
-   * 
-   * @tparam REAL should be 'float' or 'double'.
+    @brief Computes lower triangle of alpha*x*x^T
+    
+    @param[in] alpha Scalar.
+    @param[in] x Input data matrix.
+    @param[out] ret The product.
+    
+    @impl Uses the BLAS function `Xsyrk()`.
+    
+    @allocs If the output dimension is inappropriately sized, it will
+    automatically be re-allocated.
+    
+    @except If a reallocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
   void tcrossprod(const REAL alpha, const cpumat<REAL> &x, cpumat<REAL> &ret)
@@ -268,18 +280,18 @@ namespace linalg
   
   
   /**
-   * @brief Computes the transpose out-of-place (i.e. in a copy).
-   * 
-   * @param[in] x Input data matrix.
-   * @param[out] tx The transpose.
-   * 
-   * @allocs If the output dimension is inappropriately sized, it will
-   * automatically be re-allocated.
-   * 
-   * @except If a reallocation is triggered and fails, a `bad_alloc` exception
-   * will be thrown.
-   * 
-   * @tparam REAL should be 'float' or 'double'.
+    @brief Computes the transpose out-of-place (i.e. in a copy).
+    
+    @param[in] x Input data matrix.
+    @param[out] tx The transpose.
+    
+    @allocs If the output dimension is inappropriately sized, it will
+    automatically be re-allocated.
+    
+    @except If a reallocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
   void xpose(const cpumat<REAL> &x, cpumat<REAL> &tx)
@@ -308,9 +320,7 @@ namespace linalg
     }
   }
   
-  /**
-   * \overload
-   */
+  /// \overload
   template <typename REAL>
   cpumat<REAL> xpose(const cpumat<REAL> &x)
   {
@@ -322,24 +332,24 @@ namespace linalg
   
   
   /**
-   * @brief Computes the PLU factorization with partial pivoting.
-   * 
-   * @details The input is replaced by its LU factorization, with L
-   * unit-diagonal.
-   * 
-   * @param[inout] x Input data matrix, replaced by its LU factorization.
-   * @param[out] p Vector of pivots, representing the diagonal matrix P in the
-   * PLU.
-   * 
-   * @impl Uses the LAPACK function `Xgetrf()`.
-   * 
-   * @allocs If the pivot vector is inappropriately sized, it will automatically
-   * be re-allocated.
-   * 
-   * @except If a reallocation is triggered and fails, a `bad_alloc` exception
-   * will be thrown.
-   * 
-   * @tparam REAL should be 'float' or 'double'.
+    @brief Computes the PLU factorization with partial pivoting.
+    
+    @details The input is replaced by its LU factorization, with L
+    unit-diagonal.
+    
+    @param[inout] x Input data matrix, replaced by its LU factorization.
+    @param[out] p Vector of pivots, representing the diagonal matrix P in the
+    PLU.
+    
+    @impl Uses the LAPACK function `Xgetrf()`.
+    
+    @allocs If the pivot vector is inappropriately sized, it will automatically
+    be re-allocated.
+    
+    @except If a reallocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
   int lu(cpumat<REAL> &x, cpuvec<int> &p)
@@ -355,9 +365,7 @@ namespace linalg
     return info;
   }
   
-  /**
-   * \overload
-   */
+  /// \overload
   template <typename REAL>
   int lu(cpumat<REAL> &x)
   {
@@ -432,23 +440,23 @@ namespace linalg
   }
   
   /**
-   * @brief Computes the singular value decomposition.
-   * 
-   * @param[inout] x Input data matrix. Values are overwritten.
-   * @param[out] s Vector of singular values.
-   * @param[out] u Matrix of left singular vectors.
-   * @param[out] vt Matrix of (transposed) right singnular vectors.
-   * 
-   * @impl Uses the LAPACK function `Xgesvd()`.
-   * 
-   * @allocs If the any outputs are inappropriately sized, they will
-   * automatically be re-allocated. Additionally, some temporary work storage
-   * is needed.
-   * 
-   * @except If a (re-)allocation is triggered and fails, a `bad_alloc`
-   * exception will be thrown.
-   * 
-   * @tparam REAL should be 'float' or 'double'.
+    @brief Computes the singular value decomposition.
+    
+    @param[inout] x Input data matrix. Values are overwritten.
+    @param[out] s Vector of singular values.
+    @param[out] u Matrix of left singular vectors.
+    @param[out] vt Matrix of (transposed) right singnular vectors.
+    
+    @impl Uses the LAPACK function `Xgesvd()`.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
   void svd(cpumat<REAL> &x, cpuvec<REAL> &s)
@@ -458,9 +466,7 @@ namespace linalg
     check_info(info, "gesdd");
   }
   
-  /**
-   * \overload
-   */
+  /// \overload
   template <typename REAL>
   void svd(cpumat<REAL> &x, cpuvec<REAL> &s, cpumat<REAL> &u, cpumat<REAL> &vt)
   {
@@ -516,6 +522,26 @@ namespace linalg
     }
   }
   
+  /**
+    @brief Compute the eigenvalues and optionally the eigenvectors for a
+    symmetric matrix.
+    
+    @details The input data is overwritten.
+    
+    @param[inout] x Input data matrix. Should be square.
+    @param[out] values Eigenvalues.
+    @param[out] vectors Eigenvectors.
+    
+    @impl Uses the LAPACK functions `Xsyevr()`.
+    
+    @allocs If any output's dimension is inappropriately sized, it will
+    automatically be re-allocated.
+    
+    @except If the matrix is non-square, a `runtime_error` exception is thrown.
+    If an allocation fails, a `bad_alloc` exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   void eigen_sym(cpumat<REAL> &x, cpuvec<REAL> &values)
   {
@@ -525,6 +551,7 @@ namespace linalg
     check_info(info, "syevr");
   }
   
+  /// \overload
   template <typename REAL>
   void eigen_sym(cpumat<REAL> &x, cpuvec<REAL> &values, cpumat<REAL> &vectors)
   {
@@ -535,20 +562,20 @@ namespace linalg
   
   
   /**
-   * @brief Compute the matrix inverse.
-   * 
-   * @details The input is replaced by its inverse, computed via a PLU.
-   * 
-   * @param[inout] x Input data matrix. Should be square.
-   * 
-   * @impl Uses the LAPACK functions `Xgetrf()` (LU) and `Xgetri()` (inverse).
-   * 
-   * @allocs LU pivot data is allocated internally.
-   * 
-   * @except If the matrix is non-square, a `runtime_error` exception is thrown.
-   * If an allocation fails, a `bad_alloc` exception will be thrown.
-   * 
-   * @tparam REAL should be 'float' or 'double'.
+    @brief Compute the matrix inverse.
+    
+    @details The input is replaced by its inverse, computed via a PLU.
+    
+    @param[inout] x Input data matrix. Should be square.
+    
+    @impl Uses the LAPACK functions `Xgetrf()` (LU) and `Xgetri()` (solve).
+    
+    @allocs LU pivot data is allocated internally.
+    
+    @except If the matrix is non-square, a `runtime_error` exception is thrown.
+    If an allocation fails, a `bad_alloc` exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
   void invert(cpumat<REAL> &x)
@@ -592,12 +619,31 @@ namespace linalg
     }
   }
   
+  /**
+    @brief Solve a system of equations.
+    
+    @details The input is replaced by its LU factorization.
+    
+    @param[inout] x Input LHS. Should be square. Overwritten by LU.
+    @param[inout] y Input RHS. Overwritten by solution.
+    
+    @impl Uses the LAPACK functions `Xgesv()`.
+    
+    @allocs LU pivot data is allocated internally.
+    
+    @except If the matrix is non-square or if the RHS is incompatible with the
+    LHS, a `runtime_error` exception is thrown. If an allocation fails, a
+    `bad_alloc` exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   void solve(cpumat<REAL> &x, cpuvec<REAL> &y)
   {
     solver(x, y.size(), 1, y.data_ptr());
   }
   
+  /// \overload
   template <typename REAL>
   void solve(cpumat<REAL> &x, cpumat<REAL> &y)
   {

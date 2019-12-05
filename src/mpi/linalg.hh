@@ -41,7 +41,22 @@ namespace linalg
   
   
   
-  // ret = alpha*op(x) + beta*op(y)
+  /**
+    @brief Returns alpha*op(x) + beta*op(y) where op(A) is A or A^T
+    
+    @param[in] transx Should x^T be used?
+    @param[in] transy Should y^T be used?
+    @param[in] alpha,beta Scalars.
+    @param[in] x,y The inputs to the sum.
+    @param[out] ret The sum.
+    
+    @except If x and y are inappropriately sized for the sum, the method will
+    throw a 'runtime_error' exception.
+    
+    @impl Uses the PBLAS function `pXgeadd()`.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   void add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const mpimat<REAL> &x, const mpimat<REAL> &y, mpimat<REAL> &ret)
   {
@@ -61,6 +76,7 @@ namespace linalg
     scalapack::geadd(ctransx, m, n, alpha, x.data_ptr(), x.desc_ptr(), (REAL) 1.0f, ret.data_ptr(), ret.desc_ptr());
   }
   
+  /// \overload
   template <typename REAL>
   mpimat<REAL> add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const mpimat<REAL> &x, const mpimat<REAL> &y)
   {
@@ -78,22 +94,23 @@ namespace linalg
   
   
   /**
-   * @brief Returns alpha*op(x)*op(y) where op(A) is A or A^T
-   * 
-   * @param[in] transx Should x^T be used?
-   * @param[in] transy Should y^T be used?
-   * @param[in] alpha Scalar.
-   * @param[in] x Left multiplicand.
-   * @param[in] y Right multiplicand.
-   * 
-   * @except If x and y are inappropriately sized for a matrix product, the
-     method will throw a 'runtime_error' exception.
-   * 
-   * @impl Uses the PBLAS function `pXgemm()`.
-   * 
-   * @comm The method will communicate across all processes in the BLACS grid.
-   * 
-   * @tparam REAL should be 'float' or 'double'.
+    @brief Returns alpha*op(x)*op(y) where op(A) is A or A^T
+    
+    @param[in] transx Should x^T be used?
+    @param[in] transy Should y^T be used?
+    @param[in] alpha Scalar.
+    @param[in] x Left multiplicand.
+    @param[in] y Right multiplicand.
+    
+    @except If x and y are inappropriately sized for a matrix product, the
+     method will throw a 'runtime_error' exception. If the inputs are
+     distributed on different grids, a `runtime_exception` is thrown.
+    
+    @impl Uses the PBLAS function `pXgemm()`.
+    
+    @comm The method will communicate across all processes in the BLACS grid.
+    
+    @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
   mpimat<REAL> matmult(const bool transx, const bool transy, const REAL alpha, const mpimat<REAL> &x, const mpimat<REAL> &y)
@@ -117,23 +134,24 @@ namespace linalg
   }
   
   /**
-   * @brief Computes ret = alpha*op(x)*op(y) where op(A) is A or A^T
-   * 
-   * @param[in] transx Should x^T be used?
-   * @param[in] transy Should y^T be used?
-   * @param[in] alpha Scalar.
-   * @param[in] x Left multiplicand.
-   * @param[in] y Right multiplicand.
-   * @param[out] ret The product.
-   * 
-   * @except If x and y are inappropriately sized for a matrix product, the
-     method will throw a 'runtime_error' exception.
-   * 
-   * @impl Uses the PBLAS function `pXgemm()`.
-   * 
-   * @comm The method will communicate across all processes in the BLACS grid.
-   * 
-   * @tparam REAL should be 'float' or 'double'.
+    @brief Computes ret = alpha*op(x)*op(y) where op(A) is A or A^T
+    
+    @param[in] transx Should x^T be used?
+    @param[in] transy Should y^T be used?
+    @param[in] alpha Scalar.
+    @param[in] x Left multiplicand.
+    @param[in] y Right multiplicand.
+    @param[out] ret The product.
+    
+    @except If x and y are inappropriately sized for a matrix product, the
+     method will throw a 'runtime_error' exception. If the inputs are
+     distributed on different grids, a `runtime_exception` is thrown.
+    
+    @impl Uses the PBLAS function `pXgemm()`.
+    
+    @comm The method will communicate across all processes in the BLACS grid.
+    
+    @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
   void matmult(const bool transx, const bool transy, const REAL alpha, const mpimat<REAL> &x, const mpimat<REAL> &y, mpimat<REAL> &ret)
@@ -158,17 +176,23 @@ namespace linalg
   
   
   /**
-   * @brief Computes lower triangle of alpha*x^T*x
-   * 
-   * @param[in] alpha Scalar.
-   * @param[in] x Input data matrix.
-   * @param[out] ret The product.
-   * 
-   * @impl Uses the BLAS function `pXsyrk()`.
-   * 
-   * @comm The method will communicate across all processes in the BLACS grid.
-   * 
-   * @tparam REAL should be 'float' or 'double'.
+    @brief Computes lower triangle of alpha*x^T*x
+    
+    @param[in] alpha Scalar.
+    @param[in] x Input data matrix.
+    @param[out] ret The product.
+    
+    @impl Uses the BLAS function `pXsyrk()`.
+    
+    @allocs If the output dimension is inappropriately sized, it will
+    automatically be re-allocated.
+    
+    @except If a reallocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @comm The method will communicate across all processes in the BLACS grid.
+    
+    @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
   void crossprod(const REAL alpha, const mpimat<REAL> &x, mpimat<REAL> &ret)
@@ -184,9 +208,7 @@ namespace linalg
     scalapack::syrk('L', 'T', n, x.nrows(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
   }
   
-  /**
-   * \overload
-   */
+  /// \overload
   template <typename REAL>
   mpimat<REAL> crossprod(const REAL alpha, const mpimat<REAL> &x)
   {
@@ -202,23 +224,23 @@ namespace linalg
   
   
   /**
-   * @brief Computes lower triangle of alpha*x*x^T
-   * 
-   * @param[in] alpha Scalar.
-   * @param[in] x Input data matrix.
-   * @param[out] ret The product.
-   * 
-   * @impl Uses the PBLAS function `pXsyrk()`.
-   * 
-   * @allocs If the output dimension is inappropriately sized, it will
-   * automatically be re-allocated.
-   * 
-   * @except If a reallocation is triggered and fails, a `bad_alloc` exception
-   * will be thrown.
-   * 
-   * @comm The method will communicate across all processes in the BLACS grid.
-   * 
-   * @tparam REAL should be 'float' or 'double'.
+    @brief Computes lower triangle of alpha*x*x^T
+    
+    @param[in] alpha Scalar.
+    @param[in] x Input data matrix.
+    @param[out] ret The product.
+    
+    @impl Uses the PBLAS function `pXsyrk()`.
+    
+    @allocs If the output dimension is inappropriately sized, it will
+    automatically be re-allocated.
+    
+    @except If a reallocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @comm The method will communicate across all processes in the BLACS grid.
+    
+    @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
   void tcrossprod(const REAL alpha, const mpimat<REAL> &x, mpimat<REAL> &ret)
@@ -234,9 +256,7 @@ namespace linalg
     scalapack::syrk('L', 'N', m, x.ncols(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
   }
   
-  /**
-   * \overload
-   */
+  /// \overload
   template <typename REAL>
   mpimat<REAL> tcrossprod(const REAL alpha, const mpimat<REAL> &x)
   {
@@ -252,20 +272,20 @@ namespace linalg
   
   
   /**
-   * @brief Computes the transpose out-of-place (i.e. in a copy).
-   * 
-   * @param[in] x Input data matrix.
-   * @param[out] tx The transpose.
-   * 
-   * @impl Uses the PBLAS function `pXtran()`.
-   * 
-   * @allocs If the output dimension is inappropriately sized, it will
-   * automatically be re-allocated.
-   * 
-   * @except If a reallocation is triggered and fails, a `bad_alloc` exception
-   * will be thrown.
-   * 
-   * @tparam REAL should be 'float' or 'double'.
+    @brief Computes the transpose out-of-place (i.e. in a copy).
+    
+    @param[in] x Input data matrix.
+    @param[out] tx The transpose.
+    
+    @impl Uses the PBLAS function `pXtran()`.
+    
+    @allocs If the output dimension is inappropriately sized, it will
+    automatically be re-allocated.
+    
+    @except If a reallocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
   void xpose(const mpimat<REAL> &x, mpimat<REAL> &tx)
@@ -281,9 +301,7 @@ namespace linalg
     scalapack::tran(n, m, 1.f, x.data_ptr(), x.desc_ptr(), 0.f, tx.data_ptr(), tx.desc_ptr());
   }
   
-  /**
-   * \overload
-   */
+  /// \overload
   template <typename REAL>
   mpimat<REAL> xpose(const mpimat<REAL> &x)
   {
@@ -299,24 +317,24 @@ namespace linalg
   
   
   /**
-   * @brief Computes the PLU factorization with partial pivoting.
-   * 
-   * @details The input is replaced by its LU factorization, with L
-   * unit-diagonal.
-   * 
-   * @param[inout] x Input data matrix, replaced by its LU factorization.
-   * @param[out] p Vector of pivots, representing the diagonal matrix P in the
-   * PLU.
-   * 
-   * @impl Uses the ScaLAPACK function `pXgetrf()`.
-   * 
-   * @allocs If the pivot vector is inappropriately sized, it will automatically
-   * be re-allocated.
-   * 
-   * @except If a reallocation is triggered and fails, a `bad_alloc` exception
-   * will be thrown.
-   * 
-   * @tparam REAL should be 'float' or 'double'.
+    @brief Computes the PLU factorization with partial pivoting.
+    
+    @details The input is replaced by its LU factorization, with L
+    unit-diagonal.
+    
+    @param[inout] x Input data matrix, replaced by its LU factorization.
+    @param[out] p Vector of pivots, representing the diagonal matrix P in the
+    PLU.
+    
+    @impl Uses the ScaLAPACK function `pXgetrf()`.
+    
+    @allocs If the pivot vector is inappropriately sized, it will automatically
+    be re-allocated.
+    
+    @except If a reallocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
   int lu(mpimat<REAL> &x, cpuvec<int> &p)
@@ -332,9 +350,7 @@ namespace linalg
     return info;
   }
   
-  /**
-   * \overload
-   */
+  /// \overload
   template <typename REAL>
   int lu(mpimat<REAL> &x)
   {
@@ -421,23 +437,23 @@ namespace linalg
   }
   
   /**
-   * @brief Computes the singular value decomposition.
-   * 
-   * @param[inout] x Input data matrix. Values are overwritten.
-   * @param[out] s Vector of singular values.
-   * @param[out] u Matrix of left singular vectors.
-   * @param[out] vt Matrix of (transposed) right singnular vectors.
-   * 
-   * @impl Uses the ScaLAPACK function `pXgesvd()`.
-   * 
-   * @allocs If the any outputs are inappropriately sized, they will
-   * automatically be re-allocated. Additionally, some temporary work storage
-   * is needed.
-   * 
-   * @except If a (re-)allocation is triggered and fails, a `bad_alloc`
-   * exception will be thrown.
-   * 
-   * @tparam REAL should be 'float' or 'double'.
+    @brief Computes the singular value decomposition.
+    
+    @param[inout] x Input data matrix. Values are overwritten.
+    @param[out] s Vector of singular values.
+    @param[out] u Matrix of left singular vectors.
+    @param[out] vt Matrix of (transposed) right singnular vectors.
+    
+    @impl Uses the ScaLAPACK function `pXgesvd()`.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
   void svd(mpimat<REAL> &x, cpuvec<REAL> &s)
@@ -447,9 +463,7 @@ namespace linalg
     check_info(info, "gesvd");
   }
   
-  /**
-   * \overload
-   */
+  /// \overload
   template <typename REAL>
   void svd(mpimat<REAL> &x, cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
   {
@@ -507,6 +521,26 @@ namespace linalg
     }
   }
   
+  /**
+    @brief Compute the eigenvalues and optionally the eigenvectors for a
+    symmetric matrix.
+    
+    @details The input data is overwritten.
+    
+    @param[inout] x Input data matrix. Should be square.
+    @param[out] values Eigenvalues.
+    @param[out] vectors Eigenvectors.
+    
+    @impl Uses the ScaLAPACK functions `pXsyevr()`.
+    
+    @allocs If any output's dimension is inappropriately sized, it will
+    automatically be re-allocated.
+    
+    @except If the matrix is non-square, a `runtime_error` exception is thrown.
+    If an allocation fails, a `bad_alloc` exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   void eigen_sym(mpimat<REAL> &x, cpuvec<REAL> &values)
   {
@@ -516,6 +550,7 @@ namespace linalg
     check_info(info, "syevr");
   }
   
+  /// \overload
   template <typename REAL>
   void eigen_sym(mpimat<REAL> &x, cpuvec<REAL> &values, mpimat<REAL> &vectors)
   {
@@ -528,21 +563,21 @@ namespace linalg
   
   
   /**
-   * @brief Compute the matrix inverse.
-   * 
-   * @details The input is replaced by its inverse, computed via a PLU.
-   * 
-   * @param[inout] x Input data matrix. Should be square.
-   * 
-   * @impl Uses the ScaLAPACK functions `pXgetrf()` (LU) and `pXgetri()`
-   * (inverse).
-   * 
-   * @allocs LU pivot data is allocated internally.
-   * 
-   * @except If the matrix is non-square, a `runtime_error` exception is thrown.
-   * If an allocation fails, a `bad_alloc` exception will be thrown.
-   * 
-   * @tparam REAL should be 'float' or 'double'.
+    @brief Compute the matrix inverse.
+    
+    @details The input is replaced by its inverse, computed via a PLU.
+    
+    @param[inout] x Input data matrix. Should be square.
+    
+    @impl Uses the ScaLAPACK functions `pXgetrf()` (LU) and `pXgetri()`
+    (solve).
+    
+    @allocs LU pivot data is allocated internally.
+    
+    @except If the matrix is non-square, a `runtime_error` exception is thrown.
+    If an allocation fails, a `bad_alloc` exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
   void invert(mpimat<REAL> &x)
@@ -570,6 +605,25 @@ namespace linalg
   
   
   
+  /**
+    @brief Solve a system of equations.
+    
+    @details The input is replaced by its LU factorization.
+    
+    @param[inout] x Input LHS. Should be square. Overwritten by LU.
+    @param[inout] y Input RHS. Overwritten by solution.
+    
+    @impl Uses the LAPACK functions `pXgesv()`.
+    
+    @allocs LU pivot data is allocated internally.
+    
+    @except If the matrix is non-square or if the RHS is incompatible with the
+    LHS, a `runtime_error` exception is thrown. If the inputs are distributed
+    on different grids, a `runtime_exception` is thrown. If an allocation
+    fails, a `bad_alloc` exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   void solve(mpimat<REAL> &x, mpimat<REAL> &y)
   {
