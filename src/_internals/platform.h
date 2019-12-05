@@ -2,8 +2,8 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_PLATFORM_H
-#define FML_PLATFORM_H
+#ifndef FML__INTERNALS_PLATFORM_H
+#define FML__INTERNALS_PLATFORM_H
 #pragma once
 
 
