@@ -18,9 +18,7 @@
 #include <vector>
 
 
-/**
- * @brief MPI communicator data and helpers. 
- */
+/// @brief MPI communicator data and helpers. 
 class comm
 {
   public:
@@ -88,10 +86,10 @@ class comm
 // constructors/destructor and comm management
 
 /**
- * @brief Create a new comm object and uses 'MPI_COMM_WORLD' as the
+  @brief Create a new comm object and uses 'MPI_COMM_WORLD' as the
    communicator.
- * 
- * @param[in] comm An MPI communicator. Default is MPI_COMM_WORLD.
+  
+  @param[in] comm An MPI communicator. Default is MPI_COMM_WORLD.
  */
 inline comm::comm(MPI_Comm comm)
 {
@@ -105,9 +103,9 @@ inline comm::comm(MPI_Comm comm)
 
 
 /**
- * @brief Change communicator to an existing one.
- * 
- * @param[in] comm An MPI communicator.
+  @brief Change communicator to an existing one.
+  
+  @param[in] comm An MPI communicator.
  */
 inline void comm::set(MPI_Comm comm)
 {
@@ -118,10 +116,10 @@ inline void comm::set(MPI_Comm comm)
 
 
 /**
- * @brief Create new communicator based on color/key.
- * 
- * @param[in] group 
- * @return The new communicator managed in a new comm object.
+  @brief Create new communicator based on color/key.
+  
+  @param[in] group 
+  @return The new communicator managed in a new comm object.
  */
 inline comm comm::create(MPI_Group group)
 {
@@ -136,11 +134,11 @@ inline comm comm::create(MPI_Group group)
 
 
 /**
- * @brief Create new communicator based on color/key.
- * 
- * @param[in] color 
- * @param[in] key 
- * @return The new communicator managed in a new comm object.
+  @brief Create new communicator based on color/key.
+  
+  @param[in] color 
+  @param[in] key 
+  @return The new communicator managed in a new comm object.
  */
 inline comm comm::split(int color, int key)
 {
@@ -154,9 +152,7 @@ inline comm comm::split(int color, int key)
 
 
 
-/**
- * @brief Destroy communicator.
- */
+/// @brief Destroy communicator.
 inline void comm::free()
 {
   int mpi_ret = MPI_Comm_free(&_comm);
@@ -169,9 +165,7 @@ inline void comm::free()
 
 
 
-/**
- * @brief Shut down MPI.
- */
+/// @brief Shut down MPI.
 inline void comm::finalize()
 {
   int ret = MPI_Finalize();
@@ -183,13 +177,13 @@ inline void comm::finalize()
 // utilities
 
 /**
- * @brief Helper wrapper around the C standard I/O 'printf()' function.
- * Conceptually similar to guarding a normal 'printf()' function with a check
- * for 'rank==rank()'.
- * 
- * @param[in] rank The process that should do the printing.
- * @param[in] fmt The printf format string.
- * @param[in] ... additional arguments to printf.
+  @brief Helper wrapper around the C standard I/O 'printf()' function.
+  Conceptually similar to guarding a normal 'printf()' function with a check
+  for 'rank==rank()'.
+  
+  @param[in] rank The process that should do the printing.
+  @param[in] fmt The printf format string.
+  @param[in] ... additional arguments to printf.
  */
 inline void comm::printf(int rank, const char *fmt, ...) const
 {
@@ -206,8 +200,8 @@ inline void comm::printf(int rank, const char *fmt, ...) const
 
 
 /**
- * @brief Print some brief information about the MPI communicator. The printing
-   is done by rank 0.
+  @brief Print some brief information about the MPI communicator. The printing
+  is done by rank 0.
  */
 inline void comm::info() const
 {
@@ -216,9 +210,7 @@ inline void comm::info() const
 
 
 
-/**
- * @brief Check if the executing process is rank 0.
- */
+/// @brief Check if the executing process is rank 0.
 inline bool comm::rank0() const
 {
   return (_rank == 0);
@@ -227,12 +219,12 @@ inline bool comm::rank0() const
 
 
 /**
- * @brief 
- * 
- * @param[in] n The number of tasks.
- * @return A std::vector of task numbers.
- * 
- * @comm The method has no communication.
+  @brief 
+  
+  @param[in] n The number of tasks.
+  @return A std::vector of task numbers.
+  
+  @comm The method has no communication.
  */
 inline std::vector<int> comm::jid(const int n) const
 {
@@ -275,12 +267,12 @@ inline std::vector<int> comm::jid(const int n) const
 // send/recv
 
 /**
- * @brief Point-to-point send. Should be matched by a corresponding 'recv' call.
- * 
- * @param[in] n Number of elements of 'data'.
- * @param[in] data The data to send.
- * @param[in] dest The process destination in the MPI communicator.
- * @param[in] tag Optional MPI tag (default=0).
+  @brief Point-to-point send. Should be matched by a corresponding 'recv' call.
+  
+  @param[in] n Number of elements of 'data'.
+  @param[in] data The data to send.
+  @param[in] dest The process destination in the MPI communicator.
+  @param[in] tag Optional MPI tag (default=0).
  */
 ///@{
 template <typename T>
@@ -303,13 +295,13 @@ inline void comm::isend(int n, const T *data, int dest, int tag) const
 
 
 /**
- * @brief Point-to-point receive. Should be matched by a corresponding 'send'
-   call.
- * 
- * @param[in] n Number of elements of 'data'.
- * @param[in] data The data to send.
- * @param[in] source The process source in the MPI communicator.
- * @param[in] tag Optional MPI tag (default=0).
+  @brief Point-to-point receive. Should be matched by a corresponding 'send'
+  call.
+  
+  @param[in] n Number of elements of 'data'.
+  @param[in] data The data to send.
+  @param[in] source The process source in the MPI communicator.
+  @param[in] tag Optional MPI tag (default=0).
  */
 ///@{
 template <typename T>
@@ -334,7 +326,7 @@ inline void comm::irecv(int n, T *data, int source, int tag) const
 // collectives
 
 /**
- * @brief Execute a barrier.
+  @brief Execute a barrier.
  */
 inline void comm::barrier() const
 {
@@ -345,11 +337,11 @@ inline void comm::barrier() const
 
 
 /**
- * @brief Sum reduce operation across all processes in the MPI communicator.
- * 
- * @param[in] n Number of elemends of 'data'.
- * @param[in,out] data The data to reduce.
- * @param[in] op MPI reduction operation. Default is MPI_SUM.
+  @brief Sum reduce operation across all processes in the MPI communicator.
+  
+  @param[in] n Number of elemends of 'data'.
+  @param[in,out] data The data to reduce.
+  @param[in] op MPI reduction operation. Default is MPI_SUM.
  */
 ///@{
 template <typename T>
@@ -364,11 +356,11 @@ inline void comm::allreduce(int n, T *data, MPI_Op op) const
 
 
 /**
- * @brief Sum reduce operation across all processes in the MPI communicator.
- * 
- * @param[in] n Number of elemends of 'data'.
- * @param[in,out] data The data to reduce.
- * @param[in] root The rank in the MPI communicator to receive the final answer.
+  @brief Sum reduce operation across all processes in the MPI communicator.
+  
+  @param[in] n Number of elemends of 'data'.
+  @param[in,out] data The data to reduce.
+  @param[in] root The rank in the MPI communicator to receive the final answer.
  */
 ///@{
 template <typename T>
@@ -383,11 +375,11 @@ inline void comm::reduce(int n, T *data, MPI_Op op, int root) const
 
 
 /**
- * @brief Broadcast.
- * 
- * @param[in] n Number of elemends of 'data'.
- * @param[in,out] data The data to broadcast.
- * @param[in] root The rank in the MPI communicator that does the broadcasting.
+  @brief Broadcast.
+  
+  @param[in] n Number of elemends of 'data'.
+  @param[in,out] data The data to broadcast.
+  @param[in] root The rank in the MPI communicator that does the broadcasting.
  */
 ///@{
 template <typename T>

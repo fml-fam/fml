@@ -19,9 +19,7 @@
 #include "cpuvec.hh"
 
 
-/**
- * @brief Linear algebra functions.
- */
+/// @brief Linear algebra functions.
 namespace linalg
 {
   namespace

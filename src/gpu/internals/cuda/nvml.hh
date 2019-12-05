@@ -20,8 +20,8 @@
 
 
 /**
- * @brief NVIDIA Management Library (NVML) interface.
- * @except Each function can throw a 'runtime_error' exception.
+  @brief NVIDIA Management Library (NVML) interface.
+  @except Each function can throw a 'runtime_error' exception.
  */
 namespace nvml
 {
@@ -86,8 +86,8 @@ namespace nvml
   
   
   /**
-   * @brief Initialize NVML.
-   * @details Call once before calling other NVML methods.
+    @brief Initialize NVML.
+    @details Call once before calling other NVML methods.
    */
   inline void init()
   {
@@ -95,8 +95,8 @@ namespace nvml
   }
   
   /**
-   * @brief Shut down NVML.
-   * @details Call when you are finished.
+    @brief Shut down NVML.
+    @details Call when you are finished.
    */
   inline void shutdown()
   {
@@ -109,14 +109,14 @@ namespace nvml
 namespace nvml
 {
   /**
-   * @brief NVML queries against the system, independent of any GPU devices.
-   * @details Only query methods are available.
+    @brief NVML queries against the system, independent of any GPU devices.
+    @details Only query methods are available.
    */
   namespace system
   {
     /**
-     * @brief System CUDA driver version.
-     * @return The version is encoded as (major*1000) + (minor*10).
+      @brief System CUDA driver version.
+      @return The version is encoded as (major*1000) + (minor*10).
      */
     inline int get_cuda_driver_version()
     {
@@ -126,7 +126,7 @@ namespace nvml
     }
     
     /**
-     * @brief System graphics driver version.
+      @brief System graphics driver version.
      */
     inline std::string get_driver_version()
     {
@@ -137,7 +137,7 @@ namespace nvml
     }
     
     /**
-     * @brief Version of the NVML library.
+      @brief Version of the NVML library.
      */
     inline std::string get_nvml_version()
     {
@@ -148,9 +148,9 @@ namespace nvml
     }
     
     /**
-     * @brief Process name.
-     * @param[in] pid Process ID.
-     * @return Process name.
+      @brief Process name.
+      @param[in] pid Process ID.
+      @return Process name.
      */
     inline std::string get_process_name(unsigned int pid)
     {
@@ -167,8 +167,8 @@ namespace nvml
 namespace nvml
 {
   /**
-   * @brief NVML queries against GPU devices.
-   * @details Only query methods are available.
+    @brief NVML queries against GPU devices.
+    @details Only query methods are available.
   */
   namespace device
   {

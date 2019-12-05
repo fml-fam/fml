@@ -21,9 +21,9 @@
 
 
 /**
- * @brief Matrix class for data held on a single GPU. 
- * 
- * @tparam REAL should be '__half', 'float', or 'double'.
+  @brief Matrix class for data held on a single GPU. 
+  
+  @tparam REAL should be '__half', 'float', or 'double'.
  */
 template <typename REAL>
 class gpumat : public unimat<REAL>

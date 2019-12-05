@@ -18,9 +18,9 @@
 
 
 /**
- * @brief Vector class for data held on a single CPU.
- * 
- * @tparam T should be 'int', 'float' or 'double'.
+  @brief Vector class for data held on a single CPU.
+  
+  @tparam T should be 'int', 'float' or 'double'.
  */
 template <typename T>
 class cpuvec : public univec<T>
@@ -131,14 +131,14 @@ cpuvec<T>::~cpuvec()
 // memory management
 
 /**
- * @brief Resize the internal object storage.
- * 
- * @param[in] size Length of the vector needed.
- * 
- * @allocs Resizing triggers a re-allocation.
- * 
- * @except If the reallocation fails, a `bad_alloc` exception will be thrown.
- * If the input values are invalid, a `runtime_error` exception will be thrown.
+  @brief Resize the internal object storage.
+  
+  @param[in] size Length of the vector needed.
+  
+  @allocs Resizing triggers a re-allocation.
+  
+  @except If the reallocation fails, a `bad_alloc` exception will be thrown.
+  If the input values are invalid, a `runtime_error` exception will be thrown.
  */
 template <typename T>
 void cpuvec<T>::resize(len_t size)
@@ -167,16 +167,16 @@ void cpuvec<T>::resize(len_t size)
 
 
 /**
- * @brief Set the internal object storage to the specified array.
- * 
- * @param[in] data Value storage.
- * @param[in] size Length of the vector. Should match the length of the input
- * `data`.
- * @param[in] free_on_destruct Should the object destructor free the internal
- * array `data`?
- * 
- * @except If the input values are invalid, a `runtime_error` exception will be
- * thrown.
+  @brief Set the internal object storage to the specified array.
+  
+  @param[in] data Value storage.
+  @param[in] size Length of the vector. Should match the length of the input
+  `data`.
+  @param[in] free_on_destruct Should the object destructor free the internal
+  array `data`?
+  
+  @except If the input values are invalid, a `runtime_error` exception will be
+  thrown.
  */
 template <typename T>
 void cpuvec<T>::set(T *data, len_t size, bool free_on_destruct)
@@ -193,9 +193,7 @@ void cpuvec<T>::set(T *data, len_t size, bool free_on_destruct)
 
 
 
-/**
- * @brief Duplicate the object in a deep copy.
- */
+/// @brief Duplicate the object in a deep copy.
 template <typename T>
 cpuvec<T> cpuvec<T>::dupe() const
 {
@@ -212,10 +210,10 @@ cpuvec<T> cpuvec<T>::dupe() const
 // printers
 
 /**
- * @brief Copy data from a CPU object to another.
- * 
- * @param[in] ndigits Number of decimal digits to print.
- * @param[in] add_final_blank Should a final blank line be printed?
+  @brief Copy data from a CPU object to another.
+  
+  @param[in] ndigits Number of decimal digits to print.
+  @param[in] add_final_blank Should a final blank line be printed?
  */
 template <typename T>
 void cpuvec<T>::print(uint8_t ndigits, bool add_final_blank) const
@@ -230,9 +228,7 @@ void cpuvec<T>::print(uint8_t ndigits, bool add_final_blank) const
 
 
 
-/**
- * @brief Print some brief information about the object.
- */
+/// @brief Print some brief information about the object.
 template <typename T>
 void cpuvec<T>::info() const
 {
@@ -246,9 +242,7 @@ void cpuvec<T>::info() const
 
 // fillers
 
-/**
- * @brief Set all values to zero.
- */
+/// @brief Set all values to zero.
 template <typename T>
 void cpuvec<T>::fill_zero()
 {
@@ -258,9 +252,7 @@ void cpuvec<T>::fill_zero()
 
 
 
-/**
- * @brief Set all values to one.
- */
+/// @brief Set all values to one.
 template <typename T>
 void cpuvec<T>::fill_one()
 {
@@ -270,9 +262,9 @@ void cpuvec<T>::fill_one()
 
 
 /**
- * @brief Set all values to input value.
- * 
- * @param[in] v Value to set all data values to.
+  @brief Set all values to input value.
+  
+  @param[in] v Value to set all data values to.
  */
 template <typename T>
 void cpuvec<T>::fill_val(const T v)
@@ -285,9 +277,9 @@ void cpuvec<T>::fill_val(const T v)
 
 
 /**
- * @brief Set values to linearly spaced numbers.
- * 
- * @param[in] start,stop Beginning/ending numbers.
+  @brief Set values to linearly spaced numbers.
+  
+  @param[in] start,stop Beginning/ending numbers.
  */
 template <typename REAL>
 void cpuvec<REAL>::fill_linspace(const REAL start, const REAL stop)
@@ -322,9 +314,9 @@ inline void cpuvec<int>::fill_linspace(const int start, const int stop)
 
 
 /**
- * @brief Multiply all values by the input value.
- * 
- * @param[in] s Scaling value.
+  @brief Multiply all values by the input value.
+  
+  @param[in] s Scaling value.
  */
 template <typename T>
 void cpuvec<T>::scale(const T s)
@@ -336,9 +328,7 @@ void cpuvec<T>::scale(const T s)
 
 
 
-/**
- * @brief Reverse the vector.
- */
+/// @brief Reverse the vector.
 template <typename T>
 void cpuvec<T>::rev()
 {

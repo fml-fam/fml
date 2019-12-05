@@ -23,9 +23,9 @@
 
 
 /**
- * @brief Matrix class for data held on a single CPU.
- * 
- * @tparam REAL should be 'float' or 'double'.
+  @brief Matrix class for data held on a single CPU.
+  
+  @tparam REAL should be 'float' or 'double'.
  */
 template <typename REAL>
 class cpumat : public unimat<REAL>
@@ -156,14 +156,14 @@ cpumat<REAL>::~cpumat()
 // memory management
 
 /**
- * @brief Resize the internal object storage.
- * 
- * @param[in] nrows,ncols Number rows/columns needed.
- * 
- * @allocs Resizing triggers a re-allocation.
- * 
- * @except If the reallocation fails, a `bad_alloc` exception will be thrown.
- * If the input values are invalid, a `runtime_error` exception will be thrown.
+  @brief Resize the internal object storage.
+  
+  @param[in] nrows,ncols Number rows/columns needed.
+  
+  @allocs Resizing triggers a re-allocation.
+  
+  @except If the reallocation fails, a `bad_alloc` exception will be thrown.
+  If the input values are invalid, a `runtime_error` exception will be thrown.
  */
 template <typename REAL>
 void cpumat<REAL>::resize(len_t nrows, len_t ncols)
@@ -198,16 +198,16 @@ void cpumat<REAL>::resize(len_t nrows, len_t ncols)
 
 
 /**
- * @brief Set the internal object storage to the specified array.
- * 
- * @param[in] data Value storage.
- * @param[in] nrows,ncols Number rows/columns of the matrix. The product of
- * these should be the length of the input `data`.
- * @param[in] free_on_destruct Should the object destructor free the internal
- * array `data`?
- * 
- * @except If the input values are invalid, a `runtime_error` exception will be
- * thrown.
+  @brief Set the internal object storage to the specified array.
+  
+  @param[in] data Value storage.
+  @param[in] nrows,ncols Number rows/columns of the matrix. The product of
+  these should be the length of the input `data`.
+  @param[in] free_on_destruct Should the object destructor free the internal
+  array `data`?
+  
+  @except If the input values are invalid, a `runtime_error` exception will be
+  thrown.
  */
 template <typename REAL>
 void cpumat<REAL>::set(REAL *data, len_t nrows, len_t ncols, bool free_on_destruct)
@@ -225,9 +225,7 @@ void cpumat<REAL>::set(REAL *data, len_t nrows, len_t ncols, bool free_on_destru
 
 
 
-/**
- * @brief Duplicate the object in a deep copy.
- */
+/// @brief Duplicate the object in a deep copy.
 template <typename REAL>
 cpumat<REAL> cpumat<REAL>::dupe() const
 {
@@ -244,10 +242,10 @@ cpumat<REAL> cpumat<REAL>::dupe() const
 // printers
 
 /**
- * @brief Copy data from a CPU object to another.
- * 
- * @param[in] ndigits Number of decimal digits to print.
- * @param[in] add_final_blank Should a final blank line be printed?
+  @brief Copy data from a CPU object to another.
+  
+  @param[in] ndigits Number of decimal digits to print.
+  @param[in] add_final_blank Should a final blank line be printed?
  */
 template <typename REAL>
 void cpumat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
@@ -266,9 +264,7 @@ void cpumat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 
 
 
-/**
- * @brief Print some brief information about the object.
- */
+/// @brief Print some brief information about the object.
 template <typename REAL>
 void cpumat<REAL>::info() const
 {
@@ -282,9 +278,7 @@ void cpumat<REAL>::info() const
 
 // fillers
 
-/**
- * @brief Set all values to zero.
- */
+/// @brief Set all values to zero.
 template <typename REAL>
 void cpumat<REAL>::fill_zero()
 {
@@ -294,9 +288,7 @@ void cpumat<REAL>::fill_zero()
 
 
 
-/**
- * @brief Set all values to one.
- */
+/// @brief Set all values to one.
 template <typename REAL>
 void cpumat<REAL>::fill_one()
 {
@@ -306,9 +298,9 @@ void cpumat<REAL>::fill_one()
 
 
 /**
- * @brief Set all values to input value.
- * 
- * @param[in] v Value to set all data values to.
+  @brief Set all values to input value.
+  
+  @param[in] v Value to set all data values to.
  */
 template <typename REAL>
 void cpumat<REAL>::fill_val(const REAL v)
@@ -325,9 +317,9 @@ void cpumat<REAL>::fill_val(const REAL v)
 
 
 /**
- * @brief Set values to linearly spaced numbers.
- * 
- * @param[in] start,stop Beginning/ending numbers.
+  @brief Set values to linearly spaced numbers.
+  
+  @param[in] start,stop Beginning/ending numbers.
  */
 template <typename REAL>
 void cpumat<REAL>::fill_linspace(const REAL start, const REAL stop)
@@ -375,9 +367,7 @@ inline void cpumat<int>::fill_linspace(const int start, const int stop)
 
 
 
-/**
- * @brief Set diagonal entries to 1 and non-diagonal entries to 0.
- */
+/// @brief Set diagonal entries to 1 and non-diagonal entries to 0.
 template <typename REAL>
 void cpumat<REAL>::fill_eye()
 {
@@ -389,13 +379,13 @@ void cpumat<REAL>::fill_eye()
 
 
 /**
- * @brief Set diagonal entries to 1 and non-diagonal entries to 0.
- * 
- * @details If the vector is smaller than the matrix diagonal, the vector will
- * recycle until the matrix diagonal is filled. If the vector is longer, then
- * not all of it will be used.
- * 
- * @param[in] v Vector of values to set the matrix diagonal to.
+  @brief Set diagonal entries to 1 and non-diagonal entries to 0.
+  
+  @details If the vector is smaller than the matrix diagonal, the vector will
+  recycle until the matrix diagonal is filled. If the vector is longer, then
+  not all of it will be used.
+  
+  @param[in] v Vector of values to set the matrix diagonal to.
  */
 template <typename REAL>
 void cpumat<REAL>::fill_diag(const cpuvec<REAL> &v)
@@ -413,10 +403,10 @@ void cpumat<REAL>::fill_diag(const cpuvec<REAL> &v)
 
 
 /**
- * @brief Set diagonal entries to 1 and non-diagonal entries to 0.
- * 
- * @param[in] seed Seed for the rng.
- * @param[in] min,max Parameters for the generator.
+  @brief Set diagonal entries to 1 and non-diagonal entries to 0.
+  
+  @param[in] seed Seed for the rng.
+  @param[in] min,max Parameters for the generator.
  */
 template <typename REAL>
 void cpumat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL max)
@@ -432,9 +422,7 @@ void cpumat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL ma
   }
 }
 
-/**
- * \overload
- */
+/// \overload
 template <typename REAL>
 void cpumat<REAL>::fill_runif(const REAL min, const REAL max)
 {
@@ -445,10 +433,10 @@ void cpumat<REAL>::fill_runif(const REAL min, const REAL max)
 
 
 /**
- * @brief Set diagonal entries to 1 and non-diagonal entries to 0.
- * 
- * @param[in] seed Seed for the rng.
- * @param[in] mean,sd Parameters for the generator.
+  @brief Set diagonal entries to 1 and non-diagonal entries to 0.
+  
+  @param[in] seed Seed for the rng.
+  @param[in] mean,sd Parameters for the generator.
  */
 template <typename REAL>
 void cpumat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL sd)
@@ -464,9 +452,7 @@ void cpumat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL s
   }
 }
 
-/**
- * \overload
- */
+/// \overload
 template <typename REAL>
 void cpumat<REAL>::fill_rnorm(const REAL mean, const REAL sd)
 {
@@ -477,17 +463,17 @@ void cpumat<REAL>::fill_rnorm(const REAL mean, const REAL sd)
 
 
 /**
- * @brief Get the diagonal entries.
- * 
- * @param[out] v The diagonal. Length should match the length of the diagonal
- * of the input (minimum of the matrix dimensions). If not, the vector will
- * automatically be resized.
- * 
- * @allocs If the output dimension is inappropriately sized, it will
- * automatically be re-allocated.
- * 
- * @except If a reallocation is triggered and fails, a `bad_alloc` exception
- * will be thrown.
+  @brief Get the diagonal entries.
+  
+  @param[out] v The diagonal. Length should match the length of the diagonal
+  of the input (minimum of the matrix dimensions). If not, the vector will
+  automatically be resized.
+  
+  @allocs If the output dimension is inappropriately sized, it will
+  automatically be re-allocated.
+  
+  @except If a reallocation is triggered and fails, a `bad_alloc` exception
+  will be thrown.
  */
 template <typename REAL>
 void cpumat<REAL>::diag(cpuvec<REAL> &v)
@@ -504,18 +490,18 @@ void cpumat<REAL>::diag(cpuvec<REAL> &v)
 
 
 /**
- * @brief Get the anti-diagonal entries, i.e. those on the bottom-left to
- * top-right.
- * 
- * @param[out] v The anti-diagonal. Length should match the length of the
- * diagonal of the input (minimum of the matrix dimensions). If not, the vector
- * will automatically be resized.
- * 
- * @allocs If the output dimension is inappropriately sized, it will
- * automatically be re-allocated.
- * 
- * @except If a reallocation is triggered and fails, a `bad_alloc` exception
- * will be thrown.
+  @brief Get the anti-diagonal entries, i.e. those on the bottom-left to
+  top-right.
+  
+  @param[out] v The anti-diagonal. Length should match the length of the
+  diagonal of the input (minimum of the matrix dimensions). If not, the vector
+  will automatically be resized.
+  
+  @allocs If the output dimension is inappropriately sized, it will
+  automatically be re-allocated.
+  
+  @except If a reallocation is triggered and fails, a `bad_alloc` exception
+  will be thrown.
  */
 template <typename REAL>
 void cpumat<REAL>::antidiag(cpuvec<REAL> &v)
@@ -532,9 +518,9 @@ void cpumat<REAL>::antidiag(cpuvec<REAL> &v)
 
 
 /**
- * @brief Multiply all values by the input value.
- * 
- * @param[in] s Scaling value.
+  @brief Multiply all values by the input value.
+  
+  @param[in] s Scaling value.
  */
 template <typename REAL>
 void cpumat<REAL>::scale(const REAL s)
@@ -550,9 +536,7 @@ void cpumat<REAL>::scale(const REAL s)
 
 
 
-/**
- * @brief Reverse the rows of the matrix.
- */
+/// @brief Reverse the rows of the matrix.
 template <typename REAL>
 void cpumat<REAL>::rev_rows()
 {
@@ -572,9 +556,7 @@ void cpumat<REAL>::rev_rows()
 
 
 
-/**
- * @brief Reverse the columns of the matrix.
- */
+/// @brief Reverse the columns of the matrix.
 template <typename REAL>
 void cpumat<REAL>::rev_cols()
 {
@@ -596,17 +578,17 @@ void cpumat<REAL>::rev_cols()
 
 
 /**
- * @brief Get the specified row.
- * 
- * @param[in] i The desired row, 0-indexed.
- * @param[out] v The row values.
- * 
- * @allocs If the output dimension is inappropriately sized, it will
- * automatically be re-allocated.
- * 
- * @except If `i` is an inappropriate value (i.e. does not refer to a matrix
- * row), then the method will throw a `logic_error` exception. If a reallocation
- * is triggered and fails, a `bad_alloc` exception will be thrown.
+  @brief Get the specified row.
+  
+  @param[in] i The desired row, 0-indexed.
+  @param[out] v The row values.
+  
+  @allocs If the output dimension is inappropriately sized, it will
+  automatically be re-allocated.
+  
+  @except If `i` is an inappropriate value (i.e. does not refer to a matrix
+  row), then the method will throw a `logic_error` exception. If a reallocation
+  is triggered and fails, a `bad_alloc` exception will be thrown.
  */
 template <typename REAL>
 void cpumat<REAL>::get_row(len_t i, cpuvec<REAL> &v) const
@@ -624,17 +606,17 @@ void cpumat<REAL>::get_row(len_t i, cpuvec<REAL> &v) const
 
 
 /**
- * @brief Get the specified column.
- * 
- * @param[in] j The desired column, 0-indexed.
- * @param[out] v The column values.
- * 
- * @allocs If the output dimension is inappropriately sized, it will
- * automatically be re-allocated.
- * 
- * @except If `j` is an inappropriate value (i.e. does not refer to a matrix
- * column), then the method will throw a `logic_error` exception. If a
- * reallocation is triggered and fails, a `bad_alloc` exception will be thrown.
+  @brief Get the specified column.
+  
+  @param[in] j The desired column, 0-indexed.
+  @param[out] v The column values.
+  
+  @allocs If the output dimension is inappropriately sized, it will
+  automatically be re-allocated.
+  
+  @except If `j` is an inappropriate value (i.e. does not refer to a matrix
+  column), then the method will throw a `logic_error` exception. If a
+  reallocation is triggered and fails, a `bad_alloc` exception will be thrown.
  */
 template <typename REAL>
 void cpumat<REAL>::get_col(len_t j, cpuvec<REAL> &v) const
@@ -651,9 +633,7 @@ void cpumat<REAL>::get_col(len_t j, cpuvec<REAL> &v) const
 
 
 
-/**
- * @brief Are any values infinite?
- */
+/// @brief Are any values infinite?
 template <typename REAL>
 bool cpumat<REAL>::any_inf() const
 {
@@ -671,9 +651,7 @@ bool cpumat<REAL>::any_inf() const
 
 
 
-/**
- * @brief Are any values NaN?
- */
+/// @brief Are any values NaN?
 template <typename REAL>
 bool cpumat<REAL>::any_nan() const
 {

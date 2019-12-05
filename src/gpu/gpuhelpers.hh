@@ -19,9 +19,7 @@
 #include "gpuvec.hh"
 
 
-/**
- * @brief GPU class helpers.
-*/
+/// @brief GPU class helpers.
 namespace gpuhelpers
 {
   inline std::shared_ptr<card> new_card(int id)
@@ -135,20 +133,20 @@ namespace gpuhelpers
   
   
   /**
-   * @brief Copy data from a GPU object to a CPU object.
-   * 
-   * @param[in] gpu Input data.
-   * @param[out] cpu Output. Dimensions should match those of the input
-   * data. If not, the matrix will automatically be resized.
-   * 
-   * @allocs If the output dimensions do not match those of the input, the
-   * internal data will automatically be re-allocated.
-   * 
-   * @except If a reallocation is triggered and fails, a `bad_alloc` exception
-   * will be thrown.
-   * 
-   * @tparam REAL_IN,REAL_OUT Should be `float` or `double`. They do not have to
-   * be the same type. Additionally, `REAL_IN` can be `__half`.
+    @brief Copy data from a GPU object to a CPU object.
+    
+    @param[in] gpu Input data.
+    @param[out] cpu Output. Dimensions should match those of the input
+    data. If not, the matrix will automatically be resized.
+    
+    @allocs If the output dimensions do not match those of the input, the
+    internal data will automatically be re-allocated.
+    
+    @except If a reallocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @tparam REAL_IN,REAL_OUT Should be `float` or `double`. They do not have to
+    be the same type. Additionally, `REAL_IN` can be `__half`.
   */
   template <typename REAL_IN, typename REAL_OUT>
   void gpu2cpu(const gpuvec<REAL_IN> &gpu, cpuvec<REAL_OUT> &cpu)
@@ -157,9 +155,7 @@ namespace gpuhelpers
     copy_gpu2cpu(gpu.size(), (len_t)1, gpu.get_card(), gpu.data_ptr(), cpu.data_ptr());
   }
   
-  /**
-   * \overload
-   */
+  /// \overload
   template <typename REAL_IN, typename REAL_OUT>
   void gpu2cpu(const gpumat<REAL_IN> &gpu, cpumat<REAL_OUT> &cpu)
   {
@@ -170,20 +166,20 @@ namespace gpuhelpers
   
   
   /**
-   * @brief Copy data from a CPU object to a GPU object.
-   * 
-   * @param[in] cpu Input data.
-   * @param[out] gpu Output. Dimensions should match those of the input
-   * data. If not, the matrix will automatically be resized.
-   * 
-   * @allocs If the output dimensions do not match those of the input, the
-   * internal data will automatically be re-allocated.
-   * 
-   * @except If a reallocation is triggered and fails, a `bad_alloc` exception
-   * will be thrown.
-   * 
-   * @tparam REAL_IN,REAL_OUT Should be `float` or `double`. They do not have to
-   * be the same type. Additionally, `REAL_OUT` can be `__half`.
+    @brief Copy data from a CPU object to a GPU object.
+    
+    @param[in] cpu Input data.
+    @param[out] gpu Output. Dimensions should match those of the input
+    data. If not, the matrix will automatically be resized.
+    
+    @allocs If the output dimensions do not match those of the input, the
+    internal data will automatically be re-allocated.
+    
+    @except If a reallocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @tparam REAL_IN,REAL_OUT Should be `float` or `double`. They do not have to
+    be the same type. Additionally, `REAL_OUT` can be `__half`.
   */
   template <typename REAL_IN, typename REAL_OUT>
   void cpu2gpu(const cpuvec<REAL_IN> &cpu, gpuvec<REAL_OUT> &gpu)
@@ -193,9 +189,7 @@ namespace gpuhelpers
     copy_cpu2gpu(cpu.size(), (len_t)1, gpu.get_card(), cpu.data_ptr(), gpu.data_ptr());
   }
   
-  /**
-   * \overload
-   */
+  /// \overload
   template <typename REAL_IN, typename REAL_OUT>
   void cpu2gpu(const cpumat<REAL_IN> &cpu, gpumat<REAL_OUT> &gpu)
   {
@@ -206,23 +200,23 @@ namespace gpuhelpers
   
   
   /**
-   * @brief Copy data from a GPU object to another.
-   * 
-   * @details The GPU objects should be on the same card.
-   * 
-   * @param[in] gpu_in Input data.
-   * @param[out] gpu_out Output. Dimensions should match those of the input
-   * data. If not, the matrix will automatically be resized.
-   * 
-   * @allocs If the output dimensions do not match those of the input, the
-   * internal data will automatically be re-allocated.
-   * 
-   * @except If a reallocation is triggered and fails, a `bad_alloc` exception
-   * will be thrown. If the objects are on different cards, a `logic_error`
-   * exception will be thrown.
-   * 
-   * @tparam REAL_IN,REAL_OUT should be `__half`, `float`, or `double`. They do
-   * not have to be the same type.
+    @brief Copy data from a GPU object to another.
+    
+    @details The GPU objects should be on the same card.
+    
+    @param[in] gpu_in Input data.
+    @param[out] gpu_out Output. Dimensions should match those of the input
+    data. If not, the matrix will automatically be resized.
+    
+    @allocs If the output dimensions do not match those of the input, the
+    internal data will automatically be re-allocated.
+    
+    @except If a reallocation is triggered and fails, a `bad_alloc` exception
+    will be thrown. If the objects are on different cards, a `logic_error`
+    exception will be thrown.
+    
+    @tparam REAL_IN,REAL_OUT should be `__half`, `float`, or `double`. They do
+    not have to be the same type.
   */
   template <typename REAL_IN, typename REAL_OUT>
   void gpu2gpu(const gpuvec<REAL_IN> &gpu_in, gpuvec<REAL_OUT> &gpu_out)
@@ -235,9 +229,7 @@ namespace gpuhelpers
     copy_gpu2gpu(gpu_in.size(), (len_t)1, c, gpu_in.get_griddim(), gpu_in.get_blockdim(), gpu_in.data_ptr(), gpu_out.data_ptr());
   }
   
-  /**
-   * \overload
-   */
+  /// \overload
   template <typename REAL_IN, typename REAL_OUT>
   void gpu2gpu(const gpumat<REAL_IN> &gpu_in, gpumat<REAL_OUT> &gpu_out)
   {

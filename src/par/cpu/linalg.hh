@@ -13,9 +13,7 @@
 
 namespace linalg
 {
-  /**
-   * @brief Computes lower triangle of alpha*x^T*x
-   */
+  /// @brief Computes lower triangle of alpha*x^T*x
   template <typename REAL>
   void crossprod(const REAL alpha, const parmat_cpu<REAL> &x, cpumat<REAL> &ret)
   {
@@ -29,9 +27,7 @@ namespace linalg
     r.allreduce(n*n, ret.data_ptr());
   }
   
-  /**
-   * \overload
-   */
+  /// \overload
   template <typename REAL>
   cpumat<REAL> crossprod(const REAL alpha, const parmat_cpu<REAL> &x)
   {
