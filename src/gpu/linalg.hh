@@ -592,40 +592,24 @@ namespace linalg
   }
   
   template <typename REAL>
-  void eigen(bool symmetric, gpumat<REAL> &x, gpuvec<REAL> &values)
+  void eigen_sym(gpumat<REAL> &x, gpuvec<REAL> &values)
   {
     check_card(x, values);
-    
     gpumat<REAL> ignored(x.get_card());
-    if (symmetric)
-    {
-      int info = eig_sym_internals(true, x, values, ignored);
-      check_info(info, "syevd");
-    }
-    else
-    {
-      // TODO
-    }
+    
+    int info = eig_sym_internals(true, x, values, ignored);
+    check_info(info, "syevd");
   }
   
   template <typename REAL>
-  void eigen(bool symmetric, gpumat<REAL> &x, gpuvec<REAL> &values,
-    gpumat<REAL> &vectors)
+  void eigen_sym(gpumat<REAL> &x, gpuvec<REAL> &values, gpumat<REAL> &vectors)
   {
     check_card(x, values);
     check_card(x, vectors);
     
-    if (symmetric)
-    {
-      int info = eig_sym_internals(false, x, values, vectors);
-      check_info(info, "syevd");
-    }
-    else
-    {
-      // TODO
-    }
+    int info = eig_sym_internals(false, x, values, vectors);
+    check_info(info, "syevd");
   }
-  
   
   
   

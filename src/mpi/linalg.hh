@@ -508,35 +508,21 @@ namespace linalg
   }
   
   template <typename REAL>
-  void eigen(bool symmetric, mpimat<REAL> &x, cpuvec<REAL> &values)
+  void eigen_sym(mpimat<REAL> &x, cpuvec<REAL> &values)
   {
     mpimat<REAL> ignored(x.get_grid());
-    if (symmetric)
-    {
-      int info = eig_sym_internals(true, x, values, ignored);
-      check_info(info, "syevr");
-    }
-    else
-    {
-      // TODO
-    }
+    
+    int info = eig_sym_internals(true, x, values, ignored);
+    check_info(info, "syevr");
   }
   
   template <typename REAL>
-  void eigen(bool symmetric, mpimat<REAL> &x, cpuvec<REAL> &values,
-    mpimat<REAL> &vectors)
+  void eigen_sym(mpimat<REAL> &x, cpuvec<REAL> &values, mpimat<REAL> &vectors)
   {
     check_grid(x, vectors);
     
-    if (symmetric)
-    {
-      int info = eig_sym_internals(false, x, values, vectors);
-      check_info(info, "syevr");
-    }
-    else
-    {
-      // TODO
-    }
+    int info = eig_sym_internals(false, x, values, vectors);
+    check_info(info, "syevr");
   }
   
   

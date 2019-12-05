@@ -207,7 +207,7 @@ TEMPLATE_TEST_CASE("eigen", "[linalg]", float, double)
   x.fill_diag(v);
   
   gpuvec<TestType> values(c);
-  linalg::eigen(true, x, values);
+  linalg::eigen_sym(x, values);
   
   REQUIRE( v == values );
 }

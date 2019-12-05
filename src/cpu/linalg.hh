@@ -517,33 +517,19 @@ namespace linalg
   }
   
   template <typename REAL>
-  void eigen(bool symmetric, cpumat<REAL> &x, cpuvec<REAL> &values)
+  void eigen_sym(cpumat<REAL> &x, cpuvec<REAL> &values)
   {
     cpumat<REAL> ignored;
-    if (symmetric)
-    {
-      int info = eig_sym_internals(true, x, values, ignored);
-      check_info(info, "syevr");
-    }
-    else
-    {
-      // TODO
-    }
+    
+    int info = eig_sym_internals(true, x, values, ignored);
+    check_info(info, "syevr");
   }
   
   template <typename REAL>
-  void eigen(bool symmetric, cpumat<REAL> &x, cpuvec<REAL> &values,
-    cpumat<REAL> &vectors)
+  void eigen_sym(cpumat<REAL> &x, cpuvec<REAL> &values, cpumat<REAL> &vectors)
   {
-    if (symmetric)
-    {
-      int info = eig_sym_internals(false, x, values, vectors);
-      check_info(info, "syevr");
-    }
-    else
-    {
-      // TODO
-    }
+    int info = eig_sym_internals(false, x, values, vectors);
+    check_info(info, "syevr");
   }
   
   
