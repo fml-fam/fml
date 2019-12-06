@@ -9,6 +9,8 @@
 
 #include <stdexcept>
 
+#include "../arraytools/src/arraytools.hpp"
+
 #include "../cpu/cpumat.hh"
 
 #include "internals/bcutils.hh"
@@ -129,6 +131,36 @@ namespace mpihelpers
         }
       }
     }
+  }
+  
+  
+  
+  /**
+    @brief Copy data from an MPI object to another.
+    
+    @param[in] mpi_in Input data.
+    @param[out] mpi_out Output. Dimensions should match those of the input
+    data. If not, the matrix will automatically be resized.
+    
+    @allocs If the output dimensions do not match those of the input, the
+    internal data will automatically be re-allocated.
+    
+    @except If a reallocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @tparam REAL_IN,REAL_OUT Should be `float` or `double`. They do not have to
+    be the same type.
+  */
+  template <typename REAL_IN, typename REAL_OUT>
+  void mpi2mpi(const mpimat<REAL_IN> &mpi_in, mpimat<REAL_OUT> &mpi_out)
+  {
+    if (mpi_in.get_grid().get_ictxt() != mpi_out.get_grid().get_ictxt())
+      throw std::runtime_error("mpimat objects must be distributed on the same process grid");
+    
+    mpi_out.resize(mpi_in.nrows(), mpi_in.ncols());
+    
+    size_t len = (size_t) mpi_in.nrows_local() * mpi_in.ncols_local();
+    arraytools::copy(len, mpi_in.data_ptr(), mpi_out.data_ptr());
   }
 }
 
