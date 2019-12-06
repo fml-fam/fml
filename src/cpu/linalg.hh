@@ -388,6 +388,7 @@ namespace linalg
     const len_t minmn = std::min(m, x.ncols());
     
     REAL tr = 0;
+    #pragma omp simd reduction(+:tr)
     for (len_t i=0; i<minmn; i++)
       tr += x_d[i + i*m];
     
