@@ -450,12 +450,43 @@ namespace linalg
   
   
   
+  /**
+    @brief Computes the trace, i.e. the sum of the diagonal.
+    
+    @param[in] x Input data matrix.
+    
+    @tparam REAL should be '__half', 'float', or 'double'.
+   */
+  template <typename REAL>
+  REAL trace(const gpumat<REAL> &x)
+  {
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
+    auto c = x.get_card();
+    
+    REAL tr = 0;
+    REAL *tr_gpu = (REAL*) c->mem_alloc(sizeof(REAL));
+    c->mem_cpu2gpu(tr_gpu, &tr, sizeof(REAL));
+    
+    dim3 dim_block(16, 16);
+    dim3 dim_grid((m + 16 - 1) / 16, (n + 16 - 1) / 16);
+    kernelfuns::kernel_trace<<<dim_grid, dim_block>>>(m, n, x.data_ptr(), tr_gpu);
+    
+    c->mem_gpu2cpu(&tr, tr_gpu, sizeof(REAL));
+    c->mem_free(tr_gpu);
+    
+    c->check();
+    
+    return tr;
+  }
+  
+  
+  
   namespace
   {
     template <typename REAL>
     int svd_internals(const int nu, const int nv, gpumat<REAL> &x, gpuvec<REAL> &s, gpumat<REAL> &u, gpumat<REAL> &vt)
     {
-      
       auto c = x.get_card();
       
       const len_t m = x.nrows();

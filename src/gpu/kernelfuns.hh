@@ -176,6 +176,18 @@ namespace kernelfuns
         atomicMin(all_eq, 0);
     }
   }
+  
+  
+  
+  template <typename REAL>
+  __global__ void kernel_trace(const len_t m, const len_t n, const REAL *data, REAL *tr)
+  {
+    int i = blockDim.x*blockIdx.x + threadIdx.x;
+    int j = blockDim.y*blockIdx.y + threadIdx.y;
+    
+    if (i < m && j < n && i == j)
+      atomicAdd(tr, data[i + m*i]);
+  }
 }
 
 
