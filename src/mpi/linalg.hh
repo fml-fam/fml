@@ -360,6 +360,15 @@ namespace linalg
   
   
   
+  /**
+    @brief Computes the trace, i.e. the sum of the diagonal.
+    
+    @param[in] x Input data matrix.
+    
+    @comm The method will communicate across all processes in the BLACS grid.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   REAL trace(const mpimat<REAL> &x)
   {

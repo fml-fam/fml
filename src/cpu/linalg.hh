@@ -373,6 +373,13 @@ namespace linalg
   
   
   
+  /**
+    @brief Computes the trace, i.e. the sum of the diagonal.
+    
+    @param[in] x Input data matrix.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   REAL trace(const cpumat<REAL> &x)
   {
