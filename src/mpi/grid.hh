@@ -205,7 +205,7 @@ inline void grid::set(const int blacs_context)
   if (_nprow == -1)
     throw std::runtime_error("context handle does not point at a valid context");
   
-  _nprocs = _nprow  _npcol;
+  _nprocs = _nprow * _npcol;
 }
 
 
