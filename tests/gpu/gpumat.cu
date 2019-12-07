@@ -51,3 +51,25 @@ TEMPLATE_TEST_CASE("inheriting memory", "[gpumat]", float, double)
   
   c->mem_free(data);
 }
+
+
+
+TEMPLATE_TEST_CASE("diag", "[gpumat]", float, double)
+{
+  len_t m = 4;
+  len_t n = 3;
+  
+  gpumat<TestType> x(c, m, n);
+  x.fill_linspace(1, m*n);
+  
+  gpuvec<TestType> v(c);
+  x.diag(v);
+  REQUIRE( fltcmp::eq(v(0), 1) );
+  REQUIRE( fltcmp::eq(v(1), 6) );
+  REQUIRE( fltcmp::eq(v(2), 11) );
+  
+  x.antidiag(v);
+  REQUIRE( fltcmp::eq(v(0), 4) );
+  REQUIRE( fltcmp::eq(v(1), 7) );
+  REQUIRE( fltcmp::eq(v(2), 10) );
+}

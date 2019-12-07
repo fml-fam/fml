@@ -54,6 +54,8 @@ class gpumat : public unimat<REAL>
     void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
     void fill_rnorm(const REAL mean=0, const REAL sd=1);
     
+    void diag(gpuvec<REAL> &v);
+    void antidiag(gpuvec<REAL> &v);
     void scale(const REAL s);
     void rev_rows();
     void rev_cols();
@@ -371,19 +373,26 @@ void gpumat<REAL>::fill_rnorm(REAL mean, REAL sd)
 
 
 
-
-
-
 template <typename REAL>
-void diag(cpuvec<REAL> &v)
+void gpumat<REAL>::diag(gpuvec<REAL> &v)
 {
+  const len_t minmn = std::min(this->m, this->n);
+  v.resize(minmn);
   
+  kernelfuns::kernel_diag<<<dim_grid, dim_block>>>(this->m, this->n, this->data, v.data_ptr());
+  this->c->check();
 }
 
+
+
 template <typename REAL>
-void antidiag(cpuvec<REAL> &v)
+void gpumat<REAL>::antidiag(gpuvec<REAL> &v)
 {
+  const len_t minmn = std::min(this->m, this->n);
+  v.resize(minmn);
   
+  kernelfuns::kernel_antidiag<<<dim_grid, dim_block>>>(this->m, this->n, this->data, v.data_ptr());
+  this->c->check();
 }
 
 

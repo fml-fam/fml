@@ -123,6 +123,30 @@ namespace kernelfuns
   
   
   template <typename REAL>
+  __global__ void kernel_diag(const len_t m, const len_t n, const REAL *data, REAL *v)
+  {
+    int i = blockDim.x*blockIdx.x + threadIdx.x;
+    int j = blockDim.y*blockIdx.y + threadIdx.y;
+    
+    if (i < m && j < n && i == j)
+      v[i] = data[i + m*j];
+  }
+  
+  
+  
+  template <typename REAL>
+  __global__ void kernel_antidiag(const len_t m, const len_t n, const REAL *data, REAL *v)
+  {
+    int i = blockDim.x*blockIdx.x + threadIdx.x;
+    int j = blockDim.y*blockIdx.y + threadIdx.y;
+    
+    if (i < m && j < n && m-1-i == j)
+      v[j] = data[i + m*j];
+  }
+  
+  
+  
+  template <typename REAL>
   __global__ void kernel_scale(const REAL s, const len_t m, const len_t n, REAL *data)
   {
     int i = blockDim.x*blockIdx.x + threadIdx.x;
