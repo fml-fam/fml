@@ -22,6 +22,15 @@
 /// @brief GPU class helpers.
 namespace gpuhelpers
 {
+  /**
+    @brief Initialize a new card.
+    
+    @param[in] id GPU id number.
+    @return Shared pointer to initialized card object.
+    
+    @except If the GPU can not be initialized, or if the allocation of one of the
+    handles fails, the method will throw a 'runtime_error' exception.
+  */
   inline std::shared_ptr<card> new_card(int id)
   {
     return std::make_shared<card>(id);
@@ -32,8 +41,6 @@ namespace gpuhelpers
   namespace
   {
     static const size_t CPLEN = 1024;
-    
-    
     
     static __global__ void kernel_copy(len_t m, len_t n, __half *in, float *out)
     {
@@ -77,8 +84,6 @@ namespace gpuhelpers
         kernel_copy<<<griddim, blockdim>>>(m, n, in, out);
     }
     
-    
-    
     template <typename REAL_IN, typename REAL_OUT>
     void copy_gpu2cpu(const len_t m, const len_t n, std::shared_ptr<card> c, const REAL_IN *in, REAL_OUT *out)
     {
@@ -102,8 +107,6 @@ namespace gpuhelpers
         }
       }
     }
-    
-    
     
     template <typename REAL_IN, typename REAL_OUT>
     void copy_cpu2gpu(const len_t m, const len_t n, std::shared_ptr<card> c, const REAL_IN *in, REAL_OUT *out)
