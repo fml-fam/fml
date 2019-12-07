@@ -27,20 +27,20 @@ class card
 {
   public:
     card();
-    card(int id=0);
+    card(const int id=0);
     card(const card &x);
     ~card();
     
-    void set(int id);
+    void set(const int id);
     
     void info() const;
     
-    void* mem_alloc(size_t len);
-    void mem_set(void *ptr, int value, size_t len);
+    void* mem_alloc(const size_t len);
+    void mem_set(void *ptr, const int value, const size_t len);
     void mem_free(void *ptr);
-    void mem_cpu2gpu(void *dst, void *src, size_t len);
-    void mem_gpu2cpu(void *dst, void *src, size_t len);
-    void mem_gpu2gpu(void *dst, void *src, size_t len);
+    void mem_cpu2gpu(void *dst, const void *src, const size_t len);
+    void mem_gpu2cpu(void *dst, const void *src, const size_t len);
+    void mem_gpu2gpu(void *dst, const void *src, const size_t len);
     
     void synch();
     void check();
@@ -103,7 +103,7 @@ inline card::card()
   @except If the GPU can not be initialized, or if the allocation of one of the
   handles fails, the method will throw a 'runtime_error' exception.
 */
-inline card::card(int id)
+inline card::card(const int id)
 {
   _id = id;
   init();
@@ -147,7 +147,7 @@ inline card::~card()
   @except If the GPU can not be initialized, or if the allocation of one of the
   handles fails, the method will throw a 'runtime_error' exception.
 */
-inline void card::set(int id)
+inline void card::set(const int id)
 {
   if (id == _id)
     return;
@@ -211,7 +211,7 @@ inline void card::info() const
   
   @except If the allocation fails, this throws a 'runtime_error' exception.
 */
-inline void* card::mem_alloc(size_t len)
+inline void* card::mem_alloc(const size_t len)
 {
   init();
   void *ptr;
@@ -236,7 +236,7 @@ inline void* card::mem_alloc(size_t len)
   @except If the function fails (e.g., being by given non-device memory), this
   throws a 'runtime_error' exception.
 */
-inline void card::mem_set(void *ptr, int value, size_t len)
+inline void card::mem_set(void *ptr, const int value, const size_t len)
 {
   init();
   err = cudaMemset(ptr, value, len);
@@ -279,7 +279,7 @@ inline void card::mem_free(void *ptr)
   @except If the function fails (e.g., being by improperly using device
   memory), this throws a 'runtime_error' exception.
 */
-inline void card::mem_cpu2gpu(void *dst, void *src, size_t len)
+inline void card::mem_cpu2gpu(void *dst, const void *src, const size_t len)
 {
   init();
   err = cudaMemcpy(dst, src, len, cudaMemcpyHostToDevice);
@@ -300,7 +300,7 @@ inline void card::mem_cpu2gpu(void *dst, void *src, size_t len)
   @except If the function fails (e.g., being by improperly using device
   memory), this throws a 'runtime_error' exception.
 */
-inline void card::mem_gpu2cpu(void *dst, void *src, size_t len)
+inline void card::mem_gpu2cpu(void *dst, const void *src, const size_t len)
 {
   init();
   err = cudaMemcpy(dst, src, len, cudaMemcpyDeviceToHost);
@@ -321,7 +321,7 @@ inline void card::mem_gpu2cpu(void *dst, void *src, size_t len)
   @except If the function fails (e.g., being by improperly using device
   memory), this throws a 'runtime_error' exception.
 */
-inline void card::mem_gpu2gpu(void *dst, void *src, size_t len)
+inline void card::mem_gpu2gpu(void *dst, const void *src, const size_t len)
 {
   init();
   err = cudaMemcpy(dst, src, len, cudaMemcpyDeviceToDevice);
