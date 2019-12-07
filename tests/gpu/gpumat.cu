@@ -87,6 +87,25 @@ TEMPLATE_TEST_CASE("scale", "[gpumat]", float, double)
 
 
 
+TEMPLATE_TEST_CASE("indexing", "[gpumat]", float, double)
+{
+  len_t n = 2;
+
+  gpumat<TestType> x(c, n, n);
+  gpumat<TestType> y(c, n, n);
+
+  for (len_t i=0; i<n*n; i++)
+    x.set(i, (TestType) i+1);
+
+  y.fill_linspace(1.f, (TestType) n*n);
+  REQUIRE( (x == y) );
+
+  y.fill_val(1.f);
+  REQUIRE( (x != y) );
+}
+
+
+
 TEMPLATE_TEST_CASE("diag", "[gpumat]", float, double)
 {
   len_t m = 4;
