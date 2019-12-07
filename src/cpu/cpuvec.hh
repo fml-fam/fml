@@ -33,7 +33,7 @@ class cpuvec : public univec<T>
     ~cpuvec();
     
     void resize(len_t size);
-    void set(T *data, len_t size, bool free_on_destruct=false);
+    void inherit(T *data, len_t size, bool free_on_destruct=false);
     cpuvec<T> dupe() const;
     
     void print(uint8_t ndigits=4, bool add_final_blank=true) const;
@@ -47,12 +47,11 @@ class cpuvec : public univec<T>
     void scale(const T s);
     void rev();
     
-    const T operator()(len_t i) const; // getter
-    T& operator()(len_t i); // setter
+    T get(len_t i) const;
+    void set(len_t i, T v);
     
     bool operator==(const cpuvec<T> &x) const;
     bool operator!=(const cpuvec<T> &x) const;
-    
     cpuvec<T>& operator=(const cpuvec<T> &x);
   
   private:
@@ -179,7 +178,7 @@ void cpuvec<T>::resize(len_t size)
   thrown.
  */
 template <typename T>
-void cpuvec<T>::set(T *data, len_t size, bool free_on_destruct)
+void cpuvec<T>::inherit(T *data, len_t size, bool free_on_destruct)
 {
   check_params(size);
   
@@ -349,19 +348,17 @@ void cpuvec<T>::rev()
 // operators
 
 template <typename T>
-const T cpuvec<T>::operator()(len_t i) const
+T cpuvec<T>::get(len_t i) const
 {
   this->check_index(i);
-  
   return this->data[i];
 }
 
 template <typename T>
-T& cpuvec<T>::operator()(len_t i)
+void cpuvec<T>::set(len_t i, T v)
 {
   this->check_index(i);
-  
-  return this->data[i];
+  this->data[i] = v;
 }
 
 

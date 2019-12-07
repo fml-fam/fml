@@ -38,7 +38,7 @@ class cpumat : public unimat<REAL>
     ~cpumat();
     
     void resize(len_t nrows, len_t ncols);
-    void set(REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
+    void inherit(REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
     cpumat<REAL> dupe() const;
     
     void print(uint8_t ndigits=4, bool add_final_blank=true) const;
@@ -66,14 +66,13 @@ class cpumat : public unimat<REAL>
     bool any_inf() const;
     bool any_nan() const;
     
-    const REAL operator()(len_t i) const; // getters
-    const REAL operator()(len_t i, len_t j) const;
-    REAL& operator()(len_t i); // setters
-    REAL& operator()(len_t i, len_t j);
+    REAL get(len_t i) const;
+    REAL get(len_t i, len_t j) const;
+    void set(len_t i, REAL v);
+    void set(len_t i, len_t j, REAL v);
     
     bool operator==(const cpumat<REAL> &x) const;
     bool operator!=(const cpumat<REAL> &x) const;
-    
     cpumat<REAL>& operator=(const cpumat<REAL> &x);
   
   private:
@@ -210,7 +209,7 @@ void cpumat<REAL>::resize(len_t nrows, len_t ncols)
   thrown.
  */
 template <typename REAL>
-void cpumat<REAL>::set(REAL *data, len_t nrows, len_t ncols, bool free_on_destruct)
+void cpumat<REAL>::inherit(REAL *data, len_t nrows, len_t ncols, bool free_on_destruct)
 {
   check_params(nrows, ncols);
   
@@ -372,7 +371,7 @@ template <typename REAL>
 void cpumat<REAL>::fill_eye()
 {
   cpuvec<REAL> v(1);
-  v(0) = (REAL) 1;
+  v.set(0, (REAL)1);
   this->fill_diag(v);
 }
 
@@ -672,31 +671,31 @@ bool cpumat<REAL>::any_nan() const
 // operators
 
 template <typename REAL>
-const REAL cpumat<REAL>::operator()(len_t i) const
+REAL cpumat<REAL>::get(len_t i) const
 {
   this->check_index(i);
   return this->data[i];
 }
 
 template <typename REAL>
-const REAL cpumat<REAL>::operator()(len_t i, len_t j) const
+REAL cpumat<REAL>::get(len_t i, len_t j) const
 {
   this->check_index(i, j);
   return this->data[i + (this->m)*j];
 }
 
 template <typename REAL>
-REAL& cpumat<REAL>::operator()(len_t i)
+void cpumat<REAL>::set(len_t i, REAL v)
 {
   this->check_index(i);
-  return this->data[i];
+  this->data[i] = v;
 }
 
 template <typename REAL>
-REAL& cpumat<REAL>::operator()(len_t i, len_t j)
+void cpumat<REAL>::set(len_t i, len_t j, REAL v)
 {
   this->check_index(i, j);
-  return this->data[i + (this->m)*j];
+  this->data[i + (this->m)*j] = v;
 }
 
 
