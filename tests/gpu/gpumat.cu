@@ -72,6 +72,21 @@ TEMPLATE_TEST_CASE("resize", "[gpumat]", float, double)
 
 
 
+TEMPLATE_TEST_CASE("scale", "[gpumat]", float, double)
+{
+  len_t m = 3;
+  len_t n = 2;
+  
+  gpumat<TestType> x(c, m, n);
+  x.fill_one();
+  
+  x.scale((TestType) 3);
+  REQUIRE( fltcmp::eq(x(0), 3) );
+  REQUIRE( fltcmp::eq(x(1), 3) );
+}
+
+
+
 TEMPLATE_TEST_CASE("diag", "[gpumat]", float, double)
 {
   len_t m = 4;
