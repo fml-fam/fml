@@ -7,7 +7,7 @@
 #pragma once
 
 
-#include "../linalg.hh
+#include "../linalg.hh"
 
 
 namespace linalg
@@ -90,7 +90,7 @@ namespace linalg
       geqp3(m, n, x.data_ptr(), m, pivot.data_ptr(), qraux.data_ptr(), work.data_ptr(), lwork, &info);
       
       if (info != 0)
-        error("sgeqp3() returned info=%d\n", info);
+        linalgutils::check_info(info, "geqp3");
     }
     
     template <typename REAL>
@@ -117,7 +117,7 @@ namespace linalg
       ormqr('L', 'N', m, nrhs, n, QR.data_ptr(), m, qraux.data_ptr(), Q_d, m, work.data_ptr(), lwork, &info);
       
       if (info != 0)
-        error("sormqr() returned info=%d\n", info);
+        linalgutils::check_info(info, "ormqr");
     }
   }
 }
