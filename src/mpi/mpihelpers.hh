@@ -73,7 +73,19 @@ namespace mpihelpers
       }
     }
     
-    g.reduce(m, n, gbl, 'A', 0, 0);
+    g.reduce(m, n, gbl);
+  }
+  
+  
+  
+  /// \overload
+  template <typename REAL>
+  cpumat<REAL> mpi2cpu(const mpimat<REAL> &mpi)
+  {
+    cpumat<REAL> cpu;
+    mpi2cpu(mpi, cpu);
+    
+    return cpu;
   }
   
   
