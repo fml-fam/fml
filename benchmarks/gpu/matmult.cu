@@ -1,4 +1,4 @@
-#include "../bench.hh"
+#include <bench.hh>
 
 #include <cpu/cpumat.hh>
 #include <cpu/linalg.hh>
@@ -66,13 +66,13 @@ static void gemm_gpu(bench &b)
 
 int main(int argc, char **argv)
 {
-  m = 5;
-  n = 3;
+  m = 1000000;
+  n = 250;
   nrhs = 1;
   bench b(2);
   
   double problem_size = sizeof(float) * m * n / 1024 / 1024;
-  b.print_header("GEMM: %dx%d * %dx%d (%.2f MB)", m, n, n, nrhs, problem_size);
+  b.print_header("GEMM: %dx%d * %dx%d (%.3f MiB)", m, n, n, nrhs, problem_size);
   
   gemm_cpu<float>(b);
   gemm_gpu<__half>(b);
