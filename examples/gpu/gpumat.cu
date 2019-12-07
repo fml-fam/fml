@@ -1,8 +1,8 @@
+#include <cpu/cpumat.hh>
 #include <gpu/card.hh>
+#include <gpu/gpuhelpers.hh>
 #include <gpu/gpumat.hh>
 
-#include <cpu/cpumat.hh>
-#include <gpu/gpuhelpers.hh>
 
 
 int main()
@@ -20,7 +20,8 @@ int main()
   
   x.fill_linspace(1.f, (float) n*n);
   
-  cpumat<float> x_cpu = gpuhelpers::gpu2cpu(x);
+  cpumat<float> x_cpu;
+  gpuhelpers::gpu2cpu(x, x_cpu);
   x_cpu.print();
   
   return 0;

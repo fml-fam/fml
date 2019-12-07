@@ -1,8 +1,7 @@
 #include <gpu/card.hh>
+#include <gpu/gpuhelpers.hh>
 #include <gpu/gpumat.hh>
 #include <gpu/linalg.hh>
-
-#include <gpu/gpuhelpers.hh>
 
 
 int main()
@@ -17,14 +16,14 @@ int main()
   gpumat<float> y(c, n, n);
   y.fill_linspace(1.f, (float) n*n);
   
-  gpumat<__half> xh, yh;
-  gpuhelpers::copy(x, xh);
-  gpuhelpers::copy(y, yh);
+  gpumat<__half> xh(c), yh(c);
+  gpuhelpers::gpu2gpu(x, xh);
+  gpuhelpers::gpu2gpu(y, yh);
   
   gpumat<__half> zh = linalg::matmult(false, false, (__half)1.f, xh, yh);
-  gpumat<float> z;
+  gpumat<float> z(c);
   
-  gpuhelpers::copy(zh, z);
+  gpuhelpers::gpu2gpu(zh, z);
   z.info();
   z.print(0);
   

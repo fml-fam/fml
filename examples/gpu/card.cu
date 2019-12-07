@@ -1,8 +1,4 @@
 #include <gpu/card.hh>
-#include <gpu/gpumat.hh>
-
-#include <cpu/cpumat.hh>
-#include <gpu/gpuhelpers.hh>
 
 
 int main()
