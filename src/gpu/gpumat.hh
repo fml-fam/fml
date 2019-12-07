@@ -63,14 +63,13 @@ class gpumat : public unimat<REAL>
     bool any_inf() const;
     bool any_nan() const;
     
-    const REAL operator()(len_t i) const; // getters
-    const REAL operator()(len_t i, len_t j) const;
-    // REAL& operator()(len_t i); // setters
-    // REAL& operator()(len_t i, len_t j);
+    REAL get(len_t i) const;
+    REAL get(len_t i, len_t j) const;
+    void set(len_t i, REAL v);
+    void set(len_t i, len_t j, REAL v);
     
     bool operator==(const gpumat<REAL> &x) const;
     bool operator!=(const gpumat<REAL> &x) const;
-    
     gpumat<REAL>& operator=(const gpumat<REAL> &x);
     
     std::shared_ptr<card> get_card() const {return c;};
@@ -465,38 +464,38 @@ bool gpumat<REAL>::any_nan() const
 // operators
 
 template <typename REAL>
-const REAL gpumat<REAL>::operator()(len_t i) const
+REAL gpumat<REAL>::get(len_t i) const
 {
   this->check_index(i);
-  
+
   REAL ret;
   this->c->mem_gpu2cpu(&ret, this->data + i, sizeof(REAL));
   return ret;
 }
 
 template <typename REAL>
-const REAL gpumat<REAL>::operator()(len_t i, len_t j) const
+REAL gpumat<REAL>::get(len_t i, len_t j) const
 {
   this->check_index(i, j);
-  
+
   REAL ret;
   this->c->mem_gpu2cpu(&ret, this->data + (i + this->m*j), sizeof(REAL));
   return ret;
 }
 
-// template <typename REAL>
-// REAL& gpumat<REAL>::operator()(len_t i)
-// {
-//   this->check_index(i);
-// 
-// }
-// 
-// template <typename REAL>
-// REAL& gpumat<REAL>::operator()(len_t i, len_t j)
-// {
-//   this->check_index(i, j);
-// 
-// }
+template <typename REAL>
+void gpumat<REAL>::set(len_t i, REAL v)
+{
+  this->check_index(i);
+  this->c->mem_cpu2gpu(this->data + i, &v, sizeof(REAL));
+}
+
+template <typename REAL>
+void gpumat<REAL>::set(len_t i, len_t j, REAL v)
+{
+  this->check_index(i, j);
+  this->c->mem_cpu2gpu(this->data + (i + this->m*j), &v, sizeof(REAL));
+}
 
 
 

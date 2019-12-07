@@ -21,9 +21,9 @@ TEMPLATE_TEST_CASE("basics", "[gpumat]", float, double)
   REQUIRE( x.ncols() == n );
   
   x.fill_zero();
-  // REQUIRE( fltcmp::eq(x(0, 0), 0) );
-  // x(0, 0) = (TestType) 3.14;
-  // REQUIRE( fltcmp::eq(x(0, 0), 3.14) );
+  REQUIRE( fltcmp::eq(x.get(0, 0), 0) );
+  x.set(0, 0, 3.14);
+  REQUIRE( fltcmp::eq(x.get(0, 0), 3.14) );
 }
 
 
@@ -66,8 +66,8 @@ TEMPLATE_TEST_CASE("resize", "[gpumat]", float, double)
   REQUIRE( x.nrows() == n );
   REQUIRE( x.ncols() == m );
   
-  REQUIRE( fltcmp::eq(x(0), 1) );
-  REQUIRE( fltcmp::eq(x(1), 0) );
+  REQUIRE( fltcmp::eq(x.get(0), 1) );
+  REQUIRE( fltcmp::eq(x.get(1), 0) );
 }
 
 
@@ -81,8 +81,8 @@ TEMPLATE_TEST_CASE("scale", "[gpumat]", float, double)
   x.fill_one();
   
   x.scale((TestType) 3);
-  REQUIRE( fltcmp::eq(x(0), 3) );
-  REQUIRE( fltcmp::eq(x(1), 3) );
+  REQUIRE( fltcmp::eq(x.get(0), 3) );
+  REQUIRE( fltcmp::eq(x.get(1), 3) );
 }
 
 
@@ -97,12 +97,12 @@ TEMPLATE_TEST_CASE("diag", "[gpumat]", float, double)
   
   gpuvec<TestType> v(c);
   x.diag(v);
-  REQUIRE( fltcmp::eq(v(0), 1) );
-  REQUIRE( fltcmp::eq(v(1), 6) );
-  REQUIRE( fltcmp::eq(v(2), 11) );
+  REQUIRE( fltcmp::eq(v.get(0), 1) );
+  REQUIRE( fltcmp::eq(v.get(1), 6) );
+  REQUIRE( fltcmp::eq(v.get(2), 11) );
   
   x.antidiag(v);
-  REQUIRE( fltcmp::eq(v(0), 4) );
-  REQUIRE( fltcmp::eq(v(1), 7) );
-  REQUIRE( fltcmp::eq(v(2), 10) );
+  REQUIRE( fltcmp::eq(v.get(0), 4) );
+  REQUIRE( fltcmp::eq(v.get(1), 7) );
+  REQUIRE( fltcmp::eq(v.get(2), 10) );
 }
