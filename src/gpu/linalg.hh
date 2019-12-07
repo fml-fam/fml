@@ -409,7 +409,7 @@ namespace linalg
     
     const len_t lipiv = std::min(m, x.ncols());
     if (!p.get_card()->valid_card())
-      p.set(c);
+      p.inherit(c);
     
     p.resize(lipiv);
     

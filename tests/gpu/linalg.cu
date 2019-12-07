@@ -1,7 +1,6 @@
 #include "../catch.hpp"
 
 #include <arraytools/src/arraytools.hpp>
-#include <gpu/gpuhelpers.hh>
 #include <gpu/gpumat.hh>
 #include <gpu/linalg.hh>
 
@@ -187,12 +186,9 @@ TEMPLATE_TEST_CASE("svd", "[linalg]", float, double)
 {
   len_t n = 2;
   
-  cpuvec<TestType> v_cpu(n);
-  v_cpu(0) = (TestType) 2;
-  v_cpu(1) = (TestType) 5;
-  
-  gpuvec<TestType> v(c);
-  gpuhelpers::cpu2gpu(v_cpu, v);
+  gpuvec<TestType> v(c, n);
+  v.set(0, 2);
+  v.set(1, 5);
   
   gpumat<TestType> x(c, n, n);
   x.fill_diag(v);
@@ -210,12 +206,9 @@ TEMPLATE_TEST_CASE("eigen", "[linalg]", float, double)
 {
   len_t n = 2;
   
-  cpuvec<TestType> v_cpu(n);
-  v_cpu(0) = (TestType) 2;
-  v_cpu(1) = (TestType) 5;
-  
-  gpuvec<TestType> v(c);
-  gpuhelpers::cpu2gpu(v_cpu, v);
+  gpuvec<TestType> v(c, n);
+  v.set(0, 2);
+  v.set(1, 5);
   
   gpumat<TestType> x(c, n, n);
   x.fill_diag(v);
@@ -249,22 +242,17 @@ TEMPLATE_TEST_CASE("solve", "[linalg]", float, double)
 {
   len_t n = 2;
   
-  cpuvec<TestType> y_cpu(n);
-  y_cpu(0) = (TestType) 1;
-  y_cpu(1) = (TestType) 1;
+  gpuvec<TestType> y(c, n);
+  y.set(0, 1);
+  y.set(1, 1);
   
-  cpumat<TestType> x_cpu(n, n);
-  x_cpu.fill_zero();
-  x_cpu(0, 0) = (TestType) 2;
-  x_cpu(1, 1) = (TestType) 3;
+  gpumat<TestType> x(c, n, n);
+  x.fill_zero();
+  x.set(0, 0, 2);
+  x.set(1, 1, 3);
   
-  gpumat<TestType> x(c);
-  gpuvec<TestType> y(c);
-  gpuhelpers::cpu2gpu(x_cpu, x);
-  gpuhelpers::cpu2gpu(y_cpu, y);
   linalg::solve(x, y);
   
-  gpuhelpers::gpu2cpu(y, y_cpu);
-  REQUIRE( fltcmp::eq(y_cpu(0), 0.5) );
-  REQUIRE( fltcmp::eq(y_cpu(1), (TestType)1/3) );
+  REQUIRE( fltcmp::eq(y.get(0), 0.5) );
+  REQUIRE( fltcmp::eq(y.get(1), (TestType)1/3) );
 }

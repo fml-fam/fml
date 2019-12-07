@@ -37,7 +37,7 @@ class gpumat : public unimat<REAL>
     
     void resize(len_t nrows, len_t ncols);
     void resize(std::shared_ptr<card> gpu, len_t nrows, len_t ncols);
-    void set(std::shared_ptr<card> gpu, REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
+    void inherit(std::shared_ptr<card> gpu, REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
     gpumat<REAL> dupe() const;
     
     void print(uint8_t ndigits=4, bool add_final_blank=true) const;
@@ -218,7 +218,7 @@ void gpumat<REAL>::resize(std::shared_ptr<card> gpu, len_t nrows, len_t ncols)
 
 
 template <typename REAL>
-void gpumat<REAL>::set(std::shared_ptr<card> gpu, REAL *data, len_t nrows, len_t ncols, bool free_on_destruct)
+void gpumat<REAL>::inherit(std::shared_ptr<card> gpu, REAL *data, len_t nrows, len_t ncols, bool free_on_destruct)
 {
   check_params(nrows, ncols);
   

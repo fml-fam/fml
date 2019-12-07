@@ -30,8 +30,8 @@ class gpuvec : public univec<T>
     
     void resize(len_t size);
     void resize(std::shared_ptr<card> gpu, len_t size);
-    void set(std::shared_ptr<card> gpu);
-    void set(std::shared_ptr<card> gpu, T *data, len_t size, bool free_on_destruct=false);
+    void inherit(std::shared_ptr<card> gpu);
+    void inherit(std::shared_ptr<card> gpu, T *data, len_t size, bool free_on_destruct=false);
     gpuvec<T> dupe() const;
     
     void print(uint8_t ndigits=4, bool add_final_blank=true) const;
@@ -189,7 +189,7 @@ void gpuvec<T>::resize(std::shared_ptr<card> gpu, len_t size)
 
 
 template <typename T>
-void gpuvec<T>::set(std::shared_ptr<card> gpu)
+void gpuvec<T>::inherit(std::shared_ptr<card> gpu)
 {
   this->c = gpu;
   
@@ -202,7 +202,7 @@ void gpuvec<T>::set(std::shared_ptr<card> gpu)
 
 
 template <typename T>
-void gpuvec<T>::set(std::shared_ptr<card> gpu, T *data, len_t size, bool free_on_destruct)
+void gpuvec<T>::inherit(std::shared_ptr<card> gpu, T *data, len_t size, bool free_on_destruct)
 {
   check_params(size);
   
