@@ -54,6 +54,24 @@ TEMPLATE_TEST_CASE("inheriting memory", "[gpumat]", float, double)
 
 
 
+TEMPLATE_TEST_CASE("resize", "[gpumat]", float, double)
+{
+  len_t m = 3;
+  len_t n = 2;
+  
+  gpumat<TestType> x(c);
+  x.resize(n, m);
+  x.fill_eye();
+  
+  REQUIRE( x.nrows() == n );
+  REQUIRE( x.ncols() == m );
+  
+  REQUIRE( fltcmp::eq(x(0), 1) );
+  REQUIRE( fltcmp::eq(x(1), 0) );
+}
+
+
+
 TEMPLATE_TEST_CASE("diag", "[gpumat]", float, double)
 {
   len_t m = 4;
