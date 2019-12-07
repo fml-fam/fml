@@ -21,13 +21,13 @@ TEMPLATE_TEST_CASE("basics", "[mpimat]", float, double)
   REQUIRE( x.ncols() == n );
   
   x.fill_zero();
-  REQUIRE( fltcmp::eq(x(0, 0), 0) );
+  REQUIRE( fltcmp::eq(x.get(0, 0), 0) );
   // FIXME TODO can tis be fixed to match cpumat insertion?
   // x(0, 0) = (TestType) 3.14;
   if (g.rank0())
     x.data_ptr()[0] = (TestType) 3.14;
   
-  REQUIRE( fltcmp::eq(x(0, 0), 3.14) );
+  REQUIRE( fltcmp::eq(x.get(0, 0), 3.14) );
 }
 
 
@@ -57,7 +57,7 @@ TEMPLATE_TEST_CASE("inheriting memory", "[mpimat]", float, double)
   REQUIRE( fltcmp::eq(testval, 1) );
   
   mpimat<TestType> y(g);
-  y.set(g, data, m, n, mb, nb);
+  y.inherit(g, data, m, n, mb, nb);
   y.fill_zero();
   y.~mpimat();
   
@@ -86,8 +86,8 @@ TEMPLATE_TEST_CASE("resize", "[mpimat]", float, double)
   REQUIRE( x.nrows() == m );
   REQUIRE( x.ncols() == n );
   
-  REQUIRE( fltcmp::eq(x(0), 1) );
-  REQUIRE( fltcmp::eq(x(1), 0) );
+  REQUIRE( fltcmp::eq(x.get(0), 1) );
+  REQUIRE( fltcmp::eq(x.get(1), 0) );
 }
 
 
@@ -103,8 +103,8 @@ TEMPLATE_TEST_CASE("scale", "[mpimat]", float, double)
   x.fill_one();
 
   x.scale(3.0f);
-  REQUIRE( fltcmp::eq(x(0), 3) );
-  REQUIRE( fltcmp::eq(x(1), 3) );
+  REQUIRE( fltcmp::eq(x.get(0), 3) );
+  REQUIRE( fltcmp::eq(x.get(1), 3) );
 }
 
 
@@ -143,14 +143,14 @@ TEMPLATE_TEST_CASE("diag", "[cpumat]", float, double)
   
   cpuvec<TestType> v;
   x.diag(v);
-  REQUIRE( fltcmp::eq(v(0), 1) );
-  REQUIRE( fltcmp::eq(v(1), 6) );
-  REQUIRE( fltcmp::eq(v(2), 11) );
+  REQUIRE( fltcmp::eq(v.get(0), 1) );
+  REQUIRE( fltcmp::eq(v.get(1), 6) );
+  REQUIRE( fltcmp::eq(v.get(2), 11) );
   
   x.antidiag(v);
-  REQUIRE( fltcmp::eq(v(0), 4) );
-  REQUIRE( fltcmp::eq(v(1), 7) );
-  REQUIRE( fltcmp::eq(v(2), 10) );
+  REQUIRE( fltcmp::eq(v.get(0), 4) );
+  REQUIRE( fltcmp::eq(v.get(1), 7) );
+  REQUIRE( fltcmp::eq(v.get(2), 10) );
 }
 
 
@@ -163,12 +163,12 @@ TEMPLATE_TEST_CASE("rev", "[cpumat]", float, double)
   x.fill_linspace(1, n*n);
   
   x.rev_cols();
-  REQUIRE( fltcmp::eq(x(0, 0), 3) );
-  REQUIRE( fltcmp::eq(x(1, 0), 4) );
+  REQUIRE( fltcmp::eq(x.get(0, 0), 3) );
+  REQUIRE( fltcmp::eq(x.get(1, 0), 4) );
   
   // x.rev_rows();
-  // REQUIRE( fltcmp::eq(x(0, 0), 4) );
-  // REQUIRE( fltcmp::eq(x(1, 0), 3) );
+  // REQUIRE( fltcmp::eq(x.get(0, 0), 4) );
+  // REQUIRE( fltcmp::eq(x.get(1, 0), 3) );
 }
 
 
@@ -183,10 +183,10 @@ TEMPLATE_TEST_CASE("get row/col", "[cpumat]", float, double)
   cpuvec<TestType> v;
   
   x.get_row(1, v);
-  REQUIRE( fltcmp::eq(x(1, 0), v(0)) );
-  REQUIRE( fltcmp::eq(x(1, 1), v(1)) );
+  REQUIRE( fltcmp::eq(x.get(1, 0), v.get(0)) );
+  REQUIRE( fltcmp::eq(x.get(1, 1), v.get(1)) );
   
   x.get_col(0, v);
-  REQUIRE( fltcmp::eq(x(0, 0), v(0)) );
-  REQUIRE( fltcmp::eq(x(1, 0), v(1)) );
+  REQUIRE( fltcmp::eq(x.get(0, 0), v.get(0)) );
+  REQUIRE( fltcmp::eq(x.get(1, 0), v.get(1)) );
 }

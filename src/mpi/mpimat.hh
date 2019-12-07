@@ -44,7 +44,7 @@ class mpimat : public unimat<REAL>
     
     void resize(len_t nrows, len_t ncols);
     void resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols);
-    void set(grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct=false);
+    void inherit(grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct=false);
     mpimat<REAL> dupe() const;
     
     void print(uint8_t ndigits=4, bool add_final_blank=true) const;
@@ -71,14 +71,13 @@ class mpimat : public unimat<REAL>
     bool any_inf() const;
     bool any_nan() const;
     
-    const REAL operator()(len_t i) const; // getters
-    const REAL operator()(len_t i, len_t j) const;
-    REAL& operator()(len_t i); // setters
-    REAL& operator()(len_t i, len_t j);
+    REAL get(len_t i) const;
+    REAL get(len_t i, len_t j) const;
+    void set(len_t i, REAL v);
+    void set(len_t i, len_t j, REAL v);
     
     bool operator==(const mpimat<REAL> &x) const;
     bool operator!=(const mpimat<REAL> &x) const;
-    
     mpimat<REAL>& operator=(const mpimat<REAL> &x);
     
     len_local_t nrows_local() const {return m_local;};
@@ -98,7 +97,6 @@ class mpimat : public unimat<REAL>
     grid g;
     
   private:
-    REAL _getter;
     void free();
     void check_params(const grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols);
     REAL get_val_from_global_index(len_t gi, len_t gj) const;
@@ -312,7 +310,7 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
 
 
 template <typename REAL>
-void mpimat<REAL>::set(grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct)
+void mpimat<REAL>::inherit(grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct)
 {
   check_params(blacs_grid, nrows, ncols, bf_rows, bf_cols);
   
@@ -493,7 +491,7 @@ template <typename REAL>
 void mpimat<REAL>::fill_eye()
 {
   cpuvec<REAL> v(1);
-  v(0) = (REAL) 1;
+  v.set(0, 1);
   this->fill_diag(v);
 }
 
@@ -802,7 +800,7 @@ bool mpimat<REAL>::any_nan() const
 // operators
 
 template <typename REAL>
-const REAL mpimat<REAL>::operator()(len_t i) const
+REAL mpimat<REAL>::get(len_t i) const
 {
   this->check_index(i);
   
@@ -814,7 +812,7 @@ const REAL mpimat<REAL>::operator()(len_t i) const
 }
 
 template <typename REAL>
-const REAL mpimat<REAL>::operator()(len_t i, len_t j) const
+REAL mpimat<REAL>::get(len_t i, len_t j) const
 {
   this->check_index(i, j);
   
@@ -823,7 +821,7 @@ const REAL mpimat<REAL>::operator()(len_t i, len_t j) const
 }
 
 template <typename REAL>
-REAL& mpimat<REAL>::operator()(len_t i)
+void mpimat<REAL>::set(len_t i, REAL v)
 {
   this->check_index(i);
   
@@ -837,13 +835,11 @@ REAL& mpimat<REAL>::operator()(len_t i)
   int lj = bcutils::g2l(gj, this->nb, this->g.npcol());
   
   if (pr == this->g.myrow() && pc == this->g.mycol())
-    return this->data[li + (this->m_local)*lj];
-  else
-    return this->_getter;
+    this->data[li + (this->m_local)*lj] = v;
 }
 
 template <typename REAL>
-REAL& mpimat<REAL>::operator()(len_t i, len_t j)
+void mpimat<REAL>::set(len_t i, len_t j, REAL v)
 {
   this->check_index(i, j);
   
@@ -854,9 +850,7 @@ REAL& mpimat<REAL>::operator()(len_t i, len_t j)
   int lj = bcutils::g2l(j, this->nb, this->g.npcol());
   
   if (pr == this->g.myrow() && pc == this->g.mycol())
-    return this->data[li + (this->m_local)*lj];
-  else
-    return this->_getter;
+    this->data[li + (this->m_local)*lj] = v;
 }
 
 
