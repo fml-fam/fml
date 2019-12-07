@@ -22,20 +22,6 @@
 /// @brief Linear algebra functions.
 namespace linalg
 {
-  namespace
-  {
-    inline void check_info(const int info, std::string fun)
-    {
-      if (info != 0)
-      {
-        std::string msg = "LAPACK function " + fun + "() returned info=" + std::to_string(info);
-        throw std::runtime_error(msg);
-      }
-    }
-  }
-  
-  
-  
   /**
     @brief Returns alpha*op(x) + beta*op(y) where op(A) is A or A^T
     
@@ -469,7 +455,7 @@ namespace linalg
   {
     cpumat<REAL> ignored;
     int info = svd_internals(0, 0, x, s, ignored, ignored);
-    check_info(info, "gesdd");
+    linalgutils::check_info(info, "gesdd");
   }
   
   /// \overload
@@ -477,7 +463,7 @@ namespace linalg
   void svd(cpumat<REAL> &x, cpuvec<REAL> &s, cpumat<REAL> &u, cpumat<REAL> &vt)
   {
     int info = svd_internals(1, 1, x, s, u, vt);
-    check_info(info, "gesdd");
+    linalgutils::check_info(info, "gesdd");
   }
   
   
@@ -554,7 +540,7 @@ namespace linalg
     cpumat<REAL> ignored;
     
     int info = eig_sym_internals(true, x, values, ignored);
-    check_info(info, "syevr");
+    linalgutils::check_info(info, "syevr");
   }
   
   /// \overload
@@ -562,7 +548,7 @@ namespace linalg
   void eigen_sym(cpumat<REAL> &x, cpuvec<REAL> &values, cpumat<REAL> &vectors)
   {
     int info = eig_sym_internals(false, x, values, vectors);
-    check_info(info, "syevr");
+    linalgutils::check_info(info, "syevr");
   }
   
   
@@ -593,7 +579,7 @@ namespace linalg
     // Factor x = LU
     cpuvec<int> p;
     int info = lu(x, p);
-    check_info(info, "getrf");
+    linalgutils::check_info(info, "getrf");
     
     // Invert
     REAL tmp;
@@ -602,7 +588,7 @@ namespace linalg
     cpuvec<REAL> work(lwork);
     
     lapack::getri(n, x.data_ptr(), n, p.data_ptr(), work.data_ptr(), lwork, &info);
-    check_info(info, "getri");
+    linalgutils::check_info(info, "getri");
   }
   
   
@@ -621,7 +607,7 @@ namespace linalg
       int info;
       cpuvec<int> p(n);
       lapack::gesv(n, nrhs, x.data_ptr(), n, p.data_ptr(), y_d, n, &info);
-      check_info(info, "gesv");
+      linalgutils::check_info(info, "gesv");
     }
   }
   

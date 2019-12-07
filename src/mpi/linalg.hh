@@ -20,17 +20,6 @@ namespace linalg
 {
   namespace
   {
-    inline void check_info(const int info, std::string fun)
-    {
-      if (info != 0)
-      {
-        std::string msg = "ScaLAPACK function " + fun + "() returned info=" + std::to_string(info);
-        throw std::runtime_error(msg);
-      }
-    }
-    
-    
-    
     template <typename REAL>
     void check_grid(const mpimat<REAL> &a, const mpimat<REAL> &b)
     {
@@ -469,7 +458,7 @@ namespace linalg
   {
     mpimat<REAL> ignored(x.get_grid());
     int info = svd_internals(0, 0, x, s, ignored, ignored);
-    check_info(info, "gesvd");
+    linalgutils::check_info(info, "gesvd");
   }
   
   /// \overload
@@ -480,7 +469,7 @@ namespace linalg
     check_grid(x, vt);
     
     int info = svd_internals(1, 1, x, s, u, vt);
-    check_info(info, "gesvd");
+    linalgutils::check_info(info, "gesvd");
   }
   
   
@@ -556,7 +545,7 @@ namespace linalg
     mpimat<REAL> ignored(x.get_grid());
     
     int info = eig_sym_internals(true, x, values, ignored);
-    check_info(info, "syevr");
+    linalgutils::check_info(info, "syevr");
   }
   
   /// \overload
@@ -566,7 +555,7 @@ namespace linalg
     check_grid(x, vectors);
     
     int info = eig_sym_internals(false, x, values, vectors);
-    check_info(info, "syevr");
+    linalgutils::check_info(info, "syevr");
   }
   
   
@@ -597,7 +586,7 @@ namespace linalg
     // Factor x = LU
     cpuvec<int> p;
     int info = lu(x, p);
-    check_info(info, "getrf");
+    linalgutils::check_info(info, "getrf");
     
     // Invert
     const len_t n = x.nrows();
@@ -609,7 +598,7 @@ namespace linalg
     cpuvec<int> iwork(liwork);
     
     scalapack::getri(n, x.data_ptr(), x.desc_ptr(), p.data_ptr(), work.data_ptr(), lwork, iwork.data_ptr(), liwork, &info);
-    check_info(info, "getri");
+    linalgutils::check_info(info, "getri");
   }
   
   
@@ -647,7 +636,7 @@ namespace linalg
     int info;
     cpuvec<int> p(n);
     scalapack::gesv(n, y.ncols(), x.data_ptr(), x.desc_ptr(), p.data_ptr(), y.data_ptr(), y.desc_ptr(), &info);
-    check_info(info, "gesv");
+    linalgutils::check_info(info, "gesv");
   }
 }
 

@@ -14,6 +14,17 @@
 
 namespace linalgutils
 {
+  inline void check_info(const int info, std::string fun)
+  {
+    if (info != 0)
+    {
+      std::string msg = "function " + fun + "() returned info=" + std::to_string(info);
+      throw std::runtime_error(msg);
+    }
+  }
+  
+  
+  
   inline void matadd_params(const bool transx, const bool transy, const len_t mx, const len_t nx, const len_t my, const len_t ny, len_t *m, len_t *n)
   {
     if (!transx && !transy)

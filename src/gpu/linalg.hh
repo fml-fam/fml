@@ -15,6 +15,7 @@
 #include "internals/launcher.hh"
 #include "internals/gpuscalar.hh"
 
+#include "gpuhelpers.hh"
 #include "gpumat.hh"
 #include "gpuvec.hh"
 #include "kernelfuns.hh"
@@ -88,17 +89,6 @@ namespace linalg
       if (check != CUSOLVER_STATUS_SUCCESS)
       {
         std::string msg = "cuSOLVER " + op + "() failed with error: " + get_cusolver_error_msg(check);
-        throw std::runtime_error(msg);
-      }
-    }
-    
-    
-    
-    inline void check_info(const int info, std::string fun)
-    {
-      if (info != 0)
-      {
-        std::string msg = "CUDA function " + fun + "() returned info=" + std::to_string(info);
         throw std::runtime_error(msg);
       }
     }
@@ -552,7 +542,7 @@ namespace linalg
     
     gpumat<REAL> ignored(x.get_card());
     int info = svd_internals(0, 0, x, s, ignored, ignored);
-    check_info(info, "gesvd");
+    linalgutils::check_info(info, "gesvd");
   }
   
   /// \overload
@@ -564,7 +554,7 @@ namespace linalg
     check_card(x, vt);
     
     int info = svd_internals(1, 1, x, s, u, vt);
-    check_info(info, "gesvd");
+    linalgutils::check_info(info, "gesvd");
   }
   
   
@@ -644,7 +634,7 @@ namespace linalg
     gpumat<REAL> ignored(x.get_card());
     
     int info = eig_sym_internals(true, x, values, ignored);
-    check_info(info, "syevd");
+    linalgutils::check_info(info, "syevd");
   }
   
   /// \overload
@@ -655,7 +645,7 @@ namespace linalg
     check_card(x, vectors);
     
     int info = eig_sym_internals(false, x, values, vectors);
-    check_info(info, "syevd");
+    linalgutils::check_info(info, "syevd");
   }
   
   
@@ -688,7 +678,7 @@ namespace linalg
     auto c = x.get_card();
     gpuvec<int> p(c);
     int info = lu(x, p);
-    check_info(info, "getrf");
+    linalgutils::check_info(info, "getrf");
     
     // Invert
     const len_t n = x.nrows();
@@ -703,7 +693,7 @@ namespace linalg
     
     info_device.get_val(&info);
     check_cusolver_ret(check, "getrs");
-    check_info(info, "getrs");
+    linalgutils::check_info(info, "getrs");
     
     gpuhelpers::gpu2gpu(inv, x);
   }
@@ -725,7 +715,7 @@ namespace linalg
       auto c = x.get_card();
       gpuvec<int> p(c);
       int info = lu(x, p);
-      check_info(info, "getrf");
+      linalgutils::check_info(info, "getrf");
       
       // Solve xb = y
       gpuscalar<int> info_device(c, info);
@@ -735,7 +725,7 @@ namespace linalg
       
       info_device.get_val(&info);
       check_cusolver_ret(check, "getrs");
-      check_info(info, "getrs");
+      linalgutils::check_info(info, "getrs");
     }
   }
   
