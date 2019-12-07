@@ -24,7 +24,6 @@ class bench
     void report(std::string msg="", bool reset_timer=true);
     
     bool proceed();
-    
   
   private:
     std::chrono::high_resolution_clock::time_point query_clock() const;
@@ -32,6 +31,9 @@ class bench
     double _elapsed;
     unsigned int _iters;
     unsigned int _maxiter;
+    
+    static const int print_width = 50;
+    void print_hline();
 };
 
 
@@ -77,27 +79,21 @@ inline void bench::reset()
 
 inline void bench::print_header(const char *fmt, ...)
 {
+  print_hline();
+  
   printf("| ");
-  for (int i=0; i<50; i++)
-    putchar('-');
-  
-  printf(" |\n| ");
-  
-  char s[50];
+  char s[print_width];
   va_list args;
   va_start(args, fmt);
-  int nchars = vsnprintf(s, 50, fmt, args);
+  int nchars = vsnprintf(s, print_width, fmt, args);
   printf("%s", s);
   va_end(args);
   
-  for (int i=0; i<std::max(50-nchars, 1); i++)
+  for (int i=0; i<std::max(print_width-nchars, 1); i++)
     putchar(' ');
   
-  printf(" |\n| ");
-  for (int i=0; i<50; i++)
-    putchar('-');
-  
   printf(" |\n");
+  print_hline();
 }
 
 
@@ -123,6 +119,16 @@ inline bool bench::proceed()
 inline std::chrono::high_resolution_clock::time_point bench::query_clock() const
 {
   return std::chrono::high_resolution_clock::now();
+}
+
+
+inline void bench::print_hline()
+{
+  printf("| ");
+  for (int i=0; i<print_width; i++)
+    putchar('-');
+  
+  printf(" |\n");
 }
 
 
