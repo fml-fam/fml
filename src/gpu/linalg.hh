@@ -13,6 +13,7 @@
 #include "../_internals/linalgutils.hh"
 
 #include "internals/launcher.hh"
+#include "internals/gpuscalar.hh"
 
 #include "gpumat.hh"
 #include "gpuvec.hh"
@@ -427,14 +428,11 @@ namespace linalg
     check_cusolver_ret(check, "getrf_bufferSize");
     
     gpuvec<REAL> work(c, lwork);
-    int *info_device = (int*) c->mem_alloc(sizeof(*info_device));
-    c->mem_cpu2gpu(info_device, &info, sizeof(info));
+    gpuscalar<int> info_device(c, info);
     
-    check = culapack::getrf(c->lapack_handle(), m, m, x.data_ptr(), m, work.data_ptr(), p.data_ptr(), info_device);
+    check = culapack::getrf(c->lapack_handle(), m, m, x.data_ptr(), m, work.data_ptr(), p.data_ptr(), info_device.data_ptr());
     
-    c->mem_gpu2cpu(&info, info_device, sizeof(info));
-    c->mem_free(info_device);
-    
+    info_device.get_val(&info);
     check_cusolver_ret(check, "getrf");
     
     return info;
@@ -465,16 +463,12 @@ namespace linalg
     auto c = x.get_card();
     
     REAL tr = 0;
-    REAL *tr_gpu = (REAL*) c->mem_alloc(sizeof(REAL));
-    c->mem_cpu2gpu(tr_gpu, &tr, sizeof(REAL));
+    gpuscalar<REAL> tr_gpu(c, tr);
     
-    dim3 dim_block(16, 16);
-    dim3 dim_grid((m + 16 - 1) / 16, (n + 16 - 1) / 16);
-    kernelfuns::kernel_trace<<<dim_grid, dim_block>>>(m, n, x.data_ptr(), tr_gpu);
+    kernelfuns::kernel_trace<<<x.get_griddim(), x.get_blockdim()>>>(m, n,
+      x.data_ptr(), tr_gpu.data_ptr());
     
-    c->mem_gpu2cpu(&tr, tr_gpu, sizeof(REAL));
-    c->mem_free(tr_gpu);
-    
+    tr_gpu.get_val(&tr);
     c->check();
     
     return tr;
@@ -519,16 +513,13 @@ namespace linalg
       gpuvec<REAL> rwork(c, minmn-1);
       
       int info = 0;
-      int *info_device = (int*) c->mem_alloc(sizeof(*info_device));
-      c->mem_cpu2gpu(info_device, &info, sizeof(info));
+      gpuscalar<int> info_device(c, info);
       
       check = culapack::gesvd(c->lapack_handle(), jobu, jobvt, m, n, x.data_ptr(),
         m, s.data_ptr(), u.data_ptr(), m, vt.data_ptr(), minmn, work.data_ptr(),
-        lwork, rwork.data_ptr(), info_device);
+        lwork, rwork.data_ptr(), info_device.data_ptr());
       
-      c->mem_gpu2cpu(&info, info_device, sizeof(info));
-      c->mem_free(info_device);
-      
+      info_device.get_val(&info);
       check_cusolver_ret(check, "gesvd");
       
       return info;
@@ -606,16 +597,13 @@ namespace linalg
       gpuvec<REAL> work(c, lwork);
       
       int info = 0;
-      int *info_device = (int*) c->mem_alloc(sizeof(*info_device));
-      c->mem_cpu2gpu(info_device, &info, sizeof(info));
+      gpuscalar<int> info_device(c, info);
       
       check = culapack::syevd(c->lapack_handle(), jobz, CUBLAS_FILL_MODE_UPPER, n,
         x.data_ptr(), n, values.data_ptr(), work.data_ptr(), lwork,
-        info_device);
+        info_device.data_ptr());
       
-      c->mem_gpu2cpu(&info, info_device, sizeof(info));
-      c->mem_free(info_device);
-      
+      info_device.get_val(&info);
       check_cusolver_ret(check, "syevd");
       
       if (!only_values)
@@ -708,13 +696,12 @@ namespace linalg
     gpumat<REAL> inv(c, n, nrhs);
     inv.fill_eye();
     
-    int *info_device = (int*) c->mem_alloc(sizeof(*info_device));
-    c->mem_cpu2gpu(info_device, &info, sizeof(info));
+    gpuscalar<int> info_device(c, info);
     
-    cusolverStatus_t check = culapack::getrs(c->lapack_handle(), CUBLAS_OP_N, n, nrhs, x.data_ptr(), n, p.data_ptr(), inv.data_ptr(), n, info_device);
-    c->mem_gpu2cpu(&info, info_device, sizeof(info));
-    c->mem_free(info_device);
+    cusolverStatus_t check = culapack::getrs(c->lapack_handle(), CUBLAS_OP_N, n,
+      nrhs, x.data_ptr(), n, p.data_ptr(), inv.data_ptr(), n, info_device.data_ptr());
     
+    info_device.get_val(&info);
     check_cusolver_ret(check, "getrs");
     check_info(info, "getrs");
     
@@ -741,13 +728,12 @@ namespace linalg
       check_info(info, "getrf");
       
       // Solve xb = y
-      int *info_device = (int*) c->mem_alloc(sizeof(*info_device));
-      c->mem_cpu2gpu(info_device, &info, sizeof(info));
+      gpuscalar<int> info_device(c, info);
       
-      cusolverStatus_t check = culapack::getrs(c->lapack_handle(), CUBLAS_OP_N, n, nrhs, x.data_ptr(), n, p.data_ptr(), y_d, n, info_device);
-      c->mem_gpu2cpu(&info, info_device, sizeof(info));
-      c->mem_free(info_device);
+      cusolverStatus_t check = culapack::getrs(c->lapack_handle(), CUBLAS_OP_N,
+        n, nrhs, x.data_ptr(), n, p.data_ptr(), y_d, n, info_device.data_ptr());
       
+      info_device.get_val(&info);
       check_cusolver_ret(check, "getrs");
       check_info(info, "getrs");
     }
