@@ -50,7 +50,6 @@ class gpuvec : public univec<T>
     
     bool operator==(const gpuvec<T> &x) const;
     bool operator!=(const gpuvec<T> &x) const;
-    
     gpuvec<T>& operator=(const gpuvec<T> &x);
     
     std::shared_ptr<card> get_card() const {return c;};
