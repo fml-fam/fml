@@ -14,6 +14,10 @@
 typedef cudaError_t GPUError_t;
 #define GPU_SUCCESS cudaSuccess
 
+#define GPU_MEMCPY_HOST_TO_DEVICE cudaMemcpyHostToDevice
+#define GPU_MEMCPY_DEVICE_TO_HOST cudaMemcpyDeviceToHost
+#define GPU_MEMCPY_DEVICE_TO_DEVICE cudaMemcpyDeviceToDevice
+
 #define GPUBLAS_STATUS_SUCCESS CUBLAS_STATUS_SUCCESS
 typedef cublasStatus_t BLASStatus_t;
 typedef cublasHandle_t BLASHandle_t;

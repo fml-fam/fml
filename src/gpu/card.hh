@@ -207,7 +207,7 @@ inline void card::info() const
   @param[in] len Number of bytes of memory to allocate.
   @return Pointer to the newly allocated device memory.
   
-  @impl Wrapper around cudaMalloc().
+  @impl Wrapper around GPU malloc, e.g. `cudaMalloc()`.
   
   @except If the allocation fails, this throws a 'runtime_error' exception.
 */
@@ -215,7 +215,7 @@ inline void* card::mem_alloc(const size_t len)
 {
   init();
   void *ptr;
-  err = cudaMalloc(&ptr, len);
+  err = gpuprims::gpu_malloc(&ptr, len);
   check_gpu_error();
   return ptr;
 }
@@ -231,7 +231,7 @@ inline void* card::mem_alloc(const size_t len)
   @param[in] len Number of bytes of the input 'ptr' to set to 'value'.
   @return Pointer to the newly allocated device memory.
   
-  @impl Wrapper around cudaMemset().
+  @impl Wrapper around GPU memset, e.g. `cudaMemset()`.
   
   @except If the function fails (e.g., being by given non-device memory), this
   throws a 'runtime_error' exception.
@@ -239,7 +239,7 @@ inline void* card::mem_alloc(const size_t len)
 inline void card::mem_set(void *ptr, const int value, const size_t len)
 {
   init();
-  err = cudaMemset(ptr, value, len);
+  err = gpuprims::gpu_memset(ptr, value, len);
   check_gpu_error();
 }
 
@@ -250,7 +250,7 @@ inline void card::mem_set(void *ptr, const int value, const size_t len)
   
   @param[in] ptr The device memory you want to un-allocate.
   
-  @impl Wrapper around cudaFree().
+  @impl Wrapper around GPU free, e.g. `cudaFree()`.
   
   @except If the function fails (e.g., being by given non-device memory), this
   throws a 'runtime_error' exception.
@@ -260,7 +260,7 @@ inline void card::mem_free(void *ptr)
   init();
   if (ptr)
   {
-    err = cudaFree(ptr);
+    err = gpuprims::gpu_free(ptr);
     check_gpu_error();
   }
 }
@@ -274,7 +274,7 @@ inline void card::mem_free(void *ptr)
   @param[in] src The host memory you want to copy FROM.
   @param[in] len Number of bytes of each array to use.
   
-  @impl Wrapper around cudaMemcpy().
+  @impl Wrapper around GPU memcpy, e.g. `cudaMemcpy()`.
   
   @except If the function fails (e.g., being by improperly using device
   memory), this throws a 'runtime_error' exception.
@@ -282,7 +282,7 @@ inline void card::mem_free(void *ptr)
 inline void card::mem_cpu2gpu(void *dst, const void *src, const size_t len)
 {
   init();
-  err = cudaMemcpy(dst, src, len, cudaMemcpyHostToDevice);
+  err = gpuprims::gpu_memcpy(dst, src, len, GPU_MEMCPY_HOST_TO_DEVICE);
   check_gpu_error();
 }
 
@@ -295,7 +295,7 @@ inline void card::mem_cpu2gpu(void *dst, const void *src, const size_t len)
   @param[in] src The device memory you want to copy FROM.
   @param[in] len Number of bytes of each array to use.
   
-  @impl Wrapper around cudaMemcpy().
+  @impl Wrapper around GPU memcpy, e.g. `cudaMemcpy()`.
   
   @except If the function fails (e.g., being by improperly using device
   memory), this throws a 'runtime_error' exception.
@@ -303,7 +303,7 @@ inline void card::mem_cpu2gpu(void *dst, const void *src, const size_t len)
 inline void card::mem_gpu2cpu(void *dst, const void *src, const size_t len)
 {
   init();
-  err = cudaMemcpy(dst, src, len, cudaMemcpyDeviceToHost);
+  err = gpuprims::gpu_memcpy(dst, src, len, GPU_MEMCPY_DEVICE_TO_HOST);
   check_gpu_error();
 }
 
@@ -316,7 +316,7 @@ inline void card::mem_gpu2cpu(void *dst, const void *src, const size_t len)
   @param[in] src The device memory you want to copy FROM.
   @param[in] len Number of bytes of each array to use.
   
-  @impl Wrapper around cudaMemcpy().
+  @impl Wrapper around GPU memcpy, e.g. `cudaMemcpy()`.
   
   @except If the function fails (e.g., being by improperly using device
   memory), this throws a 'runtime_error' exception.
@@ -324,7 +324,7 @@ inline void card::mem_gpu2cpu(void *dst, const void *src, const size_t len)
 inline void card::mem_gpu2gpu(void *dst, const void *src, const size_t len)
 {
   init();
-  err = cudaMemcpy(dst, src, len, cudaMemcpyDeviceToDevice);
+  err = gpuprims::gpu_memcpy(dst, src, len, GPU_MEMCPY_DEVICE_TO_DEVICE);
   check_gpu_error();
 }
 
@@ -336,14 +336,14 @@ inline void card::mem_gpu2gpu(void *dst, const void *src, const size_t len)
   @details Blocks further GPU execution until the device completes all
   previously executed kernels.
   
-  @impl Wrapper around cudaDeviceSynchronize().
+  @impl Wrapper around GPU synchronize, e.g. `cudaDeviceSynchronize()`.
   
   @except If a CUDA error is detected, this throws a 'runtime_error' exception.
 */
 inline void card::synch()
 {
   init();
-  err = cudaDeviceSynchronize();
+  err = gpuprims::gpu_synch();
   check_gpu_error();
 }
 
@@ -352,13 +352,13 @@ inline void card::synch()
 /**
   @brief Check for (and throw if found) a CUDA error.
   
-  @impl Wrapper around cudaGetLastError().
+  @impl Wrapper around GPU error lookup, e.g. `cudaGetLastError()`.
   
   @except If a CUDA error is detected, this throws a 'runtime_error' exception.
 */
 inline void card::check()
 {
-  err = cudaGetLastError();
+  err = gpuprims::gpu_last_error();
   check_gpu_error();
 }
 
@@ -375,7 +375,7 @@ inline void card::init()
   else if (_id == DESTROYED_CARD)
     throw std::runtime_error("invalid card (destroyed)");
   
-  err = cudaSetDevice(_id);
+  err = gpuprims::gpu_set_device(_id);
   check_gpu_error();
 }
 
