@@ -60,8 +60,6 @@ class cpumat : public unimat<REAL>
     void scale(const REAL s);
     void rev_rows();
     void rev_cols();
-    void get_row(len_t i, cpuvec<REAL> &v) const;
-    void get_col(len_t j, cpuvec<REAL> &v) const;
     
     bool any_inf() const;
     bool any_nan() const;
@@ -70,6 +68,8 @@ class cpumat : public unimat<REAL>
     REAL get(len_t i, len_t j) const;
     void set(len_t i, REAL v);
     void set(len_t i, len_t j, REAL v);
+    void get_row(len_t i, cpuvec<REAL> &v) const;
+    void get_col(len_t j, cpuvec<REAL> &v) const;
     
     bool operator==(const cpumat<REAL> &x) const;
     bool operator!=(const cpumat<REAL> &x) const;
@@ -613,62 +613,6 @@ void cpumat<REAL>::rev_cols()
 
 
 
-/**
-  @brief Get the specified row.
-  
-  @param[in] i The desired row, 0-indexed.
-  @param[out] v The row values.
-  
-  @allocs If the output dimension is inappropriately sized, it will
-  automatically be re-allocated.
-  
-  @except If `i` is an inappropriate value (i.e. does not refer to a matrix
-  row), then the method will throw a `logic_error` exception. If a reallocation
-  is triggered and fails, a `bad_alloc` exception will be thrown.
- */
-template <typename REAL>
-void cpumat<REAL>::get_row(len_t i, cpuvec<REAL> &v) const
-{
-  if (i < 0 || i >= this->m)
-    throw std::logic_error("invalid matrix row");
-  
-  v.resize(this->n);
-  REAL *v_d = v.data_ptr();
-  
-  for (len_t j=0; j<this->n; j++)
-    v_d[j] = this->data[i + this->m*j];
-}
-
-
-
-/**
-  @brief Get the specified column.
-  
-  @param[in] j The desired column, 0-indexed.
-  @param[out] v The column values.
-  
-  @allocs If the output dimension is inappropriately sized, it will
-  automatically be re-allocated.
-  
-  @except If `j` is an inappropriate value (i.e. does not refer to a matrix
-  column), then the method will throw a `logic_error` exception. If a
-  reallocation is triggered and fails, a `bad_alloc` exception will be thrown.
- */
-template <typename REAL>
-void cpumat<REAL>::get_col(len_t j, cpuvec<REAL> &v) const
-{
-  if (j < 0 || j >= this->n)
-    throw std::logic_error("invalid matrix column");
-  
-  v.resize(this->m);
-  REAL *v_d = v.data_ptr();
-  
-  for (len_t i=0; i<this->m; i++)
-    v_d[i] = this->data[i + this->m*j];
-}
-
-
-
 /// @brief Are any values infinite?
 template <typename REAL>
 bool cpumat<REAL>::any_inf() const
@@ -769,6 +713,62 @@ void cpumat<REAL>::set(len_t i, len_t j, REAL v)
 {
   this->check_index(i, j);
   this->data[i + (this->m)*j] = v;
+}
+
+
+
+/**
+  @brief Get the specified row.
+  
+  @param[in] i The desired row, 0-indexed.
+  @param[out] v The row values.
+  
+  @allocs If the output dimension is inappropriately sized, it will
+  automatically be re-allocated.
+  
+  @except If `i` is an inappropriate value (i.e. does not refer to a matrix
+  row), then the method will throw a `logic_error` exception. If a reallocation
+  is triggered and fails, a `bad_alloc` exception will be thrown.
+ */
+template <typename REAL>
+void cpumat<REAL>::get_row(len_t i, cpuvec<REAL> &v) const
+{
+  if (i < 0 || i >= this->m)
+    throw std::logic_error("invalid matrix row");
+  
+  v.resize(this->n);
+  REAL *v_d = v.data_ptr();
+  
+  for (len_t j=0; j<this->n; j++)
+    v_d[j] = this->data[i + this->m*j];
+}
+
+
+
+/**
+  @brief Get the specified column.
+  
+  @param[in] j The desired column, 0-indexed.
+  @param[out] v The column values.
+  
+  @allocs If the output dimension is inappropriately sized, it will
+  automatically be re-allocated.
+  
+  @except If `j` is an inappropriate value (i.e. does not refer to a matrix
+  column), then the method will throw a `logic_error` exception. If a
+  reallocation is triggered and fails, a `bad_alloc` exception will be thrown.
+ */
+template <typename REAL>
+void cpumat<REAL>::get_col(len_t j, cpuvec<REAL> &v) const
+{
+  if (j < 0 || j >= this->n)
+    throw std::logic_error("invalid matrix column");
+  
+  v.resize(this->m);
+  REAL *v_d = v.data_ptr();
+  
+  for (len_t i=0; i<this->m; i++)
+    v_d[i] = this->data[i + this->m*j];
 }
 
 

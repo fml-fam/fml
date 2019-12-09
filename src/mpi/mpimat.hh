@@ -65,8 +65,6 @@ class mpimat : public unimat<REAL>
     void antidiag(cpuvec<REAL> &v);
     void scale(const REAL s);
     void rev_cols();
-    void get_row(len_t i, cpuvec<REAL> &v) const;
-    void get_col(len_t j, cpuvec<REAL> &v) const;
     
     bool any_inf() const;
     bool any_nan() const;
@@ -75,6 +73,8 @@ class mpimat : public unimat<REAL>
     REAL get(len_t i, len_t j) const;
     void set(len_t i, REAL v);
     void set(len_t i, len_t j, REAL v);
+    void get_row(len_t i, cpuvec<REAL> &v) const;
+    void get_col(len_t j, cpuvec<REAL> &v) const;
     
     bool operator==(const mpimat<REAL> &x) const;
     bool operator!=(const mpimat<REAL> &x) const;
@@ -804,6 +804,7 @@ void mpimat<REAL>::scale(const REAL s)
 
 
 
+/// @brief Reverse the columns of the matrix.
 template <typename REAL>
 void mpimat<REAL>::rev_cols()
 {
@@ -869,82 +870,6 @@ void mpimat<REAL>::rev_cols()
   
   std::free(rev_buf);
   std::free(tmp);
-}
-
-
-
-/**
-  @brief Get the specified row.
-  
-  @param[in] i The desired row, 0-indexed.
-  @param[out] v The row values.
-  
-  @allocs If the output dimension is inappropriately sized, it will
-  automatically be re-allocated.
-  
-  @except If `i` is an inappropriate value (i.e. does not refer to a matrix
-  row), then the method will throw a `logic_error` exception. If a reallocation
-  is triggered and fails, a `bad_alloc` exception will be thrown.
- */
-template <typename REAL>
-void mpimat<REAL>::get_row(len_t i, cpuvec<REAL> &v) const
-{
-  v.resize(this->n);
-  v.fill_zero();
-  REAL *v_ptr = v.data_ptr();
-  
-  for (len_t j=0; j<this->n; j++)
-  {
-    const len_local_t i_local = bcutils::g2l(i, this->mb, this->g.nprow());
-    const len_local_t j_local = bcutils::g2l(j, this->nb, this->g.npcol());
-    
-    const int pr = bcutils::g2p(i, this->mb, this->g.nprow());
-    const int pc = bcutils::g2p(j, this->nb, this->g.npcol());
-    
-    if (pr == this->g.myrow() && pc == this->g.mycol())
-      v_ptr[j] = this->data[i_local + this->m_local*j_local];
-  }
-  
-  
-  this->g.allreduce(this->n, 1, v_ptr, 'A');
-}
-
-
-
-/**
-  @brief Get the specified column.
-  
-  @param[in] j The desired column, 0-indexed.
-  @param[out] v The column values.
-  
-  @allocs If the output dimension is inappropriately sized, it will
-  automatically be re-allocated.
-  
-  @except If `j` is an inappropriate value (i.e. does not refer to a matrix
-  column), then the method will throw a `logic_error` exception. If a
-  reallocation is triggered and fails, a `bad_alloc` exception will be thrown.
- */
-template <typename REAL>
-void mpimat<REAL>::get_col(len_t j, cpuvec<REAL> &v) const
-{
-  v.resize(this->m);
-  v.fill_zero();
-  REAL *v_ptr = v.data_ptr();
-  
-  for (len_t i=0; i<this->m; i++)
-  {
-    const len_local_t i_local = bcutils::g2l(i, this->mb, this->g.nprow());
-    const len_local_t j_local = bcutils::g2l(j, this->nb, this->g.npcol());
-    
-    const int pr = bcutils::g2p(i, this->mb, this->g.nprow());
-    const int pc = bcutils::g2p(j, this->nb, this->g.npcol());
-    
-    if (pr == this->g.myrow() && pc == this->g.mycol())
-      v_ptr[i] = this->data[i_local + this->m_local*j_local];
-  }
-  
-  
-  this->g.allreduce(this->m, 1, v_ptr, 'A');
 }
 
 
@@ -1087,6 +1012,82 @@ void mpimat<REAL>::set(len_t i, len_t j, REAL v)
   
   if (pr == this->g.myrow() && pc == this->g.mycol())
     this->data[li + (this->m_local)*lj] = v;
+}
+
+
+
+/**
+  @brief Get the specified row.
+  
+  @param[in] i The desired row, 0-indexed.
+  @param[out] v The row values.
+  
+  @allocs If the output dimension is inappropriately sized, it will
+  automatically be re-allocated.
+  
+  @except If `i` is an inappropriate value (i.e. does not refer to a matrix
+  row), then the method will throw a `logic_error` exception. If a reallocation
+  is triggered and fails, a `bad_alloc` exception will be thrown.
+ */
+template <typename REAL>
+void mpimat<REAL>::get_row(len_t i, cpuvec<REAL> &v) const
+{
+  v.resize(this->n);
+  v.fill_zero();
+  REAL *v_ptr = v.data_ptr();
+  
+  for (len_t j=0; j<this->n; j++)
+  {
+    const len_local_t i_local = bcutils::g2l(i, this->mb, this->g.nprow());
+    const len_local_t j_local = bcutils::g2l(j, this->nb, this->g.npcol());
+    
+    const int pr = bcutils::g2p(i, this->mb, this->g.nprow());
+    const int pc = bcutils::g2p(j, this->nb, this->g.npcol());
+    
+    if (pr == this->g.myrow() && pc == this->g.mycol())
+      v_ptr[j] = this->data[i_local + this->m_local*j_local];
+  }
+  
+  
+  this->g.allreduce(this->n, 1, v_ptr, 'A');
+}
+
+
+
+/**
+  @brief Get the specified column.
+  
+  @param[in] j The desired column, 0-indexed.
+  @param[out] v The column values.
+  
+  @allocs If the output dimension is inappropriately sized, it will
+  automatically be re-allocated.
+  
+  @except If `j` is an inappropriate value (i.e. does not refer to a matrix
+  column), then the method will throw a `logic_error` exception. If a
+  reallocation is triggered and fails, a `bad_alloc` exception will be thrown.
+ */
+template <typename REAL>
+void mpimat<REAL>::get_col(len_t j, cpuvec<REAL> &v) const
+{
+  v.resize(this->m);
+  v.fill_zero();
+  REAL *v_ptr = v.data_ptr();
+  
+  for (len_t i=0; i<this->m; i++)
+  {
+    const len_local_t i_local = bcutils::g2l(i, this->mb, this->g.nprow());
+    const len_local_t j_local = bcutils::g2l(j, this->nb, this->g.npcol());
+    
+    const int pr = bcutils::g2p(i, this->mb, this->g.nprow());
+    const int pc = bcutils::g2p(j, this->nb, this->g.npcol());
+    
+    if (pr == this->g.myrow() && pc == this->g.mycol())
+      v_ptr[i] = this->data[i_local + this->m_local*j_local];
+  }
+  
+  
+  this->g.allreduce(this->m, 1, v_ptr, 'A');
 }
 
 
