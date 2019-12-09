@@ -31,6 +31,7 @@ TEMPLATE_TEST_CASE("inheriting memory", "[cpumat]", float, double)
   len_t n = 3;
   
   TestType *data = (TestType*) malloc(m*n*sizeof(*data));
+  
   cpumat<TestType> x(data, m, n);
   x.fill_eye();
   x.~cpumat();
