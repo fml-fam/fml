@@ -278,7 +278,7 @@ cpumat<REAL> cpumat<REAL>::dupe() const
 // printers
 
 /**
-  @brief Copy data from a CPU object to another.
+  @brief Print all values in the object.
   
   @param[in] ndigits Number of decimal digits to print.
   @param[in] add_final_blank Should a final blank line be printed?
