@@ -112,6 +112,16 @@ class mpimat : public unimat<REAL>
 
 // constructors/destructor
 
+/**
+  @brief Construct matrix object with no internal allocated storage.
+  
+  @param[in] blacs_grid Scalapack grid object.
+  
+  @code
+  grid g = grid(PROC_GRID_SQUARE);
+  mpimat<float> x(g);
+  @endcode
+ */
 template <typename REAL>
 mpimat<REAL>::mpimat(const grid &blacs_grid)
 {
@@ -131,6 +141,21 @@ mpimat<REAL>::mpimat(const grid &blacs_grid)
 
 
 
+/**
+  @brief Construct matrix object.
+  
+  @param[in] blacs_grid Scalapack grid object.
+  @param[in] nrows,ncols Number rows/columns of the matrix.
+  @param[in] bf_rows,bf_cols Row/column blocking factor.
+  
+  @except If the allocation fails, a `bad_alloc` exception will be thrown.
+  If the input values are invalid, a `runtime_error` exception will be thrown.
+  
+  @code
+  grid g = grid(PROC_GRID_SQUARE);
+  mpimat<float> x(g, 1, 1);
+  @endcode
+ */
 template <typename REAL>
 mpimat<REAL>::mpimat(const grid &blacs_grid, int bf_rows, int bf_cols)
 {
@@ -150,6 +175,22 @@ mpimat<REAL>::mpimat(const grid &blacs_grid, int bf_rows, int bf_cols)
 
 
 
+/**
+  @brief Construct matrix object.
+  
+  @param[in] blacs_grid Scalapack grid object.
+  @param[in] nrows,ncols Number rows/columns of the array, i.e. the length of
+  the array is nrows*ncols.
+  @param[in] bf_rows,bf_cols Row/column blocking factor.
+  
+  @except If the input values are invalid, a `runtime_error` exception will be
+  thrown.
+  
+  @code
+  grid g = grid(PROC_GRID_SQUARE);
+  mpimat<float> x(g, 3, 2, 1, 1);
+  @endcode
+ */
 template <typename REAL>
 mpimat<REAL>::mpimat(const grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols)
 {
@@ -176,6 +217,21 @@ mpimat<REAL>::mpimat(const grid &blacs_grid, len_t nrows, len_t ncols, int bf_ro
 
 
 
+/**
+  @brief Construct matrix object with inherited data. Essentially the same as
+  using the minimal constructor and immediately calling the `inherit()` method.
+  
+  @param[in] blacs_grid Scalapack grid object.
+  @param[in] data_ Storage array.
+  @param[in] nrows,ncols Number rows/columns of the array, i.e. the length of
+  the array is nrows*ncols.
+  @param[in] bf_rows,bf_cols Row/column blocking factor.
+  @param[in] free_on_destruct Should the inherited array `data_` be freed when
+  the matrix object is destroyed?
+  
+  @except If the input values are invalid, a `runtime_error` exception will be
+  thrown.
+ */
 template <typename REAL>
 mpimat<REAL>::mpimat(const grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct)
 {
@@ -232,6 +288,16 @@ mpimat<REAL>::~mpimat()
 
 // memory management
 
+/**
+  @brief Resize the internal object storage.
+  
+  @param[in] nrows,ncols Number rows/columns needed.
+  
+  @allocs Resizing triggers a re-allocation.
+  
+  @except If the reallocation fails, a `bad_alloc` exception will be thrown.
+  If the input values are invalid, a `runtime_error` exception will be thrown.
+ */
 template <typename REAL>
 void mpimat<REAL>::resize(len_t nrows, len_t ncols)
 {
@@ -269,6 +335,17 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols)
 
 
 
+/**
+  @brief Resize the internal object storage.
+  
+  @param[in] nrows,ncols Number rows/columns needed.
+  @param[in] bf_rows,bf_cols Row/column blocking factor.
+  
+  @allocs Resizing triggers a re-allocation.
+  
+  @except If the reallocation fails, a `bad_alloc` exception will be thrown.
+  If the input values are invalid, a `runtime_error` exception will be thrown.
+ */
 template <typename REAL>
 void mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
 {
@@ -309,6 +386,19 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
 
 
 
+/**
+  @brief Set the internal object storage to the specified array.
+  
+  @param[in] data Value storage.
+  @param[in] nrows,ncols Number rows/columns of the matrix. The product of
+  these should be the length of the input `data`.
+  @param[in] bf_rows,bf_cols Row/column blocking factor.
+  @param[in] free_on_destruct Should the object destructor free the internal
+  array `data`?
+  
+  @except If the input values are invalid, a `runtime_error` exception will be
+  thrown.
+ */
 template <typename REAL>
 void mpimat<REAL>::inherit(grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct)
 {
@@ -333,6 +423,7 @@ void mpimat<REAL>::inherit(grid &blacs_grid, REAL *data_, len_t nrows, len_t nco
 
 
 
+/// @brief Duplicate the object in a deep copy.
 template <typename REAL>
 mpimat<REAL> mpimat<REAL>::dupe() const
 {
@@ -350,6 +441,14 @@ mpimat<REAL> mpimat<REAL>::dupe() const
 
 // printers
 
+/**
+  @brief Print all values in the object.
+  
+  @details Printing will only be done by rank 0.
+  
+  @param[in] ndigits Number of decimal digits to print.
+  @param[in] add_final_blank Should a final blank line be printed?
+ */
 template <typename REAL>
 void mpimat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 {
@@ -389,6 +488,11 @@ void mpimat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 
 
 
+/**
+  @brief Print some brief information about the object.
+  
+  @details Printing will only be done by rank 0.
+ */
 template <typename REAL>
 void mpimat<REAL>::info() const
 {
@@ -406,6 +510,7 @@ void mpimat<REAL>::info() const
 
 // fillers
 
+/// @brief Set all values to zero.
 template <typename REAL>
 void mpimat<REAL>::fill_zero()
 {
@@ -415,6 +520,7 @@ void mpimat<REAL>::fill_zero()
 
 
 
+/// @brief Set all values to one.
 template <typename REAL>
 void mpimat<REAL>::fill_one()
 {
@@ -423,6 +529,11 @@ void mpimat<REAL>::fill_one()
 
 
 
+/**
+  @brief Set all values to input value.
+  
+  @param[in] v Value to set all data values to.
+ */
 template <typename REAL>
 void mpimat<REAL>::fill_val(const REAL v)
 {
@@ -436,6 +547,35 @@ void mpimat<REAL>::fill_val(const REAL v)
 }
 
 
+
+/**
+  @brief Set values to linearly spaced numbers.
+  
+  @param[in] start,stop Beginning/ending numbers.
+ */
+template <typename REAL>
+void mpimat<REAL>::fill_linspace(const REAL start, const REAL stop)
+{
+  if (start == stop)
+    this->fill_val(start);
+  else
+  {
+    const REAL v = (stop-start)/((REAL) this->m*this->n - 1);
+    
+    #pragma omp parallel for if((this->m_local)*(this->n_local) > omputils::OMP_MIN_SIZE)
+    for (len_t j=0; j<this->n_local; j++)
+    {
+      #pragma omp simd
+      for (len_t i=0; i<this->m_local; i++)
+      {
+        const int gi = bcutils::l2g(i, this->mb, this->g.nprow(), this->g.myrow());
+        const int gj = bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
+        
+        this->data[i + this->m_local*j] = v*((REAL) gi + this->m*gj) + start;
+      }
+    }
+  }
+}
 
 template <>
 inline void mpimat<int>::fill_linspace(const int start, const int stop)
@@ -461,32 +601,9 @@ inline void mpimat<int>::fill_linspace(const int start, const int stop)
   }
 }
 
-template <typename REAL>
-void mpimat<REAL>::fill_linspace(const REAL start, const REAL stop)
-{
-  if (start == stop)
-    this->fill_val(start);
-  else
-  {
-    const REAL v = (stop-start)/((REAL) this->m*this->n - 1);
-    
-    #pragma omp parallel for if((this->m_local)*(this->n_local) > omputils::OMP_MIN_SIZE)
-    for (len_t j=0; j<this->n_local; j++)
-    {
-      #pragma omp simd
-      for (len_t i=0; i<this->m_local; i++)
-      {
-        const int gi = bcutils::l2g(i, this->mb, this->g.nprow(), this->g.myrow());
-        const int gj = bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
-        
-        this->data[i + this->m_local*j] = v*((REAL) gi + this->m*gj) + start;
-      }
-    }
-  }
-}
 
 
-
+/// @brief Set diagonal entries to 1 and non-diagonal entries to 0.
 template <typename REAL>
 void mpimat<REAL>::fill_eye()
 {
@@ -497,6 +614,15 @@ void mpimat<REAL>::fill_eye()
 
 
 
+/**
+  @brief Set diagonal entries to 1 and non-diagonal entries to 0.
+  
+  @details If the vector is smaller than the matrix diagonal, the vector will
+  recycle until the matrix diagonal is filled. If the vector is longer, then
+  not all of it will be used.
+  
+  @param[in] v Vector of values to set the matrix diagonal to.
+ */
 template <typename REAL>
 void mpimat<REAL>::fill_diag(const cpuvec<REAL> &v)
 {
@@ -520,6 +646,12 @@ void mpimat<REAL>::fill_diag(const cpuvec<REAL> &v)
 
 
 
+/**
+  @brief Set diagonal entries to 1 and non-diagonal entries to 0.
+  
+  @param[in] seed Seed for the rng.
+  @param[in] min,max Parameters for the generator.
+ */
 template <typename REAL>
 void mpimat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL max)
 {
@@ -534,6 +666,7 @@ void mpimat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL ma
   }
 }
 
+/// \overload
 template <typename REAL>
 void mpimat<REAL>::fill_runif(const REAL min, const REAL max)
 {
@@ -543,6 +676,12 @@ void mpimat<REAL>::fill_runif(const REAL min, const REAL max)
 
 
 
+/**
+  @brief Set diagonal entries to 1 and non-diagonal entries to 0.
+  
+  @param[in] seed Seed for the rng.
+  @param[in] mean,sd Parameters for the generator.
+ */
 template <typename REAL>
 void mpimat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL sd)
 {
@@ -557,6 +696,7 @@ void mpimat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL s
   }
 }
 
+/// \overload
 template <typename REAL>
 void mpimat<REAL>::fill_rnorm(const REAL mean, const REAL sd)
 {
@@ -566,6 +706,19 @@ void mpimat<REAL>::fill_rnorm(const REAL mean, const REAL sd)
 
 
 
+/**
+  @brief Get the diagonal entries.
+  
+  @param[out] v The diagonal. Length should match the length of the diagonal
+  of the input (minimum of the matrix dimensions). If not, the vector will
+  automatically be resized.
+  
+  @allocs If the output dimension is inappropriately sized, it will
+  automatically be re-allocated.
+  
+  @except If a reallocation is triggered and fails, a `bad_alloc` exception
+  will be thrown.
+ */
 template <typename REAL>
 void mpimat<REAL>::diag(cpuvec<REAL> &v)
 {
@@ -592,6 +745,20 @@ void mpimat<REAL>::diag(cpuvec<REAL> &v)
 
 
 
+/**
+  @brief Get the anti-diagonal entries, i.e. those on the bottom-left to
+  top-right.
+  
+  @param[out] v The anti-diagonal. Length should match the length of the
+  diagonal of the input (minimum of the matrix dimensions). If not, the vector
+  will automatically be resized.
+  
+  @allocs If the output dimension is inappropriately sized, it will
+  automatically be re-allocated.
+  
+  @except If a reallocation is triggered and fails, a `bad_alloc` exception
+  will be thrown.
+ */
 template <typename REAL>
 void mpimat<REAL>::antidiag(cpuvec<REAL> &v)
 {
@@ -618,6 +785,11 @@ void mpimat<REAL>::antidiag(cpuvec<REAL> &v)
 
 
 
+/**
+  @brief Multiply all values by the input value.
+  
+  @param[in] s Scaling value.
+ */
 template <typename REAL>
 void mpimat<REAL>::scale(const REAL s)
 {
@@ -701,6 +873,19 @@ void mpimat<REAL>::rev_cols()
 
 
 
+/**
+  @brief Get the specified row.
+  
+  @param[in] i The desired row, 0-indexed.
+  @param[out] v The row values.
+  
+  @allocs If the output dimension is inappropriately sized, it will
+  automatically be re-allocated.
+  
+  @except If `i` is an inappropriate value (i.e. does not refer to a matrix
+  row), then the method will throw a `logic_error` exception. If a reallocation
+  is triggered and fails, a `bad_alloc` exception will be thrown.
+ */
 template <typename REAL>
 void mpimat<REAL>::get_row(len_t i, cpuvec<REAL> &v) const
 {
@@ -726,6 +911,19 @@ void mpimat<REAL>::get_row(len_t i, cpuvec<REAL> &v) const
 
 
 
+/**
+  @brief Get the specified column.
+  
+  @param[in] j The desired column, 0-indexed.
+  @param[out] v The column values.
+  
+  @allocs If the output dimension is inappropriately sized, it will
+  automatically be re-allocated.
+  
+  @except If `j` is an inappropriate value (i.e. does not refer to a matrix
+  column), then the method will throw a `logic_error` exception. If a
+  reallocation is triggered and fails, a `bad_alloc` exception will be thrown.
+ */
 template <typename REAL>
 void mpimat<REAL>::get_col(len_t j, cpuvec<REAL> &v) const
 {
@@ -751,6 +949,7 @@ void mpimat<REAL>::get_col(len_t j, cpuvec<REAL> &v) const
 
 
 
+/// @brief Are any values infinite?
 template <typename REAL>
 bool mpimat<REAL>::any_inf() const
 {
@@ -774,6 +973,7 @@ bool mpimat<REAL>::any_inf() const
 
 
 
+/// @brief Are any values NaN?
 template <typename REAL>
 bool mpimat<REAL>::any_nan() const
 {
@@ -799,6 +999,15 @@ bool mpimat<REAL>::any_nan() const
 
 // operators
 
+/**
+  @brief Get the specified value.
+  
+  @param[in] i The index of the desired value, 0-indexed. The numbering
+  considers the internal storage as a 1-dimensional array.
+  
+  @except If indices are out of bounds, the method will throw a `runtime_error`
+  exception.
+ */
 template <typename REAL>
 REAL mpimat<REAL>::get(len_t i) const
 {
@@ -811,6 +1020,14 @@ REAL mpimat<REAL>::get(len_t i) const
   return ret;
 }
 
+/**
+  @brief Get the specified value.
+  
+  @param[in] i,j The indices of the desired value, 0-indexed.
+  
+  @except If indices are out of bounds, the method will throw a `runtime_error`
+  exception.
+ */
 template <typename REAL>
 REAL mpimat<REAL>::get(len_t i, len_t j) const
 {
@@ -820,6 +1037,16 @@ REAL mpimat<REAL>::get(len_t i, len_t j) const
   return ret;
 }
 
+/**
+  @brief Set the storage at the specified index with the provided value.
+  
+  @param[in] i The index of the desired value, 0-indexed. The numbering
+  considers the internal storage as a 1-dimensional array.
+  @param[in] v Setter value.
+  
+  @except If indices are out of bounds, the method will throw a `runtime_error`
+  exception.
+ */
 template <typename REAL>
 void mpimat<REAL>::set(len_t i, REAL v)
 {
@@ -838,6 +1065,15 @@ void mpimat<REAL>::set(len_t i, REAL v)
     this->data[li + (this->m_local)*lj] = v;
 }
 
+/**
+  @brief Set the storage at the specified index with the provided value.
+  
+  @param[in] i,j The indices of the desired value, 0-indexed.
+  @param[in] v Setter value.
+  
+  @except If indices are out of bounds, the method will throw a `runtime_error`
+  exception.
+ */
 template <typename REAL>
 void mpimat<REAL>::set(len_t i, len_t j, REAL v)
 {
@@ -855,6 +1091,15 @@ void mpimat<REAL>::set(len_t i, len_t j, REAL v)
 
 
 
+/**
+  @brief See if the two objects are the same.
+  
+  @param[in] Comparison object.
+  @return If the dimensions mismatch, then `false` is necessarily returned.
+  Next, if the grid objects have different ordinal context numbers, then `false`
+  is returned. Next, if the pointer to the internal storage arrays match, then
+  `true` is returned. Otherwise the objects are compared value by value.
+ */
 template <typename REAL>
 bool mpimat<REAL>::operator==(const mpimat<REAL> &x) const
 {
@@ -888,6 +1133,12 @@ bool mpimat<REAL>::operator==(const mpimat<REAL> &x) const
   return !((bool) negation_ret);
 }
 
+/**
+  @brief See if the two objects are not the same. Uses same internal logic as
+  the `==` method.
+  
+  @param[in] Comparison object.
+ */
 template <typename REAL>
 bool mpimat<REAL>::operator!=(const mpimat<REAL> &x) const
 {
@@ -896,6 +1147,12 @@ bool mpimat<REAL>::operator!=(const mpimat<REAL> &x) const
 
 
 
+/**
+  @brief Operator that sets the LHS to a shallow copy of the input. Desctruction
+  of the LHS object will not result in the internal array storage being freed.
+  
+  @param[in] x Setter value.
+ */
 template <typename REAL>
 mpimat<REAL>& mpimat<REAL>::operator=(const mpimat<REAL> &x)
 {
