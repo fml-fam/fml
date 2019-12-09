@@ -94,6 +94,16 @@ class gpumat : public unimat<REAL>
 
 // constructors/destructor
 
+/**
+  @brief Construct matrix object with no internal allocated storage.
+  
+  @param[in] gpu Shared pointer to GPU card object.
+  
+  @code
+  auto c = gpuhelpers::new_card(0);
+  gpumat<float> x(c);
+  @endcode
+ */
 template <typename REAL>
 gpumat<REAL>::gpumat(std::shared_ptr<card> gpu)
 {
@@ -108,6 +118,20 @@ gpumat<REAL>::gpumat(std::shared_ptr<card> gpu)
 
 
 
+/**
+  @brief Construct matrix object.
+  
+  @param[in] gpu Shared pointer to GPU card object.
+  @param[in] nrows,ncols Number rows/columns of the matrix.
+  
+  @except If the allocation fails, a `bad_alloc` exception will be thrown.
+  If the input values are invalid, a `runtime_error` exception will be thrown.
+  
+  @code
+  auto c = gpuhelpers::new_card(0);
+  gpumat<float> x(c, 3, 2);
+  @endcode
+ */
 template <typename REAL>
 gpumat<REAL>::gpumat(std::shared_ptr<card> gpu, len_t nrows, len_t ncols)
 {
@@ -129,6 +153,20 @@ gpumat<REAL>::gpumat(std::shared_ptr<card> gpu, len_t nrows, len_t ncols)
 
 
 
+/**
+  @brief Construct matrix object with inherited data. Essentially the same as
+  using the minimal constructor and immediately calling the `inherit()` method.
+  
+  @param[in] gpu Shared pointer to GPU card object.
+  @param[in] data_ Storage array.
+  @param[in] nrows,ncols Number rows/columns of the array, i.e. the length of
+  the array is nrows*ncols.
+  @param[in] free_on_destruct Should the inherited array `data_` be freed when
+  the matrix object is destroyed?
+  
+  @except If the input values are invalid, a `runtime_error` exception will be
+  thrown.
+ */
 template <typename REAL>
 gpumat<REAL>::gpumat(std::shared_ptr<card> gpu, REAL *data_, len_t nrows, len_t ncols, bool free_on_destruct)
 {
@@ -176,6 +214,16 @@ gpumat<REAL>::~gpumat()
 
 // memory management
 
+/**
+  @brief Resize the internal object storage.
+  
+  @param[in] nrows,ncols Number rows/columns needed.
+  
+  @allocs Resizing triggers a re-allocation.
+  
+  @except If the reallocation fails, a `bad_alloc` exception will be thrown.
+  If the input values are invalid, a `runtime_error` exception will be thrown.
+ */
 template <typename REAL>
 void gpumat<REAL>::resize(len_t nrows, len_t ncols)
 {
@@ -208,6 +256,17 @@ void gpumat<REAL>::resize(len_t nrows, len_t ncols)
 
 
 
+/**
+  @brief Resize the internal object storage.
+  
+  @param[in] gpu Shared pointer to GPU card object.
+  @param[in] nrows,ncols Number rows/columns needed.
+  
+  @allocs Resizing triggers a re-allocation.
+  
+  @except If the reallocation fails, a `bad_alloc` exception will be thrown.
+  If the input values are invalid, a `runtime_error` exception will be thrown.
+ */
 template <typename REAL>
 void gpumat<REAL>::resize(std::shared_ptr<card> gpu, len_t nrows, len_t ncols)
 {
@@ -217,11 +276,23 @@ void gpumat<REAL>::resize(std::shared_ptr<card> gpu, len_t nrows, len_t ncols)
 
 
 
+/**
+  @brief Set the internal object storage to the specified array.
+  
+  @param[in] gpu Shared pointer to GPU card object.
+  @param[in] data Value storage.
+  @param[in] nrows,ncols Number rows/columns of the matrix. The product of
+  these should be the length of the input `data`.
+  @param[in] free_on_destruct Should the object destructor free the internal
+  array `data`?
+  
+  @except If the input values are invalid, a `runtime_error` exception will be
+  thrown.
+ */
 template <typename REAL>
 void gpumat<REAL>::inherit(std::shared_ptr<card> gpu, REAL *data, len_t nrows, len_t ncols, bool free_on_destruct)
 {
   check_params(nrows, ncols);
-  
   this->free();
   
   this->c = gpu;
@@ -238,6 +309,7 @@ void gpumat<REAL>::inherit(std::shared_ptr<card> gpu, REAL *data, len_t nrows, l
 
 
 
+/// @brief Duplicate the object in a deep copy.
 template <typename REAL>
 gpumat<REAL> gpumat<REAL>::dupe() const
 {
@@ -253,6 +325,12 @@ gpumat<REAL> gpumat<REAL>::dupe() const
 
 // printers
 
+/**
+  @brief Print all values in the object.
+  
+  @param[in] ndigits Number of decimal digits to print.
+  @param[in] add_final_blank Should a final blank line be printed?
+ */
 template <typename REAL>
 void gpumat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 {
@@ -274,6 +352,7 @@ void gpumat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 
 
 
+/// @brief Print some brief information about the object.
 template <typename REAL>
 void gpumat<REAL>::info() const
 {
@@ -287,6 +366,7 @@ void gpumat<REAL>::info() const
 
 // fillers
 
+/// @brief Set all values to zero.
 template <typename REAL>
 void gpumat<REAL>::fill_zero()
 {
@@ -296,6 +376,7 @@ void gpumat<REAL>::fill_zero()
 
 
 
+/// @brief Set all values to one.
 template <typename REAL>
 void gpumat<REAL>::fill_one()
 {
@@ -304,6 +385,11 @@ void gpumat<REAL>::fill_one()
 
 
 
+/**
+  @brief Set all values to input value.
+  
+  @param[in] v Value to set all data values to.
+ */
 template <typename REAL>
 void gpumat<REAL>::fill_val(const REAL v)
 {
@@ -313,6 +399,11 @@ void gpumat<REAL>::fill_val(const REAL v)
 
 
 
+/**
+  @brief Set values to linearly spaced numbers.
+  
+  @param[in] start,stop Beginning/ending numbers.
+ */
 template <typename REAL>
 void gpumat<REAL>::fill_linspace(REAL start, REAL stop)
 {
@@ -327,7 +418,7 @@ void gpumat<REAL>::fill_linspace(REAL start, REAL stop)
 
 
 
-
+/// @brief Set diagonal entries to 1 and non-diagonal entries to 0.
 template <typename REAL>
 void gpumat<REAL>::fill_eye()
 {
@@ -337,6 +428,15 @@ void gpumat<REAL>::fill_eye()
 
 
 
+/**
+  @brief Set diagonal entries to 1 and non-diagonal entries to 0.
+  
+  @details If the vector is smaller than the matrix diagonal, the vector will
+  recycle until the matrix diagonal is filled. If the vector is longer, then
+  not all of it will be used.
+  
+  @param[in] v Vector of values to set the matrix diagonal to.
+ */
 template <typename REAL>
 void gpumat<REAL>::fill_diag(const gpuvec<REAL> &v)
 {
@@ -346,24 +446,40 @@ void gpumat<REAL>::fill_diag(const gpuvec<REAL> &v)
 
 
 
+/**
+  @brief Set diagonal entries to 1 and non-diagonal entries to 0.
+  
+  @param[in] seed Seed for the rng.
+  @param[in] min,max Parameters for the generator.
+ */
 template <typename REAL>
 void gpumat<REAL>::fill_runif(uint32_t seed, REAL min, REAL max)
 {
   
 }
 
+/// \overload
 template <typename REAL>
 void gpumat<REAL>::fill_runif(REAL min, REAL max)
 {
   
 }
 
+
+
+/**
+  @brief Set diagonal entries to 1 and non-diagonal entries to 0.
+  
+  @param[in] seed Seed for the rng.
+  @param[in] mean,sd Parameters for the generator.
+ */
 template <typename REAL>
 void gpumat<REAL>::fill_rnorm(uint32_t seed, REAL mean, REAL sd)
 {
   
 }
 
+/// \overload
 template <typename REAL>
 void gpumat<REAL>::fill_rnorm(REAL mean, REAL sd)
 {
@@ -372,6 +488,19 @@ void gpumat<REAL>::fill_rnorm(REAL mean, REAL sd)
 
 
 
+/**
+  @brief Get the diagonal entries.
+  
+  @param[out] v The diagonal. Length should match the length of the diagonal
+  of the input (minimum of the matrix dimensions). If not, the vector will
+  automatically be resized.
+  
+  @allocs If the output dimension is inappropriately sized, it will
+  automatically be re-allocated.
+  
+  @except If a reallocation is triggered and fails, a `bad_alloc` exception
+  will be thrown.
+ */
 template <typename REAL>
 void gpumat<REAL>::diag(gpuvec<REAL> &v)
 {
@@ -384,6 +513,20 @@ void gpumat<REAL>::diag(gpuvec<REAL> &v)
 
 
 
+/**
+  @brief Get the anti-diagonal entries, i.e. those on the bottom-left to
+  top-right.
+  
+  @param[out] v The anti-diagonal. Length should match the length of the
+  diagonal of the input (minimum of the matrix dimensions). If not, the vector
+  will automatically be resized.
+  
+  @allocs If the output dimension is inappropriately sized, it will
+  automatically be re-allocated.
+  
+  @except If a reallocation is triggered and fails, a `bad_alloc` exception
+  will be thrown.
+ */
 template <typename REAL>
 void gpumat<REAL>::antidiag(gpuvec<REAL> &v)
 {
@@ -396,6 +539,11 @@ void gpumat<REAL>::antidiag(gpuvec<REAL> &v)
 
 
 
+/**
+  @brief Multiply all values by the input value.
+  
+  @param[in] s Scaling value.
+ */
 template <typename REAL>
 void gpumat<REAL>::scale(const REAL s)
 {
@@ -405,6 +553,7 @@ void gpumat<REAL>::scale(const REAL s)
 
 
 
+/// @brief Reverse the rows of the matrix.
 template <typename REAL>
 void gpumat<REAL>::rev_rows()
 {
@@ -414,6 +563,7 @@ void gpumat<REAL>::rev_rows()
 
 
 
+/// @brief Reverse the columns of the matrix.
 template <typename REAL>
 void gpumat<REAL>::rev_cols()
 {
@@ -423,6 +573,7 @@ void gpumat<REAL>::rev_cols()
 
 
 
+/// @brief Are any values infinite?
 template <typename REAL>
 bool gpumat<REAL>::any_inf() const
 {
@@ -463,6 +614,15 @@ bool gpumat<REAL>::any_nan() const
 
 // operators
 
+/**
+  @brief Get the specified value.
+  
+  @param[in] i The index of the desired value, 0-indexed. The numbering
+  considers the internal storage as a 1-dimensional array.
+  
+  @except If indices are out of bounds, the method will throw a `runtime_error`
+  exception.
+ */
 template <typename REAL>
 REAL gpumat<REAL>::get(len_t i) const
 {
@@ -473,6 +633,14 @@ REAL gpumat<REAL>::get(len_t i) const
   return ret;
 }
 
+/**
+  @brief Get the specified value.
+  
+  @param[in] i,j The indices of the desired value, 0-indexed.
+  
+  @except If indices are out of bounds, the method will throw a `runtime_error`
+  exception.
+ */
 template <typename REAL>
 REAL gpumat<REAL>::get(len_t i, len_t j) const
 {
@@ -483,6 +651,16 @@ REAL gpumat<REAL>::get(len_t i, len_t j) const
   return ret;
 }
 
+/**
+  @brief Set the storage at the specified index with the provided value.
+  
+  @param[in] i The index of the desired value, 0-indexed. The numbering
+  considers the internal storage as a 1-dimensional array.
+  @param[in] v Setter value.
+  
+  @except If indices are out of bounds, the method will throw a `runtime_error`
+  exception.
+ */
 template <typename REAL>
 void gpumat<REAL>::set(len_t i, REAL v)
 {
@@ -490,6 +668,15 @@ void gpumat<REAL>::set(len_t i, REAL v)
   this->c->mem_cpu2gpu(this->data + i, &v, sizeof(REAL));
 }
 
+/**
+  @brief Set the storage at the specified index with the provided value.
+  
+  @param[in] i,j The indices of the desired value, 0-indexed.
+  @param[in] v Setter value.
+  
+  @except If indices are out of bounds, the method will throw a `runtime_error`
+  exception.
+ */
 template <typename REAL>
 void gpumat<REAL>::set(len_t i, len_t j, REAL v)
 {
@@ -499,6 +686,15 @@ void gpumat<REAL>::set(len_t i, len_t j, REAL v)
 
 
 
+/**
+  @brief See if the two objects are the same.
+  
+  @param[in] Comparison object.
+  @return If the dimensions mismatch, then `false` is necessarily returned.
+  Next, if the card objects have different ordinal IDs, then `false` is
+  returned. Next, if the pointer to the internal storage arrays match, then
+  `true` is returned. Otherwise the objects are compared value by value.
+ */
 template <typename T>
 bool gpumat<T>::operator==(const gpumat<T> &x) const
 {
@@ -523,6 +719,12 @@ bool gpumat<T>::operator==(const gpumat<T> &x) const
   return (bool) all_eq;
 }
 
+/**
+  @brief See if the two objects are not the same. Uses same internal logic as
+  the `==` method.
+  
+  @param[in] Comparison object.
+ */
 template <typename T>
 bool gpumat<T>::operator!=(const gpumat<T> &x) const
 {
@@ -531,6 +733,12 @@ bool gpumat<T>::operator!=(const gpumat<T> &x) const
 
 
 
+/**
+  @brief Operator that sets the LHS to a shallow copy of the input. Desctruction
+  of the LHS object will not result in the internal array storage being freed.
+  
+  @param[in] x Setter value.
+ */
 template <typename REAL>
 gpumat<REAL>& gpumat<REAL>::operator=(const gpumat<REAL> &x)
 {
