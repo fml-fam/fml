@@ -16,7 +16,7 @@ OBJS=$(SRCS:.cpp=.o )
 	$(MPICXX) $(CXXFLAGS) $(CPPFLAGS) $(WARNFLAGS) $(OMPFLAGS) -c $< -o $@
 
 parmat: $(OBJS)
-	$(MPICXX) $(CXXFLAGS) $(OBJS) -o parmat $(OMPFLAGS)
+	$(MPICXX) $(CXXFLAGS) $(OBJS) -o parmat $(OMPFLAGS) $(CPU_LDFLAGS)
 
 miniclean:
 	( ls *.o | grep -v test-main | xargs rm -f )
