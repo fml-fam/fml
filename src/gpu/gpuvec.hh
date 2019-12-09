@@ -145,6 +145,7 @@ template <typename T>
 gpuvec<T>::~gpuvec()
 {
   this->free();
+  c = NULL;
 }
 
 
