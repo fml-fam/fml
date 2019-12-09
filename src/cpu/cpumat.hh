@@ -88,6 +88,18 @@ class cpumat : public unimat<REAL>
 
 // constructors/destructor
 
+/**
+  @brief Construct matrix object with no internal allocated storage.
+  
+  @param[in] nrows,ncols Number rows/columns of the matrix.
+  
+  @except If the allocation fails, a `bad_alloc` exception will be thrown.
+  If the input values are invalid, a `runtime_error` exception will be thrown.
+  
+  @code
+  cpumat<float> x();
+  @endcode
+ */
 template <typename REAL>
 cpumat<REAL>::cpumat()
 {
@@ -100,6 +112,18 @@ cpumat<REAL>::cpumat()
 
 
 
+/**
+  @brief Construct matrix object.
+  
+  @param[in] nrows,ncols Number rows/columns of the matrix.
+  
+  @except If the allocation fails, a `bad_alloc` exception will be thrown.
+  If the input values are invalid, a `runtime_error` exception will be thrown.
+  
+  @code
+  cpumat<float> x(3, 2);
+  @endcode
+ */
 template <typename REAL>
 cpumat<REAL>::cpumat(len_t nrows, len_t ncols)
 {
@@ -118,6 +142,19 @@ cpumat<REAL>::cpumat(len_t nrows, len_t ncols)
 
 
 
+/**
+  @brief Construct matrix object with inherited data. Essentially the same as
+  using the minimal constructor and immediately calling the `inherit()` method.
+  
+  @param[in] data_ Storage array.
+  @param[in] nrows,ncols Number rows/columns of the array, i.e. the length of
+  the array is nrows*ncols.
+  @param[in] free_on_destruct Should the inherited array `data_` be freed when
+  the matrix object is destroyed?
+  
+  @except If the input values are invalid, a `runtime_error` exception will be
+  thrown.
+ */
 template <typename REAL>
 cpumat<REAL>::cpumat(REAL *data_, len_t nrows, len_t ncols, bool free_on_destruct)
 {
@@ -670,6 +707,15 @@ bool cpumat<REAL>::any_nan() const
 
 // operators
 
+/**
+  @brief Get the specified value.
+  
+  @param[in] i The index of the desired value, 0-indexed. The numbering
+  considers the internal storage as a 1-dimensional array.
+  
+  @except If indices are out of bounds, the method will throw a `runtime_error`
+  exception.
+ */
 template <typename REAL>
 REAL cpumat<REAL>::get(len_t i) const
 {
@@ -677,6 +723,14 @@ REAL cpumat<REAL>::get(len_t i) const
   return this->data[i];
 }
 
+/**
+  @brief Get the specified value.
+  
+  @param[in] i,j The indices of the desired value, 0-indexed.
+  
+  @except If indices are out of bounds, the method will throw a `runtime_error`
+  exception.
+ */
 template <typename REAL>
 REAL cpumat<REAL>::get(len_t i, len_t j) const
 {
@@ -684,6 +738,16 @@ REAL cpumat<REAL>::get(len_t i, len_t j) const
   return this->data[i + (this->m)*j];
 }
 
+/**
+  @brief Set the storage at the specified index with the provided value.
+  
+  @param[in] i The index of the desired value, 0-indexed. The numbering
+  considers the internal storage as a 1-dimensional array.
+  @param[in] v Setter value.
+  
+  @except If indices are out of bounds, the method will throw a `runtime_error`
+  exception.
+ */
 template <typename REAL>
 void cpumat<REAL>::set(len_t i, REAL v)
 {
@@ -691,6 +755,15 @@ void cpumat<REAL>::set(len_t i, REAL v)
   this->data[i] = v;
 }
 
+/**
+  @brief Set the storage at the specified index with the provided value.
+  
+  @param[in] i,j The indices of the desired value, 0-indexed.
+  @param[in] v Setter value.
+  
+  @except If indices are out of bounds, the method will throw a `runtime_error`
+  exception.
+ */
 template <typename REAL>
 void cpumat<REAL>::set(len_t i, len_t j, REAL v)
 {
@@ -700,6 +773,14 @@ void cpumat<REAL>::set(len_t i, len_t j, REAL v)
 
 
 
+/**
+  @brief See if the two objects are the same.
+  
+  @param[in] Comparison object.
+  @return If the dimensions mismatch, then `false` is necessarily returned.
+  Next, if the pointer to the internal storage arrays match, then `true` is
+  necessarily returned. Otherwise the objects are compared value by value.
+ */
 template <typename REAL>
 bool cpumat<REAL>::operator==(const cpumat<REAL> &x) const
 {
@@ -721,6 +802,12 @@ bool cpumat<REAL>::operator==(const cpumat<REAL> &x) const
   return true;
 }
 
+/**
+  @brief See if the two objects are not the same. Uses same internal logic as
+  the `==` method.
+  
+  @param[in] Comparison object.
+ */
 template <typename REAL>
 bool cpumat<REAL>::operator!=(const cpumat<REAL> &x) const
 {
@@ -729,6 +816,12 @@ bool cpumat<REAL>::operator!=(const cpumat<REAL> &x) const
 
 
 
+/**
+  @brief Operator that sets the LHS to a shallow copy of the input. Desctruction
+  of the LHS object will not result in the internal array storage being freed.
+  
+  @param[in] x Setter value.
+ */
 template <typename REAL>
 cpumat<REAL>& cpumat<REAL>::operator=(const cpumat<REAL> &x)
 {
