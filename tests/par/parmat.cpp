@@ -1,11 +1,11 @@
 #include "../catch.hpp"
 
-#include <fltcmp.hh>
+#include <arraytools/src/arraytools.hpp>
 #include <par/cpu.hh>
 
+using namespace arraytools;
 
 extern comm r;
-
 
 
 TEMPLATE_TEST_CASE("basics", "[parmat_cpu]", float, double)
