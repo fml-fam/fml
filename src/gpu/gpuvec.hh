@@ -111,7 +111,6 @@ template <typename T>
 gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, T *data_, len_t size, bool free_on_destruct)
 {
   check_params(size);
-  this->free();
   
   this->c = gpu;
   
@@ -182,6 +181,8 @@ void gpuvec<T>::resize(len_t size)
 template <typename T>
 void gpuvec<T>::resize(std::shared_ptr<card> gpu, len_t size)
 {
+  this->free();
+  
   this->c = gpu;
   this->resize(size);
 }
