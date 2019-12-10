@@ -79,10 +79,12 @@ class gpumat : public unimat<REAL>
     std::shared_ptr<card> c;
   
   private:
-    void free();
-    void check_params(len_t nrows, len_t ncols);
     dim3 dim_block;
     dim3 dim_grid;
+    
+    void free();
+    void check_params(len_t nrows, len_t ncols);
+    void check_gpu(std::shared_ptr<card> gpu);
 };
 
 
@@ -106,6 +108,8 @@ class gpumat : public unimat<REAL>
 template <typename REAL>
 gpumat<REAL>::gpumat(std::shared_ptr<card> gpu)
 {
+  check_gpu(gpu);
+  
   this->c = gpu;
   
   this->m = 0;
@@ -135,6 +139,7 @@ template <typename REAL>
 gpumat<REAL>::gpumat(std::shared_ptr<card> gpu, len_t nrows, len_t ncols)
 {
   check_params(nrows, ncols);
+  check_gpu(gpu);
   
   this->c = gpu;
   
@@ -170,6 +175,7 @@ template <typename REAL>
 gpumat<REAL>::gpumat(std::shared_ptr<card> gpu, REAL *data_, len_t nrows, len_t ncols, bool free_on_destruct)
 {
   check_params(nrows, ncols);
+  check_gpu(gpu);
   
   this->c = gpu;
   
@@ -269,6 +275,8 @@ void gpumat<REAL>::resize(len_t nrows, len_t ncols)
 template <typename REAL>
 void gpumat<REAL>::resize(std::shared_ptr<card> gpu, len_t nrows, len_t ncols)
 {
+  check_gpu(gpu);
+  
   this->c = gpu;
   this->resize(nrows, ncols);
 }
@@ -292,6 +300,8 @@ template <typename REAL>
 void gpumat<REAL>::inherit(std::shared_ptr<card> gpu, REAL *data, len_t nrows, len_t ncols, bool free_on_destruct)
 {
   check_params(nrows, ncols);
+  check_gpu(gpu);
+  
   this->free();
   
   this->c = gpu;
@@ -765,6 +775,15 @@ void gpumat<REAL>::check_params(len_t nrows, len_t ncols)
 {
   if (nrows < 0 || ncols < 0)
     throw std::runtime_error("invalid dimensions");
+}
+
+
+
+template <typename REAL>
+void gpumat<REAL>::check_gpu(std::shared_ptr<card> gpu)
+{
+  if (!gpu->valid_card())
+    throw std::runtime_error("GPU card object is invalid");
 }
 
 

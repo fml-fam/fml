@@ -59,10 +59,12 @@ class gpuvec : public univec<T>
     std::shared_ptr<card> c;
   
   private:
-    void free();
-    void check_params(len_t size);
     dim3 dim_block;
     dim3 dim_grid;
+    
+    void free();
+    void check_params(len_t size);
+    void check_gpu(std::shared_ptr<card> gpu);
 };
 
 
@@ -76,6 +78,8 @@ class gpuvec : public univec<T>
 template <typename T>
 gpuvec<T>::gpuvec(std::shared_ptr<card> gpu)
 {
+  check_gpu(gpu);
+  
   this->c = gpu;
   
   this->_size = 0;
@@ -90,6 +94,7 @@ template <typename T>
 gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, len_t size)
 {
   check_params(size);
+  check_gpu(gpu);
   
   this->c = gpu;
   
@@ -110,6 +115,7 @@ template <typename T>
 gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, T *data_, len_t size, bool free_on_destruct)
 {
   check_params(size);
+  check_gpu(gpu);
   
   this->c = gpu;
   
@@ -181,6 +187,8 @@ void gpuvec<T>::resize(len_t size)
 template <typename T>
 void gpuvec<T>::resize(std::shared_ptr<card> gpu, len_t size)
 {
+  check_gpu(gpu);
+  
   this->free();
   
   this->c = gpu;
@@ -192,6 +200,8 @@ void gpuvec<T>::resize(std::shared_ptr<card> gpu, len_t size)
 template <typename T>
 void gpuvec<T>::inherit(std::shared_ptr<card> gpu)
 {
+  check_gpu(gpu);
+  
   this->c = gpu;
   
   this->_size = 0;
@@ -206,6 +216,8 @@ template <typename T>
 void gpuvec<T>::inherit(std::shared_ptr<card> gpu, T *data, len_t size, bool free_on_destruct)
 {
   check_params(size);
+  check_gpu(gpu);
+  
   this->free();
   
   this->c = gpu;
@@ -380,8 +392,8 @@ gpuvec<T>& gpuvec<T>::operator=(const gpuvec<T> &x)
 // private
 // -----------------------------------------------------------------------------
 
-template <typename REAL>
-void gpuvec<REAL>::free()
+template <typename T>
+void gpuvec<T>::free()
 {
   if (this->free_data && this->data)
   {
@@ -392,11 +404,20 @@ void gpuvec<REAL>::free()
 
 
 
-template <typename REAL>
-void gpuvec<REAL>::check_params(len_t size)
+template <typename T>
+void gpuvec<T>::check_params(len_t size)
 {
   if (size < 0)
     throw std::runtime_error("invalid dimensions");
+}
+
+
+
+template <typename T>
+void gpuvec<T>::check_gpu(std::shared_ptr<card> gpu)
+{
+  if (!gpu->valid_card())
+    throw std::runtime_error("GPU card object is invalid");
 }
 
 
