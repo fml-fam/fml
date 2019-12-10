@@ -64,12 +64,12 @@ class cpumat : public unimat<REAL>
     bool any_inf() const;
     bool any_nan() const;
     
-    REAL get(len_t i) const;
-    REAL get(len_t i, len_t j) const;
-    void set(len_t i, REAL v);
-    void set(len_t i, len_t j, REAL v);
-    void get_row(len_t i, cpuvec<REAL> &v) const;
-    void get_col(len_t j, cpuvec<REAL> &v) const;
+    REAL get(const len_t i) const;
+    REAL get(const len_t i, const len_t j) const;
+    void set(const len_t i, const REAL v);
+    void set(const len_t i, const len_t j, const REAL v);
+    void get_row(const len_t i, cpuvec<REAL> &v) const;
+    void get_col(const len_t j, cpuvec<REAL> &v) const;
     
     bool operator==(const cpumat<REAL> &x) const;
     bool operator!=(const cpumat<REAL> &x) const;
@@ -661,7 +661,7 @@ bool cpumat<REAL>::any_nan() const
   exception.
  */
 template <typename REAL>
-REAL cpumat<REAL>::get(len_t i) const
+REAL cpumat<REAL>::get(const len_t i) const
 {
   this->check_index(i);
   return this->data[i];
@@ -676,7 +676,7 @@ REAL cpumat<REAL>::get(len_t i) const
   exception.
  */
 template <typename REAL>
-REAL cpumat<REAL>::get(len_t i, len_t j) const
+REAL cpumat<REAL>::get(const len_t i, const len_t j) const
 {
   this->check_index(i, j);
   return this->data[i + (this->m)*j];
@@ -693,7 +693,7 @@ REAL cpumat<REAL>::get(len_t i, len_t j) const
   exception.
  */
 template <typename REAL>
-void cpumat<REAL>::set(len_t i, REAL v)
+void cpumat<REAL>::set(const len_t i, const REAL v)
 {
   this->check_index(i);
   this->data[i] = v;
@@ -709,7 +709,7 @@ void cpumat<REAL>::set(len_t i, REAL v)
   exception.
  */
 template <typename REAL>
-void cpumat<REAL>::set(len_t i, len_t j, REAL v)
+void cpumat<REAL>::set(const len_t i, const len_t j, const REAL v)
 {
   this->check_index(i, j);
   this->data[i + (this->m)*j] = v;
@@ -731,7 +731,7 @@ void cpumat<REAL>::set(len_t i, len_t j, REAL v)
   is triggered and fails, a `bad_alloc` exception will be thrown.
  */
 template <typename REAL>
-void cpumat<REAL>::get_row(len_t i, cpuvec<REAL> &v) const
+void cpumat<REAL>::get_row(const len_t i, cpuvec<REAL> &v) const
 {
   if (i < 0 || i >= this->m)
     throw std::logic_error("invalid matrix row");
@@ -759,7 +759,7 @@ void cpumat<REAL>::get_row(len_t i, cpuvec<REAL> &v) const
   reallocation is triggered and fails, a `bad_alloc` exception will be thrown.
  */
 template <typename REAL>
-void cpumat<REAL>::get_col(len_t j, cpuvec<REAL> &v) const
+void cpumat<REAL>::get_col(const len_t j, cpuvec<REAL> &v) const
 {
   if (j < 0 || j >= this->n)
     throw std::logic_error("invalid matrix column");

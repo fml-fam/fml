@@ -45,8 +45,8 @@ class gpuvec : public univec<T>
     void scale(const T s);
     void rev();
     
-    T get(len_t i) const;
-    void set(len_t i, T v);
+    T get(const len_t i) const;
+    void set(const len_t i, const T v);
     
     bool operator==(const gpuvec<T> &x) const;
     bool operator!=(const gpuvec<T> &x) const;
@@ -322,7 +322,7 @@ void gpuvec<T>::rev()
 // operators
 
 template <typename T>
-T gpuvec<T>::get(len_t i) const
+T gpuvec<T>::get(const len_t i) const
 {
   this->check_index(i);
 
@@ -332,7 +332,7 @@ T gpuvec<T>::get(len_t i) const
 }
 
 template <typename T>
-void gpuvec<T>::set(len_t i, T v)
+void gpuvec<T>::set(const len_t i, const T v)
 {
   this->check_index(i);
   this->c->mem_cpu2gpu(this->data + i, &v, sizeof(T));

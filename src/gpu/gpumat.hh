@@ -63,10 +63,10 @@ class gpumat : public unimat<REAL>
     bool any_inf() const;
     bool any_nan() const;
     
-    REAL get(len_t i) const;
-    REAL get(len_t i, len_t j) const;
-    void set(len_t i, REAL v);
-    void set(len_t i, len_t j, REAL v);
+    REAL get(const len_t i) const;
+    REAL get(const len_t i, const len_t j) const;
+    void set(const len_t i, const REAL v);
+    void set(const len_t i, const len_t j, const REAL v);
     
     bool operator==(const gpumat<REAL> &x) const;
     bool operator!=(const gpumat<REAL> &x) const;
@@ -624,7 +624,7 @@ bool gpumat<REAL>::any_nan() const
   exception.
  */
 template <typename REAL>
-REAL gpumat<REAL>::get(len_t i) const
+REAL gpumat<REAL>::get(const len_t i) const
 {
   this->check_index(i);
 
@@ -642,7 +642,7 @@ REAL gpumat<REAL>::get(len_t i) const
   exception.
  */
 template <typename REAL>
-REAL gpumat<REAL>::get(len_t i, len_t j) const
+REAL gpumat<REAL>::get(const len_t i, const len_t j) const
 {
   this->check_index(i, j);
 
@@ -662,7 +662,7 @@ REAL gpumat<REAL>::get(len_t i, len_t j) const
   exception.
  */
 template <typename REAL>
-void gpumat<REAL>::set(len_t i, REAL v)
+void gpumat<REAL>::set(const len_t i, const REAL v)
 {
   this->check_index(i);
   this->c->mem_cpu2gpu(this->data + i, &v, sizeof(REAL));
@@ -678,7 +678,7 @@ void gpumat<REAL>::set(len_t i, REAL v)
   exception.
  */
 template <typename REAL>
-void gpumat<REAL>::set(len_t i, len_t j, REAL v)
+void gpumat<REAL>::set(const len_t i, const len_t j, const REAL v)
 {
   this->check_index(i, j);
   this->c->mem_cpu2gpu(this->data + (i + this->m*j), &v, sizeof(REAL));

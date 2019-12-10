@@ -47,8 +47,8 @@ class cpuvec : public univec<T>
     void scale(const T s);
     void rev();
     
-    T get(len_t i) const;
-    void set(len_t i, T v);
+    T get(const len_t i) const;
+    void set(const len_t i, const T v);
     
     bool operator==(const cpuvec<T> &x) const;
     bool operator!=(const cpuvec<T> &x) const;
@@ -348,14 +348,14 @@ void cpuvec<T>::rev()
 // operators
 
 template <typename T>
-T cpuvec<T>::get(len_t i) const
+T cpuvec<T>::get(const len_t i) const
 {
   this->check_index(i);
   return this->data[i];
 }
 
 template <typename T>
-void cpuvec<T>::set(len_t i, T v)
+void cpuvec<T>::set(const len_t i, const T v)
 {
   this->check_index(i);
   this->data[i] = v;
