@@ -32,7 +32,7 @@ TEMPLATE_TEST_CASE("inheriting memory - vec", "[gpuvec]", float, double)
   TestType *data = (TestType*) c->mem_alloc(n*sizeof(*data));
   
   gpuvec<TestType> x(c, data, n);
-  x.fill_one();
+  x.fill_val(1);
   x.~gpuvec();
   c->mem_gpu2cpu(&test_val, data+0, 1*sizeof(test_val));
   REQUIRE( fltcmp::eq(test_val, 1) );
@@ -55,7 +55,7 @@ TEMPLATE_TEST_CASE("resize - vec", "[gpuvec]", float, double)
   
   gpuvec<TestType> x(c, n);
   REQUIRE( x.size() == n );
-  x.fill_one();
+  x.fill_val(1);
   
   n = 2;
   x.resize(n);
@@ -73,7 +73,7 @@ TEMPLATE_TEST_CASE("scale - vec", "[gpuvec]", float, double)
   len_t n = 2;
   
   gpuvec<TestType> x(c, n);
-  x.fill_one();
+  x.fill_val(1);
   
   x.scale((TestType) 3);
   REQUIRE( fltcmp::eq(x.get(0), 3) );

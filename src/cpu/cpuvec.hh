@@ -40,7 +40,6 @@ class cpuvec : public univec<T>
     void info() const;
     
     void fill_zero();
-    void fill_one();
     void fill_val(const T v);
     void fill_linspace(const T start, const T stop);
     
@@ -247,15 +246,6 @@ void cpuvec<T>::fill_zero()
 {
   const size_t len = (size_t) this->_size * sizeof(T);
   memset(this->data, 0, len);
-}
-
-
-
-/// @brief Set all values to one.
-template <typename T>
-void cpuvec<T>::fill_one()
-{
-  this->fill_val((T) 1);
 }
 
 

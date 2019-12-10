@@ -38,7 +38,6 @@ class gpuvec : public univec<T>
     void info() const;
     
     void fill_zero();
-    void fill_one();
     void fill_val(const T v);
     void fill_linspace(const T start, const T stop);
     
@@ -271,14 +270,6 @@ void gpuvec<T>::fill_zero()
 {
   size_t len = (size_t) this->_size * sizeof(T);
   this->c->mem_set(this->data, 0, len);
-}
-
-
-
-template <typename T>
-void gpuvec<T>::fill_one()
-{
-  this->fill_val((T) 1);
 }
 
 

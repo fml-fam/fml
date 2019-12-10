@@ -44,7 +44,6 @@ class gpumat : public unimat<REAL>
     void info() const;
     
     void fill_zero();
-    void fill_one();
     void fill_val(const REAL v);
     void fill_linspace(const REAL start, const REAL stop);
     void fill_eye();
@@ -372,15 +371,6 @@ void gpumat<REAL>::fill_zero()
 {
   const size_t len = (size_t) this->m * this->n * sizeof(REAL);
   this->c->mem_set(this->data, 0, len);
-}
-
-
-
-/// @brief Set all values to one.
-template <typename REAL>
-void gpumat<REAL>::fill_one()
-{
-  this->fill_val((REAL) 1);
 }
 
 

@@ -78,7 +78,7 @@ TEMPLATE_TEST_CASE("scale", "[gpumat]", float, double)
   len_t n = 2;
   
   gpumat<TestType> x(c, m, n);
-  x.fill_one();
+  x.fill_val(1);
   
   x.scale((TestType) 3);
   REQUIRE( fltcmp::eq(x.get(0), 3) );

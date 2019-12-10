@@ -100,7 +100,7 @@ TEMPLATE_TEST_CASE("scale", "[mpimat]", float, double)
   int nb = 2;
 
   mpimat<float> x(g, m, n, mb, nb);
-  x.fill_one();
+  x.fill_val(1);
 
   x.scale(3.0f);
   REQUIRE( fltcmp::eq(x.get(0), 3) );

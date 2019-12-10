@@ -29,7 +29,7 @@ TEMPLATE_TEST_CASE("inheriting memory - vec", "[cpuvec]", float, double)
   TestType *data = (TestType*) malloc(n*sizeof(*data));
   
   cpuvec<TestType> x(data, n);
-  x.fill_one();
+  x.fill_val(1);
   x.~cpuvec();
   REQUIRE( fltcmp::eq(data[0], 1) );
   
@@ -50,7 +50,7 @@ TEMPLATE_TEST_CASE("resize - vec", "[cpuvec]", float, double)
   
   cpuvec<TestType> x(n);
   REQUIRE( x.size() == n );
-  x.fill_one();
+  x.fill_val(1);
   
   n = 2;
   x.resize(n);
@@ -68,7 +68,7 @@ TEMPLATE_TEST_CASE("scale - vec", "[cpuvec]", float, double)
   len_t n = 2;
   
   cpuvec<TestType> x(n);
-  x.fill_one();
+  x.fill_val(1);
   
   x.scale((TestType) 3);
   REQUIRE( fltcmp::eq(x.get(0), 3) );
