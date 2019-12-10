@@ -22,11 +22,7 @@ TEMPLATE_TEST_CASE("basics", "[mpimat]", float, double)
   
   x.fill_zero();
   REQUIRE( fltcmp::eq(x.get(0, 0), 0) );
-  // FIXME TODO can tis be fixed to match cpumat insertion?
-  // x(0, 0) = (TestType) 3.14;
-  if (g.rank0())
-    x.data_ptr()[0] = (TestType) 3.14;
-  
+  x.set(0, 0, 3.14);
   REQUIRE( fltcmp::eq(x.get(0, 0), 3.14) );
 }
 
