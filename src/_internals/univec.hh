@@ -30,6 +30,7 @@ class univec
     len_t _size;
     T *data;
     bool free_data;
+    
     bool should_free() const {return free_data;};
     void check_index(const len_t i) const;
     void printval(const T val, uint8_t ndigits) const;

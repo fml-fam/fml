@@ -39,6 +39,7 @@ class unimat
     len_t n;
     REAL *data;
     bool free_data;
+    
     bool should_free() const {return free_data;};
     void check_index(const len_t i) const;
     void check_index(const len_t i, const len_t j) const;
