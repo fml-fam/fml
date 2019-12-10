@@ -97,7 +97,8 @@ class mpimat : public unimat<REAL>
     
   private:
     void free();
-    void check_params(const grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols);
+    void check_params(len_t nrows, len_t ncols, int bf_rows, int bf_cols);
+    void check_grid(const grid &blacs_grid);
     REAL get_val_from_global_index(len_t gi, len_t gj) const;
     void copy_colchunk_to_buf(const len_t len, REAL *buf, const len_t row_offset, const len_t column);
     void copy_buf_to_colchunk(const len_t len, REAL *buf, const len_t row_offset, const len_t column);
@@ -124,6 +125,8 @@ class mpimat : public unimat<REAL>
 template <typename REAL>
 mpimat<REAL>::mpimat(const grid &blacs_grid)
 {
+  check_grid(blacs_grid);
+  
   this->m = 0;
   this->n = 0;
   this->m_local = 0;
@@ -158,6 +161,8 @@ mpimat<REAL>::mpimat(const grid &blacs_grid)
 template <typename REAL>
 mpimat<REAL>::mpimat(const grid &blacs_grid, int bf_rows, int bf_cols)
 {
+  check_grid(blacs_grid);
+  
   this->m = 0;
   this->n = 0;
   this->m_local = 0;
@@ -193,7 +198,8 @@ mpimat<REAL>::mpimat(const grid &blacs_grid, int bf_rows, int bf_cols)
 template <typename REAL>
 mpimat<REAL>::mpimat(const grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols)
 {
-  check_params(blacs_grid, nrows, ncols, bf_rows, bf_cols);
+  check_params(nrows, ncols, bf_rows, bf_cols);
+  check_grid(blacs_grid);
   
   this->m_local = bcutils::numroc(nrows, bf_rows, blacs_grid.myrow(), 0, blacs_grid.nprow());
   this->n_local = bcutils::numroc(ncols, bf_cols, blacs_grid.mycol(), 0, blacs_grid.npcol());
@@ -234,7 +240,8 @@ mpimat<REAL>::mpimat(const grid &blacs_grid, len_t nrows, len_t ncols, int bf_ro
 template <typename REAL>
 mpimat<REAL>::mpimat(const grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct)
 {
-  check_params(blacs_grid, nrows, ncols, bf_rows, bf_cols);
+  check_params(nrows, ncols, bf_rows, bf_cols);
+  check_grid(blacs_grid);
   
   this->m_local = bcutils::numroc(nrows, bf_rows, blacs_grid.myrow(), 0, blacs_grid.nprow());
   this->n_local = bcutils::numroc(ncols, bf_cols, blacs_grid.mycol(), 0, blacs_grid.npcol());
@@ -300,7 +307,7 @@ mpimat<REAL>::~mpimat()
 template <typename REAL>
 void mpimat<REAL>::resize(len_t nrows, len_t ncols)
 {
-  check_params(this->g, nrows, ncols, this->mb, this->nb);
+  check_params(nrows, ncols, this->mb, this->nb);
   
   const size_t len = (size_t) nrows * ncols * sizeof(REAL);
   const size_t oldlen = (size_t) this->m * this->n * sizeof(REAL);
@@ -348,7 +355,7 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols)
 template <typename REAL>
 void mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
 {
-  check_params(this->g, nrows, ncols, bf_rows, bf_cols);
+  check_params(nrows, ncols, bf_rows, bf_cols);
   
   const size_t len = (size_t) nrows * ncols * sizeof(REAL);
   const size_t oldlen = (size_t) this->m * this->n * sizeof(REAL);
@@ -401,7 +408,8 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
 template <typename REAL>
 void mpimat<REAL>::inherit(grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct)
 {
-  check_params(blacs_grid, nrows, ncols, bf_rows, bf_cols);
+  check_params(nrows, ncols, bf_rows, bf_cols);
+  check_grid(blacs_grid);
   
   this->free();
   
@@ -1183,16 +1191,22 @@ void mpimat<REAL>::free()
 
 
 template <typename REAL>
-void mpimat<REAL>::check_params(const grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols)
+void mpimat<REAL>::check_params(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
 {
-  if (!blacs_grid.valid_grid())
-    throw std::runtime_error("invalid blacs grid");
-  
   if (nrows < 0 || ncols < 0)
     throw std::runtime_error("invalid dimensions");
   
   if (bf_rows <= 0 || bf_cols <= 0)
     throw std::runtime_error("invalid blocking factor");
+}
+
+
+
+template <typename REAL>
+void mpimat<REAL>::check_grid(const grid &blacs_grid)
+{
+  if (!blacs_grid.valid_grid())
+    throw std::runtime_error("invalid blacs grid");
 }
 
 
