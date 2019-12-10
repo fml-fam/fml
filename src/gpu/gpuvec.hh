@@ -13,6 +13,7 @@
 #include "../_internals/univec.hh"
 
 #include "internals/launcher.hh"
+#include "internals/gpuscalar.hh"
 
 #include "card.hh"
 #include "kernelfuns.hh"
@@ -354,14 +355,11 @@ bool gpuvec<T>::operator==(const gpuvec<T> &x) const
     return true;
   
   int all_eq = 1;
-  int *all_eq_gpu = (int*) this->c->mem_alloc(sizeof(*all_eq_gpu));
-  this->c->mem_cpu2gpu(all_eq_gpu, &all_eq, sizeof(all_eq));
+  gpuscalar<int> all_eq_gpu(c, all_eq);
   
-  kernelfuns::kernel_all_eq<<<dim_grid, dim_block>>>(this->_size, 1, this->data, x.data_ptr(), all_eq_gpu);
+  kernelfuns::kernel_all_eq<<<dim_grid, dim_block>>>(this->_size, 1, this->data, x.data_ptr(), all_eq_gpu.data_ptr());
   
-  this->c->mem_gpu2cpu(&all_eq, all_eq_gpu, sizeof(all_eq));
-  this->c->mem_free(all_eq_gpu);
-  
+  all_eq_gpu.get_val(&all_eq);
   this->c->check();
   
   return (bool) all_eq;

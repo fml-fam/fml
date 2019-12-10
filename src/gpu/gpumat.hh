@@ -14,6 +14,7 @@
 #include "../_internals/unimat.hh"
 
 #include "internals/launcher.hh"
+#include "internals/gpuscalar.hh"
 
 #include "card.hh"
 #include "kernelfuns.hh"
@@ -578,14 +579,11 @@ template <typename REAL>
 bool gpumat<REAL>::any_inf() const
 {
   int has_inf = 0;
-  int *has_inf_gpu = (int*) this->c->mem_alloc(sizeof(*has_inf_gpu));
-  this->c->mem_cpu2gpu(has_inf_gpu, &has_inf, sizeof(has_inf));
+  gpuscalar<int> has_inf_gpu(c, has_inf);
   
-  kernelfuns::kernel_any_inf<<<dim_grid, dim_block>>>(this->m, this->n, this->data, has_inf_gpu);
+  kernelfuns::kernel_any_inf<<<dim_grid, dim_block>>>(this->m, this->n, this->data, has_inf_gpu.data_ptr());
   
-  this->c->mem_gpu2cpu(&has_inf, has_inf_gpu, sizeof(has_inf));
-  this->c->mem_free(has_inf_gpu);
-  
+  has_inf_gpu.get_val(&has_inf);
   this->c->check();
   
   return (bool) has_inf;
@@ -597,14 +595,11 @@ template <typename REAL>
 bool gpumat<REAL>::any_nan() const
 {
   int has_nan = 0;
-  int *has_nan_gpu = (int*) this->c->mem_alloc(sizeof(*has_nan_gpu));
-  this->c->mem_cpu2gpu(has_nan_gpu, &has_nan, sizeof(has_nan));
+  gpuscalar<int> has_nan_gpu(c, has_nan);
   
-  kernelfuns::kernel_any_nan<<<dim_grid, dim_block>>>(this->m, this->n, this->data, has_nan_gpu);
+  kernelfuns::kernel_any_nan<<<dim_grid, dim_block>>>(this->m, this->n, this->data, has_nan_gpu.data_ptr());
   
-  this->c->mem_gpu2cpu(&has_nan, has_nan_gpu, sizeof(has_nan));
-  this->c->mem_free(has_nan_gpu);
-  
+  has_nan_gpu.get_val(&has_nan);
   this->c->check();
   
   return (bool) has_nan;
@@ -706,14 +701,11 @@ bool gpumat<T>::operator==(const gpumat<T> &x) const
     return true;
   
   int all_eq = 1;
-  int *all_eq_gpu = (int*) this->c->mem_alloc(sizeof(*all_eq_gpu));
-  this->c->mem_cpu2gpu(all_eq_gpu, &all_eq, sizeof(all_eq));
+  gpuscalar<int> all_eq_gpu(c, all_eq);
   
-  kernelfuns::kernel_all_eq<<<dim_grid, dim_block>>>(this->m, this->n, this->data, x.data_ptr(), all_eq_gpu);
+  kernelfuns::kernel_all_eq<<<dim_grid, dim_block>>>(this->m, this->n, this->data, x.data_ptr(), all_eq_gpu.data_ptr());
   
-  this->c->mem_gpu2cpu(&all_eq, all_eq_gpu, sizeof(all_eq));
-  this->c->mem_free(all_eq_gpu);
-  
+  all_eq_gpu.get_val(&all_eq);
   this->c->check();
   
   return (bool) all_eq;
