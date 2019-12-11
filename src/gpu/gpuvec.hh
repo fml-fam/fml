@@ -19,6 +19,11 @@
 #include "kernelfuns.hh"
 
 
+/**
+  @brief Vector class for data held on a single GPU.
+  
+  @tparam T should be 'int', '__half', 'float' or 'double'.
+ */
 template <typename T>
 class gpuvec : public univec<T>
 {
@@ -76,6 +81,16 @@ class gpuvec : public univec<T>
 
 // constructors/destructor
 
+/**
+  @brief Construct vector object with no internal allocated storage.
+  
+  @param[in] gpu Shared pointer to GPU card object.
+  
+  @code
+  auto c = gpuhelpers::new_card(0);
+  gpuvec<float> x(c);
+  @endcode
+ */
 template <typename T>
 gpuvec<T>::gpuvec(std::shared_ptr<card> gpu)
 {
@@ -91,6 +106,20 @@ gpuvec<T>::gpuvec(std::shared_ptr<card> gpu)
 
 
 
+/**
+  @brief Construct vector object with no internal allocated storage.
+  
+  @param[in] gpu Shared pointer to GPU card object.
+  @param[in] size Number elements of the vector.
+  
+  @except If the allocation fails, a `bad_alloc` exception will be thrown.
+  If the input values are invalid, a `runtime_error` exception will be thrown.
+  
+  @code
+  auto c = gpuhelpers::new_card(0);
+  gpuvec<float> x(c, 5);
+  @endcode
+ */
 template <typename T>
 gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, len_t size)
 {
@@ -112,6 +141,19 @@ gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, len_t size)
 
 
 
+/**
+  @brief Construct vector object with inherited data. Essentially the same as
+  using the minimal constructor and immediately calling the `inherit()` method.
+  
+  @param[in] gpu Shared pointer to GPU card object.
+  @param[in] data_ Storage array.
+  @param[in] size Number elements of the array.
+  @param[in] free_on_destruct Should the inherited array `data_` be freed when
+  the vector object is destroyed?
+  
+  @except If the input values are invalid, a `runtime_error` exception will be
+  thrown.
+ */
 template <typename T>
 gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, T *data_, len_t size, bool free_on_destruct)
 {
@@ -158,6 +200,16 @@ gpuvec<T>::~gpuvec()
 
 // memory management
 
+/**
+  @brief Resize the internal object storage.
+  
+  @param[in] size Length of the vector needed.
+  
+  @allocs Resizing triggers a re-allocation.
+  
+  @except If the reallocation fails, a `bad_alloc` exception will be thrown.
+  If the input values are invalid, a `runtime_error` exception will be thrown.
+ */
 template <typename T>
 void gpuvec<T>::resize(len_t size)
 {
@@ -185,6 +237,17 @@ void gpuvec<T>::resize(len_t size)
 
 
 
+/**
+  @brief Resize the internal object storage.
+  
+  @param[in] gpu Shared pointer to GPU card object.
+  @param[in] size Length of the vector needed.
+  
+  @allocs Resizing triggers a re-allocation.
+  
+  @except If the reallocation fails, a `bad_alloc` exception will be thrown.
+  If the input values are invalid, a `runtime_error` exception will be thrown.
+ */
 template <typename T>
 void gpuvec<T>::resize(std::shared_ptr<card> gpu, len_t size)
 {
@@ -198,6 +261,14 @@ void gpuvec<T>::resize(std::shared_ptr<card> gpu, len_t size)
 
 
 
+/**
+  @brief Update the internal GPU card object to point to the specified one.
+  
+  @param[in] gpu Shared pointer to GPU card object.
+  
+  @except If the input values are invalid, a `runtime_error` exception will be
+  thrown.
+ */
 template <typename T>
 void gpuvec<T>::inherit(std::shared_ptr<card> gpu)
 {
@@ -213,6 +284,19 @@ void gpuvec<T>::inherit(std::shared_ptr<card> gpu)
 
 
 
+/**
+  @brief Set the internal object storage to the specified array.
+  
+  @param[in] gpu Shared pointer to GPU card object.
+  @param[in] data Value storage.
+  @param[in] size Length of the vector. Should match the length of the input
+  `data`.
+  @param[in] free_on_destruct Should the object destructor free the internal
+  array `data`?
+  
+  @except If the input values are invalid, a `runtime_error` exception will be
+  thrown.
+ */
 template <typename T>
 void gpuvec<T>::inherit(std::shared_ptr<card> gpu, T *data, len_t size, bool free_on_destruct)
 {
@@ -234,6 +318,7 @@ void gpuvec<T>::inherit(std::shared_ptr<card> gpu, T *data, len_t size, bool fre
 
 
 
+/// @brief Duplicate the object in a deep copy.
 template <typename T>
 gpuvec<T> gpuvec<T>::dupe() const
 {
@@ -249,6 +334,12 @@ gpuvec<T> gpuvec<T>::dupe() const
 
 // printers
 
+/**
+  @brief Copy data from a CPU object to another.
+  
+  @param[in] ndigits Number of decimal digits to print.
+  @param[in] add_final_blank Should a final blank line be printed?
+ */
 template <typename REAL>
 void gpuvec<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 {
@@ -265,6 +356,7 @@ void gpuvec<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 
 
 
+/// @brief Print some brief information about the object.
 template <typename T>
 void gpuvec<T>::info() const
 {
@@ -278,6 +370,7 @@ void gpuvec<T>::info() const
 
 // fillers
 
+/// @brief Set all values to zero.
 template <typename T>
 void gpuvec<T>::fill_zero()
 {
@@ -287,6 +380,11 @@ void gpuvec<T>::fill_zero()
 
 
 
+/**
+  @brief Set all values to input value.
+  
+  @param[in] v Value to set all data values to.
+ */
 template <typename T>
 void gpuvec<T>::fill_val(const T v)
 {
@@ -296,6 +394,11 @@ void gpuvec<T>::fill_val(const T v)
 
 
 
+/**
+  @brief Set values to linearly spaced numbers.
+  
+  @param[in] start,stop Beginning/ending numbers.
+ */
 template <typename T>
 void gpuvec<T>::fill_linspace(const T start, const T stop)
 {
@@ -305,6 +408,11 @@ void gpuvec<T>::fill_linspace(const T start, const T stop)
 
 
 
+/**
+  @brief Multiply all values by the input value.
+  
+  @param[in] s Scaling value.
+ */
 template <typename T>
 void gpuvec<T>::scale(const T s)
 {
@@ -314,6 +422,7 @@ void gpuvec<T>::scale(const T s)
 
 
 
+/// @brief Reverse the vector.
 template <typename T>
 void gpuvec<T>::rev()
 {
@@ -325,6 +434,14 @@ void gpuvec<T>::rev()
 
 // operators
 
+/**
+  @brief Get the specified value.
+  
+  @param[in] i The index of the desired value, 0-indexed.
+  
+  @except If indices are out of bounds, the method will throw a `runtime_error`
+  exception.
+ */
 template <typename T>
 T gpuvec<T>::get(const len_t i) const
 {
@@ -335,6 +452,15 @@ T gpuvec<T>::get(const len_t i) const
   return ret;
 }
 
+/**
+  @brief Set the storage at the specified index with the provided value.
+  
+  @param[in] i The index of the desired value, 0-indexed.
+  @param[in] v Setter value.
+  
+  @except If indices are out of bounds, the method will throw a `runtime_error`
+  exception.
+ */
 template <typename T>
 void gpuvec<T>::set(const len_t i, const T v)
 {
@@ -344,6 +470,14 @@ void gpuvec<T>::set(const len_t i, const T v)
 
 
 
+/**
+  @brief See if the two objects are the same.
+  
+  @param[in] Comparison object.
+  @return If the sizes mismatch, then `false` is necessarily returned. Next,
+  if the pointer to the internal storage arrays match, then `true` is
+  necessarily returned. Otherwise the objects are compared value by value.
+ */
 template <typename T>
 bool gpuvec<T>::operator==(const gpuvec<T> &x) const
 {
@@ -365,6 +499,12 @@ bool gpuvec<T>::operator==(const gpuvec<T> &x) const
   return (bool) all_eq;
 }
 
+/**
+  @brief See if the two objects are not the same. Uses same internal logic as
+  the `==` method.
+  
+  @param[in] Comparison object.
+ */
 template <typename T>
 bool gpuvec<T>::operator!=(const gpuvec<T> &x) const
 {
@@ -373,6 +513,12 @@ bool gpuvec<T>::operator!=(const gpuvec<T> &x) const
 
 
 
+/**
+  @brief Operator that sets the LHS to a shallow copy of the input. Desctruction
+  of the LHS object will not result in the internal array storage being freed.
+  
+  @param[in] x Setter value.
+ */
 template <typename T>
 gpuvec<T>& gpuvec<T>::operator=(const gpuvec<T> &x)
 {
