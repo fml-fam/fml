@@ -78,27 +78,33 @@ class grid
     bool ingrid() const;
     
     // send/recv
-    void send(const int m, const int n, const int *x, const int rdest=0, const int cdest=0) const;
-    void send(const int m, const int n, const float *x, const int rdest=0, const int cdest=0) const;
+    void send(const int m, const int n, const int *x,    const int rdest=0, const int cdest=0) const;
+    void send(const int m, const int n, const float *x,  const int rdest=0, const int cdest=0) const;
     void send(const int m, const int n, const double *x, const int rdest=0, const int cdest=0) const;
+    void send(const int m, const int n, const int ldx, const int *x,    const int rdest=0, const int cdest=0) const;
+    void send(const int m, const int n, const int ldx, const float *x,  const int rdest=0, const int cdest=0) const;
+    void send(const int m, const int n, const int ldx, const double *x, const int rdest=0, const int cdest=0) const;
     
-    void recv(const int m, const int n, int *x, const int rsrc=0, const int csrc=0) const;
-    void recv(const int m, const int n, float *x, const int rsrc=0, const int csrc=0) const;
+    void recv(const int m, const int n, int *x,    const int rsrc=0, const int csrc=0) const;
+    void recv(const int m, const int n, float *x,  const int rsrc=0, const int csrc=0) const;
     void recv(const int m, const int n, double *x, const int rsrc=0, const int csrc=0) const;
+    void recv(const int m, const int n, const int ldx, int *x,    const int rsrc=0, const int csrc=0) const;
+    void recv(const int m, const int n, const int ldx, float *x,  const int rsrc=0, const int csrc=0) const;
+    void recv(const int m, const int n, const int ldx, double *x, const int rsrc=0, const int csrc=0) const;
     
     // collectives
     void barrier(const char scope) const;
     
-    void allreduce(const int m, const int n, int *x, const char scope='A', const blacsops op=BLACS_SUM) const;
-    void allreduce(const int m, const int n, float *x, const char scope='A', const blacsops op=BLACS_SUM) const;
+    void allreduce(const int m, const int n, int *x,    const char scope='A', const blacsops op=BLACS_SUM) const;
+    void allreduce(const int m, const int n, float *x,  const char scope='A', const blacsops op=BLACS_SUM) const;
     void allreduce(const int m, const int n, double *x, const char scope='A', const blacsops op=BLACS_SUM) const;
     
-    void reduce(const int m, const int n, int *x, const char scope='A', const blacsops op=BLACS_SUM, const int rdest=0, const int cdest=0) const;
-    void reduce(const int m, const int n, float *x, const char scope='A', const blacsops op=BLACS_SUM, const int rdest=0, const int cdest=0) const;
+    void reduce(const int m, const int n, int *x,    const char scope='A', const blacsops op=BLACS_SUM, const int rdest=0, const int cdest=0) const;
+    void reduce(const int m, const int n, float *x,  const char scope='A', const blacsops op=BLACS_SUM, const int rdest=0, const int cdest=0) const;
     void reduce(const int m, const int n, double *x, const char scope='A', const blacsops op=BLACS_SUM, const int rdest=0, const int cdest=0) const;
     
-    void bcast(const int m, const int n, int *x, const char scope='A', const int rsrc=0, const int csrc=0) const;
-    void bcast(const int m, const int n, float *x, const char scope='A', const int rsrc=0, const int csrc=0) const;
+    void bcast(const int m, const int n, int *x,    const char scope='A', const int rsrc=0, const int csrc=0) const;
+    void bcast(const int m, const int n, float *x,  const char scope='A', const int rsrc=0, const int csrc=0) const;
     void bcast(const int m, const int n, double *x, const char scope='A', const int rsrc=0, const int csrc=0) const;
     
     
@@ -301,7 +307,8 @@ inline bool grid::ingrid() const
 /**
   @brief Point-to-point send. Should be matched by a corresponding 'recv' call.
   
-  @param[in] m,n Dimensions (number of rows/cols) of the data 'x'.
+  @param[in] m,n Dimensions (number of rows/cols) of the data `x`.
+  @param[in] ldx Leading dimension of matrix `x`.
   @param[in] x The data to send.
   @param[in] rdest,cdest The row/col destination in the BLACS grid.
  */
@@ -319,6 +326,21 @@ inline void grid::send(const int m, const int n, const float *x, const int rdest
 inline void grid::send(const int m, const int n, const double *x, const int rdest, const int cdest) const
 {
   Cdgesd2d(_ictxt, m, n, x, m, rdest, cdest);
+}
+
+inline void grid::send(const int m, const int n, const int ldx, const int *x, const int rdest, const int cdest) const
+{
+  Cigesd2d(_ictxt, m, n, x, ldx, rdest, cdest);
+}
+
+inline void grid::send(const int m, const int n, const int ldx, const float *x, const int rdest, const int cdest) const
+{
+  Csgesd2d(_ictxt, m, n, x, ldx, rdest, cdest);
+}
+
+inline void grid::send(const int m, const int n, const int ldx, const double *x, const int rdest, const int cdest) const
+{
+  Cdgesd2d(_ictxt, m, n, x, ldx, rdest, cdest);
 }
 ///@}
 
@@ -346,6 +368,21 @@ inline void grid::recv(const int m, const int n, float *x, const int rsrc, const
 inline void grid::recv(const int m, const int n, double *x, const int rsrc, const int csrc) const
 {
   Cdgerv2d(_ictxt, m, n, x, m, rsrc, csrc);
+}
+
+inline void grid::recv(const int m, const int n, const int ldx, int *x, const int rsrc, const int csrc) const
+{
+  Cigerv2d(_ictxt, m, n, x, ldx, rsrc, csrc);
+}
+
+inline void grid::recv(const int m, const int n, const int ldx, float *x, const int rsrc, const int csrc) const
+{
+  Csgerv2d(_ictxt, m, n, x, ldx, rsrc, csrc);
+}
+
+inline void grid::recv(const int m, const int n, const int ldx, double *x, const int rsrc, const int csrc) const
+{
+  Cdgerv2d(_ictxt, m, n, x, ldx, rsrc, csrc);
 }
 ///@}
 
