@@ -66,6 +66,13 @@ class cpuvec : public univec<T>
 
 // constructors/destructor
 
+/**
+  @brief Construct vector object with no internal allocated storage.
+  
+  @code
+  cpuvec<float> x();
+  @endcode
+ */
 template <typename T>
 cpuvec<T>::cpuvec()
 {
@@ -77,6 +84,18 @@ cpuvec<T>::cpuvec()
 
 
 
+/**
+  @brief Construct vector object with no internal allocated storage.
+  
+  @param[in] size Number elements of the vector.
+  
+  @except If the allocation fails, a `bad_alloc` exception will be thrown.
+  If the input values are invalid, a `runtime_error` exception will be thrown.
+  
+  @code
+  cpuvec<float> x(5);
+  @endcode
+ */
 template <typename T>
 cpuvec<T>::cpuvec(len_t size)
 {
@@ -94,6 +113,18 @@ cpuvec<T>::cpuvec(len_t size)
 
 
 
+/**
+  @brief Construct vector object with inherited data. Essentially the same as
+  using the minimal constructor and immediately calling the `inherit()` method.
+  
+  @param[in] data_ Storage array.
+  @param[in] size Number elements of the array.
+  @param[in] free_on_destruct Should the inherited array `data_` be freed when
+  the vector object is destroyed?
+  
+  @except If the input values are invalid, a `runtime_error` exception will be
+  thrown.
+ */
 template <typename T>
 cpuvec<T>::cpuvec(T *data_, len_t size, bool free_on_destruct)
 {
@@ -337,6 +368,14 @@ void cpuvec<T>::rev()
 
 // operators
 
+/**
+  @brief Get the specified value.
+  
+  @param[in] i The index of the desired value, 0-indexed.
+  
+  @except If indices are out of bounds, the method will throw a `runtime_error`
+  exception.
+ */
 template <typename T>
 T cpuvec<T>::get(const len_t i) const
 {
@@ -344,6 +383,15 @@ T cpuvec<T>::get(const len_t i) const
   return this->data[i];
 }
 
+/**
+  @brief Set the storage at the specified index with the provided value.
+  
+  @param[in] i The index of the desired value, 0-indexed.
+  @param[in] v Setter value.
+  
+  @except If indices are out of bounds, the method will throw a `runtime_error`
+  exception.
+ */
 template <typename T>
 void cpuvec<T>::set(const len_t i, const T v)
 {
@@ -353,6 +401,14 @@ void cpuvec<T>::set(const len_t i, const T v)
 
 
 
+/**
+  @brief See if the two objects are the same.
+  
+  @param[in] Comparison object.
+  @return If the sizes mismatch, then `false` is necessarily returned. Next,
+  if the pointer to the internal storage arrays match, then `true` is
+  necessarily returned. Otherwise the objects are compared value by value.
+ */
 template <typename T>
 bool cpuvec<T>::operator==(const cpuvec<T> &x) const
 {
@@ -371,6 +427,12 @@ bool cpuvec<T>::operator==(const cpuvec<T> &x) const
   return true;
 }
 
+/**
+  @brief See if the two objects are not the same. Uses same internal logic as
+  the `==` method.
+  
+  @param[in] Comparison object.
+ */
 template <typename T>
 bool cpuvec<T>::operator!=(const cpuvec<T> &x) const
 {
@@ -379,6 +441,12 @@ bool cpuvec<T>::operator!=(const cpuvec<T> &x) const
 
 
 
+/**
+  @brief Operator that sets the LHS to a shallow copy of the input. Desctruction
+  of the LHS object will not result in the internal array storage being freed.
+  
+  @param[in] x Setter value.
+ */
 template <typename T>
 cpuvec<T>& cpuvec<T>::operator=(const cpuvec<T> &x)
 {
