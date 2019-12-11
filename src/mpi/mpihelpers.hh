@@ -150,10 +150,7 @@ namespace mpihelpers
     REAL_OUT *gbl = cpu.data_ptr();
     const REAL_IN *sub = mpi.data_ptr();
     
-    cpuvec<REAL_IN> buf_vec(mb);
-    REAL_IN *buf = buf_vec.data_ptr();
-    
-    for (len_t gj=0; gj<n; gj++)
+    for (len_t gj=0; gj<n; gj+=nb)
     {
       const int pc = bcutils::g2p(gj, nb, g.npcol());
       const int j = bcutils::g2l(gj, nb, g.npcol());
@@ -163,23 +160,21 @@ namespace mpihelpers
         const int pr = bcutils::g2p(gi, mb, g.nprow());
         const int i = bcutils::g2l(gi, mb, g.nprow());
         
-        const int copylen = std::min(mb, m-gi);
+        const int row_copylen = std::min(mb, m-gi);
+        const int col_copylen = std::min(nb, n-gj);
         
         if (i_am_ret)
         {
           if (pr == g.myrow() && pc == g.mycol())
-            arraytools::copy(copylen, sub + i+m_local*j, gbl + gi+m*gj);
-          else
           {
-            g.recv(copylen, 1, buf, pr, pc);
-            arraytools::copy(copylen, buf, gbl + gi+m*j);
+            for (int jj=0; jj<col_copylen; jj++)
+              arraytools::copy(row_copylen, sub + i+m_local*(j+jj), gbl + gi+m*(gj+jj));
           }
+          else
+            g.recv(row_copylen, col_copylen, m, gbl + gi+m*j, pr, pc);
         }
         else if (pr == g.myrow() && pc == g.mycol())
-        {
-          arraytools::copy(copylen, sub + i+m_local*j, buf);
-          g.send(copylen, 1, buf, rdest, cdest);
-        }
+          g.send(row_copylen, col_copylen, m_local, sub + i+m_local*j, rdest, cdest);
       }
     }
   }
