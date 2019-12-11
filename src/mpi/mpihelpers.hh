@@ -12,6 +12,7 @@
 #include "../arraytools/src/arraytools.hpp"
 
 #include "../cpu/cpumat.hh"
+#include "../cpu/cpuvec.hh"
 
 #include "internals/bcutils.hh"
 #include "grid.hh"
@@ -91,6 +92,106 @@ namespace mpihelpers
   {
     cpumat<REAL> cpu;
     mpi2cpu_all(mpi, cpu);
+    
+    return cpu;
+  }
+  
+  
+  
+  /**
+    @brief Copy data from an MPI object to a CPU object.
+    
+    @details The process at grid positiong (rdest, cdest) will receive the full
+    matrix.
+    
+    @param[in] mpi Input data.
+    @param[out] cpu Output. Dimensions should match those of the input
+    data. If not, the matrix will automatically be resized.
+    @param[in] rdest,cdest Row/column position in the communicator grid of the
+    receiving process.
+    
+    @allocs If the output dimensions do not match those of the input, the
+    internal data will automatically be re-allocated. Each process also needs
+    temporary storage of the size `mpi.bf_rows()`.
+    
+    @except If an allocation or reallocation is triggered and fails, a
+    `bad_alloc` exception will be thrown.
+    
+    @comm The method will communicate across all processes in the BLACS grid.
+    
+    @tparam REAL_IN,REAL_OUT Should be `float` or `double`. They do not have to
+    be the same type.
+  */
+  template <typename REAL_IN, typename REAL_OUT>
+  void mpi2cpu(const mpimat<REAL_IN> &mpi, cpumat<REAL_OUT> &cpu, int rdest=0, int cdest=0)
+  {
+    grid g = mpi.get_grid();
+    if (!g.ingrid())
+      return;
+    
+    bool i_am_ret = (g.myrow() == rdest && g.mycol() == cdest) ? true : false;
+    
+    len_local_t m_local = mpi.nrows_local();
+    
+    int mb = mpi.bf_rows();
+    int nb = mpi.bf_cols();
+    
+    len_t m = mpi.nrows();
+    len_t n = mpi.ncols();
+    
+    if (i_am_ret)
+    {
+      if (m != cpu.nrows() || n != cpu.ncols())
+        cpu.resize(m, n);
+      
+      cpu.fill_zero();
+    }
+    
+    REAL_OUT *gbl = cpu.data_ptr();
+    const REAL_IN *sub = mpi.data_ptr();
+    
+    cpuvec<REAL_IN> buf_vec(mb);
+    REAL_IN *buf = buf_vec.data_ptr();
+    
+    for (len_t gj=0; gj<n; gj++)
+    {
+      const int pc = bcutils::g2p(gj, nb, g.npcol());
+      const int j = bcutils::g2l(gj, nb, g.npcol());
+      
+      for (len_t gi=0; gi<m; gi+=mb)
+      {
+        const int pr = bcutils::g2p(gi, mb, g.nprow());
+        const int i = bcutils::g2l(gi, mb, g.nprow());
+        
+        const int copylen = std::min(mb, m-gi);
+        
+        if (i_am_ret)
+        {
+          if (pr == g.myrow() && pc == g.mycol())
+            arraytools::copy(copylen, sub + i+m_local*j, gbl + gi+m*gj);
+          else
+          {
+            g.recv(copylen, 1, buf, pr, pc);
+            arraytools::copy(copylen, buf, gbl + gi+m*j);
+          }
+        }
+        else if (pr == g.myrow() && pc == g.mycol())
+        {
+          arraytools::copy(copylen, sub + i+m_local*j, buf);
+          g.send(copylen, 1, buf, rdest, cdest);
+        }
+      }
+    }
+  }
+  
+  
+  
+  /// \overload
+  template <typename REAL>
+  cpumat<REAL> mpi2cpu(const mpimat<REAL> &mpi)
+  {
+    cpumat<REAL> cpu;
+    mpi2cpu(mpi, cpu);
     
     return cpu;
   }
