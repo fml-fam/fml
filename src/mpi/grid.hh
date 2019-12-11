@@ -75,6 +75,7 @@ class grid
     void printf(const int row, const int col, const char *fmt, ...) const;
     void info() const;
     bool rank0() const;
+    bool ingrid() const;
     
     // send/recv
     void send(const int m, const int n, const int *x, const int rdest=0, const int cdest=0) const;
@@ -280,6 +281,17 @@ inline void grid::info() const
 inline bool grid::rank0() const
 {
   return (_myrow==0 && _mycol==0);
+}
+
+
+
+/**
+  @brief Check if the executing process is in the grid, i.e., if neither the
+  process row nor column are -1.
+ */
+inline bool grid::ingrid() const
+{
+  return !(_myrow==-1 && _mycol==-1);
 }
 
 
