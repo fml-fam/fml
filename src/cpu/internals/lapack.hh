@@ -145,6 +145,20 @@ namespace lapack
   {
     dgesv_(&n, &nrhs, a, &lda, ipiv, b, &ldb, info);
   }
+  
+  
+  
+  inline void lacpy(const char uplo, const int m, const int n, const float *a,
+    const int lda, float *b, const int ldb)
+  {
+    slacpy_(&uplo, &m, &n, a, &lda, b, &ldb);
+  }
+  
+  inline void lacpy(const char uplo, const int m, const int n, const double *a,
+    const int lda, double *b, const int ldb)
+  {
+    dlacpy_(&uplo, &m, &n, a, &lda, b, &ldb);
+  }
 }
 
 

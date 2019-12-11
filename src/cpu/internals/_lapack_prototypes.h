@@ -119,6 +119,14 @@ extern void dgesv_(const int *n, const int *restrict nrhs, double *restrict a,
   int *restrict info);
 
 
+
+extern void slacpy_(const char *uplo, const int *m, const int *n,
+  const float *restrict a, const int *lda, float *restrict b, const int *ldb);
+
+extern void dlacpy_(const char *uplo, const int *m, const int *n,
+  const double *restrict a, const int *lda, double *restrict b, const int *ldb);
+
+
 #ifdef __cplusplus
 }
 #endif
