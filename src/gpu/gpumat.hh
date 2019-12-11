@@ -13,7 +13,8 @@
 #include "../_internals/types.hh"
 #include "../_internals/unimat.hh"
 
-#include "internals/launcher.hh"
+#include "arch/arch.hh"
+
 #include "internals/gpuscalar.hh"
 
 #include "card.hh"

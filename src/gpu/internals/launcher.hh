@@ -7,35 +7,7 @@
 #pragma once
 
 
-#include <cstdarg>
 #include "../../_internals/types.hh"
-
-#if (!defined(FML_USE_CUDA) && !defined(FML_USE_HIP))
-  #define FML_USE_CUDA
-#endif
-
-#if (defined(FML_USE_CUDA))
-  #include "cuda/culapack.hh"
-  #include "cuda/gpuprims.hh"
-  #include "cuda/nvml.hh"
-  #include "cuda/types.hh"
-#elif defined(FML_USE_HIP)
-  #error "HIP is currently unsupported"
-#else
-  #error "Unsupported kernel launcher"
-#endif
-
-
-#if defined(FML_USE_CUDA)
-  #define FML_LAUNCH_KERNEL(FML_KERNEL, FML_GRIDSIZE, FML_BLOCKSIZE, ...) \
-  FML_KERNEL<<<FML_GRIDSIZE, FML_BLOCKSIZE>>>(__VA_ARGS__)
-#elif defined(FML_USE_HIP)
-  #define FML_LAUNCH_KERNEL(FML_KERNEL, FML_GRIDSIZE, FML_BLOCKSIZE, ...) \
-  hipLaunchKernelGGL(FML_KERNEL, FML_GRIDSIZE, FML_BLOCKSIZE, 0, 0, __VA_ARGS__)
-#else
-  #error "Unsupported kernel launcher"
-#endif
-
 
 
 namespace kernel_launcher

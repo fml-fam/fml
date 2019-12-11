@@ -7,8 +7,6 @@
 #pragma once
 
 
-#include "launcher.hh"
-
 #include "../card.hh"
 
 

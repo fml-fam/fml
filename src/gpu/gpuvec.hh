@@ -12,6 +12,8 @@
 
 #include "../_internals/univec.hh"
 
+#include "arch/arch.hh"
+
 #include "internals/launcher.hh"
 #include "internals/gpuscalar.hh"
 

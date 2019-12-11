@@ -12,7 +12,8 @@
 
 #include "../_internals/linalgutils.hh"
 
-#include "internals/launcher.hh"
+#include "arch/arch.hh"
+
 #include "internals/gpuscalar.hh"
 
 #include "gpuhelpers.hh"
