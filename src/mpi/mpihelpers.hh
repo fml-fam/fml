@@ -239,6 +239,7 @@ namespace mpihelpers
       {
         const int gj = bcutils::l2g(j, mpi.bf_cols(), g.npcol(), g.mycol());
         
+        #pragma omp for simd
         for (len_local_t i=0; i<m_local; i++)
         {
           const int gi = bcutils::l2g(i, mpi.bf_rows(), g.nprow(), g.myrow());
