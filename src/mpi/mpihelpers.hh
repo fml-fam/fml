@@ -38,52 +38,59 @@ namespace mpihelpers
     
     @comm The method will communicate across all processes in the BLACS grid.
     
-    @tparam REAL Should be `float` or `double`.
+    @tparam REAL_IN,REAL_OUT Should be `float` or `double`. They do not have to
+    be the same type.
   */
-  template <typename REAL>
-  void mpi2cpu(const mpimat<REAL> &mpi, cpumat<REAL> &cpu)
+  template <typename REAL_IN, typename REAL_OUT>
+  void mpi2cpu_all(const mpimat<REAL_IN> &mpi, cpumat<REAL_OUT> &cpu)
   {
+    grid g = mpi.get_grid();
+    if (!g.ingrid())
+      return;
+    
+    len_local_t m_local = mpi.nrows_local();
+    len_local_t n_local = mpi.ncols_local();
+    
+    int mb = mpi.bf_rows();
+    
     len_t m = mpi.nrows();
     len_t n = mpi.ncols();
     
     if (m != cpu.nrows() || n != cpu.ncols())
       cpu.resize(m, n);
     
-    len_local_t m_local = mpi.nrows_local();
-    len_local_t n_local = mpi.ncols_local();
-    
-    grid g = mpi.get_grid();
-    
     cpu.fill_zero();
     
-    REAL *gbl = cpu.data_ptr();
-    REAL *sub = mpi.data_ptr();
+    REAL_OUT *gbl = cpu.data_ptr();
+    const REAL_IN *sub = mpi.data_ptr();
     
     if (m_local > 0 && n_local > 0)
     {
       for (len_local_t j=0; j<n_local; j++)
       {
-        for (len_local_t i=0; i<m_local; i++)
+        const int gj = bcutils::l2g(j, mpi.bf_cols(), g.npcol(), g.mycol());
+        
+        for (len_local_t i=0; i<m_local; i+=mb)
         {
-          int gi = bcutils::l2g(i, mpi.bf_rows(), g.nprow(), g.myrow());
-          int gj = bcutils::l2g(j, mpi.bf_cols(), g.npcol(), g.mycol());
+          const int gi = bcutils::l2g(i, mpi.bf_rows(), g.nprow(), g.myrow());
           
-          gbl[gi + m*gj] = sub[i + m_local*j];
+          for (int ii=0; ii<mb && ii+i<m_local; ii++)
+            gbl[gi+ii + m*gj] = (REAL_OUT) sub[i+ii + m_local*j];
         }
       }
     }
     
-    g.reduce(m, n, gbl);
+    g.allreduce(m, n, gbl);
   }
   
   
   
   /// \overload
   template <typename REAL>
-  cpumat<REAL> mpi2cpu(const mpimat<REAL> &mpi)
+  cpumat<REAL> mpi2cpu_all(const mpimat<REAL> &mpi)
   {
     cpumat<REAL> cpu;
-    mpi2cpu(mpi, cpu);
+    mpi2cpu_all(mpi, cpu);
     
     return cpu;
   }
