@@ -90,11 +90,6 @@ class cpumat : public unimat<REAL>
 /**
   @brief Construct matrix object with no internal allocated storage.
   
-  @param[in] nrows,ncols Number rows/columns of the matrix.
-  
-  @except If the allocation fails, a `bad_alloc` exception will be thrown.
-  If the input values are invalid, a `runtime_error` exception will be thrown.
-  
   @code
   cpumat<float> x();
   @endcode
