@@ -51,7 +51,7 @@ namespace gpuhelpers
         c->mem_gpu2gpu((void*)out, (void*)in, len);
       }
       else
-        kernelfuns::kernel_copy<<<griddim, blockdim>>>(m, n, in, out);
+        fml::kernelfuns::kernel_copy<<<griddim, blockdim>>>(m, n, in, out);
     }
     
     template <typename REAL_IN, typename REAL_OUT>
@@ -64,14 +64,14 @@ namespace gpuhelpers
       }
       else
       {
-        cpuvec<REAL_OUT> cp(kernelfuns::CPLEN);
+        cpuvec<REAL_OUT> cp(fml::kernelfuns::CPLEN);
         REAL_OUT *cp_d = cp.data_ptr();
         
         size_t top = (size_t) m*n;
-        for (size_t i=0; i<top; i+=kernelfuns::CPLEN)
+        for (size_t i=0; i<top; i+=fml::kernelfuns::CPLEN)
         {
           const size_t start = top - i;
-          const size_t copylen = std::min(kernelfuns::CPLEN, start);
+          const size_t copylen = std::min(fml::kernelfuns::CPLEN, start);
           c->mem_cpu2gpu((void*)cp_d, (void*)(in + start), copylen);
           arraytools::copy(copylen, cp_d, out + start);
         }
@@ -88,14 +88,14 @@ namespace gpuhelpers
       }
       else
       {
-        cpuvec<REAL_OUT> cp(kernelfuns::CPLEN);
+        cpuvec<REAL_OUT> cp(fml::kernelfuns::CPLEN);
         REAL_OUT *cp_d = cp.data_ptr();
         
         size_t top = (size_t) m*n;
-        for (size_t i=0; i<top; i+=kernelfuns::CPLEN)
+        for (size_t i=0; i<top; i+=fml::kernelfuns::CPLEN)
         {
           const size_t start = top - i;
-          const size_t copylen = std::min(kernelfuns::CPLEN, start);
+          const size_t copylen = std::min(fml::kernelfuns::CPLEN, start);
           arraytools::copy(copylen, in + start, cp_d);
           c->mem_cpu2gpu((void*)(out + start), (void*)cp_d, copylen);
         }

@@ -11,7 +11,7 @@
 #include <stdexcept>
 
 #include "../_internals/linalgutils.hh"
-#include "../_internals/omputils.hh"
+#include "../_internals/omp.hh"
 
 #include "internals/lapack.hh"
 
@@ -40,7 +40,7 @@ namespace linalg
   void add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const cpumat<REAL> &x, const cpumat<REAL> &y, cpumat<REAL> &ret)
   {
     len_t m, n;
-    linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
+    fml::linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
     
     if (ret.nrows() != m || ret.ncols() != n)
       ret.resize(m, n);
@@ -51,7 +51,7 @@ namespace linalg
     
     if (!transx && !transy)
     {
-      #pragma omp parallel for if(m*n > omputils::OMP_MIN_SIZE)
+      #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE)
       for (len_t j=0; j<n; j++)
       {
         #pragma omp simd
@@ -61,7 +61,7 @@ namespace linalg
     }
     else if (transx && transy)
     {
-      #pragma omp parallel for if(m*n > omputils::OMP_MIN_SIZE)
+      #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE)
       for (len_t j=0; j<m; j++)
       {
         #pragma omp simd
@@ -71,7 +71,7 @@ namespace linalg
     }
     else if (transx && !transy)
     {
-      #pragma omp parallel for if(m*n > omputils::OMP_MIN_SIZE)
+      #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE)
       for (len_t j=0; j<n; j++)
       {
         #pragma omp simd
@@ -81,7 +81,7 @@ namespace linalg
     }
     else if (!transx && transy)
     {
-      #pragma omp parallel for if(m*n > omputils::OMP_MIN_SIZE)
+      #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE)
       for (len_t j=0; j<n; j++)
       {
         #pragma omp simd
@@ -96,7 +96,7 @@ namespace linalg
   cpumat<REAL> add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const cpumat<REAL> &x, const cpumat<REAL> &y)
   {
     len_t m, n;
-    linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
+    fml::linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
     
     cpumat<REAL> ret(m, n);
     add(transx, transy, alpha, beta, x, y, ret);
@@ -128,13 +128,13 @@ namespace linalg
     const len_t mx = x.nrows();
     const len_t my = y.nrows();
     
-    linalgutils::matmult_params(transx, transy, mx, x.ncols(), my, y.ncols(), &m, &n, &k);
+    fml::linalgutils::matmult_params(transx, transy, mx, x.ncols(), my, y.ncols(), &m, &n, &k);
     cpumat<REAL> ret(m, n);
     
     const char ctransx = transx ? 'T' : 'N';
     const char ctransy = transy ? 'T' : 'N';
     
-    lapack::gemm(ctransx, ctransy, m, n, k, alpha, x.data_ptr(), mx, y.data_ptr(), my, (REAL)0, ret.data_ptr(), m);
+    fml::lapack::gemm(ctransx, ctransy, m, n, k, alpha, x.data_ptr(), mx, y.data_ptr(), my, (REAL)0, ret.data_ptr(), m);
     
     return ret;
   }
@@ -163,7 +163,7 @@ namespace linalg
     const len_t mx = x.nrows();
     const len_t my = y.nrows();
     
-    linalgutils::matmult_params(transx, transy, mx, x.ncols(), my, y.ncols(), &m, &n, &k);
+    fml::linalgutils::matmult_params(transx, transy, mx, x.ncols(), my, y.ncols(), &m, &n, &k);
     
     if (m != ret.nrows() || n != ret.ncols())
       ret.resize(m, n);
@@ -171,7 +171,7 @@ namespace linalg
     const char ctransx = transx ? 'T' : 'N';
     const char ctransy = transy ? 'T' : 'N';
     
-    lapack::gemm(ctransx, ctransy, m, n, k, alpha, x.data_ptr(), mx, y.data_ptr(), my, (REAL)0, ret.data_ptr(), m);
+    fml::lapack::gemm(ctransx, ctransy, m, n, k, alpha, x.data_ptr(), mx, y.data_ptr(), my, (REAL)0, ret.data_ptr(), m);
   }
   
   
@@ -203,7 +203,7 @@ namespace linalg
       ret.resize(n, n);
     
     ret.fill_zero();
-    lapack::syrk('L', 'T', n, m, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), n);
+    fml::lapack::syrk('L', 'T', n, m, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), n);
   }
   
   /// \overload
@@ -247,7 +247,7 @@ namespace linalg
       ret.resize(m, m);
     
     ret.fill_zero();
-    lapack::syrk('L', 'N', m, n, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), m);
+    fml::lapack::syrk('L', 'N', m, n, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), m);
   }
   
   template <typename REAL>
@@ -290,7 +290,7 @@ namespace linalg
     const REAL *x_d = x.data_ptr();
     REAL *tx_d = tx.data_ptr();
     
-    #pragma omp parallel for shared(tx) schedule(dynamic, 1) if(m*n>omputils::OMP_MIN_SIZE)
+    #pragma omp parallel for shared(tx) schedule(dynamic, 1) if(m*n>fml::omp::OMP_MIN_SIZE)
     for (int j=0; j<n; j+=blocksize)
     {
       for (int i=0; i<m; i+=blocksize)
@@ -344,7 +344,7 @@ namespace linalg
     
     p.resize(lipiv);
     
-    lapack::getrf(m, x.ncols(), x.data_ptr(), m, p.data_ptr(), &info);
+    fml::lapack::getrf(m, x.ncols(), x.data_ptr(), m, p.data_ptr(), &info);
     
     return info;
   }
@@ -421,11 +421,11 @@ namespace linalg
       cpuvec<int> iwork(8*minmn);
       
       REAL tmp;
-      lapack::gesdd(jobz, m, n, x.data_ptr(), m, s.data_ptr(), u.data_ptr(), m, vt.data_ptr(), ldvt, &tmp, -1, iwork.data_ptr(), &info);
+      fml::lapack::gesdd(jobz, m, n, x.data_ptr(), m, s.data_ptr(), u.data_ptr(), m, vt.data_ptr(), ldvt, &tmp, -1, iwork.data_ptr(), &info);
       int lwork = (int) tmp;
       cpuvec<REAL> work(lwork);
       
-      lapack::gesdd(jobz, m, n, x.data_ptr(), m, s.data_ptr(), u.data_ptr(), m, vt.data_ptr(), ldvt, work.data_ptr(), lwork, iwork.data_ptr(), &info);
+      fml::lapack::gesdd(jobz, m, n, x.data_ptr(), m, s.data_ptr(), u.data_ptr(), m, vt.data_ptr(), ldvt, work.data_ptr(), lwork, iwork.data_ptr(), &info);
       
       return info;
     }
@@ -455,7 +455,7 @@ namespace linalg
   {
     cpumat<REAL> ignored;
     int info = svd_internals(0, 0, x, s, ignored, ignored);
-    linalgutils::check_info(info, "gesdd");
+    fml::linalgutils::check_info(info, "gesdd");
   }
   
   /// \overload
@@ -463,7 +463,7 @@ namespace linalg
   void svd(cpumat<REAL> &x, cpuvec<REAL> &s, cpumat<REAL> &u, cpumat<REAL> &vt)
   {
     int info = svd_internals(1, 1, x, s, u, vt);
-    linalgutils::check_info(info, "gesdd");
+    fml::linalgutils::check_info(info, "gesdd");
   }
   
   
@@ -496,7 +496,7 @@ namespace linalg
       
       REAL worksize;
       int lwork, liwork;
-      lapack::syevr(jobz, 'A', 'U', n, x.data_ptr(), n, (REAL) 0.f, (REAL) 0.f,
+      fml::lapack::syevr(jobz, 'A', 'U', n, x.data_ptr(), n, (REAL) 0.f, (REAL) 0.f,
         0, 0, (REAL) 0.f, &nfound, values.data_ptr(), vectors.data_ptr(), n,
         support.data_ptr(), &worksize, -1, &liwork, -1,
         &info);
@@ -505,7 +505,7 @@ namespace linalg
       cpuvec<REAL> work(lwork);
       cpuvec<int> iwork(liwork);
       
-      lapack::syevr(jobz, 'A', 'U', n, x.data_ptr(), n, (REAL) 0.f, (REAL) 0.f,
+      fml::lapack::syevr(jobz, 'A', 'U', n, x.data_ptr(), n, (REAL) 0.f, (REAL) 0.f,
         0, 0, (REAL) 0.f, &nfound, values.data_ptr(), vectors.data_ptr(), n,
         support.data_ptr(), work.data_ptr(), lwork, iwork.data_ptr(), liwork,
         &info);
@@ -540,7 +540,7 @@ namespace linalg
     cpumat<REAL> ignored;
     
     int info = eig_sym_internals(true, x, values, ignored);
-    linalgutils::check_info(info, "syevr");
+    fml::linalgutils::check_info(info, "syevr");
   }
   
   /// \overload
@@ -548,7 +548,7 @@ namespace linalg
   void eigen_sym(cpumat<REAL> &x, cpuvec<REAL> &values, cpumat<REAL> &vectors)
   {
     int info = eig_sym_internals(false, x, values, vectors);
-    linalgutils::check_info(info, "syevr");
+    fml::linalgutils::check_info(info, "syevr");
   }
   
   
@@ -579,16 +579,16 @@ namespace linalg
     // Factor x = LU
     cpuvec<int> p;
     int info = lu(x, p);
-    linalgutils::check_info(info, "getrf");
+    fml::linalgutils::check_info(info, "getrf");
     
     // Invert
     REAL tmp;
-    lapack::getri(n, x.data_ptr(), n, p.data_ptr(), &tmp, -1, &info);
+    fml::lapack::getri(n, x.data_ptr(), n, p.data_ptr(), &tmp, -1, &info);
     int lwork = (int) tmp;
     cpuvec<REAL> work(lwork);
     
-    lapack::getri(n, x.data_ptr(), n, p.data_ptr(), work.data_ptr(), lwork, &info);
-    linalgutils::check_info(info, "getri");
+    fml::lapack::getri(n, x.data_ptr(), n, p.data_ptr(), work.data_ptr(), lwork, &info);
+    fml::linalgutils::check_info(info, "getri");
   }
   
   
@@ -606,8 +606,8 @@ namespace linalg
       
       int info;
       cpuvec<int> p(n);
-      lapack::gesv(n, nrhs, x.data_ptr(), n, p.data_ptr(), y_d, n, &info);
-      linalgutils::check_info(info, "gesv");
+      fml::lapack::gesv(n, nrhs, x.data_ptr(), n, p.data_ptr(), y_d, n, &info);
+      fml::linalgutils::check_info(info, "gesv");
     }
   }
   

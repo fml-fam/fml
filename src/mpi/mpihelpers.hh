@@ -69,11 +69,11 @@ namespace mpihelpers
     {
       for (len_local_t j=0; j<n_local; j++)
       {
-        const int gj = bcutils::l2g(j, mpi.bf_cols(), g.npcol(), g.mycol());
+        const int gj = fml::bcutils::l2g(j, mpi.bf_cols(), g.npcol(), g.mycol());
         
         for (len_local_t i=0; i<m_local; i+=mb)
         {
-          const int gi = bcutils::l2g(i, mpi.bf_rows(), g.nprow(), g.myrow());
+          const int gi = fml::bcutils::l2g(i, mpi.bf_rows(), g.nprow(), g.myrow());
           
           for (int ii=0; ii<mb && ii+i<m_local; ii++)
             gbl[gi+ii + m*gj] = (REAL_OUT) sub[i+ii + m_local*j];
@@ -152,13 +152,13 @@ namespace mpihelpers
     
     for (len_t gj=0; gj<n; gj+=nb)
     {
-      const int pc = bcutils::g2p(gj, nb, g.npcol());
-      const int j = bcutils::g2l(gj, nb, g.npcol());
+      const int pc = fml::bcutils::g2p(gj, nb, g.npcol());
+      const int j = fml::bcutils::g2l(gj, nb, g.npcol());
       
       for (len_t gi=0; gi<m; gi+=mb)
       {
-        const int pr = bcutils::g2p(gi, mb, g.nprow());
-        const int i = bcutils::g2l(gi, mb, g.nprow());
+        const int pr = fml::bcutils::g2p(gi, mb, g.nprow());
+        const int i = fml::bcutils::g2l(gi, mb, g.nprow());
         
         const int row_copylen = std::min(mb, m-gi);
         const int col_copylen = std::min(nb, n-gj);
@@ -237,12 +237,12 @@ namespace mpihelpers
     {
       for (len_local_t j=0; j<n_local; j++)
       {
-        const int gj = bcutils::l2g(j, mpi.bf_cols(), g.npcol(), g.mycol());
+        const int gj = fml::bcutils::l2g(j, mpi.bf_cols(), g.npcol(), g.mycol());
         
         #pragma omp for simd
         for (len_local_t i=0; i<m_local; i++)
         {
-          const int gi = bcutils::l2g(i, mpi.bf_rows(), g.nprow(), g.myrow());
+          const int gi = fml::bcutils::l2g(i, mpi.bf_rows(), g.nprow(), g.myrow());
           
           sub[i + m_local*j] = gbl[gi + m*gj];
         }

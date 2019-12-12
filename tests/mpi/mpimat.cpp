@@ -37,8 +37,8 @@ TEMPLATE_TEST_CASE("inheriting memory", "[mpimat]", float, double)
   int mb = 2;
   int nb = 2;
   
-  len_local_t m_local = bcutils::numroc(m, mb, g.myrow(), 0, g.nprow());
-  len_local_t n_local = bcutils::numroc(n, nb, g.mycol(), 0, g.npcol());
+  len_local_t m_local = fml::bcutils::numroc(m, mb, g.myrow(), 0, g.nprow());
+  len_local_t n_local = fml::bcutils::numroc(n, nb, g.mycol(), 0, g.npcol());
   
   TestType *data = (TestType*) malloc(m_local*n_local*sizeof(*data));
   

@@ -135,8 +135,8 @@ gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, len_t size)
   
   this->_size = size;
   
-  dim_block = kernel_launcher::dim_block1();
-  dim_grid = kernel_launcher::dim_grid(this->_size);
+  dim_block = fml::kernel_launcher::dim_block1();
+  dim_grid = fml::kernel_launcher::dim_grid(this->_size);
   
   this->free_data = true;
 }
@@ -167,8 +167,8 @@ gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, T *data_, len_t size, bool free_on_
   this->_size = size;
   this->data = data_;
   
-  dim_block = kernel_launcher::dim_block1();
-  dim_grid = kernel_launcher::dim_grid(this->_size);
+  dim_block = fml::kernel_launcher::dim_block1();
+  dim_grid = fml::kernel_launcher::dim_grid(this->_size);
   
   this->free_data = free_on_destruct;
 }
@@ -181,8 +181,8 @@ gpuvec<REAL>::gpuvec(const gpuvec<REAL> &x)
   this->_size = x.size();
   this->data = x.data_ptr();
   
-  dim_block = kernel_launcher::dim_block1();
-  dim_grid = kernel_launcher::dim_grid(this->_size);
+  dim_block = fml::kernel_launcher::dim_block1();
+  dim_grid = fml::kernel_launcher::dim_grid(this->_size);
   
   this->c = x.get_card();
   
@@ -233,8 +233,8 @@ void gpuvec<T>::resize(len_t size)
   
   this->_size = size;
   
-  dim_block = kernel_launcher::dim_block1();
-  dim_grid = kernel_launcher::dim_grid(this->_size);
+  dim_block = fml::kernel_launcher::dim_block1();
+  dim_grid = fml::kernel_launcher::dim_grid(this->_size);
 }
 
 
@@ -312,8 +312,8 @@ void gpuvec<T>::inherit(std::shared_ptr<card> gpu, T *data, len_t size, bool fre
   this->_size = size;
   this->data = data;
   
-  dim_block = kernel_launcher::dim_block1();
-  dim_grid = kernel_launcher::dim_grid(this->_size);
+  dim_block = fml::kernel_launcher::dim_block1();
+  dim_grid = fml::kernel_launcher::dim_grid(this->_size);
   
   this->free_data = free_on_destruct;
 }
@@ -390,7 +390,7 @@ void gpuvec<T>::fill_zero()
 template <typename T>
 void gpuvec<T>::fill_val(const T v)
 {
-  kernelfuns::kernel_fill_val<<<dim_grid, dim_block>>>(v, this->_size, 1, this->data);
+  fml::kernelfuns::kernel_fill_val<<<dim_grid, dim_block>>>(v, this->_size, 1, this->data);
   this->c->check();
 }
 
@@ -404,7 +404,7 @@ void gpuvec<T>::fill_val(const T v)
 template <typename T>
 void gpuvec<T>::fill_linspace(const T start, const T stop)
 {
-  kernelfuns::kernel_fill_linspace<<<dim_grid, dim_block>>>(start, stop, this->_size, 1, this->data);
+  fml::kernelfuns::kernel_fill_linspace<<<dim_grid, dim_block>>>(start, stop, this->_size, 1, this->data);
   this->c->check();
 }
 
@@ -418,7 +418,7 @@ void gpuvec<T>::fill_linspace(const T start, const T stop)
 template <typename T>
 void gpuvec<T>::scale(const T s)
 {
-  kernelfuns::kernel_scale<<<dim_grid, dim_block>>>(s, this->_size, 1, this->data);
+  fml::kernelfuns::kernel_scale<<<dim_grid, dim_block>>>(s, this->_size, 1, this->data);
   this->c->check();
 }
 
@@ -428,7 +428,7 @@ void gpuvec<T>::scale(const T s)
 template <typename T>
 void gpuvec<T>::rev()
 {
-  kernelfuns::kernel_rev_rows<<<dim_grid, dim_block>>>(this->_size, 1, this->data);
+  fml::kernelfuns::kernel_rev_rows<<<dim_grid, dim_block>>>(this->_size, 1, this->data);
   this->c->check();
 }
 
@@ -493,7 +493,7 @@ bool gpuvec<T>::operator==(const gpuvec<T> &x) const
   int all_eq = 1;
   gpuscalar<int> all_eq_gpu(c, all_eq);
   
-  kernelfuns::kernel_all_eq<<<dim_grid, dim_block>>>(this->_size, 1, this->data, x.data_ptr(), all_eq_gpu.data_ptr());
+  fml::kernelfuns::kernel_all_eq<<<dim_grid, dim_block>>>(this->_size, 1, this->data, x.data_ptr(), all_eq_gpu.data_ptr());
   
   all_eq_gpu.get_val(&all_eq);
   this->c->check();

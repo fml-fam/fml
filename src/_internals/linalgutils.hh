@@ -12,100 +12,103 @@
 #include "types.hh"
 
 
-namespace linalgutils
+namespace fml
 {
-  inline void check_info(const int info, std::string fun)
+  namespace linalgutils
   {
-    if (info != 0)
+    inline void check_info(const int info, std::string fun)
     {
-      std::string msg = "function " + fun + "() returned info=" + std::to_string(info);
-      throw std::runtime_error(msg);
-    }
-  }
-  
-  
-  
-  inline void matadd_params(const bool transx, const bool transy, const len_t mx, const len_t nx, const len_t my, const len_t ny, len_t *m, len_t *n)
-  {
-    if (!transx && !transy)
-    {
-      if (mx != my || nx != ny)
-        throw std::runtime_error("non-conformable arguments");
-      
-      *m = mx;
-      *n = nx;
-    }
-    else if (transx && transy)
-    {
-      if (mx != my || nx != ny)
-        throw std::runtime_error("non-conformable arguments");
-      
-      *m = nx;
-      *n = mx;
-    }
-    else if (transx && !transy)
-    {
-      if (mx != ny || nx != my)
-        throw std::runtime_error("non-conformable arguments");
-      
-      *m = nx;
-      *n = mx;
-    }
-    else if (!transx && transy)
-    {
-      if (mx != ny || nx != my)
-        throw std::runtime_error("non-conformable arguments");
-      
-      *m = mx;
-      *n = nx;
-    }
-    else
-    {
-      throw std::runtime_error("this should be impossible");
-    }
-  }
-  
-  
-  
-  inline void matmult_params(const bool transx, const bool transy, const len_t mx, const len_t nx, const len_t my, const len_t ny, len_t *m, len_t *n, len_t *k)
-  {
-    if (!transx && !transy)
-    {
-      if (nx != my)
-        throw std::runtime_error("non-conformable arguments");
-    }
-    else if (transx && transy)
-    {
-      if (mx != ny)
-        throw std::runtime_error("non-conformable arguments");
-    }
-    else if (transx && !transy)
-    {
-      if (mx != my)
-        throw std::runtime_error("non-conformable arguments");
-    }
-    else if (!transx && transy)
-    {
-      if (nx != ny)
-        throw std::runtime_error("non-conformable arguments");
+      if (info != 0)
+      {
+        std::string msg = "function " + fun + "() returned info=" + std::to_string(info);
+        throw std::runtime_error(msg);
+      }
     }
     
-    // m = # rows of op(x)
-    // n = # cols of op(y)
-    // k = # cols of op(x)
     
-    if (transx)
+    
+    inline void matadd_params(const bool transx, const bool transy, const len_t mx, const len_t nx, const len_t my, const len_t ny, len_t *m, len_t *n)
     {
-      *m = nx;
-      *k = mx;
-    }
-    else
-    {
-      *m = mx;
-      *k = nx;
+      if (!transx && !transy)
+      {
+        if (mx != my || nx != ny)
+          throw std::runtime_error("non-conformable arguments");
+        
+        *m = mx;
+        *n = nx;
+      }
+      else if (transx && transy)
+      {
+        if (mx != my || nx != ny)
+          throw std::runtime_error("non-conformable arguments");
+        
+        *m = nx;
+        *n = mx;
+      }
+      else if (transx && !transy)
+      {
+        if (mx != ny || nx != my)
+          throw std::runtime_error("non-conformable arguments");
+        
+        *m = nx;
+        *n = mx;
+      }
+      else if (!transx && transy)
+      {
+        if (mx != ny || nx != my)
+          throw std::runtime_error("non-conformable arguments");
+        
+        *m = mx;
+        *n = nx;
+      }
+      else
+      {
+        throw std::runtime_error("this should be impossible");
+      }
     }
     
-    *n = transy ? my : ny;
+    
+    
+    inline void matmult_params(const bool transx, const bool transy, const len_t mx, const len_t nx, const len_t my, const len_t ny, len_t *m, len_t *n, len_t *k)
+    {
+      if (!transx && !transy)
+      {
+        if (nx != my)
+          throw std::runtime_error("non-conformable arguments");
+      }
+      else if (transx && transy)
+      {
+        if (mx != ny)
+          throw std::runtime_error("non-conformable arguments");
+      }
+      else if (transx && !transy)
+      {
+        if (mx != my)
+          throw std::runtime_error("non-conformable arguments");
+      }
+      else if (!transx && transy)
+      {
+        if (nx != ny)
+          throw std::runtime_error("non-conformable arguments");
+      }
+      
+      // m = # rows of op(x)
+      // n = # cols of op(y)
+      // k = # cols of op(x)
+      
+      if (transx)
+      {
+        *m = nx;
+        *k = mx;
+      }
+      else
+      {
+        *m = mx;
+        *k = nx;
+      }
+      
+      *n = transy ? my : ny;
+    }
   }
 }
 

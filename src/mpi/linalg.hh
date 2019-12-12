@@ -12,6 +12,7 @@
 #include "../_internals/linalgutils.hh"
 #include "../cpu/cpuvec.hh"
 
+#include "internals/bcutils.hh"
 #include "internals/scalapack.hh"
 #include "mpimat.hh"
 
@@ -53,7 +54,7 @@ namespace linalg
     check_grid(x, ret);
     
     len_t m, n;
-    linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
+    fml::linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
     
     if (ret.nrows() != m || ret.ncols() != n)
       ret.resize(m, n);
@@ -61,8 +62,8 @@ namespace linalg
     char ctransx = transx ? 'T' : 'N';
     char ctransy = transy ? 'T' : 'N';
     
-    scalapack::geadd(ctransy, m, n, beta, y.data_ptr(), y.desc_ptr(), (REAL) 0.0f, ret.data_ptr(), ret.desc_ptr());
-    scalapack::geadd(ctransx, m, n, alpha, x.data_ptr(), x.desc_ptr(), (REAL) 1.0f, ret.data_ptr(), ret.desc_ptr());
+    fml::scalapack::geadd(ctransy, m, n, beta, y.data_ptr(), y.desc_ptr(), (REAL) 0.0f, ret.data_ptr(), ret.desc_ptr());
+    fml::scalapack::geadd(ctransx, m, n, alpha, x.data_ptr(), x.desc_ptr(), (REAL) 1.0f, ret.data_ptr(), ret.desc_ptr());
   }
   
   /// \overload
@@ -72,7 +73,7 @@ namespace linalg
     check_grid(x, y);
     
     len_t m, n;
-    linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
+    fml::linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
     
     grid g = x.get_grid();
     mpimat<REAL> ret(g, m, n, x.bf_rows(), x.bf_cols());
@@ -107,7 +108,7 @@ namespace linalg
     check_grid(x, y);
     
     int m, n, k;
-    linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
+    fml::linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
     
     grid g = x.get_grid();
     mpimat<REAL> ret(g, m, n, x.bf_rows(), x.bf_cols());
@@ -115,7 +116,7 @@ namespace linalg
     const char ctransx = transx ? 'T' : 'N';
     const char ctransy = transy ? 'T' : 'N';
     
-    scalapack::gemm(ctransx, ctransy, m, n, k, alpha,
+    fml::scalapack::gemm(ctransx, ctransy, m, n, k, alpha,
       x.data_ptr(), x.desc_ptr(), y.data_ptr(), y.desc_ptr(),
       (REAL)0, ret.data_ptr(), ret.desc_ptr());
     
@@ -149,7 +150,7 @@ namespace linalg
     check_grid(x, ret);
     
     int m, n, k;
-    linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
+    fml::linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
     
     if (m != ret.nrows() || n != ret.ncols())
       ret.resize(m, n);
@@ -157,7 +158,7 @@ namespace linalg
     const char ctransx = transx ? 'T' : 'N';
     const char ctransy = transy ? 'T' : 'N';
     
-    scalapack::gemm(ctransx, ctransy, m, n, k, alpha,
+    fml::scalapack::gemm(ctransx, ctransy, m, n, k, alpha,
       x.data_ptr(), x.desc_ptr(), y.data_ptr(), y.desc_ptr(),
       (REAL)0, ret.data_ptr(), ret.desc_ptr());
   }
@@ -194,7 +195,7 @@ namespace linalg
       ret.resize(n, n);
     
     ret.fill_zero();
-    scalapack::syrk('L', 'T', n, x.nrows(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
+    fml::scalapack::syrk('L', 'T', n, x.nrows(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
   }
   
   /// \overload
@@ -242,7 +243,7 @@ namespace linalg
       ret.resize(m, m);
     
     ret.fill_zero();
-    scalapack::syrk('L', 'N', m, x.ncols(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
+    fml::scalapack::syrk('L', 'N', m, x.ncols(), alpha, x.data_ptr(), x.desc_ptr(), (REAL) 0, ret.data_ptr(), ret.desc_ptr());
   }
   
   /// \overload
@@ -287,7 +288,7 @@ namespace linalg
     if (m != tx.ncols() || n != tx.nrows())
       tx.resize(n, m);
     
-    scalapack::tran(n, m, 1.f, x.data_ptr(), x.desc_ptr(), 0.f, tx.data_ptr(), tx.desc_ptr());
+    fml::scalapack::tran(n, m, 1.f, x.data_ptr(), x.desc_ptr(), 0.f, tx.data_ptr(), tx.desc_ptr());
   }
   
   /// \overload
@@ -334,7 +335,7 @@ namespace linalg
     
     p.resize(lipiv);
     
-    scalapack::getrf(m, x.ncols(), x.data_ptr(), x.desc_ptr(), p.data_ptr(), &info);
+    fml::scalapack::getrf(m, x.ncols(), x.data_ptr(), x.desc_ptr(), p.data_ptr(), &info);
     
     return info;
   }
@@ -371,11 +372,11 @@ namespace linalg
     REAL tr = 0;
     for (len_t gi=0; gi<minmn; gi++)
     {
-      const len_local_t i = bcutils::g2l(gi, mb, g.nprow());
-      const len_local_t j = bcutils::g2l(gi, nb, g.npcol());
+      const len_local_t i = fml::bcutils::g2l(gi, mb, g.nprow());
+      const len_local_t j = fml::bcutils::g2l(gi, nb, g.npcol());
       
-      const int pr = bcutils::g2p(gi, mb, g.nprow());
-      const int pc = bcutils::g2p(gi, nb, g.npcol());
+      const int pr = fml::bcutils::g2p(gi, mb, g.nprow());
+      const int pc = fml::bcutils::g2p(gi, nb, g.npcol());
       
       if (pr == g.myrow() && pc == g.mycol())
         tr += x_d[i + m_local*j];
@@ -424,11 +425,11 @@ namespace linalg
       }
       
       REAL tmp;
-      scalapack::gesvd(jobu, jobvt, m, n, x.data_ptr(), x.desc_ptr(), s.data_ptr(), u.data_ptr(), u.desc_ptr(), vt.data_ptr(), vt.desc_ptr(), &tmp, -1, &info);
+      fml::scalapack::gesvd(jobu, jobvt, m, n, x.data_ptr(), x.desc_ptr(), s.data_ptr(), u.data_ptr(), u.desc_ptr(), vt.data_ptr(), vt.desc_ptr(), &tmp, -1, &info);
       int lwork = (int) tmp;
       cpuvec<REAL> work(lwork);
       
-      scalapack::gesvd(jobu, jobvt, m, n, x.data_ptr(), x.desc_ptr(), s.data_ptr(), u.data_ptr(), u.desc_ptr(), vt.data_ptr(), vt.desc_ptr(), work.data_ptr(), lwork, &info);
+      fml::scalapack::gesvd(jobu, jobvt, m, n, x.data_ptr(), x.desc_ptr(), s.data_ptr(), u.data_ptr(), u.desc_ptr(), vt.data_ptr(), vt.desc_ptr(), work.data_ptr(), lwork, &info);
       
       return info;
     }
@@ -458,7 +459,7 @@ namespace linalg
   {
     mpimat<REAL> ignored(x.get_grid());
     int info = svd_internals(0, 0, x, s, ignored, ignored);
-    linalgutils::check_info(info, "gesvd");
+    fml::linalgutils::check_info(info, "gesvd");
   }
   
   /// \overload
@@ -469,7 +470,7 @@ namespace linalg
     check_grid(x, vt);
     
     int info = svd_internals(1, 1, x, s, u, vt);
-    linalgutils::check_info(info, "gesvd");
+    fml::linalgutils::check_info(info, "gesvd");
   }
   
   
@@ -501,7 +502,7 @@ namespace linalg
       REAL worksize;
       int lwork, liwork;
       
-      scalapack::syevr(jobz, 'A', 'U', n, x.data_ptr(), x.desc_ptr(),
+      fml::scalapack::syevr(jobz, 'A', 'U', n, x.data_ptr(), x.desc_ptr(),
         (REAL) 0.f, (REAL) 0.f, 0, 0, &val_found, &vec_found,
         values.data_ptr(), vectors.data_ptr(), vectors.desc_ptr(),
         &worksize, -1, &liwork, -1, &info);
@@ -510,7 +511,7 @@ namespace linalg
       cpuvec<REAL> work(lwork);
       cpuvec<int> iwork(liwork);
       
-      scalapack::syevr(jobz, 'A', 'U', n, x.data_ptr(), x.desc_ptr(),
+      fml::scalapack::syevr(jobz, 'A', 'U', n, x.data_ptr(), x.desc_ptr(),
         (REAL) 0.f, (REAL) 0.f, 0, 0, &val_found, &vec_found,
         values.data_ptr(), vectors.data_ptr(), vectors.desc_ptr(),
         work.data_ptr(), lwork, iwork.data_ptr(), liwork, &info);
@@ -545,7 +546,7 @@ namespace linalg
     mpimat<REAL> ignored(x.get_grid());
     
     int info = eig_sym_internals(true, x, values, ignored);
-    linalgutils::check_info(info, "syevr");
+    fml::linalgutils::check_info(info, "syevr");
   }
   
   /// \overload
@@ -555,7 +556,7 @@ namespace linalg
     check_grid(x, vectors);
     
     int info = eig_sym_internals(false, x, values, vectors);
-    linalgutils::check_info(info, "syevr");
+    fml::linalgutils::check_info(info, "syevr");
   }
   
   
@@ -586,19 +587,19 @@ namespace linalg
     // Factor x = LU
     cpuvec<int> p;
     int info = lu(x, p);
-    linalgutils::check_info(info, "getrf");
+    fml::linalgutils::check_info(info, "getrf");
     
     // Invert
     const len_t n = x.nrows();
     REAL tmp;
     int liwork;
-    scalapack::getri(n, x.data_ptr(), x.desc_ptr(), p.data_ptr(), &tmp, -1, &liwork, -1, &info);
+    fml::scalapack::getri(n, x.data_ptr(), x.desc_ptr(), p.data_ptr(), &tmp, -1, &liwork, -1, &info);
     int lwork = (int) tmp;
     cpuvec<REAL> work(lwork);
     cpuvec<int> iwork(liwork);
     
-    scalapack::getri(n, x.data_ptr(), x.desc_ptr(), p.data_ptr(), work.data_ptr(), lwork, iwork.data_ptr(), liwork, &info);
-    linalgutils::check_info(info, "getri");
+    fml::scalapack::getri(n, x.data_ptr(), x.desc_ptr(), p.data_ptr(), work.data_ptr(), lwork, iwork.data_ptr(), liwork, &info);
+    fml::linalgutils::check_info(info, "getri");
   }
   
   
@@ -635,8 +636,8 @@ namespace linalg
     
     int info;
     cpuvec<int> p(n);
-    scalapack::gesv(n, y.ncols(), x.data_ptr(), x.desc_ptr(), p.data_ptr(), y.data_ptr(), y.desc_ptr(), &info);
-    linalgutils::check_info(info, "gesv");
+    fml::scalapack::gesv(n, y.ncols(), x.data_ptr(), x.desc_ptr(), p.data_ptr(), y.data_ptr(), y.desc_ptr(), &info);
+    fml::linalgutils::check_info(info, "gesv");
   }
 }
 

@@ -13,7 +13,7 @@
 #include <cstring>
 #include <stdexcept>
 
-#include "../_internals/omputils.hh"
+#include "../_internals/omp.hh"
 #include "../_internals/univec.hh"
 
 
@@ -289,7 +289,7 @@ void cpuvec<T>::fill_zero()
 template <typename T>
 void cpuvec<T>::fill_val(const T v)
 {
-  #pragma omp parallel for simd if(this->_size > omputils::OMP_MIN_SIZE)
+  #pragma omp parallel for simd if(this->_size > fml::omp::OMP_MIN_SIZE)
   for (len_t i=0; i<this->_size; i++)
     this->data[i] = v;
 }
@@ -310,7 +310,7 @@ void cpuvec<REAL>::fill_linspace(const REAL start, const REAL stop)
   {
     const REAL v = (stop-start)/((REAL) this->_size - 1);
     
-    #pragma omp parallel for simd if(this->_size > omputils::OMP_MIN_SIZE)
+    #pragma omp parallel for simd if(this->_size > fml::omp::OMP_MIN_SIZE)
     for (len_t i=0; i<this->_size; i++)
       this->data[i] = v*((REAL) i) + start;
   }
@@ -325,7 +325,7 @@ inline void cpuvec<int>::fill_linspace(const int start, const int stop)
   {
     const float v = (stop-start)/((float) this->_size - 1);
     
-    #pragma omp parallel for simd if(this->_size > omputils::OMP_MIN_SIZE)
+    #pragma omp parallel for simd if(this->_size > fml::omp::OMP_MIN_SIZE)
     for (len_t i=0; i<this->_size; i++)
       this->data[i] = (int) roundf(v*((float) i) + start);
   }
@@ -341,7 +341,7 @@ inline void cpuvec<int>::fill_linspace(const int start, const int stop)
 template <typename T>
 void cpuvec<T>::scale(const T s)
 {
-  #pragma omp parallel for simd if(this->_size > omputils::OMP_MIN_SIZE)
+  #pragma omp parallel for simd if(this->_size > fml::omp::OMP_MIN_SIZE)
   for (len_t i=0; i<this->_size; i++)
     this->data[i] *= s;
 }

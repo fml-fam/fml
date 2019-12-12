@@ -129,7 +129,7 @@ namespace linalg
     check_card(x, ret);
     
     len_t m, n;
-    linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
+    fml::linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
     
     if (ret.nrows() != m || ret.ncols() != n)
       ret.resize(m, n);
@@ -148,7 +148,7 @@ namespace linalg
     check_card(x, y);
     
     len_t m, n;
-    linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
+    fml::linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
     
     auto c = x.get_card();
     gpumat<REAL> ret(c, m, n);
@@ -180,7 +180,7 @@ namespace linalg
     check_card(x, y);
     
     int m, n, k;
-    linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
+    fml::linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
     auto c = x.get_card();
     gpumat<REAL> ret(c, m, n);
     
@@ -217,7 +217,7 @@ namespace linalg
     check_card(x, ret);
     
     int m, n, k;
-    linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
+    fml::linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
     
     if (m != ret.nrows() || n != ret.ncols())
       ret.resize(m, n);
@@ -456,7 +456,7 @@ namespace linalg
     REAL tr = 0;
     gpuscalar<REAL> tr_gpu(c, tr);
     
-    kernelfuns::kernel_trace<<<x.get_griddim(), x.get_blockdim()>>>(m, n,
+    fml::kernelfuns::kernel_trace<<<x.get_griddim(), x.get_blockdim()>>>(m, n,
       x.data_ptr(), tr_gpu.data_ptr());
     
     tr_gpu.get_val(&tr);
@@ -543,7 +543,7 @@ namespace linalg
     
     gpumat<REAL> ignored(x.get_card());
     int info = svd_internals(0, 0, x, s, ignored, ignored);
-    linalgutils::check_info(info, "gesvd");
+    fml::linalgutils::check_info(info, "gesvd");
   }
   
   /// \overload
@@ -555,7 +555,7 @@ namespace linalg
     check_card(x, vt);
     
     int info = svd_internals(1, 1, x, s, u, vt);
-    linalgutils::check_info(info, "gesvd");
+    fml::linalgutils::check_info(info, "gesvd");
   }
   
   
@@ -635,7 +635,7 @@ namespace linalg
     gpumat<REAL> ignored(x.get_card());
     
     int info = eig_sym_internals(true, x, values, ignored);
-    linalgutils::check_info(info, "syevd");
+    fml::linalgutils::check_info(info, "syevd");
   }
   
   /// \overload
@@ -646,7 +646,7 @@ namespace linalg
     check_card(x, vectors);
     
     int info = eig_sym_internals(false, x, values, vectors);
-    linalgutils::check_info(info, "syevd");
+    fml::linalgutils::check_info(info, "syevd");
   }
   
   
@@ -679,7 +679,7 @@ namespace linalg
     auto c = x.get_card();
     gpuvec<int> p(c);
     int info = lu(x, p);
-    linalgutils::check_info(info, "getrf");
+    fml::linalgutils::check_info(info, "getrf");
     
     // Invert
     const len_t n = x.nrows();
@@ -694,7 +694,7 @@ namespace linalg
     
     info_device.get_val(&info);
     check_cusolver_ret(check, "getrs");
-    linalgutils::check_info(info, "getrs");
+    fml::linalgutils::check_info(info, "getrs");
     
     gpuhelpers::gpu2gpu(inv, x);
   }
@@ -716,7 +716,7 @@ namespace linalg
       auto c = x.get_card();
       gpuvec<int> p(c);
       int info = lu(x, p);
-      linalgutils::check_info(info, "getrf");
+      fml::linalgutils::check_info(info, "getrf");
       
       // Solve xb = y
       gpuscalar<int> info_device(c, info);
@@ -726,7 +726,7 @@ namespace linalg
       
       info_device.get_val(&info);
       check_cusolver_ret(check, "getrs");
-      linalgutils::check_info(info, "getrs");
+      fml::linalgutils::check_info(info, "getrs");
     }
   }
   

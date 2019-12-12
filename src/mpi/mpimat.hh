@@ -17,8 +17,8 @@
 #include "grid.hh"
 #include "internals/bcutils.hh"
 
-#include "../_internals/fmlutils.hh"
-#include "../_internals/omputils.hh"
+#include "../_internals/rand.hh"
+#include "../_internals/omp.hh"
 #include "../_internals/types.hh"
 #include "../_internals/unimat.hh"
 
@@ -201,10 +201,10 @@ mpimat<REAL>::mpimat(const grid &blacs_grid, len_t nrows, len_t ncols, int bf_ro
   check_params(nrows, ncols, bf_rows, bf_cols);
   check_grid(blacs_grid);
   
-  this->m_local = bcutils::numroc(nrows, bf_rows, blacs_grid.myrow(), 0, blacs_grid.nprow());
-  this->n_local = bcutils::numroc(ncols, bf_cols, blacs_grid.mycol(), 0, blacs_grid.npcol());
+  this->m_local = fml::bcutils::numroc(nrows, bf_rows, blacs_grid.myrow(), 0, blacs_grid.nprow());
+  this->n_local = fml::bcutils::numroc(ncols, bf_cols, blacs_grid.mycol(), 0, blacs_grid.npcol());
   
-  bcutils::descinit(this->desc, blacs_grid.ictxt(), nrows, ncols, bf_rows, bf_cols, this->m_local);
+  fml::bcutils::descinit(this->desc, blacs_grid.ictxt(), nrows, ncols, bf_rows, bf_cols, this->m_local);
   
   const size_t len = (size_t) this->m_local * this->n_local * sizeof(REAL);
   this->data = (REAL*) std::malloc(len);
@@ -243,10 +243,10 @@ mpimat<REAL>::mpimat(const grid &blacs_grid, REAL *data_, len_t nrows, len_t nco
   check_params(nrows, ncols, bf_rows, bf_cols);
   check_grid(blacs_grid);
   
-  this->m_local = bcutils::numroc(nrows, bf_rows, blacs_grid.myrow(), 0, blacs_grid.nprow());
-  this->n_local = bcutils::numroc(ncols, bf_cols, blacs_grid.mycol(), 0, blacs_grid.npcol());
+  this->m_local = fml::bcutils::numroc(nrows, bf_rows, blacs_grid.myrow(), 0, blacs_grid.nprow());
+  this->n_local = fml::bcutils::numroc(ncols, bf_cols, blacs_grid.mycol(), 0, blacs_grid.npcol());
   
-  bcutils::descinit(this->desc, blacs_grid.ictxt(), nrows, ncols, bf_rows, bf_cols, this->m_local);
+  fml::bcutils::descinit(this->desc, blacs_grid.ictxt(), nrows, ncols, bf_rows, bf_cols, this->m_local);
   
   this->m = nrows;
   this->n = ncols;
@@ -319,8 +319,8 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols)
     return;
   }
   
-  this->m_local = bcutils::numroc(nrows, this->mb, this->g.myrow(), 0, this->g.nprow());
-  this->n_local = bcutils::numroc(ncols, this->nb, this->g.mycol(), 0, this->g.npcol());
+  this->m_local = fml::bcutils::numroc(nrows, this->mb, this->g.myrow(), 0, this->g.nprow());
+  this->n_local = fml::bcutils::numroc(ncols, this->nb, this->g.mycol(), 0, this->g.npcol());
   
   void *realloc_ptr;
   if (oldlen == 0)
@@ -333,7 +333,7 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols)
   
   this->data = (REAL*) realloc_ptr;
   
-  bcutils::descinit(this->desc, this->g.ictxt(), nrows, ncols, this->mb, this->nb, this->m_local);
+  fml::bcutils::descinit(this->desc, this->g.ictxt(), nrows, ncols, this->mb, this->nb, this->m_local);
   
   this->m = nrows;
   this->n = ncols;
@@ -370,8 +370,8 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
   this->mb = bf_rows;
   this->nb = bf_cols;
   
-  this->m_local = bcutils::numroc(nrows, this->mb, this->g.myrow(), 0, this->g.nprow());
-  this->n_local = bcutils::numroc(ncols, this->nb, this->g.mycol(), 0, this->g.npcol());
+  this->m_local = fml::bcutils::numroc(nrows, this->mb, this->g.myrow(), 0, this->g.nprow());
+  this->n_local = fml::bcutils::numroc(ncols, this->nb, this->g.mycol(), 0, this->g.npcol());
   
   void *realloc_ptr;
   if (oldlen == 0)
@@ -384,7 +384,7 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
   
   this->data = (REAL*) realloc_ptr;
   
-  bcutils::descinit(this->desc, this->g.ictxt(), nrows, ncols, this->mb, this->nb, this->m_local);
+  fml::bcutils::descinit(this->desc, this->g.ictxt(), nrows, ncols, this->mb, this->nb, this->m_local);
   
   this->m = nrows;
   this->n = ncols;
@@ -413,9 +413,9 @@ void mpimat<REAL>::inherit(grid &blacs_grid, REAL *data_, len_t nrows, len_t nco
   
   this->free();
   
-  m_local = bcutils::numroc(nrows, bf_rows, blacs_grid.myrow(), 0, blacs_grid.nprow());
-  n_local = bcutils::numroc(ncols, bf_cols, blacs_grid.mycol(), 0, blacs_grid.npcol());
-  bcutils::descinit(this->desc, blacs_grid.ictxt(), nrows, ncols, bf_rows, bf_cols, m_local);
+  m_local = fml::bcutils::numroc(nrows, bf_rows, blacs_grid.myrow(), 0, blacs_grid.nprow());
+  n_local = fml::bcutils::numroc(ncols, bf_cols, blacs_grid.mycol(), 0, blacs_grid.npcol());
+  fml::bcutils::descinit(this->desc, blacs_grid.ictxt(), nrows, ncols, bf_rows, bf_cols, m_local);
   
   this->m = nrows;
   this->n = ncols;
@@ -463,11 +463,11 @@ void mpimat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
   {
     for (len_t gj=0; gj<this->n; gj++)
     {
-      const int pr = bcutils::g2p(gi, this->mb, this->g.nprow());
-      const int pc = bcutils::g2p(gj, this->nb, this->g.npcol());
+      const int pr = fml::bcutils::g2p(gi, this->mb, this->g.nprow());
+      const int pc = fml::bcutils::g2p(gj, this->nb, this->g.npcol());
       
-      const int i = bcutils::g2l(gi, this->mb, this->g.nprow());
-      const int j = bcutils::g2l(gj, this->nb, this->g.npcol());
+      const int i = fml::bcutils::g2l(gi, this->mb, this->g.nprow());
+      const int j = fml::bcutils::g2l(gj, this->nb, this->g.npcol());
       
       REAL d;
       if (this->g.rank0())
@@ -535,7 +535,7 @@ void mpimat<REAL>::fill_zero()
 template <typename REAL>
 void mpimat<REAL>::fill_val(const REAL v)
 {
-  #pragma omp parallel for if((this->m_local)*(this->n_local) > omputils::OMP_MIN_SIZE)
+  #pragma omp parallel for if((this->m_local)*(this->n_local) > fml::omp::OMP_MIN_SIZE)
   for (len_t j=0; j<this->n_local; j++)
   {
     #pragma omp simd
@@ -560,14 +560,14 @@ void mpimat<REAL>::fill_linspace(const REAL start, const REAL stop)
   {
     const REAL v = (stop-start)/((REAL) this->m*this->n - 1);
     
-    #pragma omp parallel for if((this->m_local)*(this->n_local) > omputils::OMP_MIN_SIZE)
+    #pragma omp parallel for if((this->m_local)*(this->n_local) > fml::omp::OMP_MIN_SIZE)
     for (len_t j=0; j<this->n_local; j++)
     {
       #pragma omp simd
       for (len_t i=0; i<this->m_local; i++)
       {
-        const int gi = bcutils::l2g(i, this->mb, this->g.nprow(), this->g.myrow());
-        const int gj = bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
+        const int gi = fml::bcutils::l2g(i, this->mb, this->g.nprow(), this->g.myrow());
+        const int gj = fml::bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
         
         this->data[i + this->m_local*j] = v*((REAL) gi + this->m*gj) + start;
       }
@@ -584,14 +584,14 @@ inline void mpimat<int>::fill_linspace(const int start, const int stop)
   {
     const float v = (stop-start)/((float) this->m*this->n - 1);
     
-    #pragma omp parallel for if((this->m_local)*(this->n_local) > omputils::OMP_MIN_SIZE)
+    #pragma omp parallel for if((this->m_local)*(this->n_local) > fml::omp::OMP_MIN_SIZE)
     for (len_t j=0; j<this->n_local; j++)
     {
       #pragma omp simd
       for (len_t i=0; i<this->m_local; i++)
       {
-        const int gi = bcutils::l2g(i, this->mb, this->g.nprow(), this->g.myrow());
-        const int gj = bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
+        const int gi = fml::bcutils::l2g(i, this->mb, this->g.nprow(), this->g.myrow());
+        const int gj = fml::bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
         
         this->data[i + this->m_local*j] = (int) roundf(v*((float) gi + this->m*gj) + start);
       }
@@ -626,13 +626,13 @@ void mpimat<REAL>::fill_diag(const cpuvec<REAL> &v)
 {
   REAL *v_d = v.data_ptr();
   
-  #pragma omp parallel for if((this->m_local)*(this->n_local) > omputils::OMP_MIN_SIZE)
+  #pragma omp parallel for if((this->m_local)*(this->n_local) > fml::omp::OMP_MIN_SIZE)
   for (len_local_t j=0; j<n_local; j++)
   {
     for (len_local_t i=0; i<m_local; i++)
     {
-      const int gi = bcutils::l2g(i, this->mb, this->g.nprow(), this->g.myrow());
-      const int gj = bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
+      const int gi = fml::bcutils::l2g(i, this->mb, this->g.nprow(), this->g.myrow());
+      const int gj = fml::bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
       
       if (gi == gj)
         this->data[i + this->m_local*j] = v_d[gi % v.size()];
@@ -668,7 +668,7 @@ void mpimat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL ma
 template <typename REAL>
 void mpimat<REAL>::fill_runif(const REAL min, const REAL max)
 {
-  uint32_t seed = fmlutils::get_seed() + (g.myrow() + g.nprow()*g.mycol());
+  uint32_t seed = fml::rand::get_seed() + (g.myrow() + g.nprow()*g.mycol());
   this->fill_runif(seed, min, max);
 }
 
@@ -698,7 +698,7 @@ void mpimat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL s
 template <typename REAL>
 void mpimat<REAL>::fill_rnorm(const REAL mean, const REAL sd)
 {
-  uint32_t seed = fmlutils::get_seed() + (g.myrow() + g.nprow()*g.mycol());
+  uint32_t seed = fml::rand::get_seed() + (g.myrow() + g.nprow()*g.mycol());
   this->fill_rnorm(seed, mean, sd);
 }
 
@@ -727,11 +727,11 @@ void mpimat<REAL>::diag(cpuvec<REAL> &v)
   
   for (len_t gi=0; gi<minmn; gi++)
   {
-    const len_local_t i = bcutils::g2l(gi, this->mb, this->g.nprow());
-    const len_local_t j = bcutils::g2l(gi, this->nb, this->g.npcol());
+    const len_local_t i = fml::bcutils::g2l(gi, this->mb, this->g.nprow());
+    const len_local_t j = fml::bcutils::g2l(gi, this->nb, this->g.npcol());
     
-    const int pr = bcutils::g2p(gi, this->mb, this->g.nprow());
-    const int pc = bcutils::g2p(gi, this->nb, this->g.npcol());
+    const int pr = fml::bcutils::g2p(gi, this->mb, this->g.nprow());
+    const int pc = fml::bcutils::g2p(gi, this->nb, this->g.npcol());
     
     if (pr == this->g.myrow() && pc == this->g.mycol())
       v_ptr[gi] = this->data[i + this->m_local*j];
@@ -767,11 +767,11 @@ void mpimat<REAL>::antidiag(cpuvec<REAL> &v)
   
   for (len_t gi=0; gi<minmn; gi++)
   {
-    const len_local_t i = bcutils::g2l(this->m-1-gi, this->mb, this->g.nprow());
-    const len_local_t j = bcutils::g2l(gi, this->nb, this->g.npcol());
+    const len_local_t i = fml::bcutils::g2l(this->m-1-gi, this->mb, this->g.nprow());
+    const len_local_t j = fml::bcutils::g2l(gi, this->nb, this->g.npcol());
     
-    const int pr = bcutils::g2p(this->m-1-gi, this->mb, this->g.nprow());
-    const int pc = bcutils::g2p(gi, this->nb, this->g.npcol());
+    const int pr = fml::bcutils::g2p(this->m-1-gi, this->mb, this->g.nprow());
+    const int pc = fml::bcutils::g2p(gi, this->nb, this->g.npcol());
     
     if (pr == this->g.myrow() && pc == this->g.mycol())
       v_ptr[gi] = this->data[i + this->m_local*j];
@@ -791,7 +791,7 @@ void mpimat<REAL>::antidiag(cpuvec<REAL> &v)
 template <typename REAL>
 void mpimat<REAL>::scale(const REAL s)
 {
-  #pragma omp parallel for if((this->m_local)*(this->n_local) > omputils::OMP_MIN_SIZE)
+  #pragma omp parallel for if((this->m_local)*(this->n_local) > fml::omp::OMP_MIN_SIZE)
   for (len_local_t j=0; j<this->n_local; j++)
   {
     #pragma omp simd
@@ -820,18 +820,18 @@ void mpimat<REAL>::rev_cols()
   {
     for (len_t i=0; i<this->m_local; i+=this->mb)
     {
-      const int gj = bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
+      const int gj = fml::bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
       if (gj >= this->n/2)
         break;
       
       const int gj_rev = this->n - gj - 1;
       
       const int pr = this->g.myrow();
-      const int pc_rev = bcutils::g2p(gj_rev, this->nb, this->g.npcol());
+      const int pc_rev = fml::bcutils::g2p(gj_rev, this->nb, this->g.npcol());
       
       if (pc_rev == this->g.mycol())
       {
-        const int j_rev = bcutils::g2l(gj_rev, this->nb, this->g.npcol());
+        const int j_rev = fml::bcutils::g2l(gj_rev, this->nb, this->g.npcol());
         
         if (j != j_rev)
         {
@@ -978,11 +978,11 @@ void mpimat<REAL>::set(const len_t i, const REAL v)
   int gi = i % this->m;
   int gj = i / this->m;
   
-  int pr = bcutils::g2p(gi, this->mb, this->g.nprow());
-  int pc = bcutils::g2p(gj, this->nb, this->g.npcol());
+  int pr = fml::bcutils::g2p(gi, this->mb, this->g.nprow());
+  int pc = fml::bcutils::g2p(gj, this->nb, this->g.npcol());
   
-  int li = bcutils::g2l(gi, this->mb, this->g.nprow());
-  int lj = bcutils::g2l(gj, this->nb, this->g.npcol());
+  int li = fml::bcutils::g2l(gi, this->mb, this->g.nprow());
+  int lj = fml::bcutils::g2l(gj, this->nb, this->g.npcol());
   
   if (pr == this->g.myrow() && pc == this->g.mycol())
     this->data[li + (this->m_local)*lj] = v;
@@ -1002,11 +1002,11 @@ void mpimat<REAL>::set(const len_t i, const len_t j, const REAL v)
 {
   this->check_index(i, j);
   
-  int pr = bcutils::g2p(i, this->mb, this->g.nprow());
-  int pc = bcutils::g2p(j, this->nb, this->g.npcol());
+  int pr = fml::bcutils::g2p(i, this->mb, this->g.nprow());
+  int pc = fml::bcutils::g2p(j, this->nb, this->g.npcol());
   
-  int li = bcutils::g2l(i, this->mb, this->g.nprow());
-  int lj = bcutils::g2l(j, this->nb, this->g.npcol());
+  int li = fml::bcutils::g2l(i, this->mb, this->g.nprow());
+  int lj = fml::bcutils::g2l(j, this->nb, this->g.npcol());
   
   if (pr == this->g.myrow() && pc == this->g.mycol())
     this->data[li + (this->m_local)*lj] = v;
@@ -1036,11 +1036,11 @@ void mpimat<REAL>::get_row(const len_t i, cpuvec<REAL> &v) const
   
   for (len_t j=0; j<this->n; j++)
   {
-    const len_local_t i_local = bcutils::g2l(i, this->mb, this->g.nprow());
-    const len_local_t j_local = bcutils::g2l(j, this->nb, this->g.npcol());
+    const len_local_t i_local = fml::bcutils::g2l(i, this->mb, this->g.nprow());
+    const len_local_t j_local = fml::bcutils::g2l(j, this->nb, this->g.npcol());
     
-    const int pr = bcutils::g2p(i, this->mb, this->g.nprow());
-    const int pc = bcutils::g2p(j, this->nb, this->g.npcol());
+    const int pr = fml::bcutils::g2p(i, this->mb, this->g.nprow());
+    const int pc = fml::bcutils::g2p(j, this->nb, this->g.npcol());
     
     if (pr == this->g.myrow() && pc == this->g.mycol())
       v_ptr[j] = this->data[i_local + this->m_local*j_local];
@@ -1074,11 +1074,11 @@ void mpimat<REAL>::get_col(const len_t j, cpuvec<REAL> &v) const
   
   for (len_t i=0; i<this->m; i++)
   {
-    const len_local_t i_local = bcutils::g2l(i, this->mb, this->g.nprow());
-    const len_local_t j_local = bcutils::g2l(j, this->nb, this->g.npcol());
+    const len_local_t i_local = fml::bcutils::g2l(i, this->mb, this->g.nprow());
+    const len_local_t j_local = fml::bcutils::g2l(j, this->nb, this->g.npcol());
     
-    const int pr = bcutils::g2p(i, this->mb, this->g.nprow());
-    const int pc = bcutils::g2p(j, this->nb, this->g.npcol());
+    const int pr = fml::bcutils::g2p(i, this->mb, this->g.nprow());
+    const int pc = fml::bcutils::g2p(j, this->nb, this->g.npcol());
     
     if (pr == this->g.myrow() && pc == this->g.mycol())
       v_ptr[i] = this->data[i_local + this->m_local*j_local];
@@ -1216,11 +1216,11 @@ REAL mpimat<REAL>::get_val_from_global_index(len_t gi, len_t gj) const
 {
   REAL ret;
   
-  int pr = bcutils::g2p(gi, this->mb, this->g.nprow());
-  int pc = bcutils::g2p(gj, this->nb, this->g.npcol());
+  int pr = fml::bcutils::g2p(gi, this->mb, this->g.nprow());
+  int pc = fml::bcutils::g2p(gj, this->nb, this->g.npcol());
   
-  int li = bcutils::g2l(gi, this->mb, this->g.nprow());
-  int lj = bcutils::g2l(gj, this->nb, this->g.npcol());
+  int li = fml::bcutils::g2l(gi, this->mb, this->g.nprow());
+  int lj = fml::bcutils::g2l(gj, this->nb, this->g.npcol());
   
   if (pr == this->g.myrow() && pc == this->g.mycol())
     ret = this->data[li + (this->m_local)*lj];

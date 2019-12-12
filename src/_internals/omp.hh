@@ -7,9 +7,12 @@
 #pragma once
 
 
-namespace omputils
+namespace fml
 {
-  const int OMP_MIN_SIZE = 2500;
+  namespace omp
+  {
+    const int OMP_MIN_SIZE = 2500;
+  }
 }
 
 

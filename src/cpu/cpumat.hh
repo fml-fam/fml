@@ -14,8 +14,8 @@
 #include <random>
 #include <stdexcept>
 
-#include "../_internals/fmlutils.hh"
-#include "../_internals/omputils.hh"
+#include "../_internals/rand.hh"
+#include "../_internals/omp.hh"
 #include "../_internals/types.hh"
 #include "../_internals/unimat.hh"
 
@@ -326,7 +326,7 @@ void cpumat<REAL>::fill_zero()
 template <typename REAL>
 void cpumat<REAL>::fill_val(const REAL v)
 {
-  #pragma omp parallel for if((this->m)*(this->n) > omputils::OMP_MIN_SIZE)
+  #pragma omp parallel for if((this->m)*(this->n) > fml::omp::OMP_MIN_SIZE)
   for (len_t j=0; j<this->n; j++)
   {
     #pragma omp simd
@@ -351,7 +351,7 @@ void cpumat<REAL>::fill_linspace(const REAL start, const REAL stop)
   {
     const REAL v = (stop-start)/((REAL) this->m*this->n - 1);
     
-    #pragma omp parallel for if((this->m)*(this->n) > omputils::OMP_MIN_SIZE)
+    #pragma omp parallel for if((this->m)*(this->n) > fml::omp::OMP_MIN_SIZE)
     for (len_t j=0; j<this->n; j++)
     {
       #pragma omp simd
@@ -373,7 +373,7 @@ inline void cpumat<int>::fill_linspace(const int start, const int stop)
   {
     const float v = (stop-start)/((float) this->m*this->n - 1);
     
-    #pragma omp parallel for if((this->m)*(this->n) > omputils::OMP_MIN_SIZE)
+    #pragma omp parallel for if((this->m)*(this->n) > fml::omp::OMP_MIN_SIZE)
     for (len_t j=0; j<this->n; j++)
     {
       #pragma omp simd
@@ -447,7 +447,7 @@ void cpumat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL ma
 template <typename REAL>
 void cpumat<REAL>::fill_runif(const REAL min, const REAL max)
 {
-  uint32_t seed = fmlutils::get_seed();
+  uint32_t seed = fml::rand::get_seed();
   this->fill_runif(seed, min, max);
 }
 
@@ -477,7 +477,7 @@ void cpumat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL s
 template <typename REAL>
 void cpumat<REAL>::fill_rnorm(const REAL mean, const REAL sd)
 {
-  uint32_t seed = fmlutils::get_seed();
+  uint32_t seed = fml::rand::get_seed();
   this->fill_rnorm(seed, mean, sd);
 }
 
@@ -546,7 +546,7 @@ void cpumat<REAL>::antidiag(cpuvec<REAL> &v)
 template <typename REAL>
 void cpumat<REAL>::scale(const REAL s)
 {
-  #pragma omp parallel for if((this->m)*(this->n) > omputils::OMP_MIN_SIZE)
+  #pragma omp parallel for if((this->m)*(this->n) > fml::omp::OMP_MIN_SIZE)
   for (len_t j=0; j<this->n; j++)
   {
     #pragma omp simd

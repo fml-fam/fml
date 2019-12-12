@@ -17,6 +17,7 @@
 
 #include "internals/gpuscalar.hh"
 #include "internals/kernelfuns.hh"
+#include "internals/launcher.hh"
 
 #include "card.hh"
 #include "gpuvec.hh"
@@ -151,8 +152,8 @@ gpumat<REAL>::gpumat(std::shared_ptr<card> gpu, len_t nrows, len_t ncols)
   this->m = nrows;
   this->n = ncols;
   
-  dim_block = kernel_launcher::dim_block2();
-  dim_grid = kernel_launcher::dim_grid(this->m, this->n);
+  dim_block = fml::kernel_launcher::dim_block2();
+  dim_grid = fml::kernel_launcher::dim_grid(this->m, this->n);
   
   this->free_data = true;
 }
@@ -185,8 +186,8 @@ gpumat<REAL>::gpumat(std::shared_ptr<card> gpu, REAL *data_, len_t nrows, len_t 
   this->n = ncols;
   this->data = data_;
   
-  dim_block = kernel_launcher::dim_block2();
-  dim_grid = kernel_launcher::dim_grid(this->m, this->n);
+  dim_block = fml::kernel_launcher::dim_block2();
+  dim_grid = fml::kernel_launcher::dim_grid(this->m, this->n);
   
   this->free_data = free_on_destruct;
 }
@@ -200,8 +201,8 @@ gpumat<REAL>::gpumat(const gpumat<REAL> &x)
   this->n = x.ncols();
   this->data = x.data_ptr();
   
-  dim_block = kernel_launcher::dim_block2();
-  dim_grid = kernel_launcher::dim_grid(this->m, this->n);
+  dim_block = fml::kernel_launcher::dim_block2();
+  dim_grid = fml::kernel_launcher::dim_grid(this->m, this->n);
   
   this->c = x.get_card();
   
@@ -257,8 +258,8 @@ void gpumat<REAL>::resize(len_t nrows, len_t ncols)
   this->m = nrows;
   this->n = ncols;
   
-  dim_block = kernel_launcher::dim_block2();
-  dim_grid = kernel_launcher::dim_grid(this->m, this->n);
+  dim_block = fml::kernel_launcher::dim_block2();
+  dim_grid = fml::kernel_launcher::dim_grid(this->m, this->n);
 }
 
 
@@ -312,8 +313,8 @@ void gpumat<REAL>::inherit(std::shared_ptr<card> gpu, REAL *data, len_t nrows, l
   this->n = ncols;
   this->data = data;
   
-  dim_block = kernel_launcher::dim_block2();
-  dim_grid = kernel_launcher::dim_grid(this->m, this->n);
+  dim_block = fml::kernel_launcher::dim_block2();
+  dim_grid = fml::kernel_launcher::dim_grid(this->m, this->n);
   
   this->free_data = free_on_destruct;
 }
@@ -395,7 +396,7 @@ void gpumat<REAL>::fill_zero()
 template <typename REAL>
 void gpumat<REAL>::fill_val(const REAL v)
 {
-  kernelfuns::kernel_fill_val<<<dim_grid, dim_block>>>(v, this->m, this->n, this->data);
+  fml::kernelfuns::kernel_fill_val<<<dim_grid, dim_block>>>(v, this->m, this->n, this->data);
   this->c->check();
 }
 
@@ -413,7 +414,7 @@ void gpumat<REAL>::fill_linspace(REAL start, REAL stop)
   //   this->fill_val(start);
   // else
   {
-    kernelfuns::kernel_fill_linspace<<<dim_grid, dim_block>>>(start, stop, this->m, this->n, this->data);
+    fml::kernelfuns::kernel_fill_linspace<<<dim_grid, dim_block>>>(start, stop, this->m, this->n, this->data);
     this->c->check();
   }
 }
@@ -424,7 +425,7 @@ void gpumat<REAL>::fill_linspace(REAL start, REAL stop)
 template <typename REAL>
 void gpumat<REAL>::fill_eye()
 {
-  kernelfuns::kernel_fill_eye<<<dim_grid, dim_block>>>(this->m, this->n, this->data);
+  fml::kernelfuns::kernel_fill_eye<<<dim_grid, dim_block>>>(this->m, this->n, this->data);
   this->c->check();
 }
 
@@ -442,7 +443,7 @@ void gpumat<REAL>::fill_eye()
 template <typename REAL>
 void gpumat<REAL>::fill_diag(const gpuvec<REAL> &v)
 {
-  kernelfuns::kernel_fill_diag<<<dim_grid, dim_block>>>(v.size(), v.data_ptr(), this->m, this->n, this->data);
+  fml::kernelfuns::kernel_fill_diag<<<dim_grid, dim_block>>>(v.size(), v.data_ptr(), this->m, this->n, this->data);
   this->c->check();
 }
 
@@ -509,7 +510,7 @@ void gpumat<REAL>::diag(gpuvec<REAL> &v)
   const len_t minmn = std::min(this->m, this->n);
   v.resize(minmn);
   
-  kernelfuns::kernel_diag<<<dim_grid, dim_block>>>(this->m, this->n, this->data, v.data_ptr());
+  fml::kernelfuns::kernel_diag<<<dim_grid, dim_block>>>(this->m, this->n, this->data, v.data_ptr());
   this->c->check();
 }
 
@@ -535,7 +536,7 @@ void gpumat<REAL>::antidiag(gpuvec<REAL> &v)
   const len_t minmn = std::min(this->m, this->n);
   v.resize(minmn);
   
-  kernelfuns::kernel_antidiag<<<dim_grid, dim_block>>>(this->m, this->n, this->data, v.data_ptr());
+  fml::kernelfuns::kernel_antidiag<<<dim_grid, dim_block>>>(this->m, this->n, this->data, v.data_ptr());
   this->c->check();
 }
 
@@ -549,7 +550,7 @@ void gpumat<REAL>::antidiag(gpuvec<REAL> &v)
 template <typename REAL>
 void gpumat<REAL>::scale(const REAL s)
 {
-  kernelfuns::kernel_scale<<<dim_grid, dim_block>>>(s, this->m, this->n, this->data);
+  fml::kernelfuns::kernel_scale<<<dim_grid, dim_block>>>(s, this->m, this->n, this->data);
   this->c->check();
 }
 
@@ -559,7 +560,7 @@ void gpumat<REAL>::scale(const REAL s)
 template <typename REAL>
 void gpumat<REAL>::rev_rows()
 {
-  kernelfuns::kernel_rev_rows<<<dim_grid, dim_block>>>(this->m, this->n, this->data);
+  fml::kernelfuns::kernel_rev_rows<<<dim_grid, dim_block>>>(this->m, this->n, this->data);
   this->c->check();
 }
 
@@ -569,7 +570,7 @@ void gpumat<REAL>::rev_rows()
 template <typename REAL>
 void gpumat<REAL>::rev_cols()
 {
-  kernelfuns::kernel_rev_cols<<<dim_grid, dim_block>>>(this->m, this->n, this->data);
+  fml::kernelfuns::kernel_rev_cols<<<dim_grid, dim_block>>>(this->m, this->n, this->data);
   this->c->check();
 }
 
@@ -582,7 +583,7 @@ bool gpumat<REAL>::any_inf() const
   int has_inf = 0;
   gpuscalar<int> has_inf_gpu(c, has_inf);
   
-  kernelfuns::kernel_any_inf<<<dim_grid, dim_block>>>(this->m, this->n, this->data, has_inf_gpu.data_ptr());
+  fml::kernelfuns::kernel_any_inf<<<dim_grid, dim_block>>>(this->m, this->n, this->data, has_inf_gpu.data_ptr());
   
   has_inf_gpu.get_val(&has_inf);
   this->c->check();
@@ -598,7 +599,7 @@ bool gpumat<REAL>::any_nan() const
   int has_nan = 0;
   gpuscalar<int> has_nan_gpu(c, has_nan);
   
-  kernelfuns::kernel_any_nan<<<dim_grid, dim_block>>>(this->m, this->n, this->data, has_nan_gpu.data_ptr());
+  fml::kernelfuns::kernel_any_nan<<<dim_grid, dim_block>>>(this->m, this->n, this->data, has_nan_gpu.data_ptr());
   
   has_nan_gpu.get_val(&has_nan);
   this->c->check();
@@ -704,7 +705,7 @@ bool gpumat<T>::operator==(const gpumat<T> &x) const
   int all_eq = 1;
   gpuscalar<int> all_eq_gpu(c, all_eq);
   
-  kernelfuns::kernel_all_eq<<<dim_grid, dim_block>>>(this->m, this->n, this->data, x.data_ptr(), all_eq_gpu.data_ptr());
+  fml::kernelfuns::kernel_all_eq<<<dim_grid, dim_block>>>(this->m, this->n, this->data, x.data_ptr(), all_eq_gpu.data_ptr());
   
   all_eq_gpu.get_val(&all_eq);
   this->c->check();
