@@ -9,7 +9,7 @@ using namespace arraytools;
 extern grid g;
 
 
-TEMPLATE_TEST_CASE("mpi2cpu_all - small blocks", "[mpimat]", float, double)
+TEMPLATE_TEST_CASE("mpi2cpu_all", "[mpimat]", float, double)
 {
   len_t m, n;
   int mb, nb;
