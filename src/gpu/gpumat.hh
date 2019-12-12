@@ -16,9 +16,9 @@
 #include "arch/arch.hh"
 
 #include "internals/gpuscalar.hh"
+#include "internals/kernelfuns.hh"
 
 #include "card.hh"
-#include "kernelfuns.hh"
 #include "gpuvec.hh"
 
 

@@ -14,11 +14,11 @@
 
 #include "arch/arch.hh"
 
-#include "internals/launcher.hh"
 #include "internals/gpuscalar.hh"
+#include "internals/kernelfuns.hh"
+#include "internals/launcher.hh"
 
 #include "card.hh"
-#include "kernelfuns.hh"
 
 
 /**

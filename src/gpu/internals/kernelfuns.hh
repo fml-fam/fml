@@ -2,14 +2,14 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_GPU_KERNELFUNS_H
-#define FML_GPU_KERNELFUNS_H
+#ifndef FML_GPU_INTERNALS_KERNELFUNS_H
+#define FML_GPU_INTERNALS_KERNELFUNS_H
 #pragma once
 
 
 #include <cuda_runtime.h>
 
-#include "../_internals/types.hh"
+#include "../../_internals/types.hh"
 
 
 namespace kernelfuns
@@ -211,6 +211,38 @@ namespace kernelfuns
     
     if (i < m && j < n && i == j)
       atomicAdd(tr, data[i + m*i]);
+  }
+  
+  
+  
+  static const size_t CPLEN = 1024;
+  
+  static __global__ void kernel_copy(len_t m, len_t n, __half *in, float *out)
+  {
+    int i = blockDim.x*blockIdx.x + threadIdx.x;
+    int j = blockDim.y*blockIdx.y + threadIdx.y;
+    
+    if (i < m && j < n)
+      out[i + m*j] = __half2float(in[i + m*j]);
+  }
+  
+  static __global__ void kernel_copy(len_t m, len_t n, float *in, __half *out)
+  {
+    int i = blockDim.x*blockIdx.x + threadIdx.x;
+    int j = blockDim.y*blockIdx.y + threadIdx.y;
+    
+    if (i < m && j < n)
+      out[i + m*j] = __float2half(in[i + m*j]);
+  }
+  
+  template <typename REAL_IN, typename REAL_OUT>
+  __global__ void kernel_copy(len_t m, len_t n, REAL_IN *in, REAL_OUT *out)
+  {
+    int i = blockDim.x*blockIdx.x + threadIdx.x;
+    int j = blockDim.y*blockIdx.y + threadIdx.y;
+    
+    if (i < m && j < n)
+      out[i + m*j] = (REAL_OUT) in[i + m*j];
   }
 }
 

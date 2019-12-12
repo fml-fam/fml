@@ -15,11 +15,11 @@
 #include "arch/arch.hh"
 
 #include "internals/gpuscalar.hh"
+#include "internals/kernelfuns.hh"
 
 #include "gpuhelpers.hh"
 #include "gpumat.hh"
 #include "gpuvec.hh"
-#include "kernelfuns.hh"
 
 
 namespace linalg
