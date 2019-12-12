@@ -42,6 +42,15 @@ namespace cpuhelpers
     arraytools::copy(cpu_in.size(), cpu_in.data_ptr(), cpu_out.data_ptr());
   }
   
+  /// \overload
+  template <typename REAL>
+  cpuvec<REAL> cpu2cpu(const cpuvec<REAL> &cpu_in)
+  {
+    cpuvec<REAL> cpu_out;
+    cpu2cpu(cpu_in, cpu_out);
+    
+    return cpu_out;
+  }
   
   /// \overload
   template <typename REAL_IN, typename REAL_OUT>
@@ -51,6 +60,16 @@ namespace cpuhelpers
     
     size_t len = (size_t) cpu_in.nrows() * cpu_in.ncols();
     arraytools::copy(len, cpu_in.data_ptr(), cpu_out.data_ptr());
+  }
+  
+  /// \overload
+  template <typename REAL>
+  cpumat<REAL> cpu2cpu(const cpumat<REAL> &cpu_in)
+  {
+    cpumat<REAL> cpu_out;
+    cpu2cpu(cpu_in, cpu_out);
+    
+    return cpu_out;
   }
 }
 
