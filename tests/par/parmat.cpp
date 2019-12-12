@@ -33,7 +33,7 @@ TEMPLATE_TEST_CASE("scale", "[parmat_cpu]", float, double)
   len_t n = 5;
 
   parmat_cpu<TestType> x(r, m, n);
-  x.fill_one();
+  x.fill_val(1);
 
   x.scale(3.0f);
   // REQUIRE( fltcmp::eq(x(0), 3) );

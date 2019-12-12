@@ -7,6 +7,8 @@
 #pragma once
 
 
+#include "../../_internals/omp.hh"
+
 #include "../../cpu/cpumat.hh"
 #include "../../cpu/cpuvec.hh"
 
@@ -56,7 +58,7 @@ void parmat_cpu<REAL>::fill_linspace(const REAL start, const REAL stop)
     const REAL v = (stop-start)/((REAL) this->m_global*n - 1);
     REAL *d_p = this->data.data_ptr();
     
-    #pragma omp parallel for if(m_local*n > omputils::OMP_MIN_SIZE)
+    #pragma omp parallel for if(m_local*n > fml::omp::OMP_MIN_SIZE)
     for (len_t j=0; j<n; j++)
     {
       #pragma omp simd

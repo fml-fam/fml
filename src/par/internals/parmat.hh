@@ -27,7 +27,6 @@ class parmat
     void info();
     
     void fill_zero();
-    void fill_one();
     void fill_val(const REAL v);
     void fill_linspace(const REAL start, const REAL stop);
     void fill_eye();
@@ -139,14 +138,6 @@ template <class MAT, class VEC, typename REAL>
 void parmat<MAT, VEC, REAL>::fill_zero()
 {
   data.fill_zero();
-}
-
-
-
-template <class MAT, class VEC, typename REAL>
-void parmat<MAT, VEC, REAL>::fill_one()
-{
-  data.fill_one();
 }
 
 
