@@ -129,11 +129,31 @@ namespace gpuhelpers
   }
   
   /// \overload
+  template <typename REAL>
+  gpuvec<REAL> gpu2cpu(const gpuvec<REAL> &gpu)
+  {
+    cpuvec<REAL> cpu;
+    gpu2cpu(gpu, cpu);
+    
+    return cpu;
+  }
+  
+  /// \overload
   template <typename REAL_IN, typename REAL_OUT>
   void gpu2cpu(const gpumat<REAL_IN> &gpu, cpumat<REAL_OUT> &cpu)
   {
     cpu.resize(gpu.nrows(), gpu.ncols());
     copy_gpu2cpu(gpu.nrows(), gpu.ncols(), gpu.get_card(), gpu.data_ptr(), cpu.data_ptr());
+  }
+  
+  /// \overload
+  template <typename REAL>
+  cpumat<REAL> gpu2cpu(const gpumat<REAL> &gpu)
+  {
+    cpumat<REAL> cpu;
+    gpu2cpu(gpu, cpu);
+    
+    return cpu;
   }
   
   
@@ -203,6 +223,16 @@ namespace gpuhelpers
   }
   
   /// \overload
+  template <typename REAL>
+  gpuvec<REAL> gpu2gpu(const gpuvec<REAL> &gpu_in)
+  {
+    gpuvec<REAL> gpu_out(gpu_in.get_card());
+    gpu2gpu(gpu_in, gpu_out);
+    
+    return gpu_out;
+  }
+  
+  /// \overload
   template <typename REAL_IN, typename REAL_OUT>
   void gpu2gpu(const gpumat<REAL_IN> &gpu_in, gpumat<REAL_OUT> &gpu_out)
   {
@@ -212,6 +242,16 @@ namespace gpuhelpers
     
     gpu_out.resize(gpu_in.nrows(), gpu_in.ncols());
     copy_gpu2gpu(gpu_in.nrows(), gpu_in.ncols(), c, gpu_in.get_griddim(), gpu_in.get_blockdim(), gpu_in.data_ptr(), gpu_out.data_ptr());
+  }
+  
+  /// \overload
+  template <typename REAL>
+  gpumat<REAL> gpu2gpu(const gpumat<REAL> &gpu_in)
+  {
+    gpumat<REAL> gpu_out(gpu_in.get_card());
+    gpu2gpu(gpu_in, gpu_out);
+    
+    return gpu_out;
   }
 }
 
