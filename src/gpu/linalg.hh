@@ -582,7 +582,7 @@ namespace linalg
       
       int lwork;
       cusolverStatus_t check = culapack::syevd_buflen(c->lapack_handle(), jobz,
-        CUBLAS_FILL_MODE_UPPER, n, x.data_ptr(), n, values.data_ptr(), &lwork);
+        CUBLAS_FILL_MODE_LOWER, n, x.data_ptr(), n, values.data_ptr(), &lwork);
       check_cusolver_ret(check, "syevd_bufferSize");
       
       gpuvec<REAL> work(c, lwork);
@@ -590,8 +590,8 @@ namespace linalg
       int info = 0;
       gpuscalar<int> info_device(c, info);
       
-      check = culapack::syevd(c->lapack_handle(), jobz, CUBLAS_FILL_MODE_UPPER, n,
-        x.data_ptr(), n, values.data_ptr(), work.data_ptr(), lwork,
+      check = culapack::syevd(c->lapack_handle(), jobz, CUBLAS_FILL_MODE_LOWER,
+        n, x.data_ptr(), n, values.data_ptr(), work.data_ptr(), lwork,
         info_device.data_ptr());
       
       info_device.get_val(&info);

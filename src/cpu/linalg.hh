@@ -496,7 +496,7 @@ namespace linalg
       
       REAL worksize;
       int lwork, liwork;
-      fml::lapack::syevr(jobz, 'A', 'U', n, x.data_ptr(), n, (REAL) 0.f, (REAL) 0.f,
+      fml::lapack::syevr(jobz, 'A', 'L', n, x.data_ptr(), n, (REAL) 0.f, (REAL) 0.f,
         0, 0, (REAL) 0.f, &nfound, values.data_ptr(), vectors.data_ptr(), n,
         support.data_ptr(), &worksize, -1, &liwork, -1,
         &info);
@@ -505,7 +505,7 @@ namespace linalg
       cpuvec<REAL> work(lwork);
       cpuvec<int> iwork(liwork);
       
-      fml::lapack::syevr(jobz, 'A', 'U', n, x.data_ptr(), n, (REAL) 0.f, (REAL) 0.f,
+      fml::lapack::syevr(jobz, 'A', 'L', n, x.data_ptr(), n, (REAL) 0.f, (REAL) 0.f,
         0, 0, (REAL) 0.f, &nfound, values.data_ptr(), vectors.data_ptr(), n,
         support.data_ptr(), work.data_ptr(), lwork, iwork.data_ptr(), liwork,
         &info);
