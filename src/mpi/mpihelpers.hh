@@ -271,7 +271,7 @@ namespace mpihelpers
   template <typename REAL_IN, typename REAL_OUT>
   void mpi2mpi(const mpimat<REAL_IN> &mpi_in, mpimat<REAL_OUT> &mpi_out)
   {
-    if (mpi_in.get_grid().get_ictxt() != mpi_out.get_grid().get_ictxt())
+    if (mpi_in.get_grid().ictxt() != mpi_out.get_grid().ictxt())
       throw std::runtime_error("mpimat objects must be distributed on the same process grid");
     
     mpi_out.resize(mpi_in.nrows(), mpi_in.ncols());

@@ -24,7 +24,7 @@ namespace linalg
     template <typename REAL>
     void check_grid(const mpimat<REAL> &a, const mpimat<REAL> &b)
     {
-      if (a.get_grid().get_ictxt() != b.get_grid().get_ictxt())
+      if (a.get_grid().ictxt() != b.get_grid().ictxt())
         throw std::runtime_error("mpimat objects must be distributed on the same process grid");
     }
   }

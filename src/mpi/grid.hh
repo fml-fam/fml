@@ -125,8 +125,6 @@ class grid
     
     /// Is the BLACS grid valid?
     bool valid_grid() const {return (_ictxt!=UNINITIALIZED_GRID && _ictxt!=EXITED_GRID);};
-    
-    int get_ictxt() const {return _ictxt;};
   
   protected:
     int _ictxt;
