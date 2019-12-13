@@ -507,6 +507,7 @@ void mpimat<REAL>::info() const
   {
     printf("# mpimat");
     printf(" %dx%d", this->m, this->n);
+    printf(" with %dx%d blocking", this->mb, this->nb);
     printf(" on %dx%d grid", this->g.nprow(), this->g.npcol());
     printf(" type=%s", typeid(REAL).name());
     printf("\n");
