@@ -2,25 +2,21 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_CPU_FUTURE_UTILS_H
-#define FML_CPU_FUTURE_UTILS_H
+#ifndef FML_CPU_FUTURE_SYM_H
+#define FML_CPU_FUTURE_SYM_H
 #pragma once
 
 
 #include <cmath>
 #include <stdexcept>
 
-#include "../../_internals/linalgutils.hh"
-
-#include "../internals/lapack.hh"
-
 #include "../cpumat.hh"
 
 
-namespace utils
+namespace sym
 {
   template <typename REAL>
-  bool is_symmetric(const cpumat<REAL> &x)
+  bool is_sym(const cpumat<REAL> &x)
   {
     if (!x.is_square())
       return false;
@@ -49,7 +45,7 @@ namespace utils
   
   
   template <typename REAL>
-  void symmetrize(cpumat<REAL> &x)
+  void make_sym(cpumat<REAL> &x)
   {
     if (!x.is_square())
       throw std::runtime_error("non-square matrix");
