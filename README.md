@@ -11,6 +11,8 @@
 
 fml is the Fused Matrix Library, a multi-source, header-only C++ library for dense matrix computing. The emphasis is on real-valued matrix types (`float`, `double`, and `__half`) for numerical operations useful for data analysis.
 
+The goal of fml is to be "medium-level". That is, high-level compared to working directly with e.g. the BLAS or CUDA, but low(er)-level compared to other C++ matrix frameworks. Some knowledge of the use of LAPACK will make many choices in fml make more sense.
+
 The library provides 4 main classes: `cpumat`, `gpumat`, `parmat`, and `mpimat`. These are mostly what they sound like, but the particular details are:
 
 * <font color="blue">CPU</font>: Single node cpu computing (multi-threaded if using multi-threaded BLAS and linking with OpenMP).
