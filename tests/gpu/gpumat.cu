@@ -128,7 +128,7 @@ TEMPLATE_TEST_CASE("diag", "[gpumat]", float, double)
 
 
 
-TEMPLATE_TEST_CASE("rev", "[cpumat]", float, double)
+TEMPLATE_TEST_CASE("rev", "[gpumat]", float, double)
 {
   len_t n = 2;
   
