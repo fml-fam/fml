@@ -809,7 +809,7 @@ void mpimat<REAL>::rev_cols()
 {
   len_t buf_len = this->mb;
   REAL *rev_buf = (REAL*) malloc(buf_len * sizeof(*rev_buf));
-  REAL *tmp = (REAL*) malloc(buf_len * sizeof(*rev_buf));
+  REAL *tmp = (REAL*) malloc(buf_len * sizeof(*tmp));
   if (rev_buf == NULL || tmp == NULL)
   {
     if (rev_buf) std::free(rev_buf);
