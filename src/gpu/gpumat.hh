@@ -69,6 +69,8 @@ class gpumat : public unimat<REAL>
     REAL get(const len_t i, const len_t j) const;
     void set(const len_t i, const REAL v);
     void set(const len_t i, const len_t j, const REAL v);
+    void get_row(const len_t i, gpuvec<REAL> &v) const;
+    void get_col(const len_t j, gpuvec<REAL> &v) const;
     
     bool operator==(const gpumat<REAL> &x) const;
     bool operator!=(const gpumat<REAL> &x) const;
@@ -679,6 +681,26 @@ void gpumat<REAL>::set(const len_t i, const len_t j, const REAL v)
 {
   this->check_index(i, j);
   this->c->mem_cpu2gpu(this->data + (i + this->m*j), &v, sizeof(REAL));
+}
+
+
+
+template <typename REAL>
+void gpumat<REAL>::get_row(const len_t i, gpuvec<REAL> &v) const
+{
+  v.resize(this->m);
+  
+  fml::kernelfuns::kernel_get_row<<<dim_grid, dim_block>>>(i, this->m, this->n, this->data, v.data_ptr());
+  this->c->check();
+}
+
+template <typename REAL>
+void gpumat<REAL>::get_col(const len_t j, gpuvec<REAL> &v) const
+{
+  v.resize(this->n);
+  
+  fml::kernelfuns::kernel_get_col<<<dim_grid, dim_block>>>(j, this->m, this->n, this->data, v.data_ptr());
+  this->c->check();
 }
 
 
