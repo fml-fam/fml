@@ -101,14 +101,16 @@ cpuvec<T>::cpuvec(len_t size)
 {
   check_params(size);
   
+  this->_size = size;
+  this->free_data = true;
+  
+  if (size == 0)
+    return;
+  
   const size_t len = (size_t) size * sizeof(T);
   this->data = (T*) std::malloc(len);
   if (this->data == NULL)
     throw std::bad_alloc();
-  
-  this->_size = size;
-  
-  this->free_data = true;
 }
 
 
@@ -174,7 +176,11 @@ void cpuvec<T>::resize(len_t size)
 {
   check_params(size);
   
-  if (this->_size == size)
+  if (size == 0)
+  {
+    this->_size = size;
+    return;
+  } else if (this->_size == size)
     return;
   
   const size_t len = (size_t) size * sizeof(T);
@@ -189,7 +195,6 @@ void cpuvec<T>::resize(len_t size)
     throw std::bad_alloc();
   
   this->data = (T*) realloc_ptr;
-  
   this->_size = size;
 }
 

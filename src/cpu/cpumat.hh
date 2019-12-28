@@ -123,15 +123,17 @@ cpumat<REAL>::cpumat(len_t nrows, len_t ncols)
 {
   check_params(nrows, ncols);
   
+  this->m = nrows;
+  this->n = ncols;
+  this->free_data = true;
+  
+  if (this->m == 0 || this->n == 0)
+    return;
+  
   size_t len = (size_t) nrows * ncols * sizeof(REAL);
   this->data = (REAL*) std::malloc(len);
   if (this->data == NULL)
     throw std::bad_alloc();
-  
-  this->m = nrows;
-  this->n = ncols;
-  
-  this->free_data = true;
 }
 
 
@@ -203,7 +205,7 @@ void cpumat<REAL>::resize(len_t nrows, len_t ncols)
   const size_t len = (size_t) nrows * ncols * sizeof(REAL);
   const size_t oldlen = (size_t) this->m * this->n * sizeof(REAL);
   
-  if (len == oldlen)
+  if ((nrows == 0 || ncols == 0) || (len == oldlen))
   {
     this->m = nrows;
     this->n = ncols;
