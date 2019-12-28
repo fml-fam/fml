@@ -685,18 +685,52 @@ void gpumat<REAL>::set(const len_t i, const len_t j, const REAL v)
 
 
 
+/**
+  @brief Get the specified row.
+  
+  @param[in] i The desired row, 0-indexed.
+  @param[out] v The row values.
+  
+  @allocs If the output dimension is inappropriately sized, it will
+  automatically be re-allocated.
+  
+  @except If `i` is an inappropriate value (i.e. does not refer to a matrix
+  row), then the method will throw a `logic_error` exception. If a reallocation
+  is triggered and fails, a `bad_alloc` exception will be thrown.
+ */
 template <typename REAL>
 void gpumat<REAL>::get_row(const len_t i, gpuvec<REAL> &v) const
 {
+  if (i < 0 || i >= this->m)
+    throw std::logic_error("invalid matrix row");
+  
   v.resize(this->m);
   
   fml::kernelfuns::kernel_get_row<<<dim_grid, dim_block>>>(i, this->m, this->n, this->data, v.data_ptr());
   this->c->check();
 }
 
+
+
+/**
+  @brief Get the specified column.
+  
+  @param[in] j The desired column, 0-indexed.
+  @param[out] v The column values.
+  
+  @allocs If the output dimension is inappropriately sized, it will
+  automatically be re-allocated.
+  
+  @except If `j` is an inappropriate value (i.e. does not refer to a matrix
+  column), then the method will throw a `logic_error` exception. If a
+  reallocation is triggered and fails, a `bad_alloc` exception will be thrown.
+ */
 template <typename REAL>
 void gpumat<REAL>::get_col(const len_t j, gpuvec<REAL> &v) const
 {
+  if (j < 0 || j >= this->n)
+    throw std::logic_error("invalid matrix column");
+  
   v.resize(this->n);
   
   fml::kernelfuns::kernel_get_col<<<dim_grid, dim_block>>>(j, this->m, this->n, this->data, v.data_ptr());
