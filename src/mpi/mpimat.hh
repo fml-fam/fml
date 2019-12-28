@@ -1031,6 +1031,9 @@ void mpimat<REAL>::set(const len_t i, const len_t j, const REAL v)
 template <typename REAL>
 void mpimat<REAL>::get_row(const len_t i, cpuvec<REAL> &v) const
 {
+  if (i < 0 || i >= this->m)
+    throw std::logic_error("invalid matrix row");
+  
   v.resize(this->n);
   v.fill_zero();
   REAL *v_ptr = v.data_ptr();
@@ -1069,6 +1072,9 @@ void mpimat<REAL>::get_row(const len_t i, cpuvec<REAL> &v) const
 template <typename REAL>
 void mpimat<REAL>::get_col(const len_t j, cpuvec<REAL> &v) const
 {
+  if (j < 0 || j >= this->n)
+    throw std::logic_error("invalid matrix column");
+  
   v.resize(this->m);
   v.fill_zero();
   REAL *v_ptr = v.data_ptr();
