@@ -246,6 +246,34 @@ namespace fml
       if (i < m && j < n)
         out[i + m*j] = (REAL_OUT) in[i + m*j];
     }
+    
+    
+    
+    template <typename REAL>
+    __global__ void kernel_get_row(const len_t row, const len_t m, const len_t n, const REAL *data, REAL *v)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      int j = blockDim.y*blockIdx.y + threadIdx.y;
+      
+      if (i < m && j < n)
+      {
+        if (i == row)
+          v[j] = data[i + m*j];
+      }
+    }
+    
+    template <typename REAL>
+    __global__ void kernel_get_col(const len_t col, const len_t m, const len_t n, const REAL *data, REAL *v)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      int j = blockDim.y*blockIdx.y + threadIdx.y;
+      
+      if (i < m && j < n)
+      {
+        if (j == col)
+          v[i] = data[i + m*j];
+      }
+    }
   }
 }
 
