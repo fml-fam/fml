@@ -1,3 +1,6 @@
 [submodule "src/arraytools"]
 	path = src/_internals/arraytools
 	url = git@github.com:wrathematics/arraytools
+[submodule "src/_internals/arraytools"]
+	path = src/_internals/arraytools
+	url = git@github.com:wrathematics/arraytools.git
