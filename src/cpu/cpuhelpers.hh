@@ -9,7 +9,7 @@
 
 #include <stdexcept>
 
-#include "../arraytools/src/arraytools.hpp"
+#include "../_internals/arraytools/src/arraytools.hpp"
 
 #include "cpumat.hh"
 #include "cpuvec.hh"

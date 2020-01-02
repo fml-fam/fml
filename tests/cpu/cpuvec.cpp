@@ -1,6 +1,6 @@
 #include "../catch.hpp"
 
-#include <arraytools/src/arraytools.hpp>
+#include <_internals/arraytools/src/arraytools.hpp>
 #include <cpu/cpuvec.hh>
 
 using namespace arraytools;

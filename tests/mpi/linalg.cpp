@@ -1,6 +1,6 @@
 #include "../catch.hpp"
 
-#include <arraytools/src/arraytools.hpp>
+#include <_internals/arraytools/src/arraytools.hpp>
 #include <mpi/grid.hh>
 #include <mpi/linalg.hh>
 #include <mpi/mpimat.hh>

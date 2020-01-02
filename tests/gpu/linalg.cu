@@ -1,6 +1,6 @@
 #include "../catch.hpp"
 
-#include <arraytools/src/arraytools.hpp>
+#include <_internals/arraytools/src/arraytools.hpp>
 #include <gpu/gpumat.hh>
 #include <gpu/linalg.hh>
 
