@@ -614,7 +614,7 @@ void mpimat<REAL>::fill_eye()
 
 
 /**
-  @brief Set diagonal entries to 1 and non-diagonal entries to 0.
+  @brief Set diagonal entries of the matrix to those in the vector.
   
   @details If the vector is smaller than the matrix diagonal, the vector will
   recycle until the matrix diagonal is filled. If the vector is longer, then
