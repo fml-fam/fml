@@ -26,5 +26,6 @@ New:
   * added to mpihelpers namespace
       - mpi2cpu()
       - cpu2mpi()
+      - mpi2mpi()
 API Changes: None
 Bug Fixes: None
