@@ -388,6 +388,7 @@ namespace linalg
     @param[inout] x Input data matrix, replaced by its LU factorization.
     @param[out] p Vector of pivots, representing the diagonal matrix P in the
     PLU.
+    @param[out] info The LAPACK return number.
     
     @impl Uses the cuSOLVER function `cusolverDnXgetrf()`.
     
@@ -400,11 +401,11 @@ namespace linalg
     @tparam REAL should be '__half', 'float', or 'double'.
    */
   template <typename REAL>
-  int lu(gpumat<REAL> &x, gpuvec<int> &p)
+  void lu(gpumat<REAL> &x, gpuvec<int> &p, int &info)
   {
     check_card(x, p);
     
-    int info = 0;
+    info = 0;
     const int m = x.nrows();
     auto c = x.get_card();
     
@@ -425,16 +426,18 @@ namespace linalg
     
     info_device.get_val(&info);
     check_cusolver_ret(check, "getrf");
-    
-    return info;
   }
   
   /// \overload
   template <typename REAL>
-  int lu(gpumat<REAL> &x)
+  void lu(gpumat<REAL> &x)
   {
     gpuvec<int> p(x.get_card());
-    return lu(x, p);
+    int info;
+    
+    lu(x, p, info);
+    
+    fml::linalgutils::check_info(info, "getrf");
   }
   
   
@@ -678,7 +681,8 @@ namespace linalg
     // Factor x = LU
     auto c = x.get_card();
     gpuvec<int> p(c);
-    int info = lu(x, p);
+    int info;
+    lu(x, p, info);
     fml::linalgutils::check_info(info, "getrf");
     
     // Invert
@@ -715,7 +719,8 @@ namespace linalg
       // Factor x = LU
       auto c = x.get_card();
       gpuvec<int> p(c);
-      int info = lu(x, p);
+      int info;
+      lu(x, p, info);
       fml::linalgutils::check_info(info, "getrf");
       
       // Solve xb = y

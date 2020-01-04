@@ -315,6 +315,7 @@ namespace linalg
     @param[inout] x Input data matrix, replaced by its LU factorization.
     @param[out] p Vector of pivots, representing the diagonal matrix P in the
     PLU.
+    @param[out] info The LAPACK return number.
     
     @impl Uses the ScaLAPACK function `pXgetrf()`.
     
@@ -327,25 +328,27 @@ namespace linalg
     @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
-  int lu(mpimat<REAL> &x, cpuvec<int> &p)
+  void lu(mpimat<REAL> &x, cpuvec<int> &p, int &info)
   {
-    int info = 0;
+    info = 0;
     const len_t m = x.nrows();
     const len_t lipiv = std::min(m, x.ncols());
     
     p.resize(lipiv);
     
     fml::scalapack::getrf(m, x.ncols(), x.data_ptr(), x.desc_ptr(), p.data_ptr(), &info);
-    
-    return info;
   }
   
   /// \overload
   template <typename REAL>
-  int lu(mpimat<REAL> &x)
+  void lu(mpimat<REAL> &x)
   {
     cpuvec<int> p;
-    return lu(x, p);
+    int info;
+    
+    lu(x, p, info);
+    
+    fml::linalgutils::check_info(info, "getrf");
   }
   
   
@@ -586,7 +589,8 @@ namespace linalg
     
     // Factor x = LU
     cpuvec<int> p;
-    int info = lu(x, p);
+    int info;
+    lu(x, p, info);
     fml::linalgutils::check_info(info, "getrf");
     
     // Invert
