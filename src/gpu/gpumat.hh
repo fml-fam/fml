@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <cstdio>
 
+#include "../_internals/rand.hh"
 #include "../_internals/types.hh"
 #include "../_internals/unimat.hh"
 
@@ -458,16 +459,20 @@ void gpumat<REAL>::fill_diag(const gpuvec<REAL> &v)
   @param[in] min,max Parameters for the generator.
  */
 template <typename REAL>
-void gpumat<REAL>::fill_runif(uint32_t seed, REAL min, REAL max)
+void gpumat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL max)
 {
-  
+  const size_t len = (size_t) this->m * this->n;
+  gpurand::gen_runif(seed, len, this->data);
+  fml::kernelfuns::kernel_fill_runif_update<<<dim_grid, dim_block>>>(min, max, this->m, this->n, this->data);
+  this->c->check();
 }
 
 /// \overload
 template <typename REAL>
-void gpumat<REAL>::fill_runif(REAL min, REAL max)
+void gpumat<REAL>::fill_runif(const REAL min, const REAL max)
 {
-  
+  uint32_t seed = fml::rand::get_seed();
+  this->fill_runif(seed, min, max);
 }
 
 
@@ -479,16 +484,18 @@ void gpumat<REAL>::fill_runif(REAL min, REAL max)
   @param[in] mean,sd Parameters for the generator.
  */
 template <typename REAL>
-void gpumat<REAL>::fill_rnorm(uint32_t seed, REAL mean, REAL sd)
+void gpumat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL sd)
 {
-  
+  const size_t len = (size_t) this->m * this->n;
+  gpurand::gen_rnorm(seed, len, this->data);
 }
 
 /// \overload
 template <typename REAL>
-void gpumat<REAL>::fill_rnorm(REAL mean, REAL sd)
+void gpumat<REAL>::fill_rnorm(const REAL mean, const REAL sd)
 {
-  
+  uint32_t seed = fml::rand::get_seed();
+  this->fill_rnorm(mean, sd);
 }
 
 

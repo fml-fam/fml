@@ -125,6 +125,18 @@ namespace fml
     
     
     template <typename REAL>
+    __global__ void kernel_fill_runif_update(const REAL min, const REAL max, const len_t m, const len_t n, REAL *data)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      int j = blockDim.y*blockIdx.y + threadIdx.y;
+      
+      if (i < m && j < n)
+        data[i + m*j] = min + (max - min)*data[i + m*j];
+    }
+    
+    
+    
+    template <typename REAL>
     __global__ void kernel_diag(const len_t m, const len_t n, const REAL *data, REAL *v)
     {
       int i = blockDim.x*blockIdx.x + threadIdx.x;
