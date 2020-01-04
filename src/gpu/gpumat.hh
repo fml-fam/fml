@@ -457,6 +457,11 @@ void gpumat<REAL>::fill_diag(const gpuvec<REAL> &v)
   
   @param[in] seed Seed for the rng.
   @param[in] min,max Parameters for the generator.
+  
+  @allocs Some internal GPU data has to be allocated.
+  
+  @except If something goes wrong with the GPU generator, a `runtime_error`
+  exception will be thrown.
  */
 template <typename REAL>
 void gpumat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL max)
@@ -482,6 +487,11 @@ void gpumat<REAL>::fill_runif(const REAL min, const REAL max)
   
   @param[in] seed Seed for the rng.
   @param[in] mean,sd Parameters for the generator.
+  
+  @allocs Some internal GPU data has to be allocated.
+  
+  @except If something goes wrong with the GPU generator, a `runtime_error`
+  exception will be thrown.
  */
 template <typename REAL>
 void gpumat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL sd)
