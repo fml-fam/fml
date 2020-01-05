@@ -58,6 +58,12 @@ Check the makefiles in the `examples/` tree if none of that makes sense.
 
 
 
+## High-Level Language Bindings
+
+* R bindings: [fmlr](https://github.com/wrathematics/fmlr)
+
+
+
 ## Example
 
 ```C++
@@ -166,12 +172,6 @@ And here we see:
 # cpuvec 2 type=f
 9.5080 0.7729 
 ```
-
-
-
-## High-Level Language Bindings
-
-* R bindings: [fmlr](https://github.com/wrathematics/fmlr)
 
 
 
