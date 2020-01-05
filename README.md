@@ -46,13 +46,13 @@ Depending on which class(es) you want to use, here are some general guidelines f
     - Link with LAPACK and BLAS (and ideally with OpenMP).
 * GPU: `gpumat`
     - Compile with `nvcc`.
-    - For most functionality, link with libcudart, libcublas, and libcusolver.  Link with libnvidia-ml if using nvml (if you're only using this, then you don't need `nvcc`; an ordinary C++ compiler will do).
-* PAR: `parmat`
-    - Compile with `mpicxx`.
-    - TODO
+    - For most functionality, link with libcudart, libcublas, and libcusolver. Link with libcurand if using the random generators.  Link with libnvidia-ml if using nvml (if you're only using this, then you don't need `nvcc`; an ordinary C++ compiler will do). If you have CUDA installed and do not know what to link with, there is no harm in linking with all of these.
 * MPI: `mpimat`
     - Compile with `mpicxx`.
     - Link with libscalapack.
+* PAR: `parmat`
+    - Compile with `mpicxx`.
+    - Link with CPU stuff if using `parmat_cpu`; link with GPU stuff if using `parmat_gpu` (you can use both).
 
 Check the makefiles in the `examples/` tree if none of that makes sense.
 
