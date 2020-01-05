@@ -17,8 +17,8 @@ The library provides 4 main classes: `cpumat`, `gpumat`, `parmat`, and `mpimat`.
 
 * <font color="blue">CPU</font>: Single node cpu computing (multi-threaded if using multi-threaded BLAS and linking with OpenMP).
 * <font color="green">GPU</font>: Single gpu computing via CUDA.
-* <font color="orange">PAR</font>: Multi-node and/or multi-gpu computing via MPI and/or CUDA.
 * <font color="red">MPI</font>: Multi-node computing via ScaLAPACK (+gpus if using [SLATE](http://icl.utk.edu/slate/)).
+* <font color="orange">PAR</font>: Multi-node and/or multi-gpu computing via MPI and/or CUDA.
 
 There are some differences in how objects of any particular type are constructed. But the high level APIs are largely the same between the objects. The goal is to be able to quickly create laptop-scale prototypes that are then easily converted into large scale gpu/multi-node/multi-gpu/multi-node+multi-gpu codes.
 
@@ -31,6 +31,7 @@ There are no external header dependencies, but there are some shared libraries y
 * CPU code needs [LAPACK](http://performance.netlib.org/lapack/) (I recommend [OpenBLAS](https://github.com/xianyi/OpenBLAS))
 * GPU code needs [CUDA](https://developer.nvidia.com/cuda-downloads)
 * MPI code needs [ScaLAPACK](http://performance.netlib.org/scalapack/)
+* PAR code needs the libraries required by the CPU and/or GPU features, noted above.
 
 Other software we use:
 
