@@ -51,6 +51,9 @@ class parmat
     void set(const len_global_t i, const REAL v);
     void set(const len_global_t i, const len_t j, const REAL v);
 
+    bool operator==(const parmat<MAT, VEC, REAL> &x) const;
+    bool operator!=(const parmat<MAT, VEC, REAL> &x) const;
+    
     len_global_t nrows() const {return m_global;};
     len_local_t nrows_local() const {return data.nrows();};
     len_local_t ncols() const {return data.ncols();};
@@ -277,6 +280,23 @@ void parmat<MAT, VEC, REAL>::set(const len_global_t i, const len_t j, const REAL
   
   if (i >= nb4 && i < nb4+data.nrows())
     data.set(i-nb4, j, v);
+}
+
+
+
+template <class MAT, class VEC, typename REAL>
+bool parmat<MAT, VEC, REAL>::operator==(const parmat<MAT, VEC, REAL> &x) const
+{
+  int neq_count = (int) (data != x.data_obj());
+  r.allreduce(1, &neq_count);
+  
+  return (neq_count == 0);
+}
+
+template <class MAT, class VEC, typename REAL>
+bool parmat<MAT, VEC, REAL>::operator!=(const parmat<MAT, VEC, REAL> &x) const
+{
+  return !(*this == x);
 }
 
 
