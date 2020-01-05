@@ -21,7 +21,8 @@ class parmat_cpu : public parmat<cpumat<REAL>, cpuvec<REAL>, REAL>
   using parmat<cpumat<REAL>, cpuvec<REAL>, REAL>::parmat;
   
   public:
-    parmat_cpu(comm &mpi_comm, len_global_t nrows, len_t ncols);
+    parmat_cpu(comm &mpi_comm, const len_global_t nrows, const len_t ncols);
+    
     void fill_linspace(const REAL start, const REAL stop);
     void fill_eye();
     void fill_diag(const cpuvec<REAL> &d);
@@ -30,13 +31,13 @@ class parmat_cpu : public parmat<cpumat<REAL>, cpuvec<REAL>, REAL>
 
 
 template <typename REAL>
-parmat_cpu<REAL>::parmat_cpu(comm &mpi_comm, len_global_t nrows, len_t ncols)
+parmat_cpu<REAL>::parmat_cpu(comm &mpi_comm, const len_global_t nrows, const len_t ncols)
 {
   this->r = mpi_comm;
   
   this->m_global = nrows;
   len_t nrows_local = this->get_local_dim();
-  this->data = cpumat<REAL>(nrows_local, ncols);
+  this->data.resize(nrows_local, ncols);
   
   this->m_global = (len_global_t) nrows_local;
   this->r.allreduce(1, &(this->m_global));
