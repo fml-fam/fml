@@ -12,6 +12,7 @@
 #include <cstring>
 #include <random>
 
+#include "../../_internals/rand.hh"
 #include "../../_internals/types.hh"
 #include "../comm.hh"
 
@@ -31,10 +32,10 @@ class parmat
     void fill_linspace(const REAL start, const REAL stop);
     void fill_eye();
     void fill_diag(const VEC &d);
-    // void fill_runif(const uint32_t seed, const REAL min=0, const REAL max=1);
-    // void fill_runif(const REAL min=0, const REAL max=1);
-    // void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
-    // void fill_rnorm(const REAL mean=0, const REAL sd=1);
+    void fill_runif(const uint32_t seed, const REAL min=0, const REAL max=1);
+    void fill_runif(const REAL min=0, const REAL max=1);
+    void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
+    void fill_rnorm(const REAL mean=0, const REAL sd=1);
     
     // void diag(cpuvec<REAL> &v);
     // void antidiag(cpuvec<REAL> &v);
@@ -146,6 +147,36 @@ template <class MAT, class VEC, typename REAL>
 void parmat<MAT, VEC, REAL>::fill_val(const REAL v)
 {
   data.fill_val(v);
+}
+
+
+
+template <class MAT, class VEC, typename REAL>
+void parmat<MAT, VEC, REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL max)
+{
+  data.fill_runif(seed, min, max);
+}
+
+template <class MAT, class VEC, typename REAL>
+void parmat<MAT, VEC, REAL>::fill_runif(const REAL min, const REAL max)
+{
+  uint32_t seed = fml::rand::get_seed() + r.rank();
+  data.fill_runif(seed, min, max);
+}
+
+
+
+template <class MAT, class VEC, typename REAL>
+void parmat<MAT, VEC, REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL sd)
+{
+  data.fill_rnorm(seed, mean, sd);
+}
+
+template <class MAT, class VEC, typename REAL>
+void parmat<MAT, VEC, REAL>::fill_rnorm(const REAL mean, const REAL sd)
+{
+  uint32_t seed = fml::rand::get_seed() + r.rank();
+  data.fill_rnorm(seed, mean, sd);
 }
 
 
