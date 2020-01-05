@@ -46,6 +46,11 @@ class parmat
     bool any_inf() const;
     bool any_nan() const;
     
+    REAL get(const len_global_t i) const;
+    REAL get(const len_global_t i, const len_t j) const;
+    void set(const len_global_t i, const REAL v);
+    void set(const len_global_t i, const len_t j, const REAL v);
+
     len_global_t nrows() const {return m_global;};
     len_local_t nrows_local() const {return data.nrows();};
     len_local_t ncols() const {return data.ncols();};
@@ -58,8 +63,11 @@ class parmat
     len_global_t m_global;
     comm r;
     len_global_t nb4;
+    
     void num_preceding_rows();
     len_t get_local_dim();
+    void check_index(const len_global_t i) const;
+    void check_index(const len_global_t i, const len_t j) const;
 };
 
 
@@ -217,6 +225,62 @@ bool parmat<MAT, VEC, REAL>::any_nan() const
 
 
 
+template <class MAT, class VEC, typename REAL>
+REAL parmat<MAT, VEC, REAL>::get(const len_global_t i) const
+{
+  check_index(i);
+  
+  len_global_t row = i % m_global;
+  len_t j = (len_t) (i / m_global);
+  
+  REAL ret;
+  if (row >= nb4 && row < nb4+data.nrows())
+    ret = data.get(row-nb4, j);
+  else
+    ret = 0;
+  
+  r.allreduce(1, &ret);
+  return ret;
+}
+
+template <class MAT, class VEC, typename REAL>
+REAL parmat<MAT, VEC, REAL>::get(const len_global_t i, const len_t j) const
+{
+  check_index(i, j);
+  
+  REAL ret;
+  if (i >= nb4 && i < nb4+data.nrows())
+    ret = data.get(i-nb4, j);
+  else
+    ret = 0;
+  
+  r.allreduce(1, &ret);
+  return ret;
+}
+
+template <class MAT, class VEC, typename REAL>
+void parmat<MAT, VEC, REAL>::set(const len_global_t i, const REAL v)
+{
+  check_index(i);
+  
+  len_global_t row = i % m_global;
+  len_t j = (len_t) (i / m_global);
+  
+  if (row >= nb4 && row < nb4+data.nrows())
+    data.set(row-nb4, j, v);
+}
+
+template <class MAT, class VEC, typename REAL>
+void parmat<MAT, VEC, REAL>::set(const len_global_t i, const len_t j, const REAL v)
+{
+  check_index(i, j);
+  
+  if (i >= nb4 && i < nb4+data.nrows())
+    data.set(i-nb4, j, v);
+}
+
+
+
 // -----------------------------------------------------------------------------
 // private
 // -----------------------------------------------------------------------------
@@ -258,6 +322,22 @@ len_t parmat<MAT, VEC, REAL>::get_local_dim()
     local++;
   
   return local;
+}
+
+
+
+template <class MAT, class VEC, typename REAL>
+void parmat<MAT, VEC, REAL>::check_index(const len_global_t i) const
+{
+  if (i < 0 || i >= (m_global * data.ncols()))
+    throw std::runtime_error("index out of bounds");
+}
+
+template <class MAT, class VEC, typename REAL>
+void parmat<MAT, VEC, REAL>::check_index(const len_global_t i, const len_t j) const
+{
+  if (i < 0 || i >= m_global || j < 0 || j >= data.ncols())
+    throw std::runtime_error("index out of bounds");
 }
 
 
