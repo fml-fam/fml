@@ -207,7 +207,7 @@ Some similar C/C++ projects worth mentioning:
 
 These are all great libraries which have stood the test of time. Armadillo in particular is worthy of a look, as it has a very nice interface and very extensive set of functions. However, to my knowledge, all of these focus exclusively on CPU computing. There are some extensions to Armadillo and Eigen for GPU computing. And for gemm-heavy codes, you can use [nvblas](https://docs.nvidia.com/cuda/nvblas/index.html) to offload some work to the GPU, but this doesn't always achieve good performance. And none of the above include distributed computing, except for PETSc which focuses on sparse matrices.
 
-There are probably many other C++ frameworks in this arena, but none to my knowledge have a similar scope.
+There are probably many other C++ frameworks in this arena, but none to my knowledge have a similar scope to fml.
 
 Probably the biggest influence on my thinking for this library is the [pbdR package ecosystem](https://github.com/RBigData) for HPC with the R language, which I have worked on for many years now. Some obvious parallels are:
 
