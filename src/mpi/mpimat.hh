@@ -821,18 +821,18 @@ void mpimat<REAL>::rev_cols()
   {
     for (len_t i=0; i<this->m_local; i+=this->mb)
     {
-      const int gj = fml::bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
+      const len_t gj = fml::bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
       if (gj >= this->n/2)
         break;
       
-      const int gj_rev = this->n - gj - 1;
+      const len_t gj_rev = this->n - gj - 1;
       
       const int pr = this->g.myrow();
       const int pc_rev = fml::bcutils::g2p(gj_rev, this->nb, this->g.npcol());
       
       if (pc_rev == this->g.mycol())
       {
-        const int j_rev = fml::bcutils::g2l(gj_rev, this->nb, this->g.npcol());
+        const len_t j_rev = fml::bcutils::g2l(gj_rev, this->nb, this->g.npcol());
         
         if (j != j_rev)
         {
