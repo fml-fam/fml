@@ -10,10 +10,10 @@ clean: cpumat_clean mpimat_clean
 
 cpumat: cpumat_miniclean cpumat_make cpumat_run
 
-cpumat_make:
-	( cd cpu; make )
+cpumat_make: cpumat_miniclean
+	( cd cpu; make -j )
 
-cpumat_run:
+cpumat_run: cpumat_make
 	( cd cpu; ./cpumat )
 
 cpumat_miniclean:
@@ -26,13 +26,13 @@ cpumat_clean:
 
 gpumat: gpumat_miniclean gpumat_make gpumat_run
 
-gpumat_make:
-	( cd gpu; make )
+gpumat_make: gpumat_miniclean
+	( cd gpu; make -j )
 
-gpumat_run:
+gpumat_run: gpumat_make
 	( cd gpu; ./gpumat )
 
-pumat_miniclean:
+gpumat_miniclean:
 	( cd gpu; make miniclean; )
 
 gpumat_clean:
@@ -42,10 +42,10 @@ gpumat_clean:
 
 mpimat: mpimat_miniclean mpimat_make mpimat_run
 
-mpimat_make:
-	( cd mpi; make )
+mpimat_make: mpimat_miniclean
+	( cd mpi; make -j )
 
-mpimat_run:
+mpimat_run: mpimat_make
 	( cd mpi; ./mpimat )
 
 mpimat_miniclean:
