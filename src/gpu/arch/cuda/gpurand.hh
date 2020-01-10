@@ -12,21 +12,28 @@
 
 namespace gpurand
 {
+  namespace defs
+  {
+    static const curandRngType_t gen_type = CURAND_RNG_PSEUDO_MTGP32;
+  }
+  
+  
+  
   namespace err
   {
-    inline void check_init(curandStatus_t st)
+    static inline void check_init(curandStatus_t st)
     {
       if (st != CURAND_STATUS_SUCCESS)
         throw std::runtime_error("unable to initialize GPU generator");
     }
     
-    inline void check_seed_set(curandStatus_t st)
+    static inline void check_seed_set(curandStatus_t st)
     {
       if (st != CURAND_STATUS_SUCCESS)
         throw std::runtime_error("unable to set GPU generator seed");
     }
     
-    inline void check_generation(curandStatus_t st)
+    static inline void check_generation(curandStatus_t st)
     {
       if (st != CURAND_STATUS_SUCCESS)
         throw std::runtime_error("unable to utilize GPU generator");
@@ -35,67 +42,64 @@ namespace gpurand
   
   
   
-  inline void gen_runif(const uint32_t seed, const size_t len, float *x)
+  namespace generics
+  {
+    static inline curandStatus_t gpu_rand_unif(curandGenerator_t generator, float *outputPtr, size_t num)
+    {
+      return curandGenerateUniform(generator, outputPtr, num);
+    }
+    
+    static inline curandStatus_t gpu_rand_unif(curandGenerator_t generator, double *outputPtr, size_t num)
+    {
+      return curandGenerateUniformDouble(generator, outputPtr, num);
+    }
+    
+    
+    
+    static inline curandStatus_t gpu_rand_norm(curandGenerator_t generator, float *outputPtr, size_t num, float mean, float stddev)
+    {
+      return curandGenerateNormal(generator, outputPtr, num, mean, stddev);
+    }
+    
+    static inline curandStatus_t gpu_rand_norm(curandGenerator_t generator, double *outputPtr, size_t num, double mean, double stddev)
+    {
+      return curandGenerateNormalDouble(generator, outputPtr, num, mean, stddev);
+    }
+  }
+  
+  
+  
+  template <typename REAL>
+  inline void gen_runif(const uint32_t seed, const size_t len, REAL *x)
   {
     curandStatus_t st;
     curandGenerator_t gen;
     
-    st = curandCreateGenerator(&gen, CURAND_RNG_PSEUDO_MT19937);
+    st = curandCreateGenerator(&gen, defs::gen_type);
     err::check_init(st);
     
     st = curandSetPseudoRandomGeneratorSeed(gen, seed);
     err::check_seed_set(st);
-    st = curandGenerateUniform(gen, x, len);
+    st = generics::gpu_rand_unif(gen, x, len);
     err::check_generation(st);
     
     curandDestroyGenerator(gen);
   }
   
-  inline void gen_runif(const uint32_t seed, const size_t len, double *x)
+  
+  
+  template <typename REAL>
+  inline void gen_rnorm(const uint32_t seed, const REAL mean, const REAL sd, const size_t len, REAL *x)
   {
     curandStatus_t st;
     curandGenerator_t gen;
     
-    st = curandCreateGenerator(&gen, CURAND_RNG_PSEUDO_MT19937);
+    st = curandCreateGenerator(&gen, defs::gen_type);
     err::check_init(st);
     
     st = curandSetPseudoRandomGeneratorSeed(gen, seed);
     err::check_seed_set(st);
-    st = curandGenerateUniformDouble(gen, x, len);
-    err::check_generation(st);
-    
-    curandDestroyGenerator(gen);
-  }
-  
-  
-  
-  inline void gen_rnorm(const uint32_t seed, const float mean, const float sd, const size_t len, float *x)
-  {
-    curandStatus_t st;
-    curandGenerator_t gen;
-    
-    st = curandCreateGenerator(&gen, CURAND_RNG_PSEUDO_MT19937);
-    err::check_init(st);
-    
-    st = curandSetPseudoRandomGeneratorSeed(gen, seed);
-    err::check_seed_set(st);
-    st = curandGenerateNormal(gen, x, len, mean, sd);
-    err::check_generation(st);
-    
-    curandDestroyGenerator(gen);
-  }
-  
-  inline void gen_rnorm(const uint32_t seed, const float mean, const float sd, const size_t len, double *x)
-  {
-    curandStatus_t st;
-    curandGenerator_t gen;
-    
-    st = curandCreateGenerator(&gen, CURAND_RNG_PSEUDO_MT19937);
-    err::check_init(st);
-    
-    st = curandSetPseudoRandomGeneratorSeed(gen, seed);
-    err::check_seed_set(st);
-    st = curandGenerateNormalDouble(gen, x, len, mean, sd);
+    st = generics::gpu_rand_norm(gen, x, len, mean, sd);
     err::check_generation(st);
     
     curandDestroyGenerator(gen);
