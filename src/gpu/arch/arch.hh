@@ -15,13 +15,19 @@
 #endif
 
 #if (defined(FML_USE_CUDA))
+  // -------------------------
+  // NOTE include order matters; something is wrong with cublas/cusolver internals
   #include "cuda/gpulapack.hh"
+  #include "cuda/gpublas.hh"
+  // -------------------------
+  
   #include "cuda/gpuprims.hh"
   #include "cuda/gpurand.hh"
   #include "cuda/nvml.hh"
   #include "cuda/types.hh"
 #elif defined(FML_USE_HIP)
   #error "HIP is currently unsupported"
+  // #include "hip/gpublas.hh"
   // #include "hip/gpulapack.hh"
   // #include "hip/gpuprims.hh"
   // #include "hip/gpurand.hh"

@@ -11,6 +11,8 @@
 #include <cuda_runtime.h>
 #include <cusolverDn.h>
 
+
+// core
 typedef cudaError_t gpu_error_t;
 #define GPU_SUCCESS cudaSuccess
 
@@ -18,6 +20,7 @@ typedef cudaError_t gpu_error_t;
 #define GPU_MEMCPY_DEVICE_TO_HOST cudaMemcpyDeviceToHost
 #define GPU_MEMCPY_DEVICE_TO_DEVICE cudaMemcpyDeviceToDevice
 
+// blas
 #define GPUBLAS_STATUS_SUCCESS CUBLAS_STATUS_SUCCESS
 typedef cublasStatus_t gpublas_status_t;
 typedef cublasHandle_t gpublas_handle_t;
@@ -28,6 +31,7 @@ typedef cublasFillMode_t gpublas_fillmode_t;
 #define GPUBLAS_FILL_L CUBLAS_FILL_MODE_LOWER
 #define GPUBLAS_FILL_U CUBLAS_FILL_MODE_UPPER
 
+// lapack/"solver"
 #define GPULAPACK_STATUS_SUCCESS CUSOLVER_STATUS_SUCCESS
 typedef cusolverStatus_t gpulapack_status_t;
 typedef cusolverDnHandle_t gpulapack_handle_t;

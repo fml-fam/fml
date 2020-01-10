@@ -24,78 +24,8 @@
 
 namespace linalg
 {
-  namespace
-  {
-    inline std::string get_cublas_error_msg(gpublas_status_t check)
-    {
-      if (check == CUBLAS_STATUS_SUCCESS)
-        return "";
-      else if (check == CUBLAS_STATUS_NOT_INITIALIZED)
-        return "cuBLAS not initialized";
-      else if (check == CUBLAS_STATUS_ALLOC_FAILED)
-        return "internal cuBLAS memory allocation failed";
-      else if (check == CUBLAS_STATUS_INVALID_VALUE)
-        return "unsupported parameter";
-      else if (check == CUBLAS_STATUS_ARCH_MISMATCH)
-        return "function requires feature missing from device architecture";
-      else if (check == CUBLAS_STATUS_MAPPING_ERROR)
-        return "access to GPU memory space failed";
-      else if (check == CUBLAS_STATUS_EXECUTION_FAILED)
-        return "GPU program failed to execute";
-      else if (check == CUBLAS_STATUS_INTERNAL_ERROR)
-        return "internal cuBLAS operation failed";
-      else if (check == CUBLAS_STATUS_NOT_SUPPORTED)
-        return "requested functionality is not supported";
-      else if (check == CUBLAS_STATUS_LICENSE_ERROR)
-        return "error with cuBLAS license check";
-      else
-        return "unknown cuBLAS error occurred";
-    }
-    
-    inline void check_gpublas_ret(gpublas_status_t check, std::string op)
-    {
-      if (check != CUBLAS_STATUS_SUCCESS)
-      {
-        std::string msg = "cuBLAS " + op + "() failed with error: " + get_cublas_error_msg(check);
-        throw std::runtime_error(msg);
-      }
-    }
-    
-    
-    
-    inline std::string get_cusolver_error_msg(gpulapack_status_t check)
-    {
-      if (check == CUSOLVER_STATUS_SUCCESS)
-        return "";
-      else if (check == CUSOLVER_STATUS_NOT_INITIALIZED)
-        return "cuSOLVER not initialized";
-      else if (check == CUSOLVER_STATUS_ALLOC_FAILED)
-        return "internal cuSOLVER memory allocation failed";
-      else if (check == CUSOLVER_STATUS_INVALID_VALUE)
-        return "unsupported parameter";
-      else if (check == CUSOLVER_STATUS_ARCH_MISMATCH)
-        return "function requires feature missing from device architecture";
-      else if (check == CUSOLVER_STATUS_EXECUTION_FAILED)
-        return "GPU program failed to execute";
-      else if (check == CUSOLVER_STATUS_INTERNAL_ERROR)
-        return "internal cuSOLVER operation failed";
-      else if (check == CUSOLVER_STATUS_MATRIX_TYPE_NOT_SUPPORTED)
-        return "matrix type not supported";
-      else
-        return "unknown cuSOLVER error occurred";
-    }
-    
-    inline void check_gpusolver_ret(gpulapack_status_t check, std::string op)
-    {
-      if (check != CUSOLVER_STATUS_SUCCESS)
-      {
-        std::string msg = "cuSOLVER " + op + "() failed with error: " + get_cusolver_error_msg(check);
-        throw std::runtime_error(msg);
-      }
-    }
-    
-    
-    
+  namespace err
+  {  
     template <typename REAL, class ARR>
     void check_card(const gpumat<REAL> &a, const ARR &b)
     {
@@ -125,8 +55,8 @@ namespace linalg
   template <typename REAL>
   void add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const gpumat<REAL> &x, const gpumat<REAL> &y, gpumat<REAL> &ret)
   {
-    check_card(x, y);
-    check_card(x, ret);
+    err::check_card(x, y);
+    err::check_card(x, ret);
     
     len_t m, n;
     fml::linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
@@ -138,14 +68,14 @@ namespace linalg
     gpublas_operation_t cbtransx = transx ? GPUBLAS_OP_T : GPUBLAS_OP_N;
     gpublas_operation_t cbtransy = transy ? GPUBLAS_OP_T : GPUBLAS_OP_N;
     
-    gpulapack::geam(c->blas_handle(), cbtransx, cbtransy, m, n, alpha, x.data_ptr(), x.nrows(), beta, y.data_ptr(), y.nrows(), ret.data_ptr(), m);
+    gpublas::geam(c->blas_handle(), cbtransx, cbtransy, m, n, alpha, x.data_ptr(), x.nrows(), beta, y.data_ptr(), y.nrows(), ret.data_ptr(), m);
   }
   
   /// \overload
   template <typename REAL>
   gpumat<REAL> add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const gpumat<REAL> &x, const gpumat<REAL> &y)
   {
-    check_card(x, y);
+    err::check_card(x, y);
     
     len_t m, n;
     fml::linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
@@ -177,7 +107,7 @@ namespace linalg
   template <typename REAL>
   gpumat<REAL> matmult(const bool transx, const bool transy, const REAL alpha, const gpumat<REAL> &x, const gpumat<REAL> &y)
   {
-    check_card(x, y);
+    err::check_card(x, y);
     
     int m, n, k;
     fml::linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
@@ -187,8 +117,8 @@ namespace linalg
     gpublas_operation_t cbtransx = transx ? GPUBLAS_OP_T : GPUBLAS_OP_N;
     gpublas_operation_t cbtransy = transy ? GPUBLAS_OP_T : GPUBLAS_OP_N;
     
-    gpublas_status_t check = gpulapack::gemm(c->blas_handle(), cbtransx, cbtransy, m, n, k, alpha, x.data_ptr(), x.nrows(), y.data_ptr(), y.nrows(), (REAL)0, ret.data_ptr(), m);
-    check_gpublas_ret(check, "gemm");
+    gpublas_status_t check = gpublas::gemm(c->blas_handle(), cbtransx, cbtransy, m, n, k, alpha, x.data_ptr(), x.nrows(), y.data_ptr(), y.nrows(), (REAL)0, ret.data_ptr(), m);
+    gpublas::err::check_ret(check, "gemm");
     
     return ret;
   }
@@ -213,8 +143,8 @@ namespace linalg
   template <typename REAL>
   void matmult(const bool transx, const bool transy, const REAL alpha, const gpumat<REAL> &x, const gpumat<REAL> &y, gpumat<REAL> &ret)
   {
-    check_card(x, y);
-    check_card(x, ret);
+    err::check_card(x, y);
+    err::check_card(x, ret);
     
     int m, n, k;
     fml::linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
@@ -225,8 +155,8 @@ namespace linalg
     gpublas_operation_t cbtransx = transx ? GPUBLAS_OP_T : GPUBLAS_OP_N;
     gpublas_operation_t cbtransy = transy ? GPUBLAS_OP_T : GPUBLAS_OP_N;
     
-    gpublas_status_t check = gpulapack::gemm(x.get_card()->blas_handle(), cbtransx, cbtransy, m, n, k, alpha, x.data_ptr(), x.nrows(), y.data_ptr(), y.nrows(), (REAL)0, ret.data_ptr(), m);
-    check_gpublas_ret(check, "gemm");
+    gpublas_status_t check = gpublas::gemm(x.get_card()->blas_handle(), cbtransx, cbtransy, m, n, k, alpha, x.data_ptr(), x.nrows(), y.data_ptr(), y.nrows(), (REAL)0, ret.data_ptr(), m);
+    gpublas::err::check_ret(check, "gemm");
   }
   
   
@@ -251,7 +181,7 @@ namespace linalg
   template <typename REAL>
   void crossprod(const REAL alpha, const gpumat<REAL> &x, gpumat<REAL> &ret)
   {
-    check_card(x, ret);
+    err::check_card(x, ret);
     
     const len_t m = x.nrows();
     const len_t n = x.ncols();
@@ -265,8 +195,8 @@ namespace linalg
     gpublas_operation_t trans = GPUBLAS_OP_T;
     gpublas_fillmode_t uplo = GPUBLAS_FILL_L;
     
-    gpublas_status_t check = gpulapack::syrk(cbh, uplo, trans, n, m, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), n);
-    check_gpublas_ret(check, "syrk");
+    gpublas_status_t check = gpublas::syrk(cbh, uplo, trans, n, m, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), n);
+    gpublas::err::check_ret(check, "syrk");
   }
   
   /// \overload
@@ -303,7 +233,7 @@ namespace linalg
   template <typename REAL>
   void tcrossprod(const REAL alpha, const gpumat<REAL> &x, gpumat<REAL> &ret)
   {
-    check_card(x, ret);
+    err::check_card(x, ret);
     
     const len_t m = x.nrows();
     const len_t n = x.ncols();
@@ -317,8 +247,8 @@ namespace linalg
     gpublas_operation_t trans = GPUBLAS_OP_N;
     gpublas_fillmode_t uplo = GPUBLAS_FILL_L;
     
-    gpublas_status_t check = gpulapack::syrk(cbh, uplo, trans, m, n, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), m);
-    check_gpublas_ret(check, "syrk");
+    gpublas_status_t check = gpublas::syrk(cbh, uplo, trans, m, n, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), m);
+    gpublas::err::check_ret(check, "syrk");
   }
   
   /// \overload
@@ -354,7 +284,7 @@ namespace linalg
   template <typename REAL>
   void xpose(const gpumat<REAL> &x, gpumat<REAL> &tx)
   {
-    check_card(x, tx);
+    err::check_card(x, tx);
     
     const len_t m = x.nrows();
     const len_t n = x.ncols();
@@ -364,8 +294,8 @@ namespace linalg
     
     auto cbh = x.get_card()->blas_handle();
     
-    gpublas_status_t check = gpulapack::geam(cbh, GPUBLAS_OP_T, GPUBLAS_OP_N, n, m, (REAL)1.0, x.data_ptr(), m, (REAL) 0.0, tx.data_ptr(), n, tx.data_ptr(), n);
-    check_gpublas_ret(check, "geam");
+    gpublas_status_t check = gpublas::geam(cbh, GPUBLAS_OP_T, GPUBLAS_OP_N, n, m, (REAL)1.0, x.data_ptr(), m, (REAL) 0.0, tx.data_ptr(), n, tx.data_ptr(), n);
+    gpublas::err::check_ret(check, "geam");
   }
   
   /// \overload
@@ -403,7 +333,7 @@ namespace linalg
   template <typename REAL>
   void lu(gpumat<REAL> &x, gpuvec<int> &p, int &info)
   {
-    check_card(x, p);
+    err::check_card(x, p);
     
     info = 0;
     const int m = x.nrows();
@@ -417,7 +347,7 @@ namespace linalg
     
     int lwork;
     gpulapack_status_t check = gpulapack::getrf_buflen(c->lapack_handle(), m, m, x.data_ptr(), m, &lwork);
-    check_gpusolver_ret(check, "getrf_bufferSize");
+    gpulapack::err::check_gpusolver_ret(check, "getrf_bufferSize");
     
     gpuvec<REAL> work(c, lwork);
     gpuscalar<int> info_device(c, info);
@@ -425,7 +355,7 @@ namespace linalg
     check = gpulapack::getrf(c->lapack_handle(), m, m, x.data_ptr(), m, work.data_ptr(), p.data_ptr(), info_device.data_ptr());
     
     info_device.get_val(&info);
-    check_gpusolver_ret(check, "getrf");
+    gpulapack::err::check_gpusolver_ret(check, "getrf");
   }
   
   /// \overload
@@ -501,7 +431,7 @@ namespace linalg
       int lwork;
       gpulapack_status_t check = gpulapack::gesvd_buflen(c->lapack_handle(), m, n,
         x.data_ptr(), &lwork);
-      check_gpusolver_ret(check, "gesvd_bufferSize");
+      gpulapack::err::check_gpusolver_ret(check, "gesvd_bufferSize");
       
       gpuvec<REAL> work(c, lwork);
       gpuvec<REAL> rwork(c, minmn-1);
@@ -514,7 +444,7 @@ namespace linalg
         lwork, rwork.data_ptr(), info_device.data_ptr());
       
       info_device.get_val(&info);
-      check_gpusolver_ret(check, "gesvd");
+      gpulapack::err::check_gpusolver_ret(check, "gesvd");
       
       return info;
     }
@@ -542,7 +472,7 @@ namespace linalg
   template <typename REAL>
   void svd(gpumat<REAL> &x, gpuvec<REAL> &s)
   {
-    check_card(x, s);
+    err::check_card(x, s);
     
     gpumat<REAL> ignored(x.get_card());
     int info = svd_internals(0, 0, x, s, ignored, ignored);
@@ -553,9 +483,9 @@ namespace linalg
   template <typename REAL>
   void svd(gpumat<REAL> &x, gpuvec<REAL> &s, gpumat<REAL> &u, gpumat<REAL> &vt)
   {
-    check_card(x, s);
-    check_card(x, u);
-    check_card(x, vt);
+    err::check_card(x, s);
+    err::check_card(x, u);
+    err::check_card(x, vt);
     
     int info = svd_internals(1, 1, x, s, u, vt);
     fml::linalgutils::check_info(info, "gesvd");
@@ -586,7 +516,7 @@ namespace linalg
       int lwork;
       gpulapack_status_t check = gpulapack::syevd_buflen(c->lapack_handle(), jobz,
         GPUBLAS_FILL_L, n, x.data_ptr(), n, values.data_ptr(), &lwork);
-      check_gpusolver_ret(check, "syevd_bufferSize");
+      gpulapack::err::check_gpusolver_ret(check, "syevd_bufferSize");
       
       gpuvec<REAL> work(c, lwork);
       
@@ -598,7 +528,7 @@ namespace linalg
         info_device.data_ptr());
       
       info_device.get_val(&info);
-      check_gpusolver_ret(check, "syevd");
+      gpulapack::err::check_gpusolver_ret(check, "syevd");
       
       if (!only_values)
       {
@@ -634,7 +564,7 @@ namespace linalg
   template <typename REAL>
   void eigen_sym(gpumat<REAL> &x, gpuvec<REAL> &values)
   {
-    check_card(x, values);
+    err::check_card(x, values);
     gpumat<REAL> ignored(x.get_card());
     
     int info = eig_sym_internals(true, x, values, ignored);
@@ -645,8 +575,8 @@ namespace linalg
   template <typename REAL>
   void eigen_sym(gpumat<REAL> &x, gpuvec<REAL> &values, gpumat<REAL> &vectors)
   {
-    check_card(x, values);
-    check_card(x, vectors);
+    err::check_card(x, values);
+    err::check_card(x, vectors);
     
     int info = eig_sym_internals(false, x, values, vectors);
     fml::linalgutils::check_info(info, "syevd");
@@ -697,7 +627,7 @@ namespace linalg
       nrhs, x.data_ptr(), n, p.data_ptr(), inv.data_ptr(), n, info_device.data_ptr());
     
     info_device.get_val(&info);
-    check_gpusolver_ret(check, "getrs");
+    gpulapack::err::check_gpusolver_ret(check, "getrs");
     fml::linalgutils::check_info(info, "getrs");
     
     gpuhelpers::gpu2gpu(inv, x);
@@ -730,7 +660,7 @@ namespace linalg
         n, nrhs, x.data_ptr(), n, p.data_ptr(), y_d, n, info_device.data_ptr());
       
       info_device.get_val(&info);
-      check_gpusolver_ret(check, "getrs");
+      gpulapack::err::check_gpusolver_ret(check, "getrs");
       fml::linalgutils::check_info(info, "getrs");
     }
   }
@@ -757,7 +687,7 @@ namespace linalg
   template <typename REAL>
   void solve(gpumat<REAL> &x, gpuvec<REAL> &y)
   {
-    check_card(x, y);
+    err::check_card(x, y);
     solver(x, y.size(), 1, y.data_ptr());
   }
   
@@ -765,7 +695,7 @@ namespace linalg
   template <typename REAL>
   void solve(gpumat<REAL> &x, gpumat<REAL> &y)
   {
-    check_card(x, y);
+    err::check_card(x, y);
     solver(x, y.nrows(), y.ncols(), y.data_ptr());
   }
 }
