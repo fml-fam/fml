@@ -138,7 +138,7 @@ namespace linalg
     cublasOperation_t cbtransx = transx ? CUBLAS_OP_T : CUBLAS_OP_N;
     cublasOperation_t cbtransy = transy ? CUBLAS_OP_T : CUBLAS_OP_N;
     
-    culapack::geam(c->blas_handle(), cbtransx, cbtransy, m, n, alpha, x.data_ptr(), x.nrows(), beta, y.data_ptr(), y.nrows(), ret.data_ptr(), m);
+    gpulapack::geam(c->blas_handle(), cbtransx, cbtransy, m, n, alpha, x.data_ptr(), x.nrows(), beta, y.data_ptr(), y.nrows(), ret.data_ptr(), m);
   }
   
   /// \overload
@@ -187,7 +187,7 @@ namespace linalg
     cublasOperation_t cbtransx = transx ? CUBLAS_OP_T : CUBLAS_OP_N;
     cublasOperation_t cbtransy = transy ? CUBLAS_OP_T : CUBLAS_OP_N;
     
-    cublasStatus_t check = culapack::gemm(c->blas_handle(), cbtransx, cbtransy, m, n, k, alpha, x.data_ptr(), x.nrows(), y.data_ptr(), y.nrows(), (REAL)0, ret.data_ptr(), m);
+    cublasStatus_t check = gpulapack::gemm(c->blas_handle(), cbtransx, cbtransy, m, n, k, alpha, x.data_ptr(), x.nrows(), y.data_ptr(), y.nrows(), (REAL)0, ret.data_ptr(), m);
     check_cublas_ret(check, "gemm");
     
     return ret;
@@ -225,7 +225,7 @@ namespace linalg
     cublasOperation_t cbtransx = transx ? CUBLAS_OP_T : CUBLAS_OP_N;
     cublasOperation_t cbtransy = transy ? CUBLAS_OP_T : CUBLAS_OP_N;
     
-    cublasStatus_t check = culapack::gemm(x.get_card()->blas_handle(), cbtransx, cbtransy, m, n, k, alpha, x.data_ptr(), x.nrows(), y.data_ptr(), y.nrows(), (REAL)0, ret.data_ptr(), m);
+    cublasStatus_t check = gpulapack::gemm(x.get_card()->blas_handle(), cbtransx, cbtransy, m, n, k, alpha, x.data_ptr(), x.nrows(), y.data_ptr(), y.nrows(), (REAL)0, ret.data_ptr(), m);
     check_cublas_ret(check, "gemm");
   }
   
@@ -265,7 +265,7 @@ namespace linalg
     cublasOperation_t trans = CUBLAS_OP_T;
     cublasFillMode_t uplo = CUBLAS_FILL_MODE_LOWER;
     
-    cublasStatus_t check = culapack::syrk(cbh, uplo, trans, n, m, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), n);
+    cublasStatus_t check = gpulapack::syrk(cbh, uplo, trans, n, m, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), n);
     check_cublas_ret(check, "syrk");
   }
   
@@ -317,7 +317,7 @@ namespace linalg
     cublasOperation_t trans = CUBLAS_OP_N;
     cublasFillMode_t uplo = CUBLAS_FILL_MODE_LOWER;
     
-    cublasStatus_t check = culapack::syrk(cbh, uplo, trans, m, n, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), m);
+    cublasStatus_t check = gpulapack::syrk(cbh, uplo, trans, m, n, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), m);
     check_cublas_ret(check, "syrk");
   }
   
@@ -364,7 +364,7 @@ namespace linalg
     
     auto cbh = x.get_card()->blas_handle();
     
-    cublasStatus_t check = culapack::geam(cbh, CUBLAS_OP_T, CUBLAS_OP_N, n, m, (REAL)1.0, x.data_ptr(), m, (REAL) 0.0, tx.data_ptr(), n, tx.data_ptr(), n);
+    cublasStatus_t check = gpulapack::geam(cbh, CUBLAS_OP_T, CUBLAS_OP_N, n, m, (REAL)1.0, x.data_ptr(), m, (REAL) 0.0, tx.data_ptr(), n, tx.data_ptr(), n);
     check_cublas_ret(check, "geam");
   }
   
@@ -416,13 +416,13 @@ namespace linalg
     p.resize(lipiv);
     
     int lwork;
-    cusolverStatus_t check = culapack::getrf_buflen(c->lapack_handle(), m, m, x.data_ptr(), m, &lwork);
+    cusolverStatus_t check = gpulapack::getrf_buflen(c->lapack_handle(), m, m, x.data_ptr(), m, &lwork);
     check_cusolver_ret(check, "getrf_bufferSize");
     
     gpuvec<REAL> work(c, lwork);
     gpuscalar<int> info_device(c, info);
     
-    check = culapack::getrf(c->lapack_handle(), m, m, x.data_ptr(), m, work.data_ptr(), p.data_ptr(), info_device.data_ptr());
+    check = gpulapack::getrf(c->lapack_handle(), m, m, x.data_ptr(), m, work.data_ptr(), p.data_ptr(), info_device.data_ptr());
     
     info_device.get_val(&info);
     check_cusolver_ret(check, "getrf");
@@ -499,7 +499,7 @@ namespace linalg
       }
       
       int lwork;
-      cusolverStatus_t check = culapack::gesvd_buflen(c->lapack_handle(), m, n,
+      cusolverStatus_t check = gpulapack::gesvd_buflen(c->lapack_handle(), m, n,
         x.data_ptr(), &lwork);
       check_cusolver_ret(check, "gesvd_bufferSize");
       
@@ -509,7 +509,7 @@ namespace linalg
       int info = 0;
       gpuscalar<int> info_device(c, info);
       
-      check = culapack::gesvd(c->lapack_handle(), jobu, jobvt, m, n, x.data_ptr(),
+      check = gpulapack::gesvd(c->lapack_handle(), jobu, jobvt, m, n, x.data_ptr(),
         m, s.data_ptr(), u.data_ptr(), m, vt.data_ptr(), minmn, work.data_ptr(),
         lwork, rwork.data_ptr(), info_device.data_ptr());
       
@@ -584,7 +584,7 @@ namespace linalg
         jobz = CUSOLVER_EIG_MODE_VECTOR;
       
       int lwork;
-      cusolverStatus_t check = culapack::syevd_buflen(c->lapack_handle(), jobz,
+      cusolverStatus_t check = gpulapack::syevd_buflen(c->lapack_handle(), jobz,
         CUBLAS_FILL_MODE_LOWER, n, x.data_ptr(), n, values.data_ptr(), &lwork);
       check_cusolver_ret(check, "syevd_bufferSize");
       
@@ -593,7 +593,7 @@ namespace linalg
       int info = 0;
       gpuscalar<int> info_device(c, info);
       
-      check = culapack::syevd(c->lapack_handle(), jobz, CUBLAS_FILL_MODE_LOWER,
+      check = gpulapack::syevd(c->lapack_handle(), jobz, CUBLAS_FILL_MODE_LOWER,
         n, x.data_ptr(), n, values.data_ptr(), work.data_ptr(), lwork,
         info_device.data_ptr());
       
@@ -693,7 +693,7 @@ namespace linalg
     
     gpuscalar<int> info_device(c, info);
     
-    cusolverStatus_t check = culapack::getrs(c->lapack_handle(), CUBLAS_OP_N, n,
+    cusolverStatus_t check = gpulapack::getrs(c->lapack_handle(), CUBLAS_OP_N, n,
       nrhs, x.data_ptr(), n, p.data_ptr(), inv.data_ptr(), n, info_device.data_ptr());
     
     info_device.get_val(&info);
@@ -726,7 +726,7 @@ namespace linalg
       // Solve xb = y
       gpuscalar<int> info_device(c, info);
       
-      cusolverStatus_t check = culapack::getrs(c->lapack_handle(), CUBLAS_OP_N,
+      cusolverStatus_t check = gpulapack::getrs(c->lapack_handle(), CUBLAS_OP_N,
         n, nrhs, x.data_ptr(), n, p.data_ptr(), y_d, n, info_device.data_ptr());
       
       info_device.get_val(&info);
