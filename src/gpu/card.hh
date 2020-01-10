@@ -50,19 +50,19 @@ class card
     int get_id() {return _id;};
     int get_id() const {return _id;};
     /// GPU BLAS handle.
-    BLASHandle_t blas_handle() {return _blas_handle;};
-    BLASHandle_t blas_handle() const {return _blas_handle;};
+    blas_handle_t blas_handle() {return _blas_handle;};
+    blas_handle_t blas_handle() const {return _blas_handle;};
     /// GPU LAPACK handle.
-    LAPACKHandle_t lapack_handle() {return _lapack_handle;};
-    LAPACKHandle_t lapack_handle() const {return _lapack_handle;};
+    lapack_handle_t lapack_handle() {return _lapack_handle;};
+    lapack_handle_t lapack_handle() const {return _lapack_handle;};
     /// Is the gpu data valid?
     bool valid_card() const {return (_id!=UNINITIALIZED_CARD && _id!=DESTROYED_CARD);};
     ///@}
   
   protected:
     int _id;
-    BLASHandle_t _blas_handle;
-    LAPACKHandle_t _lapack_handle;
+    blas_handle_t _blas_handle;
+    lapack_handle_t _lapack_handle;
   
   private:
     static const int UNINITIALIZED_CARD = -1;
@@ -70,7 +70,7 @@ class card
     
     void init();
     void cleanup();
-    GPUError_t err;
+    gpu_error_t err;
     void check_gpu_error();
 };
 
@@ -108,11 +108,11 @@ inline card::card(const int id)
   _id = id;
   init();
   
-  BLASStatus_t blas_status = gpuprims::gpu_blas_init(&_blas_handle);
+  blas_status_t blas_status = gpuprims::gpu_blas_init(&_blas_handle);
   if (blas_status != GPUBLAS_STATUS_SUCCESS)
     throw std::runtime_error("unable to initialize GPU BLAS");
   
-  LAPACKStatus_t lapack_status = gpuprims::gpu_lapack_init(&_lapack_handle);
+  lapack_status_t lapack_status = gpuprims::gpu_lapack_init(&_lapack_handle);
   if (lapack_status != GPULAPACK_STATUS_SUCCESS)
     throw std::runtime_error("unable to initialize GPU LAPACK");
 }
@@ -157,11 +157,11 @@ inline void card::set(const int id)
   _id = id;
   init();
   
-  BLASStatus_t blas_status = gpuprims::gpu_blas_init(&_blas_handle);
+  blas_status_t blas_status = gpuprims::gpu_blas_init(&_blas_handle);
   if (blas_status != GPUBLAS_STATUS_SUCCESS)
     throw std::runtime_error("unable to initialize GPU BLAS");
   
-  LAPACKStatus_t lapack_status = gpuprims::gpu_lapack_init(&_lapack_handle);
+  lapack_status_t lapack_status = gpuprims::gpu_lapack_init(&_lapack_handle);
   if (lapack_status != GPULAPACK_STATUS_SUCCESS)
     throw std::runtime_error("unable to initialize GPU LAPACK");
 }

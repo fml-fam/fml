@@ -11,7 +11,7 @@
 #include <cuda_runtime.h> // FIXME
 #include <rocsolver.h>
 
-typedef hipError_t GPUError_t;
+typedef hipError_t gpu_error_t;
 #define GPU_SUCCESS hipSuccess
 
 #define GPU_MEMCPY_HOST_TO_DEVICE hipMemcpyHostToDevice
@@ -19,12 +19,12 @@ typedef hipError_t GPUError_t;
 #define GPU_MEMCPY_DEVICE_TO_DEVICE hipMemcpyDeviceToDevice
 
 #define GPUBLAS_STATUS_SUCCESS rocblas_status_success
-typedef rocblas_status BLASStatus_t;
-typedef rocblas_handle BLASHandle_t;
+typedef rocblas_status blas_status_t;
+typedef rocblas_handle blas_handle_t;
 
 #define GPULAPACK_STATUS_SUCCESS CUSOLVER_STATUS_SUCCESS
-typedef rocsolver_status LAPACKStatus_t;
-typedef rocsolver_handle LAPACKHandle_t;
+typedef rocsolver_status lapack_status_t;
+typedef rocsolver_handle lapack_handle_t;
 
 
 #endif
