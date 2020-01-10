@@ -15,13 +15,18 @@
 #endif
 
 #if (defined(FML_USE_CUDA))
-  #include "cuda/culapack.hh"
+  #include "cuda/gpulapack.hh"
   #include "cuda/gpuprims.hh"
   #include "cuda/gpurand.hh"
   #include "cuda/nvml.hh"
   #include "cuda/types.hh"
 #elif defined(FML_USE_HIP)
   #error "HIP is currently unsupported"
+  // #include "hip/gpulapack.hh"
+  // #include "hip/gpuprims.hh"
+  // #include "hip/gpurand.hh"
+  // #include "hip/rocm_smi.hh"
+  // #include "hip/types.hh"
 #else
   #error "Unsupported kernel launcher"
 #endif
