@@ -21,6 +21,12 @@ typedef cudaError_t gpu_error_t;
 #define GPUBLAS_STATUS_SUCCESS CUBLAS_STATUS_SUCCESS
 typedef cublasStatus_t blas_status_t;
 typedef cublasHandle_t blas_handle_t;
+typedef cublasOperation_t blas_operation_t;
+typedef cublasFillMode_t blas_fillmode_t;
+#define GPUBLAS_OP_T CUBLAS_OP_T
+#define GPUBLAS_OP_N CUBLAS_OP_N
+#define GPUBLAS_FILL_L CUBLAS_FILL_MODE_LOWER
+#define GPUBLAS_FILL_U CUBLAS_FILL_MODE_UPPER
 
 #define GPULAPACK_STATUS_SUCCESS CUSOLVER_STATUS_SUCCESS
 typedef cusolverStatus_t lapack_status_t;
