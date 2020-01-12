@@ -20,7 +20,6 @@
   #include "cuda/gpulapack.hh"
   #include "cuda/gpublas.hh"
   // -------------------------
-  
   #include "cuda/gpuprims.hh"
   #include "cuda/gpurand.hh"
   #include "cuda/nvml.hh"

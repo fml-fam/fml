@@ -2,76 +2,49 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_GPU_ARCH_CUDA_CUSOLVER_H
-#define FML_GPU_ARCH_CUDA_CUSOLVER_H
+#ifndef FML_GPU_ARCH_HIP_CUSOLVER_H
+#define FML_GPU_ARCH_HIP_CUSOLVER_H
 #pragma once
 
 
-#include <cublas.h>
-#include <cusolverDn.h>
+#include <rocblas.h>
+#include <rocsolver.h>
 
 
 namespace gpulapack
 {
-  inline rocblas_status gemm(rocblas_handle handle, rocblas_operation transa,
-    rocblas_operation transb, int m, int n, int k, const __half alpha,
-    const __half *A, int lda, const __half *B, int ldb, const __half beta,
-    __half *C, int ldc)
+  namespace err
   {
-    return rocblas_hgemm(handle, transa, transb, m, n, k, &alpha, A, lda, B, ldb,
-      &beta, C, ldc);
-  }
-  
-  inline rocblas_status gemm(rocblas_handle handle, rocblas_operation transa,
-    rocblas_operation transb, int m, int n, int k, const float alpha,
-    const float *A, int lda, const float *B, int ldb, const float beta,
-    float *C, int ldc)
-  {
-    return rocblas_sgemm(handle, transa, transb, m, n, k, &alpha, A, lda, B, ldb,
-      &beta, C, ldc);
-  }
-  
-  inline rocblas_status gemm(rocblas_handle handle, rocblas_operation transa,
-    rocblas_operation transb, int m, int n, int k, const double alpha,
-    const double *A, int lda, const double *B, int ldb, const double beta,
-    double *C, int ldc)
-  {
-    return rocblas_dgemm(handle, transa, transb, m, n, k, &alpha, A, lda, B, ldb,
-      &beta, C, ldc);
-  }
-  
-  
-  
-  inline rocblas_status syrk(rocblas_handle handle, cublasFillMode_t uplo,
-    rocblas_operation trans, int n, int k, const float alpha, const float *A,
-    int lda, const float beta, float *C, int ldc)
-  {
-    return rocblas_ssyrk(handle, uplo, trans, n, k, &alpha, A, lda, &beta, C, ldc);
-  }
-  
-  inline rocblas_status syrk(rocblas_handle handle, cublasFillMode_t uplo,
-    rocblas_operation trans, int n, int k, const double alpha, const double *A,
-    int lda, const double beta, double *C, int ldc)
-  {
-    return rocblas_dsyrk(handle, uplo, trans, n, k, &alpha, A, lda, &beta, C, ldc);
-  }
-  
-  
-  
-  inline rocblas_status geam(rocblas_handle handle, rocblas_operation transa,
-    rocblas_operation transb, int m, int n, const float alpha, const float *A,
-    int lda, const float beta, const float *B, int ldb, float *C, int ldc)
-  {
-    return rocblas_sgeam(handle, transa, transb, m, n, &alpha, A, lda, &beta, B,
-      ldb, C, ldc);
-  }
-  
-  inline rocblas_status geam(rocblas_handle handle, rocblas_operation transa,
-    rocblas_operation transb, int m, int n, const double alpha, const double *A,
-    int lda, const double beta, const double *B, int ldb, double *C, int ldc)
-  {
-    return rocblas_dgeam(handle, transa, transb, m, n, &alpha, A, lda, &beta, B,
-      ldb, C, ldc);
+    inline std::string get_rocsolver_error_msg(cusolverStatus_t check)
+    {
+      if (check == CUSOLVER_STATUS_SUCCESS)
+        return "";
+      else if (check == CUSOLVER_STATUS_NOT_INITIALIZED)
+        return "cuSOLVER not initialized";
+      else if (check == CUSOLVER_STATUS_ALLOC_FAILED)
+        return "internal cuSOLVER memory allocation failed";
+      else if (check == CUSOLVER_STATUS_INVALID_VALUE)
+        return "unsupported parameter";
+      else if (check == CUSOLVER_STATUS_ARCH_MISMATCH)
+        return "function requires feature missing from device architecture";
+      else if (check == CUSOLVER_STATUS_EXECUTION_FAILED)
+        return "GPU program failed to execute";
+      else if (check == CUSOLVER_STATUS_INTERNAL_ERROR)
+        return "internal cuSOLVER operation failed";
+      else if (check == CUSOLVER_STATUS_MATRIX_TYPE_NOT_SUPPORTED)
+        return "matrix type not supported";
+      else
+        return "unknown cuSOLVER error occurred";
+    }
+    
+    inline void check_gpusolver_ret(rocsolver_status check, std::string op)
+    {
+      if (check != CUSOLVER_STATUS_SUCCESS)
+      {
+        std::string msg = "rocsolver " + op + "() failed with error: " + get_rocsolver_error_msg(check);
+        throw std::runtime_error(msg);
+      }
+    }
   }
   
   

@@ -7,10 +7,12 @@
 #pragma once
 
 
-#include <cublas.h>       // FIXME
-#include <cuda_runtime.h> // FIXME
+#include <hip_runtime_api.h>
+#include <rocblas.h>
 #include <rocsolver.h>
 
+
+// core
 typedef hipError_t gpu_error_t;
 #define GPU_SUCCESS hipSuccess
 
@@ -18,6 +20,7 @@ typedef hipError_t gpu_error_t;
 #define GPU_MEMCPY_DEVICE_TO_HOST hipMemcpyDeviceToHost
 #define GPU_MEMCPY_DEVICE_TO_DEVICE hipMemcpyDeviceToDevice
 
+// blas
 #define GPUBLAS_STATUS_SUCCESS rocblas_status_success
 typedef rocblas_status gpublas_status_t;
 typedef rocblas_handle gpublas_handle_t;
@@ -28,6 +31,7 @@ typedef rocblas_fill gpublas_fillmode_t;
 #define GPUBLAS_FILL_L rocblas_fill_lower
 #define GPUBLAS_FILL_U rocblas_fill_upper
 
+// lapack/"solver"
 #define GPULAPACK_STATUS_SUCCESS CUSOLVER_STATUS_SUCCESS
 typedef rocsolver_status gpulapack_status_t;
 typedef rocsolver_handle gpulapack_handle_t;

@@ -7,8 +7,8 @@
 #pragma once
 
 
-#include <cublas.h>     // TODO
-#include <cusolverDn.h> // TODO
+#include <rocblas.h>
+#include <rocsolver.h>
 
 
 namespace gpuprims
