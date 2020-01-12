@@ -1,4 +1,4 @@
-#include <gpu/internals/cuda/nvml.hh>
+#include <gpu/arch/cuda/nvml.hh>
 #include <iostream>
 
 
