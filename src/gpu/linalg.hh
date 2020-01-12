@@ -347,7 +347,7 @@ namespace linalg
     
     int lwork;
     gpulapack_status_t check = gpulapack::getrf_buflen(c->lapack_handle(), m, m, x.data_ptr(), m, &lwork);
-    gpulapack::err::check_gpusolver_ret(check, "getrf_bufferSize");
+    gpulapack::err::check_ret(check, "getrf_bufferSize");
     
     gpuvec<REAL> work(c, lwork);
     gpuscalar<int> info_device(c, info);
@@ -355,7 +355,7 @@ namespace linalg
     check = gpulapack::getrf(c->lapack_handle(), m, m, x.data_ptr(), m, work.data_ptr(), p.data_ptr(), info_device.data_ptr());
     
     info_device.get_val(&info);
-    gpulapack::err::check_gpusolver_ret(check, "getrf");
+    gpulapack::err::check_ret(check, "getrf");
   }
   
   /// \overload
@@ -431,7 +431,7 @@ namespace linalg
       int lwork;
       gpulapack_status_t check = gpulapack::gesvd_buflen(c->lapack_handle(), m, n,
         x.data_ptr(), &lwork);
-      gpulapack::err::check_gpusolver_ret(check, "gesvd_bufferSize");
+      gpulapack::err::check_ret(check, "gesvd_bufferSize");
       
       gpuvec<REAL> work(c, lwork);
       gpuvec<REAL> rwork(c, minmn-1);
@@ -444,7 +444,7 @@ namespace linalg
         lwork, rwork.data_ptr(), info_device.data_ptr());
       
       info_device.get_val(&info);
-      gpulapack::err::check_gpusolver_ret(check, "gesvd");
+      gpulapack::err::check_ret(check, "gesvd");
       
       return info;
     }
@@ -516,7 +516,7 @@ namespace linalg
       int lwork;
       gpulapack_status_t check = gpulapack::syevd_buflen(c->lapack_handle(), jobz,
         GPUBLAS_FILL_L, n, x.data_ptr(), n, values.data_ptr(), &lwork);
-      gpulapack::err::check_gpusolver_ret(check, "syevd_bufferSize");
+      gpulapack::err::check_ret(check, "syevd_bufferSize");
       
       gpuvec<REAL> work(c, lwork);
       
@@ -528,7 +528,7 @@ namespace linalg
         info_device.data_ptr());
       
       info_device.get_val(&info);
-      gpulapack::err::check_gpusolver_ret(check, "syevd");
+      gpulapack::err::check_ret(check, "syevd");
       
       if (!only_values)
       {
@@ -627,7 +627,7 @@ namespace linalg
       nrhs, x.data_ptr(), n, p.data_ptr(), inv.data_ptr(), n, info_device.data_ptr());
     
     info_device.get_val(&info);
-    gpulapack::err::check_gpusolver_ret(check, "getrs");
+    gpulapack::err::check_ret(check, "getrs");
     fml::linalgutils::check_info(info, "getrs");
     
     gpuhelpers::gpu2gpu(inv, x);
@@ -660,7 +660,7 @@ namespace linalg
         n, nrhs, x.data_ptr(), n, p.data_ptr(), y_d, n, info_device.data_ptr());
       
       info_device.get_val(&info);
-      gpulapack::err::check_gpusolver_ret(check, "getrs");
+      gpulapack::err::check_ret(check, "getrs");
       fml::linalgutils::check_info(info, "getrs");
     }
   }

@@ -37,7 +37,7 @@ namespace gpulapack
         return "unknown cuSOLVER error occurred";
     }
     
-    inline void check_gpusolver_ret(cusolverStatus_t check, std::string op)
+    inline void check_ret(cusolverStatus_t check, std::string op)
     {
       if (check != CUSOLVER_STATUS_SUCCESS)
       {
