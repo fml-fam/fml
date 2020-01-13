@@ -93,7 +93,7 @@ class grid
     void recv(const int m, const int n, const int ldx, double *x, const int rsrc=0, const int csrc=0) const;
     
     // collectives
-    void barrier(const char scope) const;
+    void barrier(const char scope='A') const;
     
     void allreduce(const int m, const int n, int *x,    const char scope='A', const blacsops op=BLACS_SUM) const;
     void allreduce(const int m, const int n, float *x,  const char scope='A', const blacsops op=BLACS_SUM) const;
