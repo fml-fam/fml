@@ -21,5 +21,8 @@ mpimat: $(OBJS)
 miniclean:
 	( ls *.o | grep -v test-main | xargs rm -f )
 
+run: mpimat
+	( mpirun -np 2 ./mpimat )
+
 clean:
 	rm -rf *.o mpimat
