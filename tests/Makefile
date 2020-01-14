@@ -46,7 +46,7 @@ mpimat_make: mpimat_miniclean
 	( cd mpi; make -j )
 
 mpimat_run: mpimat_make
-	( cd mpi; ./mpimat )
+	( cd mpi; make run )
 
 mpimat_miniclean:
 	( cd mpi; make miniclean )
