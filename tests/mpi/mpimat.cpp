@@ -162,9 +162,10 @@ TEMPLATE_TEST_CASE("rev", "[cpumat]", float, double)
   REQUIRE( fltcmp::eq(x.get(0, 0), 3) );
   REQUIRE( fltcmp::eq(x.get(1, 0), 4) );
   
-  // x.rev_rows();
-  // REQUIRE( fltcmp::eq(x.get(0, 0), 4) );
-  // REQUIRE( fltcmp::eq(x.get(1, 0), 3) );
+  // 4, 3 not 2, 1 because cols are still reversed from above
+  x.rev_rows();
+  REQUIRE( fltcmp::eq(x.get(0, 0), 4) );
+  REQUIRE( fltcmp::eq(x.get(1, 0), 3) );
 }
 
 
