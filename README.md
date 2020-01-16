@@ -4,7 +4,6 @@
 * **License:** [BSL-1.0](http://opensource.org/licenses/BSL-1.0)
 * **Project home**: https://github.com/wrathematics/fml
 * **Bug reports**: https://github.com/wrathematics/fml/issues
-* **Author:** Drew Schmidt
 
 
 <img align="right" src="./docs/logo/fml_med.png" />
@@ -24,7 +23,17 @@ There are some differences in how objects of any particular type are constructed
 
 
 
-## Dependencies Other Software
+## Installation
+
+The library is header-only so no installation is strictly necessary. You can just include a copy/submodule in your project. However, if you want some analogue of `make install`, then you could do something like:
+
+```bash
+ln -s ./src /usr/include/fml
+```
+
+
+
+## Dependencies and Other Software
 
 There are no external header dependencies, but there are some shared libraries you need to have (more information below):
 
