@@ -29,3 +29,5 @@ New:
       - mpi2mpi()
 API Changes: None
 Bug Fixes: None
+Documentation:
+  * Added documentation for most things.
