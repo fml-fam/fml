@@ -1,0 +1,27 @@
+var classcomm =
+[
+    [ "comm", "classcomm.html#a6f15fb4887b6cacc4b28a104e7a89237", null ],
+    [ "allreduce", "classcomm.html#a1ebd4cf2c5f063a9ab74b1144bd76565", null ],
+    [ "barrier", "classcomm.html#a69cac69d89c2f584e625511e95023369", null ],
+    [ "bcast", "classcomm.html#aa69bfc14c0401f0f1e189a176b79c755", null ],
+    [ "create", "classcomm.html#a51708725bd75d02223f60829f8c7ab94", null ],
+    [ "finalize", "classcomm.html#a77bfd91227c14764bb9d69251bf6087e", null ],
+    [ "free", "classcomm.html#ac1d5418dbf0d201e76163dc332d24e51", null ],
+    [ "get_comm", "classcomm.html#a3a1e8c5d3dfdbf8f5e6f75569eb18599", null ],
+    [ "info", "classcomm.html#a4fe71c8fa2cd7db7b85a1a4dace4358c", null ],
+    [ "irecv", "classcomm.html#ad896929dc0ad53f6e56cf00314d621a8", null ],
+    [ "isend", "classcomm.html#a6154982526258f2c5c786a37df646f5c", null ],
+    [ "jid", "classcomm.html#a6583a704af103078dfb4b2ae5d2e6213", null ],
+    [ "printf", "classcomm.html#a9cd4265699fe2b1751bb5ffbd8f9d619", null ],
+    [ "rank", "classcomm.html#a044b73d1f0356516c3c704462b6262e2", null ],
+    [ "rank0", "classcomm.html#a3f7bde6514c73119713bd37626d6d977", null ],
+    [ "recv", "classcomm.html#ad4de153ba41c0754793f0aa7531910d4", null ],
+    [ "reduce", "classcomm.html#adebdfcbbe08282e12b7d393f63bf26a9", null ],
+    [ "send", "classcomm.html#ace486007cf3d6af4384549696f3346f9", null ],
+    [ "set", "classcomm.html#ae4e5aafc3ddbd38c398d5e6594b0ed8b", null ],
+    [ "size", "classcomm.html#aafa93b63561871c72a867d14cf8c6c97", null ],
+    [ "split", "classcomm.html#a74d0ec0386343e75c05b3e64b6f3ff89", null ],
+    [ "_comm", "classcomm.html#a5f6b6126969a8f265b2fd4bfeff77db8", null ],
+    [ "_rank", "classcomm.html#a3f907c89f649c0d95c255ea98da565ee", null ],
+    [ "_size", "classcomm.html#a4d534d8fc29161414fa6cf49f8cfa06b", null ]
+];
