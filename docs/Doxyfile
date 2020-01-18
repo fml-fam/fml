@@ -26,6 +26,9 @@ RECURSIVE              = YES
 EXCLUDE                = 
 EXCLUDE_PATTERNS       = */arraytools/*
 
+INPUT += ../README.md
+USE_MDFILE_AS_MAINPAGE = ../README.md
+
 
 #---------------------------------------------------------------------------
 # render
@@ -828,13 +831,6 @@ FILTER_SOURCE_FILES    = NO
 # This tag requires that the tag FILTER_SOURCE_FILES is set to YES.
 
 FILTER_SOURCE_PATTERNS = 
-
-# If the USE_MDFILE_AS_MAINPAGE tag refers to the name of a markdown file that
-# is part of the input, its contents will be placed on the main page
-# (index.html). This can be useful if you have a project on for instance GitHub
-# and want to reuse the introduction page also for the doxygen output.
-
-USE_MDFILE_AS_MAINPAGE = 
 
 #---------------------------------------------------------------------------
 # Configuration options related to source browsing
