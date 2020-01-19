@@ -1,0 +1,27 @@
+Bootstrap: docker
+From: nvidia/cuda:10.1-devel-ubuntu18.04
+
+%labels
+  fml_version 0.1-0
+  ubuntu_version 18.04
+  CUDA_Version 10.1
+
+%environment
+  export LANG=en_US.UTF-8
+  export LC_ALL=en_US.UTF-8
+
+%post
+  echo "LC_ALL=en_US.UTF-8" >> /etc/environment
+  echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+  echo "LANG=en_US.UTF-8" > /etc/locale.conf
+  locale-gen en_US.UTF-8
+  
+  apt-get update
+  DEBIAN_FRONTEND=noninteractive apt-get install -y \
+      git locales gcc-8 \
+      libopenmpi-dev openmpi-common openmpi-bin ssh \
+      libopenblas-dev libscalapack-openmpi-dev
+  
+  mkdir -p /opt/
+  cd /opt && git clone --recurse-submodules https://github.com/wrathematics/fml.git
+  ln -s /opt/fml/src /usr/include/fml
