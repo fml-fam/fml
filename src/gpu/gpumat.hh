@@ -497,7 +497,7 @@ template <typename REAL>
 void gpumat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL sd)
 {
   const size_t len = (size_t) this->m * this->n;
-  gpurand::gen_rnorm(seed, len, this->data);
+  gpurand::gen_rnorm(seed, mean, sd, len, this->data);
 }
 
 /// \overload
