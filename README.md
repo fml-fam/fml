@@ -4,20 +4,21 @@
 * **License:** [BSL-1.0](http://opensource.org/licenses/BSL-1.0)
 * **Project home**: https://github.com/wrathematics/fml
 * **Bug reports**: https://github.com/wrathematics/fml/issues
+* **Documentation**: TODO
 
 
 <img align="right" src="./docs/logo/fml_med.png" />
 
 fml is the Fused Matrix Library, a multi-source, header-only C++ library for dense matrix computing. The emphasis is on real-valued matrix types (`float`, `double`, and `__half`) for numerical operations useful for data analysis.
 
-The goal of fml is to be "medium-level". That is, high-level compared to working directly with e.g. the BLAS or CUDA, but low(er)-level compared to other C++ matrix frameworks. Some knowledge of the use of LAPACK will make many choices in fml make more sense.
+The goal of fml is to be "medium-level". That is, high-level compared to working directly with e.g. the BLAS or CUDA™, but low(er)-level compared to other C++ matrix frameworks. Some knowledge of the use of LAPACK will make many choices in fml make more sense.
 
 The library provides 4 main classes: `cpumat`, `gpumat`, `parmat`, and `mpimat`. These are mostly what they sound like, but the particular details are:
 
 * <font color="blue">CPU</font>: Single node cpu computing (multi-threaded if using multi-threaded BLAS and linking with OpenMP).
-* <font color="green">GPU</font>: Single gpu computing via CUDA.
+* <font color="green">GPU</font>: Single gpu computing.
 * <font color="red">MPI</font>: Multi-node computing via ScaLAPACK (+gpus if using [SLATE](http://icl.utk.edu/slate/)).
-* <font color="orange">PAR</font>: Multi-node and/or multi-gpu computing via MPI and/or CUDA.
+* <font color="orange">PAR</font>: Multi-node and/or multi-gpu computing.
 
 There are some differences in how objects of any particular type are constructed. But the high level APIs are largely the same between the objects. The goal is to be able to quickly create laptop-scale prototypes that are then easily converted into large scale gpu/multi-node/multi-gpu/multi-node+multi-gpu codes.
 
@@ -38,7 +39,7 @@ ln -s ./src /usr/include/fml
 There are no external header dependencies, but there are some shared libraries you need to have (more information below):
 
 * CPU code needs [LAPACK](http://performance.netlib.org/lapack/) (I recommend [OpenBLAS](https://github.com/xianyi/OpenBLAS))
-* GPU code needs [CUDA](https://developer.nvidia.com/cuda-downloads)
+* GPU code needs [NVIDIA® CUDA™](https://developer.nvidia.com/cuda-downloads)
 * MPI code needs [ScaLAPACK](http://performance.netlib.org/scalapack/)
 * PAR code needs the libraries required by the CPU and/or GPU features, noted above.
 
@@ -91,9 +92,13 @@ The project is young and things are still mostly evolving. The current status is
 * Experimental - Nothing is remotely finalized.
     - parmat - all functions and methods
 
+Internals are evolving and subject to change at basically any time.
+
 
 
 ## Example
+
+Here's a simple example computing the SVD with some data held on a single CPU:
 
 ```C++
 #include <cpu/cpumat.hh>
@@ -176,7 +181,7 @@ int main()
 }
 ```
 
-We can build it via:
+In practice, using such small block sizes for an MPI matrix is probably not a good idea; we only do so for the sake of demonstration (we want each process to own some data). We can build this new example via:
 
 ```bash
 mpicxx -I/path/to/fml/src svd.cpp -fopenmp  svd.cpp -o svd -lscalapack-openmpi
