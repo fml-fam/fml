@@ -479,6 +479,7 @@ template&lt;typename REAL &gt; </div>
   </dd>
 </dl>
 <dl class="section user"><dt>Exceptions</dt><dd>If x and y are inappropriately sized for the sum, the method will throw a 'runtime_error' exception.</dd></dl>
+<dl class="section user"><dt>Communication Details</dt><dd>The method will communicate across all processes in the BLACS grid.</dd></dl>
 <dl class="section user"><dt>Implementation Details</dt><dd>Uses the PBLAS function <code>pXgeadd()</code>.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
@@ -1074,8 +1075,45 @@ template&lt;typename REAL &gt; </div>
 
 </div>
 </div>
+<a id="ab74b9dd202f9418c8847e78596153098"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab74b9dd202f9418c8847e78596153098">&#9670;&nbsp;</a></span>eigen_sym() <span class="overload">[2/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void linalg::eigen_sym </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>values</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vectors</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
+
+</div>
+</div>
 <a id="a8e24c473ff21f6abef9af5c730b07fb2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e24c473ff21f6abef9af5c730b07fb2">&#9670;&nbsp;</a></span>eigen_sym() <span class="overload">[2/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e24c473ff21f6abef9af5c730b07fb2">&#9670;&nbsp;</a></span>eigen_sym() <span class="overload">[3/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1115,6 +1153,7 @@ template&lt;typename REAL &gt; </div>
 <dl class="section user"><dt>Implementation Details</dt><dd>Uses the ScaLAPACK functions <code>pXsyevr()</code>.</dd></dl>
 <dl class="section user"><dt>Memory Allocations</dt><dd>If any output's dimension is inappropriately sized, it will automatically be re-allocated.</dd></dl>
 <dl class="section user"><dt>Exceptions</dt><dd>If the matrix is non-square, a <code>runtime_error</code> exception is thrown. If an allocation fails, a <code>bad_alloc</code> exception will be thrown.</dd></dl>
+<dl class="section user"><dt>Communication Details</dt><dd>The method will communicate across all processes in the BLACS grid.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
@@ -1124,82 +1163,8 @@ template&lt;typename REAL &gt; </div>
 
 </div>
 </div>
-<a id="ab74b9dd202f9418c8847e78596153098"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab74b9dd202f9418c8847e78596153098">&#9670;&nbsp;</a></span>eigen_sym() <span class="overload">[3/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename REAL &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void linalg::eigen_sym </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classcpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classcpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>values</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classcpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>vectors</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
-
-</div>
-</div>
-<a id="a10e8235a0717a937576fbb4d7e705214"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a10e8235a0717a937576fbb4d7e705214">&#9670;&nbsp;</a></span>eigen_sym() <span class="overload">[4/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename REAL &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void linalg::eigen_sym </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classmpimat.html">mpimat</a>&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classcpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>values</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classmpimat.html">mpimat</a>&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>vectors</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
-
-</div>
-</div>
 <a id="a0ac5e0babfee3b0f077701529f683b43"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0ac5e0babfee3b0f077701529f683b43">&#9670;&nbsp;</a></span>eigen_sym() <span class="overload">[5/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ac5e0babfee3b0f077701529f683b43">&#9670;&nbsp;</a></span>eigen_sym() <span class="overload">[4/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1245,6 +1210,43 @@ template&lt;typename REAL &gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a10e8235a0717a937576fbb4d7e705214"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10e8235a0717a937576fbb4d7e705214">&#9670;&nbsp;</a></span>eigen_sym() <span class="overload">[5/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void linalg::eigen_sym </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmpimat.html">mpimat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>values</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classmpimat.html">mpimat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vectors</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
 
 </div>
 </div>
@@ -1352,6 +1354,7 @@ template&lt;typename REAL &gt; </div>
 <dl class="section user"><dt>Implementation Details</dt><dd>Uses the ScaLAPACK functions <code>pXgetrf()</code> (LU) and <code>pXgetri()</code> (solve).</dd></dl>
 <dl class="section user"><dt>Memory Allocations</dt><dd>LU pivot data is allocated internally.</dd></dl>
 <dl class="section user"><dt>Exceptions</dt><dd>If the matrix is non-square, a <code>runtime_error</code> exception is thrown. If an allocation fails, a <code>bad_alloc</code> exception will be thrown.</dd></dl>
+<dl class="section user"><dt>Communication Details</dt><dd>The method will communicate across all processes in the BLACS grid.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
@@ -1399,64 +1402,8 @@ template&lt;typename REAL &gt; </div>
 
 </div>
 </div>
-<a id="a640c1f61e19df98acdabc6fe26c8c03b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a640c1f61e19df98acdabc6fe26c8c03b">&#9670;&nbsp;</a></span>lu() <span class="overload">[1/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename REAL &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void linalg::lu </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classmpimat.html">mpimat</a>&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classcpuvec.html">cpuvec</a>&lt; int &gt; &amp;&#160;</td>
-          <td class="paramname"><em>p</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int &amp;&#160;</td>
-          <td class="paramname"><em>info</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Computes the PLU factorization with partial pivoting. </p>
-<p>The input is replaced by its LU factorization, with L unit-diagonal.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">x</td><td>Input data matrix, replaced by its LU factorization. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">p</td><td>Vector of pivots, representing the diagonal matrix P in the PLU. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">info</td><td>The LAPACK return number.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section user"><dt>Implementation Details</dt><dd>Uses the ScaLAPACK function <code>pXgetrf()</code>.</dd></dl>
-<dl class="section user"><dt>Memory Allocations</dt><dd>If the pivot vector is inappropriately sized, it will automatically be re-allocated.</dd></dl>
-<dl class="section user"><dt>Exceptions</dt><dd>If a reallocation is triggered and fails, a <code>bad_alloc</code> exception will be thrown.</dd></dl>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a id="a12807dd969487fb835563c9998120beb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a12807dd969487fb835563c9998120beb">&#9670;&nbsp;</a></span>lu() <span class="overload">[2/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a12807dd969487fb835563c9998120beb">&#9670;&nbsp;</a></span>lu() <span class="overload">[1/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1505,6 +1452,63 @@ template&lt;typename REAL &gt; </div>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">REAL</td><td>should be '__half', 'float', or 'double'. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a640c1f61e19df98acdabc6fe26c8c03b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a640c1f61e19df98acdabc6fe26c8c03b">&#9670;&nbsp;</a></span>lu() <span class="overload">[2/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void linalg::lu </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmpimat.html">mpimat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcpuvec.html">cpuvec</a>&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &amp;&#160;</td>
+          <td class="paramname"><em>info</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the PLU factorization with partial pivoting. </p>
+<p>The input is replaced by its LU factorization, with L unit-diagonal.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">x</td><td>Input data matrix, replaced by its LU factorization. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">p</td><td>Vector of pivots, representing the diagonal matrix P in the PLU. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">info</td><td>The LAPACK return number.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section user"><dt>Implementation Details</dt><dd>Uses the ScaLAPACK function <code>pXgetrf()</code>.</dd></dl>
+<dl class="section user"><dt>Memory Allocations</dt><dd>If the pivot vector is inappropriately sized, it will automatically be re-allocated.</dd></dl>
+<dl class="section user"><dt>Exceptions</dt><dd>If a reallocation is triggered and fails, a <code>bad_alloc</code> exception will be thrown.</dd></dl>
+<dl class="section user"><dt>Communication Details</dt><dd>The method will communicate across all processes in the BLACS grid.</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
   </table>
   </dd>
 </dl>
@@ -2061,57 +2065,8 @@ template&lt;typename REAL &gt; </div>
 
 </div>
 </div>
-<a id="af94568ee6fe3627e1799e7d614d7cd6e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af94568ee6fe3627e1799e7d614d7cd6e">&#9670;&nbsp;</a></span>solve() <span class="overload">[1/5]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename REAL &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void linalg::solve </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classmpimat.html">mpimat</a>&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classmpimat.html">mpimat</a>&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>y</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Solve a system of equations. </p>
-<p>The input is replaced by its LU factorization.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">x</td><td>Input LHS. Should be square. Overwritten by LU. </td></tr>
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">y</td><td>Input RHS. Overwritten by solution.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section user"><dt>Implementation Details</dt><dd>Uses the LAPACK functions <code>pXgesv()</code>.</dd></dl>
-<dl class="section user"><dt>Memory Allocations</dt><dd>LU pivot data is allocated internally.</dd></dl>
-<dl class="section user"><dt>Exceptions</dt><dd>If the matrix is non-square or if the RHS is incompatible with the LHS, a <code>runtime_error</code> exception is thrown. If the inputs are distributed on different grids, a <code>runtime_exception</code> is thrown. If an allocation fails, a <code>bad_alloc</code> exception will be thrown.</dd></dl>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a id="a5ef3bf18806056a87fcd4df9fb013bd6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5ef3bf18806056a87fcd4df9fb013bd6">&#9670;&nbsp;</a></span>solve() <span class="overload">[2/5]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ef3bf18806056a87fcd4df9fb013bd6">&#9670;&nbsp;</a></span>solve() <span class="overload">[1/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2160,7 +2115,7 @@ template&lt;typename REAL &gt; </div>
 </div>
 </div>
 <a id="a65971967708b68aa071e0b4e25c400a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a65971967708b68aa071e0b4e25c400a6">&#9670;&nbsp;</a></span>solve() <span class="overload">[3/5]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a65971967708b68aa071e0b4e25c400a6">&#9670;&nbsp;</a></span>solve() <span class="overload">[2/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2187,6 +2142,56 @@ template&lt;typename REAL &gt; </div>
       </table>
 </div><div class="memdoc">
 <p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
+
+</div>
+</div>
+<a id="af94568ee6fe3627e1799e7d614d7cd6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af94568ee6fe3627e1799e7d614d7cd6e">&#9670;&nbsp;</a></span>solve() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void linalg::solve </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmpimat.html">mpimat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classmpimat.html">mpimat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Solve a system of equations. </p>
+<p>The input is replaced by its LU factorization.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">x</td><td>Input LHS. Should be square. Overwritten by LU. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">y</td><td>Input RHS. Overwritten by solution.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section user"><dt>Implementation Details</dt><dd>Uses the LAPACK functions <code>pXgesv()</code>.</dd></dl>
+<dl class="section user"><dt>Memory Allocations</dt><dd>LU pivot data is allocated internally.</dd></dl>
+<dl class="section user"><dt>Exceptions</dt><dd>If the matrix is non-square or if the RHS is incompatible with the LHS, a <code>runtime_error</code> exception is thrown. If the inputs are distributed on different grids, a <code>runtime_exception</code> is thrown. If an allocation fails, a <code>bad_alloc</code> exception will be thrown.</dd></dl>
+<dl class="section user"><dt>Communication Details</dt><dd>The method will communicate across all processes in the BLACS grid.</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -2320,8 +2325,51 @@ template&lt;typename REAL &gt; </div>
 
 </div>
 </div>
+<a id="a2fb03e4ac9901d98eaade9a4a1bfe8b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fb03e4ac9901d98eaade9a4a1bfe8b2">&#9670;&nbsp;</a></span>svd() <span class="overload">[2/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void linalg::svd </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>u</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vt</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
+
+</div>
+</div>
 <a id="accd6bce42acd5d23069863a6e7e623a4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#accd6bce42acd5d23069863a6e7e623a4">&#9670;&nbsp;</a></span>svd() <span class="overload">[2/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#accd6bce42acd5d23069863a6e7e623a4">&#9670;&nbsp;</a></span>svd() <span class="overload">[3/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2361,6 +2409,7 @@ template&lt;typename REAL &gt; </div>
 <dl class="section user"><dt>Implementation Details</dt><dd>Uses the ScaLAPACK function <code>pXgesvd()</code>.</dd></dl>
 <dl class="section user"><dt>Memory Allocations</dt><dd>If the any outputs are inappropriately sized, they will automatically be re-allocated. Additionally, some temporary work storage is needed.</dd></dl>
 <dl class="section user"><dt>Exceptions</dt><dd>If a (re-)allocation is triggered and fails, a <code>bad_alloc</code> exception will be thrown.</dd></dl>
+<dl class="section user"><dt>Communication Details</dt><dd>The method will communicate across all processes in the BLACS grid.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
@@ -2370,94 +2419,8 @@ template&lt;typename REAL &gt; </div>
 
 </div>
 </div>
-<a id="a2fb03e4ac9901d98eaade9a4a1bfe8b2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2fb03e4ac9901d98eaade9a4a1bfe8b2">&#9670;&nbsp;</a></span>svd() <span class="overload">[3/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename REAL &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void linalg::svd </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classcpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classcpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>s</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classcpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>u</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classcpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>vt</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
-
-</div>
-</div>
-<a id="ab735b1be6cc7427db9c8c062e4e0ee51"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab735b1be6cc7427db9c8c062e4e0ee51">&#9670;&nbsp;</a></span>svd() <span class="overload">[4/6]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename REAL &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void linalg::svd </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classmpimat.html">mpimat</a>&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classcpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>s</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classmpimat.html">mpimat</a>&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>u</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classmpimat.html">mpimat</a>&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>vt</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
-
-</div>
-</div>
 <a id="a9eac5c2d50bb27d713f3e435e1159def"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9eac5c2d50bb27d713f3e435e1159def">&#9670;&nbsp;</a></span>svd() <span class="overload">[5/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9eac5c2d50bb27d713f3e435e1159def">&#9670;&nbsp;</a></span>svd() <span class="overload">[4/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2503,6 +2466,49 @@ template&lt;typename REAL &gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="ab735b1be6cc7427db9c8c062e4e0ee51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab735b1be6cc7427db9c8c062e4e0ee51">&#9670;&nbsp;</a></span>svd() <span class="overload">[5/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void linalg::svd </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classmpimat.html">mpimat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classmpimat.html">mpimat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>u</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classmpimat.html">mpimat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>vt</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. </p>
 
 </div>
 </div>
@@ -2966,6 +2972,7 @@ template&lt;typename REAL &gt; </div>
 <dl class="section user"><dt>Implementation Details</dt><dd>Uses the PBLAS function <code>pXtran()</code>.</dd></dl>
 <dl class="section user"><dt>Memory Allocations</dt><dd>If the output dimension is inappropriately sized, it will automatically be re-allocated.</dd></dl>
 <dl class="section user"><dt>Exceptions</dt><dd>If a reallocation is triggered and fails, a <code>bad_alloc</code> exception will be thrown.</dd></dl>
+<dl class="section user"><dt>Communication Details</dt><dd>The method will communicate across all processes in the BLACS grid.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>

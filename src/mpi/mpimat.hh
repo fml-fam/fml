@@ -117,6 +117,8 @@ class mpimat : public unimat<REAL>
   
   @param[in] blacs_grid Scalapack grid object.
   
+  @comm The method has no communication.
+  
   @code
   grid g = grid(PROC_GRID_SQUARE);
   mpimat<float> x(g);
@@ -152,6 +154,8 @@ mpimat<REAL>::mpimat(const grid &blacs_grid)
   
   @except If the allocation fails, a `bad_alloc` exception will be thrown.
   If the input values are invalid, a `runtime_error` exception will be thrown.
+  
+  @comm The method has no communication.
   
   @code
   grid g = grid(PROC_GRID_SQUARE);
@@ -189,6 +193,8 @@ mpimat<REAL>::mpimat(const grid &blacs_grid, int bf_rows, int bf_cols)
   
   @except If the input values are invalid, a `runtime_error` exception will be
   thrown.
+  
+  @comm The method has no communication.
   
   @code
   grid g = grid(PROC_GRID_SQUARE);
@@ -236,6 +242,8 @@ mpimat<REAL>::mpimat(const grid &blacs_grid, len_t nrows, len_t ncols, int bf_ro
   
   @except If the input values are invalid, a `runtime_error` exception will be
   thrown.
+  
+  @comm The method has no communication.
  */
 template <typename REAL>
 mpimat<REAL>::mpimat(const grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct)
@@ -303,6 +311,8 @@ mpimat<REAL>::~mpimat()
   
   @except If the reallocation fails, a `bad_alloc` exception will be thrown.
   If the input values are invalid, a `runtime_error` exception will be thrown.
+  
+  @comm The method has no communication.
  */
 template <typename REAL>
 void mpimat<REAL>::resize(len_t nrows, len_t ncols)
@@ -351,6 +361,8 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols)
   
   @except If the reallocation fails, a `bad_alloc` exception will be thrown.
   If the input values are invalid, a `runtime_error` exception will be thrown.
+  
+  @comm The method has no communication.
  */
 template <typename REAL>
 void mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
@@ -404,6 +416,8 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
   
   @except If the input values are invalid, a `runtime_error` exception will be
   thrown.
+  
+  @comm The method has no communication.
  */
 template <typename REAL>
 void mpimat<REAL>::inherit(grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct)
@@ -455,6 +469,8 @@ mpimat<REAL> mpimat<REAL>::dupe() const
   
   @param[in] ndigits Number of decimal digits to print.
   @param[in] add_final_blank Should a final blank line be printed?
+  
+  @comm The method will communicate across all processes in the BLACS grid.
  */
 template <typename REAL>
 void mpimat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
@@ -499,6 +515,8 @@ void mpimat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
   @brief Print some brief information about the object.
   
   @details Printing will only be done by rank 0.
+  
+  @comm The method has no communication.
  */
 template <typename REAL>
 void mpimat<REAL>::info() const
@@ -518,7 +536,11 @@ void mpimat<REAL>::info() const
 
 // fillers
 
-/// @brief Set all values to zero.
+/**
+  @brief Set all values to zero.
+  
+  @comm The method has no communication.
+ */
 template <typename REAL>
 void mpimat<REAL>::fill_zero()
 {
@@ -532,6 +554,8 @@ void mpimat<REAL>::fill_zero()
   @brief Set all values to input value.
   
   @param[in] v Value to set all data values to.
+  
+  @comm The method has no communication.
  */
 template <typename REAL>
 void mpimat<REAL>::fill_val(const REAL v)
@@ -551,6 +575,8 @@ void mpimat<REAL>::fill_val(const REAL v)
   @brief Set values to linearly spaced numbers.
   
   @param[in] start,stop Beginning/ending numbers.
+  
+  @comm The method has no communication.
  */
 template <typename REAL>
 void mpimat<REAL>::fill_linspace(const REAL start, const REAL stop)
@@ -602,7 +628,11 @@ inline void mpimat<int>::fill_linspace(const int start, const int stop)
 
 
 
-/// @brief Set diagonal entries to 1 and non-diagonal entries to 0.
+/**
+  @brief Set diagonal entries to 1 and non-diagonal entries to 0.
+  
+  @comm The method has no communication.
+ */
 template <typename REAL>
 void mpimat<REAL>::fill_eye()
 {
@@ -621,6 +651,8 @@ void mpimat<REAL>::fill_eye()
   not all of it will be used.
   
   @param[in] v Vector of values to set the matrix diagonal to.
+  
+  @comm The method has no communication.
  */
 template <typename REAL>
 void mpimat<REAL>::fill_diag(const cpuvec<REAL> &v)
@@ -650,6 +682,8 @@ void mpimat<REAL>::fill_diag(const cpuvec<REAL> &v)
   
   @param[in] seed Seed for the rng.
   @param[in] min,max Parameters for the generator.
+  
+  @comm The method has no communication.
  */
 template <typename REAL>
 void mpimat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL max)
@@ -680,6 +714,8 @@ void mpimat<REAL>::fill_runif(const REAL min, const REAL max)
   
   @param[in] seed Seed for the rng.
   @param[in] mean,sd Parameters for the generator.
+  
+  @comm The method has no communication.
  */
 template <typename REAL>
 void mpimat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL sd)
@@ -717,6 +753,8 @@ void mpimat<REAL>::fill_rnorm(const REAL mean, const REAL sd)
   
   @except If a reallocation is triggered and fails, a `bad_alloc` exception
   will be thrown.
+  
+  @comm The method will communicate across all processes in the BLACS grid.
  */
 template <typename REAL>
 void mpimat<REAL>::diag(cpuvec<REAL> &v)
@@ -757,6 +795,8 @@ void mpimat<REAL>::diag(cpuvec<REAL> &v)
   
   @except If a reallocation is triggered and fails, a `bad_alloc` exception
   will be thrown.
+  
+  @comm The method will communicate across all processes in the BLACS grid.
  */
 template <typename REAL>
 void mpimat<REAL>::antidiag(cpuvec<REAL> &v)
@@ -788,6 +828,8 @@ void mpimat<REAL>::antidiag(cpuvec<REAL> &v)
   @brief Multiply all values by the input value.
   
   @param[in] s Scaling value.
+  
+  @comm The method has no communication.
  */
 template <typename REAL>
 void mpimat<REAL>::scale(const REAL s)
@@ -802,8 +844,13 @@ void mpimat<REAL>::scale(const REAL s)
 }
 
 
-
-/// @brief Reverse the columns of the matrix.
+/**
+  @brief Reverse the columns of the matrix.
+  
+  @comm In principle the method will communicate, although no communication is
+  possible. The pattern is highly dependent on the BLACS grid shape and the
+  matrix blocking factor.
+ */
 template <typename REAL>
 void mpimat<REAL>::rev_cols()
 {
@@ -873,7 +920,11 @@ void mpimat<REAL>::rev_cols()
 
 
 
-/// @brief Are any values infinite?
+/**
+  @brief Are any values infinite?
+  
+  @comm The method will communicate across all processes in the BLACS grid.
+ */
 template <typename REAL>
 bool mpimat<REAL>::any_inf() const
 {
@@ -897,7 +948,11 @@ bool mpimat<REAL>::any_inf() const
 
 
 
-/// @brief Are any values NaN?
+/**
+  @brief Are any values NaN?
+  
+  @comm The method will communicate across all processes in the BLACS grid.
+ */
 template <typename REAL>
 bool mpimat<REAL>::any_nan() const
 {
@@ -926,11 +981,15 @@ bool mpimat<REAL>::any_nan() const
 /**
   @brief Get the specified value.
   
+  @details All processes receive the return.
+  
   @param[in] i The index of the desired value, 0-indexed. The numbering
   considers the internal storage as a 1-dimensional array.
   
   @except If indices are out of bounds, the method will throw a `runtime_error`
   exception.
+  
+  @comm The method will communicate across all processes in the BLACS grid.
  */
 template <typename REAL>
 REAL mpimat<REAL>::get(const len_t i) const
@@ -947,10 +1006,14 @@ REAL mpimat<REAL>::get(const len_t i) const
 /**
   @brief Get the specified value.
   
+  @details All processes receive the return.
+  
   @param[in] i,j The indices of the desired value, 0-indexed.
   
   @except If indices are out of bounds, the method will throw a `runtime_error`
   exception.
+  
+  @comm The method will communicate across all processes in the BLACS grid.
  */
 template <typename REAL>
 REAL mpimat<REAL>::get(const len_t i, const len_t j) const
@@ -970,6 +1033,8 @@ REAL mpimat<REAL>::get(const len_t i, const len_t j) const
   
   @except If indices are out of bounds, the method will throw a `runtime_error`
   exception.
+  
+  @comm The method has no communication.
  */
 template <typename REAL>
 void mpimat<REAL>::set(const len_t i, const REAL v)
@@ -997,6 +1062,8 @@ void mpimat<REAL>::set(const len_t i, const REAL v)
   
   @except If indices are out of bounds, the method will throw a `runtime_error`
   exception.
+  
+  @comm The method has no communication.
  */
 template <typename REAL>
 void mpimat<REAL>::set(const len_t i, const len_t j, const REAL v)
@@ -1018,6 +1085,8 @@ void mpimat<REAL>::set(const len_t i, const len_t j, const REAL v)
 /**
   @brief Get the specified row.
   
+  @details The return vector of row values is set on all processes.
+  
   @param[in] i The desired row, 0-indexed.
   @param[out] v The row values.
   
@@ -1027,6 +1096,8 @@ void mpimat<REAL>::set(const len_t i, const len_t j, const REAL v)
   @except If `i` is an inappropriate value (i.e. does not refer to a matrix
   row), then the method will throw a `logic_error` exception. If a reallocation
   is triggered and fails, a `bad_alloc` exception will be thrown.
+  
+  @comm The method will communicate across all processes in the BLACS grid.
  */
 template <typename REAL>
 void mpimat<REAL>::get_row(const len_t i, cpuvec<REAL> &v) const
@@ -1059,6 +1130,8 @@ void mpimat<REAL>::get_row(const len_t i, cpuvec<REAL> &v) const
 /**
   @brief Get the specified column.
   
+  @details The return vector of column values is set on all processes.
+  
   @param[in] j The desired column, 0-indexed.
   @param[out] v The column values.
   
@@ -1068,6 +1141,8 @@ void mpimat<REAL>::get_row(const len_t i, cpuvec<REAL> &v) const
   @except If `j` is an inappropriate value (i.e. does not refer to a matrix
   column), then the method will throw a `logic_error` exception. If a
   reallocation is triggered and fails, a `bad_alloc` exception will be thrown.
+  
+  @comm The method will communicate across all processes in the BLACS grid.
  */
 template <typename REAL>
 void mpimat<REAL>::get_col(const len_t j, cpuvec<REAL> &v) const
@@ -1100,11 +1175,16 @@ void mpimat<REAL>::get_col(const len_t j, cpuvec<REAL> &v) const
 /**
   @brief See if the two objects are the same.
   
+  @details All processes receive the return.
+  
   @param[in] Comparison object.
+  
   @return If the dimensions mismatch, then `false` is necessarily returned.
   Next, if the grid objects have different ordinal context numbers, then `false`
   is returned. Next, if the pointer to the internal storage arrays match, then
   `true` is returned. Otherwise the objects are compared value by value.
+  
+  @comm The method will communicate across all processes in the BLACS grid.
  */
 template <typename REAL>
 bool mpimat<REAL>::operator==(const mpimat<REAL> &x) const
@@ -1144,6 +1224,8 @@ bool mpimat<REAL>::operator==(const mpimat<REAL> &x) const
   the `==` method.
   
   @param[in] Comparison object.
+  
+  @comm The method will communicate across all processes in the BLACS grid.
  */
 template <typename REAL>
 bool mpimat<REAL>::operator!=(const mpimat<REAL> &x) const
@@ -1158,6 +1240,8 @@ bool mpimat<REAL>::operator!=(const mpimat<REAL> &x) const
   of the LHS object will not result in the internal array storage being freed.
   
   @param[in] x Setter value.
+  
+  @comm The method has no communication.
  */
 template <typename REAL>
 mpimat<REAL>& mpimat<REAL>::operator=(const mpimat<REAL> &x)

@@ -43,6 +43,8 @@ namespace linalg
     @except If x and y are inappropriately sized for the sum, the method will
     throw a 'runtime_error' exception.
     
+    @comm The method will communicate across all processes in the BLACS grid.
+    
     @impl Uses the PBLAS function `pXgeadd()`.
     
     @tparam REAL should be 'float' or 'double'.
@@ -275,6 +277,8 @@ namespace linalg
     @except If a reallocation is triggered and fails, a `bad_alloc` exception
     will be thrown.
     
+    @comm The method will communicate across all processes in the BLACS grid.
+    
     @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
@@ -324,6 +328,8 @@ namespace linalg
     
     @except If a reallocation is triggered and fails, a `bad_alloc` exception
     will be thrown.
+    
+    @comm The method will communicate across all processes in the BLACS grid.
     
     @tparam REAL should be 'float' or 'double'.
    */
@@ -455,6 +461,8 @@ namespace linalg
     @except If a (re-)allocation is triggered and fails, a `bad_alloc`
     exception will be thrown.
     
+    @comm The method will communicate across all processes in the BLACS grid.
+    
     @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
@@ -541,6 +549,8 @@ namespace linalg
     @except If the matrix is non-square, a `runtime_error` exception is thrown.
     If an allocation fails, a `bad_alloc` exception will be thrown.
     
+    @comm The method will communicate across all processes in the BLACS grid.
+    
     @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
@@ -578,6 +588,8 @@ namespace linalg
     
     @except If the matrix is non-square, a `runtime_error` exception is thrown.
     If an allocation fails, a `bad_alloc` exception will be thrown.
+    
+    @comm The method will communicate across all processes in the BLACS grid.
     
     @tparam REAL should be 'float' or 'double'.
    */
@@ -624,6 +636,8 @@ namespace linalg
     LHS, a `runtime_error` exception is thrown. If the inputs are distributed
     on different grids, a `runtime_exception` is thrown. If an allocation
     fails, a `bad_alloc` exception will be thrown.
+    
+    @comm The method will communicate across all processes in the BLACS grid.
     
     @tparam REAL should be 'float' or 'double'.
    */

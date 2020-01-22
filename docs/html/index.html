@@ -97,18 +97,19 @@ $(document).ready(function(){initNavTree('index.html','');});
 <li><b>License:</b> <a href="http://opensource.org/licenses/BSL-1.0">BSL-1.0</a></li>
 <li><b>Project home</b>: <a href="https://github.com/wrathematics/fml">https://github.com/wrathematics/fml</a></li>
 <li><b>Bug reports</b>: <a href="https://github.com/wrathematics/fml/issues">https://github.com/wrathematics/fml/issues</a></li>
+<li><b>Documentation</b>: TODO</li>
 </ul>
 <div class="image">
 <img src="./docs/logo/fml_med.png" align="right"/>
 </div>
 <p>fml is the Fused Matrix Library, a multi-source, header-only C++ library for dense matrix computing. The emphasis is on real-valued matrix types (<code>float</code>, <code>double</code>, and <code>__half</code>) for numerical operations useful for data analysis.</p>
-<p>The goal of fml is to be "medium-level". That is, high-level compared to working directly with e.g. the BLAS or CUDA, but low(er)-level compared to other C++ matrix frameworks. Some knowledge of the use of LAPACK will make many choices in fml make more sense.</p>
+<p>The goal of fml is to be "medium-level". That is, high-level compared to working directly with e.g. the BLAS or CUDA™, but low(er)-level compared to other C++ matrix frameworks. Some knowledge of the use of LAPACK will make many choices in fml make more sense.</p>
 <p>The library provides 4 main classes: <code>cpumat</code>, <code>gpumat</code>, <code>parmat</code>, and <code>mpimat</code>. These are mostly what they sound like, but the particular details are:</p>
 <ul>
 <li>&lt;font color="blue"&gt;CPU&lt;/font&gt;: Single node cpu computing (multi-threaded if using multi-threaded BLAS and linking with OpenMP).</li>
-<li>&lt;font color="green"&gt;GPU&lt;/font&gt;: Single gpu computing via CUDA.</li>
+<li>&lt;font color="green"&gt;GPU&lt;/font&gt;: Single gpu computing.</li>
 <li>&lt;font color="red"&gt;MPI&lt;/font&gt;: Multi-node computing via ScaLAPACK (+gpus if using <a href="http://icl.utk.edu/slate/">SLATE</a>).</li>
-<li>&lt;font color="orange"&gt;PAR&lt;/font&gt;: Multi-node and/or multi-gpu computing via MPI and/or CUDA.</li>
+<li>&lt;font color="orange"&gt;PAR&lt;/font&gt;: Multi-node and/or multi-gpu computing.</li>
 </ul>
 <p>There are some differences in how objects of any particular type are constructed. But the high level APIs are largely the same between the objects. The goal is to be able to quickly create laptop-scale prototypes that are then easily converted into large scale gpu/multi-node/multi-gpu/multi-node+multi-gpu codes.</p>
 <h2>Installation</h2>
@@ -117,7 +118,7 @@ $(document).ready(function(){initNavTree('index.html','');});
 <p>There are no external header dependencies, but there are some shared libraries you need to have (more information below):</p>
 <ul>
 <li>CPU code needs <a href="http://performance.netlib.org/lapack/">LAPACK</a> (I recommend <a href="https://github.com/xianyi/OpenBLAS">OpenBLAS</a>)</li>
-<li>GPU code needs <a href="https://developer.nvidia.com/cuda-downloads">CUDA</a></li>
+<li>GPU code needs <a href="https://developer.nvidia.com/cuda-downloads">NVIDIA® CUDA™</a></li>
 <li>MPI code needs <a href="http://performance.netlib.org/scalapack/">ScaLAPACK</a></li>
 <li>PAR code needs the libraries required by the CPU and/or GPU features, noted above.</li>
 </ul>
@@ -181,11 +182,13 @@ $(document).ready(function(){initNavTree('index.html','');});
 </ul>
 </li>
 </ul>
+<p>Internals are evolving and subject to change at basically any time.</p>
 <h2>Example</h2>
+<p>Here's a simple example computing the SVD with some data held on a single CPU:</p>
 <div class="fragment"><div class="line">{C++}</div><div class="line">#include &lt;cpu/cpumat.hh&gt;</div><div class="line">#include &lt;cpu/linalg.hh&gt;</div><div class="line"></div><div class="line"></div><div class="line">int main()</div><div class="line">{</div><div class="line">  len_t m = 3;</div><div class="line">  len_t n = 2;</div><div class="line"></div><div class="line">  cpumat&lt;float&gt; x(m, n);</div><div class="line">  x.fill_linspace(1.f, (float)m*n);</div><div class="line"></div><div class="line">  x.info();</div><div class="line">  x.print(0);</div><div class="line"></div><div class="line">  cpuvec&lt;float&gt; s;</div><div class="line">  linalg::svd(x, s);</div><div class="line"></div><div class="line">  s.info();</div><div class="line">  s.print();</div><div class="line"></div><div class="line">  return 0;</div><div class="line">}</div></div><!-- fragment --><p>Save as <code>svd.cpp</code> and build with:</p>
 <div class="fragment"><div class="line">g++ -I/path/to/fml/src -fopenmp svd.cpp -o svd -llapack -lblas</div></div><!-- fragment --><p>You should see output like</p>
 <div class="fragment"><div class="line"># cpumat 3x2 type=f</div><div class="line">1 4 </div><div class="line">2 5 </div><div class="line">3 6 </div><div class="line"></div><div class="line"># cpuvec 2 type=f</div><div class="line">9.5080 0.7729 </div></div><!-- fragment --><p>The API is largely the same if we change the object storage, but we have to change the object initialization. For example, if <code>x</code> is an object of class <code>mpimat</code>, we still call <code>linalg::svd(x, s)</code>. The differences lie in the creation of the objects. Here is how we might change the above example to use distributed data:</p>
-<div class="fragment"><div class="line">{C++}</div><div class="line">#include &lt;mpi/mpimat.hh&gt;</div><div class="line">#include &lt;mpi/linalg.hh&gt;</div><div class="line"></div><div class="line"></div><div class="line">int main()</div><div class="line">{</div><div class="line">  grid g = grid(PROC_GRID_SQUARE);</div><div class="line">  g.info();</div><div class="line"></div><div class="line">  len_t m = 3;</div><div class="line">  len_t n = 2;</div><div class="line"></div><div class="line">  mpimat&lt;float&gt; x(g, m, n, 1, 1);</div><div class="line">  x.fill_linspace(1.f, (float)m*n);</div><div class="line"></div><div class="line">  x.info();</div><div class="line">  x.print(0);</div><div class="line"></div><div class="line">  cpuvec&lt;float&gt; s;</div><div class="line">  linalg::svd(x, s);</div><div class="line"></div><div class="line">  if (g.rank0())</div><div class="line">  {</div><div class="line">    s.info();</div><div class="line">    s.print();</div><div class="line">  }</div><div class="line"></div><div class="line">  g.exit();</div><div class="line">  g.finalize();</div><div class="line"></div><div class="line">  return 0;</div><div class="line">}</div></div><!-- fragment --><p>We can build it via:</p>
+<div class="fragment"><div class="line">{C++}</div><div class="line">#include &lt;mpi/mpimat.hh&gt;</div><div class="line">#include &lt;mpi/linalg.hh&gt;</div><div class="line"></div><div class="line"></div><div class="line">int main()</div><div class="line">{</div><div class="line">  grid g = grid(PROC_GRID_SQUARE);</div><div class="line">  g.info();</div><div class="line"></div><div class="line">  len_t m = 3;</div><div class="line">  len_t n = 2;</div><div class="line"></div><div class="line">  mpimat&lt;float&gt; x(g, m, n, 1, 1);</div><div class="line">  x.fill_linspace(1.f, (float)m*n);</div><div class="line"></div><div class="line">  x.info();</div><div class="line">  x.print(0);</div><div class="line"></div><div class="line">  cpuvec&lt;float&gt; s;</div><div class="line">  linalg::svd(x, s);</div><div class="line"></div><div class="line">  if (g.rank0())</div><div class="line">  {</div><div class="line">    s.info();</div><div class="line">    s.print();</div><div class="line">  }</div><div class="line"></div><div class="line">  g.exit();</div><div class="line">  g.finalize();</div><div class="line"></div><div class="line">  return 0;</div><div class="line">}</div></div><!-- fragment --><p>In practice, using such small block sizes for an MPI matrix is probably not a good idea; we only do so for the sake of demonstration (we want each process to own some data). We can build this new example via:</p>
 <div class="fragment"><div class="line">mpicxx -I/path/to/fml/src svd.cpp -fopenmp  svd.cpp -o svd -lscalapack-openmpi</div></div><!-- fragment --><p>We can launch the example with multiple processes via</p>
 <div class="fragment"><div class="line">mpirun -np 4 ./svd</div></div><!-- fragment --><p>And here we see:</p>
 <div class="fragment"><div class="line">## Grid 0 2x2</div><div class="line"></div><div class="line"># mpimat 3x2 on 2x2 grid type=f</div><div class="line">1 4 </div><div class="line">2 5 </div><div class="line">3 6 </div><div class="line"></div><div class="line"># cpuvec 2 type=f</div><div class="line">9.5080 0.7729 </div></div><!-- fragment --><h2>Philosophy and Similar Projects</h2>
