@@ -40,8 +40,10 @@ namespace gpuhelpers
   
   
   
-  namespace
+  namespace internals
   {
+    static const size_t CPLEN = 1024;
+    
     template <typename REAL_IN, typename REAL_OUT>
     void copy_gpu2gpu(const len_t m, const len_t n, std::shared_ptr<card> c, dim3 griddim, dim3 blockdim, const REAL_IN *in, REAL_OUT *out)
     {
@@ -64,16 +66,17 @@ namespace gpuhelpers
       }
       else
       {
-        cpuvec<REAL_OUT> cp(fml::kernelfuns::CPLEN);
-        REAL_OUT *cp_d = cp.data_ptr();
-        
         size_t top = (size_t) m*n;
-        for (size_t i=0; i<top; i+=fml::kernelfuns::CPLEN)
+        size_t tmplen = std::min(top, CPLEN);
+        cpuvec<REAL_IN> tmp(tmplen);
+        REAL_IN *tmp_d = tmp.data_ptr();
+        
+        for (size_t i=0; i<top; i+=tmplen)
         {
-          const size_t start = top - i;
-          const size_t copylen = std::min(fml::kernelfuns::CPLEN, start);
-          c->mem_cpu2gpu((void*)cp_d, (void*)(in + start), copylen);
-          arraytools::copy(copylen, cp_d, out + start);
+          const size_t rem = top - i;
+          const size_t copylen = std::min(tmplen, rem);
+          c->mem_gpu2cpu((void*)tmp_d, (void*)(in + i), copylen*sizeof(*in));
+          arraytools::copy(copylen, tmp_d, out + i);
         }
       }
     }
@@ -88,16 +91,17 @@ namespace gpuhelpers
       }
       else
       {
-        cpuvec<REAL_OUT> cp(fml::kernelfuns::CPLEN);
-        REAL_OUT *cp_d = cp.data_ptr();
-        
         size_t top = (size_t) m*n;
-        for (size_t i=0; i<top; i+=fml::kernelfuns::CPLEN)
+        size_t tmplen = std::min(top, CPLEN);
+        cpuvec<REAL_OUT> tmp(tmplen);
+        REAL_OUT *tmp_d = tmp.data_ptr();
+        
+        for (size_t i=0; i<top; i+=tmplen)
         {
-          const size_t start = top - i;
-          const size_t copylen = std::min(fml::kernelfuns::CPLEN, start);
-          arraytools::copy(copylen, in + start, cp_d);
-          c->mem_cpu2gpu((void*)(out + start), (void*)cp_d, copylen);
+          const size_t rem = top - i;
+          const size_t copylen = std::min(tmplen, rem);
+          arraytools::copy(copylen, in + i, tmp_d);
+          c->mem_cpu2gpu((void*)(out + i), (void*)tmp_d, copylen*sizeof(*out));
         }
       }
     }
@@ -125,7 +129,7 @@ namespace gpuhelpers
   void gpu2cpu(const gpuvec<REAL_IN> &gpu, cpuvec<REAL_OUT> &cpu)
   {
     cpu.resize(gpu.size());
-    copy_gpu2cpu(gpu.size(), (len_t)1, gpu.get_card(), gpu.data_ptr(), cpu.data_ptr());
+    internals::copy_gpu2cpu(gpu.size(), (len_t)1, gpu.get_card(), gpu.data_ptr(), cpu.data_ptr());
   }
   
   /// \overload
@@ -143,7 +147,7 @@ namespace gpuhelpers
   void gpu2cpu(const gpumat<REAL_IN> &gpu, cpumat<REAL_OUT> &cpu)
   {
     cpu.resize(gpu.nrows(), gpu.ncols());
-    copy_gpu2cpu(gpu.nrows(), gpu.ncols(), gpu.get_card(), gpu.data_ptr(), cpu.data_ptr());
+    internals::copy_gpu2cpu(gpu.nrows(), gpu.ncols(), gpu.get_card(), gpu.data_ptr(), cpu.data_ptr());
   }
   
   /// \overload
@@ -178,8 +182,7 @@ namespace gpuhelpers
   void cpu2gpu(const cpuvec<REAL_IN> &cpu, gpuvec<REAL_OUT> &gpu)
   {
     gpu.resize(cpu.size());
-    
-    copy_cpu2gpu(cpu.size(), (len_t)1, gpu.get_card(), cpu.data_ptr(), gpu.data_ptr());
+    internals::copy_cpu2gpu(cpu.size(), (len_t)1, gpu.get_card(), cpu.data_ptr(), gpu.data_ptr());
   }
   
   /// \overload
@@ -187,7 +190,7 @@ namespace gpuhelpers
   void cpu2gpu(const cpumat<REAL_IN> &cpu, gpumat<REAL_OUT> &gpu)
   {
     gpu.resize(cpu.nrows(), cpu.ncols());
-    copy_cpu2gpu(cpu.nrows(), cpu.ncols(), gpu.get_card(), cpu.data_ptr(), gpu.data_ptr());
+    internals::copy_cpu2gpu(cpu.nrows(), cpu.ncols(), gpu.get_card(), cpu.data_ptr(), gpu.data_ptr());
   }
   
   
@@ -219,7 +222,7 @@ namespace gpuhelpers
       throw std::logic_error("input/output data must be on the same gpu");
     
     gpu_out.resize(gpu_in.size());
-    copy_gpu2gpu(gpu_in.size(), (len_t)1, c, gpu_in.get_griddim(), gpu_in.get_blockdim(), gpu_in.data_ptr(), gpu_out.data_ptr());
+    internals::copy_gpu2gpu(gpu_in.size(), (len_t)1, c, gpu_in.get_griddim(), gpu_in.get_blockdim(), gpu_in.data_ptr(), gpu_out.data_ptr());
   }
   
   /// \overload
@@ -241,7 +244,7 @@ namespace gpuhelpers
       throw std::logic_error("input/output data must be on the same gpu");
     
     gpu_out.resize(gpu_in.nrows(), gpu_in.ncols());
-    copy_gpu2gpu(gpu_in.nrows(), gpu_in.ncols(), c, gpu_in.get_griddim(), gpu_in.get_blockdim(), gpu_in.data_ptr(), gpu_out.data_ptr());
+    internals::copy_gpu2gpu(gpu_in.nrows(), gpu_in.ncols(), c, gpu_in.get_griddim(), gpu_in.get_blockdim(), gpu_in.data_ptr(), gpu_out.data_ptr());
   }
   
   /// \overload
