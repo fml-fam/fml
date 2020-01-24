@@ -45,6 +45,7 @@ class cpuvec : public univec<T>
     
     void scale(const T s);
     void rev();
+    T sum();
     
     T get(const len_t i) const;
     void set(const len_t i, const T v);
@@ -366,7 +367,21 @@ void cpuvec<T>::rev()
     this->data[j] = tmp;
     j--;
   }
+}
 
+
+
+/// @brief Sum the vector.
+template <typename T>
+T cpuvec<T>::sum()
+{
+  T s = 0;
+  
+  #pragma omp for simd
+  for (len_t i=0; i<this->_size; i++)
+    s += this->data[i];
+  
+  return s;
 }
 
 

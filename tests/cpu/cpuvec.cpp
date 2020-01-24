@@ -107,3 +107,16 @@ TEMPLATE_TEST_CASE("rev - vec", "[cpuvec]", float, double)
   REQUIRE( fltcmp::eq(x.get(0), 2) );
   REQUIRE( fltcmp::eq(x.get(1), 1) );
 }
+
+
+
+TEMPLATE_TEST_CASE("sum - vec", "[cpuvec]", float, double)
+{
+  len_t n = 5;
+  
+  cpuvec<TestType> x(n);
+  x.fill_linspace(1, n);
+  
+  TestType s = x.sum();
+  REQUIRE( fltcmp::eq(s, (n*(n+1))/2) );
+}

@@ -173,6 +173,17 @@ namespace fml
     
     
     template <typename REAL>
+    __global__ void kernel_sum(const len_t len, const REAL *data, REAL *s)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      
+      if (i < len)
+        atomicAdd(s, data[i]);
+    }
+    
+    
+    
+    template <typename REAL>
     __global__ void kernel_any_inf(const len_t m, const len_t n, const REAL *data, int *has_inf)
     {
       int i = blockDim.x*blockIdx.x + threadIdx.x;
