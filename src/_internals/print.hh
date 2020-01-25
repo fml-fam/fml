@@ -17,6 +17,7 @@
   #include <cstdarg>
   #include <cstdio>
 #elif defined(FML_PRINT_R)
+  #define R_USE_C99_IN_CXX
   #include <R_ext/Print.h>
   #include <cstdarg>
 #endif
