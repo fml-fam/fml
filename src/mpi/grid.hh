@@ -11,9 +11,9 @@
 #include <mpi.h>
 
 #include <cmath>
-#include <cstdarg>
-#include <cstdio>
 #include <stdexcept>
+
+#include "../_internals/print.hh"
 
 #include "internals/_blacs_prototypes.h"
 
@@ -260,7 +260,7 @@ inline void grid::printf(const int row, const int col, const char *fmt, ...) con
     va_list args;
     
     va_start(args, fmt);
-    vfprintf(stdout, fmt, args);
+    fml::print::vprintf(fmt, args);
     va_end(args);
   }
 }

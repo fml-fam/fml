@@ -17,6 +17,7 @@
 #include "grid.hh"
 #include "internals/bcutils.hh"
 
+#include "../_internals/print.hh"
 #include "../_internals/rand.hh"
 #include "../_internals/omp.hh"
 #include "../_internals/types.hh"
@@ -523,12 +524,12 @@ void mpimat<REAL>::info() const
 {
   if (this->g.rank0())
   {
-    printf("# mpimat");
-    printf(" %dx%d", this->m, this->n);
-    printf(" with %dx%d blocking", this->mb, this->nb);
-    printf(" on %dx%d grid", this->g.nprow(), this->g.npcol());
-    printf(" type=%s", typeid(REAL).name());
-    printf("\n");
+    fml::print::printf("# mpimat");
+    fml::print::printf(" %dx%d", this->m, this->n);
+    fml::print::printf(" with %dx%d blocking", this->mb, this->nb);
+    fml::print::printf(" on %dx%d grid", this->g.nprow(), this->g.npcol());
+    fml::print::printf(" type=%s", typeid(REAL).name());
+    fml::print::printf("\n");
   }
 }
 

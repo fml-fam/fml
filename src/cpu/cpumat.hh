@@ -16,6 +16,7 @@
 
 #include "../_internals/rand.hh"
 #include "../_internals/omp.hh"
+#include "../_internals/print.hh"
 #include "../_internals/types.hh"
 #include "../_internals/unimat.hh"
 
@@ -287,11 +288,11 @@ void cpumat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
     for (len_t j=0; j<this->n; j++)
       this->printval(this->data[i + this->m*j], ndigits);
     
-    putchar('\n');
+    fml::print::putchar('\n');
   }
   
   if (add_final_blank)
-    putchar('\n');
+    fml::print::putchar('\n');
 }
 
 
@@ -300,10 +301,10 @@ void cpumat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 template <typename REAL>
 void cpumat<REAL>::info() const
 {
-  printf("# cpumat");
-  printf(" %dx%d", this->m, this->n);
-  printf(" type=%s", typeid(REAL).name());
-  printf("\n");
+  fml::print::printf("# cpumat");
+  fml::print::printf(" %dx%d", this->m, this->n);
+  fml::print::printf(" type=%s", typeid(REAL).name());
+  fml::print::printf("\n");
 }
 
 

@@ -14,6 +14,7 @@
 #include <stdexcept>
 
 #include "../_internals/omp.hh"
+#include "../_internals/print.hh"
 #include "../_internals/univec.hh"
 
 
@@ -256,9 +257,9 @@ void cpuvec<T>::print(uint8_t ndigits, bool add_final_blank) const
   for (len_t i=0; i<this->_size; i++)
     this->printval(this->data[i], ndigits);
   
-  putchar('\n');
+  fml::print::putchar('\n');
   if (add_final_blank)
-    putchar('\n');
+    fml::print::putchar('\n');
 }
 
 
@@ -267,10 +268,10 @@ void cpuvec<T>::print(uint8_t ndigits, bool add_final_blank) const
 template <typename T>
 void cpuvec<T>::info() const
 {
-  printf("# cpuvec");
-  printf(" %d", this->_size);
-  printf(" type=%s", typeid(T).name());
-  printf("\n");
+  fml::print::printf("# cpuvec");
+  fml::print::printf(" %d", this->_size);
+  fml::print::printf(" type=%s", typeid(T).name());
+  fml::print::printf("\n");
 }
 
 

@@ -8,8 +8,8 @@
 
 
 #include <cstdint>
-#include <cstdio>
 
+#include "../_internals/print.hh"
 #include "../_internals/rand.hh"
 #include "../_internals/types.hh"
 #include "../_internals/unimat.hh"
@@ -358,11 +358,11 @@ void gpumat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
       this->printval(tmp, ndigits);
     }
   
-    putchar('\n');
+    fml::print::putchar('\n');
   }
   
   if (add_final_blank)
-    putchar('\n');
+    fml::print::putchar('\n');
 }
 
 
@@ -371,10 +371,10 @@ void gpumat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 template <typename REAL>
 void gpumat<REAL>::info() const
 {
-  printf("# gpumat ");
-  printf("%dx%d ", this->m, this->n);
-  printf("type=%s ", typeid(REAL).name());
-  printf("\n");
+  fml::print::printf("# gpumat ");
+  fml::print::printf("%dx%d ", this->m, this->n);
+  fml::print::printf("type=%s ", typeid(REAL).name());
+  fml::print::printf("\n");
 }
 
 

@@ -8,8 +8,8 @@
 
 
 #include <cstdint>
-#include <cstdio>
 
+#include "../_internals/print.hh"
 #include "../_internals/univec.hh"
 
 #include "arch/arch.hh"
@@ -354,7 +354,7 @@ void gpuvec<REAL>::print(uint8_t ndigits, bool add_final_blank) const
   }
   
   if (add_final_blank)
-    putchar('\n');
+    fml::print::putchar('\n');
 }
 
 
@@ -363,10 +363,10 @@ void gpuvec<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 template <typename T>
 void gpuvec<T>::info() const
 {
-  printf("# gpuvec ");
-  printf("%d ", this->_size);
-  printf("type=%s ", typeid(T).name());
-  printf("\n");
+  fml::print::printf("# gpuvec ");
+  fml::print::printf("%d ", this->_size);
+  fml::print::printf("type=%s ", typeid(T).name());
+  fml::print::printf("\n");
 }
 
 
