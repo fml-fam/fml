@@ -18,6 +18,7 @@
   #include <cstdio>
 #elif defined(FML_PRINT_R)
   #include <R_ext/Print.h>
+  #include <cstdarg>
 #endif
 
 
