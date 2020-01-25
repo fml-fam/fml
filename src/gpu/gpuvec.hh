@@ -51,7 +51,7 @@ class gpuvec : public univec<T>
     
     void scale(const T s);
     void rev();
-    T sum();
+    T sum() const;
     
     T get(const len_t i) const;
     void set(const len_t i, const T v);
@@ -437,12 +437,12 @@ void gpuvec<T>::rev()
 
 /// @brief Sum the vector.
 template <typename T>
-T gpuvec<T>::sum()
+T gpuvec<T>::sum() const
 {
   T s = 0;
-  gpuscalar<int> s_gpu(c, s);
+  gpuscalar<T> s_gpu(c, s);
   
-  fml::kernelfuns::kernel_sum<<<dim_grid, dim_block>>>(this->_size, this->data, s.data_ptr());
+  fml::kernelfuns::kernel_sum<<<dim_grid, dim_block>>>(this->_size, this->data, s_gpu.data_ptr());
   s_gpu.get_val(&s);
   this->c->check();
   
