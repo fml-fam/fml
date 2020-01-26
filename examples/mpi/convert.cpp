@@ -10,7 +10,7 @@ int main()
   
   mpimat<float> x(g, 5, 5, 2, 2);
   
-  x.fill_one();
+  x.fill_val(1);
   
   cpumat<float> x_gbl = mpihelpers::mpi2cpu(x);
   if (g.rank0())
