@@ -12,7 +12,7 @@ New:
       - xpose()
       - lu()
       - svd()
-      - eigen() (symmetric only)
+      - eigen_sym()
       - invert()
       - solve()
   * added to linalg namespace for parmat:
