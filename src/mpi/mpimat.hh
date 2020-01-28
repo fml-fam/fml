@@ -64,6 +64,7 @@ class mpimat : public unimat<REAL>
     void diag(cpuvec<REAL> &v);
     void antidiag(cpuvec<REAL> &v);
     void scale(const REAL s);
+    void rev_rows();
     void rev_cols();
     
     bool any_inf() const;
@@ -101,8 +102,6 @@ class mpimat : public unimat<REAL>
     void check_params(len_t nrows, len_t ncols, int bf_rows, int bf_cols);
     void check_grid(const grid &blacs_grid);
     REAL get_val_from_global_index(len_t gi, len_t gj) const;
-    void copy_colchunk_to_buf(const len_t len, REAL *buf, const len_t row_offset, const len_t column);
-    void copy_buf_to_colchunk(const len_t len, REAL *buf, const len_t row_offset, const len_t column);
 };
 
 
@@ -845,78 +844,167 @@ void mpimat<REAL>::scale(const REAL s)
 }
 
 
+
+/**
+  @brief Reverse the rows of the matrix.
+  
+  @comm The method will communicate with all rows in the BLACS grid.
+ */
+template <typename REAL>
+void mpimat<REAL>::rev_rows()
+{
+  cpuvec<REAL> tmp(this->nb);
+  REAL *tmp_d = tmp.data_ptr();
+  
+  const int myrow = this->g.myrow();
+  const int mycol = this->g.mycol();
+  
+  for (len_t gj=0; gj<this->n; gj+=this->nb)
+  {
+    const len_t j = fml::bcutils::g2l(gj, this->nb, this->g.npcol());
+    const int pc = fml::bcutils::g2p(gj, this->nb, this->g.npcol());
+    
+    for (len_t gi=0; gi<this->m/2; gi++)
+    {
+      const len_t i = fml::bcutils::g2l(gi, this->mb, this->g.nprow());
+      const len_t gi_rev = this->m - gi - 1;
+      
+      const int pr = fml::bcutils::g2p(gi, this->mb, this->g.nprow());
+      const int pr_rev = fml::bcutils::g2p(gi_rev, this->mb, this->g.nprow());
+      
+      if ((pr == myrow || pr_rev == myrow) && pc == mycol)
+      {
+        const len_t i_rev = fml::bcutils::g2l(gi_rev, this->mb, this->g.nprow());
+        const len_t cplen = std::min(this->nb, this->n - gj);
+        
+        if (pr == pr_rev)
+        {
+          if (i != i_rev)
+          {
+            #pragma omp for simd
+            for (len_t jj=0; jj<cplen; jj++)
+              tmp_d[jj] = this->data[i + this->m_local*(j+jj)];
+            
+            #pragma omp for simd
+            for (len_t jj=0; jj<cplen; jj++)
+              this->data[i + this->m_local*(j+jj)] = this->data[i_rev + this->m_local*(j+jj)];
+            
+            #pragma omp for simd
+            for (len_t jj=0; jj<cplen; jj++)
+              this->data[i_rev + this->m_local*(j+jj)] = tmp_d[jj];
+          }
+        }
+        else
+        {
+          // oroginal indexed process sends/recvs and higher recvs/sends
+          if (pr == myrow)
+          {
+            len_t idx = i + this->m_local*j;
+            this->g.send(1, cplen, this->m_local, this->data + idx, pr_rev, pc);
+            this->g.recv(1, cplen, 1, tmp_d, pr_rev, pc);
+            
+            #pragma omp for simd
+            for (len_t jj=0; jj<cplen; jj++)
+              this->data[idx + this->m_local*jj] = tmp_d[jj];
+          }
+          else
+          {
+            len_t idx = i_rev + this->m_local*j;
+            this->g.recv(1, cplen, 1, tmp_d, pr, pc);
+            this->g.send(1, cplen, this->m_local, this->data + idx, pr, pc);
+            
+            #pragma omp for simd
+            for (len_t jj=0; jj<cplen; jj++)
+              this->data[idx + this->m_local*jj] = tmp_d[jj];
+          }
+        }
+      }
+      
+      this->g.barrier('R');
+    }
+  }
+}
+
+
+
 /**
   @brief Reverse the columns of the matrix.
   
-  @comm In principle the method will communicate, although no communication is
-  possible. The pattern is highly dependent on the BLACS grid shape and the
-  matrix blocking factor.
+  @comm The method will communicate with all columns in the BLACS grid.
  */
 template <typename REAL>
 void mpimat<REAL>::rev_cols()
 {
-  len_t buf_len = this->mb;
-  REAL *rev_buf = (REAL*) malloc(buf_len * sizeof(*rev_buf));
-  REAL *tmp = (REAL*) malloc(buf_len * sizeof(*tmp));
-  if (rev_buf == NULL || tmp == NULL)
-  {
-    if (rev_buf) std::free(rev_buf);
-    if (tmp) std::free(tmp);
-    throw std::bad_alloc();
-  }
+  cpuvec<REAL> tmp(this->mb);
+  REAL *tmp_d = tmp.data_ptr();
   
-  for (len_t j=0; j<this->n_local; j++)
+  const int myrow = this->g.myrow();
+  const int mycol = this->g.mycol();
+  
+  for (len_t gj=0; gj<this->n/2; gj++)
   {
-    for (len_t i=0; i<this->m_local; i+=this->mb)
+    const len_t j = fml::bcutils::g2l(gj, this->nb, this->g.npcol());
+    const len_t gj_rev = this->n - gj - 1;
+    const len_t j_rev = fml::bcutils::g2l(gj_rev, this->nb, this->g.npcol());
+    
+    const int pc = fml::bcutils::g2p(gj, this->nb, this->g.npcol());
+    const int pc_rev = fml::bcutils::g2p(gj_rev, this->nb, this->g.npcol());
+    
+    for (len_t gi=0; gi<this->m; gi+=this->mb)
     {
-      const len_t gj = fml::bcutils::l2g(j, this->nb, this->g.npcol(), this->g.mycol());
-      if (gj >= this->n/2)
-        break;
+      const len_t i = fml::bcutils::g2l(gi, this->mb, this->g.nprow());
+      const int pr = fml::bcutils::g2p(gi, this->mb, this->g.nprow());
       
-      const len_t gj_rev = this->n - gj - 1;
-      
-      const int pr = this->g.myrow();
-      const int pc_rev = fml::bcutils::g2p(gj_rev, this->nb, this->g.npcol());
-      
-      if (pc_rev == this->g.mycol())
+      if (pr == myrow && (pc == mycol || pc_rev == mycol))
       {
-        const len_t j_rev = fml::bcutils::g2l(gj_rev, this->nb, this->g.npcol());
+        const len_t cplen = std::min(this->mb, this->m - gi);
         
-        if (j != j_rev)
+        if (pc == pc_rev)
         {
-          len_t copylen = std::min(this->mb, this->m-i);
-          this->copy_colchunk_to_buf(copylen, tmp, i, j_rev);
-          this->copy_colchunk_to_buf(copylen, rev_buf, i, j);
-          
-          this->copy_buf_to_colchunk(copylen, rev_buf, i, j_rev);
-          this->copy_buf_to_colchunk(copylen, tmp, i, j);
-        }
-      }
-      else
-      {
-        len_t copylen = std::min(this->mb, this->m-i);
-        this->copy_colchunk_to_buf(copylen, tmp, i, j);
-        
-        // lower indexed column sends/recvs and higher recvs/sends to avoid race condition
-        if (gj < gj_rev)
-        {
-          this->g.send(copylen, 1, tmp, pr, pc_rev);
-          this->g.recv(copylen, 1, rev_buf, pr, pc_rev);
+          if (j != j_rev)
+          {
+            #pragma omp for simd
+            for (len_t ii=0; ii<cplen; ii++)
+              tmp_d[ii] = this->data[i+ii + this->m_local*j];
+            
+            #pragma omp for simd
+            for (len_t ii=0; ii<cplen; ii++)
+              this->data[i+ii + this->m_local*j] = this->data[i+ii + this->m_local*j_rev];
+            
+            #pragma omp for simd
+            for (len_t ii=0; ii<cplen; ii++)
+              this->data[i+ii + this->m_local*j_rev] = tmp_d[ii];
+          }
         }
         else
         {
-          this->g.recv(copylen, 1, rev_buf, pr, pc_rev);
-          this->g.send(copylen, 1, tmp, pr, pc_rev);
+          // oroginal indexed process sends/recvs and higher recvs/sends
+          if (pc == mycol)
+          {
+            len_t idx = i + this->m_local*j;
+            this->g.send(cplen, 1, this->m_local, this->data + idx, pr, pc_rev);
+            this->g.recv(cplen, 1, 1, tmp_d, pr, pc_rev);
+            
+            #pragma omp for simd
+            for (len_t ii=0; ii<cplen; ii++)
+              this->data[idx+ii] = tmp_d[ii];
+          }
+          else
+          {
+            len_t idx = i + this->m_local*j_rev;
+            this->g.recv(cplen, 1, 1, tmp_d, pr, pc);
+            this->g.send(cplen, 1, this->m_local, this->data + idx, pr, pc);
+            
+            #pragma omp for simd
+            for (len_t ii=0; ii<cplen; ii++)
+              this->data[idx+ii] = tmp_d[ii];
+          }
         }
-        
-        this->copy_buf_to_colchunk(copylen, rev_buf, i, j);
       }
+      
+      this->g.barrier('C');
     }
   }
-  
-  
-  std::free(rev_buf);
-  std::free(tmp);
 }
 
 
@@ -1322,24 +1410,6 @@ REAL mpimat<REAL>::get_val_from_global_index(len_t gi, len_t gj) const
   g.allreduce(1, 1, &ret, 'A');
   
   return ret;
-}
-
-
-
-template <typename REAL>
-void mpimat<REAL>::copy_colchunk_to_buf(const len_t len, REAL *buf, const len_t row_offset, const len_t column)
-{
-  for (int i=0; i<len; i++)
-    buf[i] = this->data[row_offset+i + this->m_local*column];
-}
-
-
-
-template <typename REAL>
-void mpimat<REAL>::copy_buf_to_colchunk(const len_t len, REAL *buf, const len_t row_offset, const len_t column)
-{
-  for (int i=0; i<len; i++)
-    this->data[row_offset+i + this->m_local*column] = buf[i];
 }
 
 
