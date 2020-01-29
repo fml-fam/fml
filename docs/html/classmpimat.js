@@ -41,6 +41,7 @@ var classmpimat =
     [ "resize", "classmpimat.html#a870529a6a23176afe33904a483aeaffc", null ],
     [ "resize", "classmpimat.html#a2edd69fd3e089e634c5308b801f6b198", null ],
     [ "rev_cols", "classmpimat.html#ab9886d3ec8d46639d91a8b211b27f22f", null ],
+    [ "rev_rows", "classmpimat.html#adeff93030c7b49f5115a55163d66c055", null ],
     [ "scale", "classmpimat.html#ad3bdce53b786a2af3182f8863d481ecd", null ],
     [ "set", "classmpimat.html#a442af8046e3a5b05e9f9932cabe2d09e", null ],
     [ "set", "classmpimat.html#a3e01b248fd90f9b51080d1c029e7467d", null ],

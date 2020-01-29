@@ -26,8 +26,10 @@ RECURSIVE              = YES
 EXCLUDE                = 
 EXCLUDE_PATTERNS       = */arraytools/*
 
-INPUT += ../README.md
+INPUT                 += ../README.md
 USE_MDFILE_AS_MAINPAGE = ../README.md
+
+INPUT                 += ../NEWS.md
 
 
 #---------------------------------------------------------------------------
@@ -865,7 +867,7 @@ REFERENCES_RELATION    = NO
 # link to the documentation.
 # The default value is: YES.
 
-REFERENCES_LINK_SOURCE = YES
+REFERENCES_LINK_SOURCE = NO
 
 # If SOURCE_TOOLTIPS is enabled (the default) then hovering a hyperlink in the
 # source code will show a tooltip with additional information such as prototype,

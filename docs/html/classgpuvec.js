@@ -25,5 +25,6 @@ var classgpuvec =
     [ "rev", "classgpuvec.html#aab2ae13d411e39cf21cb93051f31ff4a", null ],
     [ "scale", "classgpuvec.html#a88b187e69fe20a0dd2e357d8b48e90b2", null ],
     [ "set", "classgpuvec.html#ad261f291102f93f438752521ff51df6f", null ],
+    [ "sum", "classgpuvec.html#a6943d91d3720713d445e8686af43a696", null ],
     [ "c", "classgpuvec.html#acc17d0d1803a66d3abe36f9622e92a73", null ]
 ];

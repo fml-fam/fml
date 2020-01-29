@@ -1,6 +1,7 @@
 var NAVTREE =
 [
   [ "fml", "index.html", [
+    [ "NEWS", "md_fml__n_e_w_s.html", null ],
     [ "Modules", "modules.html", "modules" ],
     [ "Namespaces", null, [
       [ "Namespace List", "namespaces.html", "namespaces" ],
@@ -27,7 +28,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "__blacs__prototypes_8h_source.html",
-"classmpimat.html#a29b2e958f2b99d7737f4e0df24cd813b"
+"classmpimat.html#a164856d37dd4d8a9e4a2f7c467053489"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

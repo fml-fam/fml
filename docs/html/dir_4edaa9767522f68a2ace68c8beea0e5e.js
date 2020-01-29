@@ -5,5 +5,6 @@ var dir_4edaa9767522f68a2ace68c8beea0e5e =
     [ "internals", "dir_5b58e902eb5b233489738152fb904c26.html", "dir_5b58e902eb5b233489738152fb904c26" ],
     [ "comm.hh", "comm_8hh_source.html", null ],
     [ "cpu.hh", "cpu_8hh_source.html", null ],
-    [ "gpu.hh", "gpu_8hh_source.html", null ]
+    [ "gpu.hh", "gpu_8hh_source.html", null ],
+    [ "parhelpers.hh", "parhelpers_8hh_source.html", null ]
 ];

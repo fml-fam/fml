@@ -181,6 +181,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad3bdce53b786a2af3182f8863d481ecd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmpimat.html#ad3bdce53b786a2af3182f8863d481ecd">scale</a> (const REAL s)</td></tr>
 <tr class="memdesc:ad3bdce53b786a2af3182f8863d481ecd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiply all values by the input value.  <a href="#ad3bdce53b786a2af3182f8863d481ecd">More...</a><br /></td></tr>
 <tr class="separator:ad3bdce53b786a2af3182f8863d481ecd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adeff93030c7b49f5115a55163d66c055"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmpimat.html#adeff93030c7b49f5115a55163d66c055">rev_rows</a> ()</td></tr>
+<tr class="memdesc:adeff93030c7b49f5115a55163d66c055"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reverse the rows of the matrix.  <a href="#adeff93030c7b49f5115a55163d66c055">More...</a><br /></td></tr>
+<tr class="separator:adeff93030c7b49f5115a55163d66c055"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9886d3ec8d46639d91a8b211b27f22f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmpimat.html#ab9886d3ec8d46639d91a8b211b27f22f">rev_cols</a> ()</td></tr>
 <tr class="memdesc:ab9886d3ec8d46639d91a8b211b27f22f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reverse the columns of the matrix.  <a href="#ab9886d3ec8d46639d91a8b211b27f22f">More...</a><br /></td></tr>
 <tr class="separator:ab9886d3ec8d46639d91a8b211b27f22f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1440,7 +1443,29 @@ template&lt;typename REAL &gt; </div>
 </div><div class="memdoc">
 
 <p>Reverse the columns of the matrix. </p>
-<dl class="section user"><dt>Communication Details</dt><dd>In principle the method will communicate, although no communication is possible. The pattern is highly dependent on the BLACS grid shape and the matrix blocking factor. </dd></dl>
+<dl class="section user"><dt>Communication Details</dt><dd>The method will communicate with all columns in the BLACS grid. </dd></dl>
+
+</div>
+</div>
+<a id="adeff93030c7b49f5115a55163d66c055"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adeff93030c7b49f5115a55163d66c055">&#9670;&nbsp;</a></span>rev_rows()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classmpimat.html">mpimat</a>&lt; REAL &gt;::rev_rows </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reverse the rows of the matrix. </p>
+<dl class="section user"><dt>Communication Details</dt><dd>The method will communicate with all rows in the BLACS grid. </dd></dl>
 
 </div>
 </div>

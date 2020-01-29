@@ -1,6 +1,7 @@
 var searchData=
 [
   ['device',['device',['../namespacenvml_1_1device.html',1,'nvml']]],
+  ['news',['NEWS',['../md_fml__n_e_w_s.html',1,'']]],
   ['ncols',['ncols',['../classunimat.html#abb62a12023f61a32c5503e00a9c028db',1,'unimat']]],
   ['new_5fcard',['new_card',['../namespacegpuhelpers.html#af0db100c06edefae1a036c8f1d13b4dd',1,'gpuhelpers']]],
   ['npcol',['npcol',['../classgrid.html#a9795d202352ec8cb8182a2312e8c2f54',1,'grid']]],

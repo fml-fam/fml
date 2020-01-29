@@ -20,5 +20,6 @@ var classcpuvec =
     [ "resize", "classcpuvec.html#a62ebebcb39ef53ece004e513873bbd16", null ],
     [ "rev", "classcpuvec.html#a3bbd85404da6d25805b393a9af2825bd", null ],
     [ "scale", "classcpuvec.html#aab1bab640f6550d73d00ed98c4944f13", null ],
-    [ "set", "classcpuvec.html#a8b361020954f7b9725a5e735139998a5", null ]
+    [ "set", "classcpuvec.html#a8b361020954f7b9725a5e735139998a5", null ],
+    [ "sum", "classcpuvec.html#aa472282955692692f4c5dfae3b95098e", null ]
 ];
