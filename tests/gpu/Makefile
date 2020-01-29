@@ -1,4 +1,5 @@
 -include ../make.inc
+-include ../common.inc
 
 NVCC = nvcc
 NVCCFLAGS = -arch=sm_61
