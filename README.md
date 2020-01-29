@@ -1,10 +1,11 @@
 # fml
 
 * **Version:** 0.1-0
+* **Status:** [![Build Status](https://travis-ci.org/wrathematics/fml.png)](https://travis-ci.org/wrathematics/fml)
 * **License:** [BSL-1.0](http://opensource.org/licenses/BSL-1.0)
 * **Project home**: https://github.com/wrathematics/fml
 * **Bug reports**: https://github.com/wrathematics/fml/issues
-* **Documentation**: TODO
+* **Documentation**: http://librestats.com/fml/html/index.html
 
 
 <img align="right" src="./docs/logo/fml_med.png" />

@@ -1,0 +1,34 @@
+os: linux
+sudo: false
+dist: bionic
+
+addons:
+  apt:
+    packages:
+      - libopenblas-dev
+      - libopenmpi-dev
+      - openmpi-bin
+      - libscalapack-openmpi-dev
+
+language: cpp
+compiler:
+  - gcc
+  - clang
+
+before_install:
+  - export LD_LIBRARY_PATH=$(if [[ $CXX == "clang++" ]]; then echo -n '/usr/local/clang/lib'; fi)
+
+install:
+  - mkdir -p $HOME/.cache/pkgs
+  - if [ "$CXX" = "g++" ]; then
+      echo "CXX=g++" > tests/make.inc;
+    else 
+      echo "CXX=clang++" > tests/make.inc;
+    fi
+
+script:
+  - cd tests && make
+
+notifications:
+  on_success: never
+  on_failure: always
