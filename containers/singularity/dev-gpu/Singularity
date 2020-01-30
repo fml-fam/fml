@@ -1,10 +1,11 @@
 Bootstrap: docker
-From: ubuntu:18.04
+From: nvidia/cuda:10.1-devel-ubuntu18.04
 
 %labels
   fml_version 0.1-0
-  fmlr_gpu no
+  fmlr_gpu yes
   ubuntu_version 18.04
+  CUDA_Version 10.1
 
 %environment
   export LANG=en_US.UTF-8

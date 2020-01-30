@@ -1,3 +1,3 @@
 #!/bin/sh
 
-singularity exec --nv fml-dev.simg bash
+singularity exec fml-dev.simg bash

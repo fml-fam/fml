@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM nvidia/cuda:10.1-devel-ubuntu18.04
 ENV MAKE="make -j 4"
 
 RUN apt-get update && \
