@@ -5,7 +5,7 @@
 * **License:** [BSL-1.0](http://opensource.org/licenses/BSL-1.0)
 * **Project home**: https://github.com/fml-fam/fml
 * **Bug reports**: https://github.com/fml-fam/fml/issues
-* **Documentation**: http://librestats.com/fml/html/index.html
+* **Documentation**: https://fml-fam.github.io/fml
 
 
 <img align="right" src="./docs/logo/fml_med.png" />

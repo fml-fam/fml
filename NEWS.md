@@ -1,4 +1,5 @@
 Release 0.1-0 (2/5/2020):
+
 New:
   * created cpumat and cpuvec classes
   * created gpumat and gpuvec classes
@@ -27,7 +28,10 @@ New:
       - mpi2cpu()
       - cpu2mpi()
       - mpi2mpi()
+
 API Changes: None
+
 Bug Fixes: None
+
 Documentation:
   * Added documentation for most things.
