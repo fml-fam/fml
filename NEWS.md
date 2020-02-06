@@ -1,4 +1,4 @@
-Release 0.1-0 (//):
+Release 0.1-0 (2/5/2020):
 New:
   * created cpumat and cpuvec classes
   * created gpumat and gpuvec classes
