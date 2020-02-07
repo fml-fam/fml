@@ -71,7 +71,7 @@ namespace dimops
     const len_t n = x.ncols();
     
     s.resize(m);
-    s.zero();
+    s.fill_zero();
     REAL *s_d = s.data_ptr();
     
     for (len_t j=0; j<n; j++)
@@ -124,7 +124,7 @@ namespace dimops
     const len_t n = x.ncols();
     
     s.resize(n);
-    s.zero();
+    s.fill_zero();
     REAL *s_d = s.data_ptr();
     
     for (len_t j=0; j<n; j++)
@@ -149,7 +149,7 @@ namespace dimops
     const len_t n = x.ncols();
     
     s.resize(n);
-    s.zero();
+    s.fill_zero();
     REAL *s_d = s.data_ptr();
     
     for (len_t j=0; j<n; j++)
