@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mpihelpers',['mpihelpers',['../namespacempihelpers.html',1,'']]]
+  ['linalg',['linalg',['../namespacelinalg.html',1,'']]]
 ];

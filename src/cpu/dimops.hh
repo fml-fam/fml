@@ -222,20 +222,20 @@ namespace dimops
   /**
     @brief Remove the mean and/or the sd from a matrix.
     
-    @param[in] mean Remove the mean?
-    @param[in] sd Remove the sd?
+    @param[in] rm_mean Remove the column means?
+    @param[in] rm_sd Remove the column sds?
     @param[inout] x Data to center/scale.
     
     @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
-  void scale(const bool mean, const bool sd, cpumat<REAL> &x)
+  void scale(const bool rm_mean, const bool rm_sd, cpumat<REAL> &x)
   {
-    if (mean && sd)
+    if (rm_mean && rm_sd)
       internals::center_and_scale(x);
-    else if (mean)
+    else if (rm_mean)
       internals::center(x);
-    else
+    else if (rm_sd)
       internals::scale(x);
   }
 }

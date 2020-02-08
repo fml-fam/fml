@@ -5,5 +5,7 @@ var dir_f8808bf93820f5a5e5ce81dd0eebb20a =
     [ "cpuhelpers.hh", "cpuhelpers_8hh_source.html", null ],
     [ "cpumat.hh", "cpumat_8hh_source.html", null ],
     [ "cpuvec.hh", "cpuvec_8hh_source.html", null ],
-    [ "linalg.hh", "cpu_2linalg_8hh_source.html", null ]
+    [ "dimops.hh", "dimops_8hh_source.html", null ],
+    [ "linalg.hh", "cpu_2linalg_8hh_source.html", null ],
+    [ "stats.hh", "stats_8hh_source.html", null ]
 ];

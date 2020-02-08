@@ -11,12 +11,31 @@
 #include "linalg.hh"
 
 
+/// @brief Statistics kernels.
 namespace stats
 {
+  /**
+    @brief Principal components analysis.
+    
+    @param[in] rm_mean,rm_sd Should the column means/sds be removed?
+    @param[inout] x Input data. Values are overwritten.
+    @param[out] sdev Standard deviations of the principal components.
+    @param[out] rot The variable loadings.
+    
+    @impl Uses `linalg::svd()`.
+    
+    @allocs If the dimensions of the outputs are inappropriately sized, they
+    will automatically be re-allocated.
+    
+    @except If a reallocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
-  void pca(const bool mean, const bool sd, cpumat<REAL> &x, cpuvec<REAL> &sdev, cpumat<REAL> &rot)
+  void pca(const bool rm_mean, const bool rm_sd, cpumat<REAL> &x, cpuvec<REAL> &sdev, cpumat<REAL> &rot)
   {
-    dimops::scale(mean, sd, x);
+    dimops::scale(rm_mean, rm_sd, x);
     
     cpumat<REAL> u;
     cpumat<REAL> trot;

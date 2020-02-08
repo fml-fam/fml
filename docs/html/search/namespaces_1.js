@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['gpuhelpers',['gpuhelpers',['../namespacegpuhelpers.html',1,'']]]
+  ['dimops',['dimops',['../namespacedimops.html',1,'']]]
 ];

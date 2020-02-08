@@ -2,6 +2,8 @@ var searchData=
 [
   ['card',['card',['../classcard.html#a93a10f1d2e4b3af94962373b88eecd6d',1,'card::card()'],['../classcard.html#a419df33451e0b31a64da7838420cc5e0',1,'card::card(const int id=0)']]],
   ['check',['check',['../classcard.html#a367b3703c58c773d1f1740c5b6be2076',1,'card']]],
+  ['colmeans',['colmeans',['../namespacedimops.html#ae2b2aa51ddf48c65ca364f8273844111',1,'dimops']]],
+  ['colsums',['colsums',['../namespacedimops.html#a995ed5d64e0f43e4eaa16f51fcbb8d1b',1,'dimops']]],
   ['comm',['comm',['../classcomm.html#a6f15fb4887b6cacc4b28a104e7a89237',1,'comm']]],
   ['cpu2cpu',['cpu2cpu',['../namespacecpuhelpers.html#ac74d97f964ece43767db8e6655ca7ea5',1,'cpuhelpers::cpu2cpu(const cpuvec&lt; REAL_IN &gt; &amp;cpu_in, cpuvec&lt; REAL_OUT &gt; &amp;cpu_out)'],['../namespacecpuhelpers.html#adb5d34e14cb04b5e85a1e0441ec280dd',1,'cpuhelpers::cpu2cpu(const cpuvec&lt; REAL &gt; &amp;cpu_in)'],['../namespacecpuhelpers.html#a3202a797432af5805acd1f89e8ffcbac',1,'cpuhelpers::cpu2cpu(const cpumat&lt; REAL_IN &gt; &amp;cpu_in, cpumat&lt; REAL_OUT &gt; &amp;cpu_out)'],['../namespacecpuhelpers.html#a6f6fa349beda9e5b75418f3323d633cf',1,'cpuhelpers::cpu2cpu(const cpumat&lt; REAL &gt; &amp;cpu_in)']]],
   ['cpu2gpu',['cpu2gpu',['../namespacegpuhelpers.html#abad356546e2aae24c57c7db190e4e4f3',1,'gpuhelpers::cpu2gpu(const cpuvec&lt; REAL_IN &gt; &amp;cpu, gpuvec&lt; REAL_OUT &gt; &amp;gpu)'],['../namespacegpuhelpers.html#a27fdd37536d89c3fa610dd9a466aba12',1,'gpuhelpers::cpu2gpu(const cpumat&lt; REAL_IN &gt; &amp;cpu, gpumat&lt; REAL_OUT &gt; &amp;gpu)']]],

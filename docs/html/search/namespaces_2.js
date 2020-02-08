@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['linalg',['linalg',['../namespacelinalg.html',1,'']]]
+  ['gpuhelpers',['gpuhelpers',['../namespacegpuhelpers.html',1,'']]]
 ];
