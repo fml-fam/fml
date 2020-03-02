@@ -645,6 +645,77 @@ namespace linalg
   {
     solver(x, y.nrows(), y.ncols(), y.data_ptr());
   }
+  
+  
+  
+  namespace
+  {
+    template <typename REAL>
+    void qr_internals(const bool pivot, cpumat<REAL> &x, cpuvec<REAL> &qraux, cpuvec<REAL> &work)
+    {
+      len_t m = x.nrows();
+      len_t n = x.ncols();
+      len_t minmn = std::min(m, n);
+      
+      int info = 0;
+      qraux.resize(minmn);
+      
+      REAL tmp;
+      if (pivot)
+        fml::lapack::geqp3(m, n, NULL, NULL, NULL, &tmp, -1, &info);
+      else
+        fml::lapack::geqrf(m, n, NULL, NULL, &tmp, -1, &info);
+      
+      int lwork = std::max((int) tmp, 1);
+      work.resize(lwork);
+      
+      cpuvec<int> p(n);
+      p.fill_zero();
+      
+      if (pivot)
+        fml::lapack::geqp3(m, n, x.data_ptr(), m, p.data_ptr(), qraux.data_ptr(), work.data_ptr(), lwork, &info);
+      else
+        fml::lapack::geqrf(m, n, x.data_ptr(), qraux.data_ptr(), work.data_ptr(), lwork, &info);
+      
+      if (info != 0)
+      {
+        if (pivot)
+          fml::linalgutils::check_info(info, "geqp3");
+        else
+          fml::linalgutils::check_info(info, "geqrf");
+      }
+    }
+  }
+  
+  /**
+    @brief Computes the QR decomposition.
+    
+    @details The factorization works mostly in-place by modifying the input
+    data. After execution, the matrix will be the LAPACK-like compact QR
+    representation.
+    
+    @param[in] pivot Should the factorization use column pivoting?
+    @param[inout] x Input data matrix. Values are overwritten.
+    @param[out] qraux Auxiliary data for compact QR.
+    
+    @impl Uses the LAPACK function `Xgeqp3()` if pivoting and `Xgeqrf()`
+    otherwise.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void qr(const bool pivot, cpumat<REAL> &x, cpuvec<REAL> &qraux)
+  {
+    cpuvec<REAL> work;
+    qr_internals(pivot, x, qraux, work);
+  }
 }
 
 
