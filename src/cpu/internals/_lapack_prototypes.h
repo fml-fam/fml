@@ -127,6 +127,41 @@ extern void dlacpy_(const char *uplo, const int *m, const int *n,
   const double *restrict a, const int *lda, double *restrict b, const int *ldb);
 
 
+
+extern void sgeqp3_(const int *const m, const int *const n,
+  float *const restrict A, const int *const lda, int *const restrict jpvt,
+  float *const restrict tau, float *const restrict work,
+  const int *const restrict lwork, int *const restrict info);
+
+extern void dgeqp3_(const int *const m, const int *const n,
+  double *const restrict A, const int *const lda, int *const restrict jpvt,
+  double *const restrict tau, double *const restrict work,
+  const int *const restrict lwork, int *const restrict info);
+
+
+
+extern void sgeqrf_(const int *const m, const int *const n,
+  float *const restrict A, const int *const lda, float *const restrict tau,
+  float *const restrict work, const int *const restrict lwork,
+  int *const restrict info);
+
+extern void dgeqrf_(const int *const m, const int *const n,
+  double *const restrict A, const int *const lda, double *const restrict tau,
+  double *const restrict work, const int *const restrict lwork,
+  int *const restrict info);
+
+
+
+extern void sormqr_(const char *side, const char *trans, const int *m,
+  const int *n, const float *const restrict A, const int *lda,
+  const float *const restrict tau, float *const restrict c, const int *ldc,
+  float *const restrict work, const int *lwork, int *const restrict info);
+extern void dormqr_(const char *side, const char *trans, const int *m,
+  const int *n, const double *const restrict A, const int *lda,
+  const double *const restrict tau, double *const restrict c, const int *ldc,
+  double *const restrict work, const int *lwork, int *const restrict info);
+
+
 #ifdef __cplusplus
 }
 #endif

@@ -161,6 +161,50 @@ namespace fml
     {
       dlacpy_(&uplo, &m, &n, a, &lda, b, &ldb);
     }
+    
+    
+    
+    inline void geqp3(const int m, const int n, float *x, int *pivot,
+      float *qraux, float *work, const int lwork, int *info)
+    {
+      sgeqp3_(&m, &n, x, &m, pivot, qraux, work, &lwork, info);
+    }
+    
+    inline void geqp3(const int m, const int n, double *x, int *pivot,
+      double *qraux, double *work, const int lwork, int *info)
+    {
+      dgeqp3_(&m, &n, x, &m, pivot, qraux, work, &lwork, info);
+    }
+    
+    
+    
+    inline void geqrf(const int m, const int n, float *x, float *tau,
+      float *work, const int lwork, int *info)
+    {
+      sgeqrf_(&m, &n, x, &m, tau, work, &lwork, info);
+    }
+    
+    inline void geqrf(const int m, const int n, double *x, double *tau,
+      double *work, const int lwork, int *info)
+    {
+      dgeqrf_(&m, &n, x, &m, tau, work, &lwork, info);
+    }
+    
+    
+    
+    inline void ormqr(const char side, const char trans, const int m,
+      const int n, const float *x, const int lda, const float *tau,
+      float *c, const int ldc, float *work, const int lwork, int *info)
+    {
+      sormqr_(&side, &trans, &m, &n, x, &lda, tau, c, &ldc, work, &lwork, info);
+    }
+    
+    inline void ormqr(const char side, const char trans, const int m,
+      const int n, const double *x, const int lda, const double *tau,
+      double *c, const int ldc, double *work, const int lwork, int *info)
+    {
+      dormqr_(&side, &trans, &m, &n, x, &lda, tau, c, &ldc, work, &lwork, info);
+    }
   }
 }
 
