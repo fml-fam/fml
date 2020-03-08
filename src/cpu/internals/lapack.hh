@@ -164,46 +164,48 @@ namespace fml
     
     
     
-    inline void geqp3(const int m, const int n, float *x, int *pivot,
-      float *qraux, float *work, const int lwork, int *info)
+    inline void geqp3(const int m, const int n, float *x, const int lda,
+      int *pivot, float *qraux, float *work, const int lwork, int *info)
     {
-      sgeqp3_(&m, &n, x, &m, pivot, qraux, work, &lwork, info);
+      sgeqp3_(&m, &n, x, &lda, pivot, qraux, work, &lwork, info);
     }
     
-    inline void geqp3(const int m, const int n, double *x, int *pivot,
-      double *qraux, double *work, const int lwork, int *info)
+    inline void geqp3(const int m, const int n, double *x, const int lda,
+      int *pivot, double *qraux, double *work, const int lwork, int *info)
     {
-      dgeqp3_(&m, &n, x, &m, pivot, qraux, work, &lwork, info);
+      dgeqp3_(&m, &n, x, &lda, pivot, qraux, work, &lwork, info);
     }
     
     
     
-    inline void geqrf(const int m, const int n, float *x, float *tau,
-      float *work, const int lwork, int *info)
+    inline void geqrf(const int m, const int n, float *x, const int lda,
+      float *tau, float *work, const int lwork, int *info)
     {
-      sgeqrf_(&m, &n, x, &m, tau, work, &lwork, info);
+      sgeqrf_(&m, &n, x, &lda, tau, work, &lwork, info);
     }
     
-    inline void geqrf(const int m, const int n, double *x, double *tau,
-      double *work, const int lwork, int *info)
+    inline void geqrf(const int m, const int n, double *x, const int lda,
+      double *tau, double *work, const int lwork, int *info)
     {
-      dgeqrf_(&m, &n, x, &m, tau, work, &lwork, info);
+      dgeqrf_(&m, &n, x, &lda, tau, work, &lwork, info);
     }
     
     
     
     inline void ormqr(const char side, const char trans, const int m,
-      const int n, const float *x, const int lda, const float *tau,
-      float *c, const int ldc, float *work, const int lwork, int *info)
+      const int n, const int k, const float *x, const int lda,
+      const float *tau, float *c, const int ldc, float *work,
+      const int lwork, int *info)
     {
-      sormqr_(&side, &trans, &m, &n, x, &lda, tau, c, &ldc, work, &lwork, info);
+      sormqr_(&side, &trans, &m, &n, &k, x, &lda, tau, c, &ldc, work, &lwork, info);
     }
     
     inline void ormqr(const char side, const char trans, const int m,
-      const int n, const double *x, const int lda, const double *tau,
-      double *c, const int ldc, double *work, const int lwork, int *info)
+      const int n, const int k, const double *x, const int lda,
+      const double *tau, double *c, const int ldc, double *work,
+      const int lwork, int *info)
     {
-      dormqr_(&side, &trans, &m, &n, x, &lda, tau, c, &ldc, work, &lwork, info);
+      dormqr_(&side, &trans, &m, &n, &k, x, &lda, tau, c, &ldc, work, &lwork, info);
     }
   }
 }

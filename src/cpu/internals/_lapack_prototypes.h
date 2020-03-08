@@ -153,11 +153,12 @@ extern void dgeqrf_(const int *const m, const int *const n,
 
 
 extern void sormqr_(const char *side, const char *trans, const int *m,
-  const int *n, const float *const restrict A, const int *lda,
+  const int *n, const int *k, const float *const restrict A, const int *lda,
   const float *const restrict tau, float *const restrict c, const int *ldc,
   float *const restrict work, const int *lwork, int *const restrict info);
+
 extern void dormqr_(const char *side, const char *trans, const int *m,
-  const int *n, const double *const restrict A, const int *lda,
+  const int *n, const int *k, const double *const restrict A, const int *lda,
   const double *const restrict tau, double *const restrict c, const int *ldc,
   double *const restrict work, const int *lwork, int *const restrict info);
 
