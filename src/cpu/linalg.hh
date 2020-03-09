@@ -15,6 +15,7 @@
 
 #include "internals/lapack.hh"
 
+#include "cpuhelpers.hh"
 #include "cpumat.hh"
 #include "cpuvec.hh"
 
@@ -788,6 +789,99 @@ namespace linalg
     R.resize(n, n);
     R.fill_zero();
     fml::lapack::lacpy('U', m, n, QR.data_ptr(), m, R.data_ptr(), n);
+  }
+  
+  
+  
+  
+  
+  /**
+    @brief Computes the singular value decomposition for tall/skinny data.
+    The number of rows must be greater than the number of columns. If the number
+    of rows is not significantly larger than the number of columns, this may not
+    be more efficient than simply calling `linalg::svd()`.
+    
+    @details The operation works by computing a QR and then taking the SVD of
+    the R matrix. The left singular vectors are Q times the left singular
+    vectors from R's SVD, and the singular value and the right singular vectors
+    are those from R's SVD.
+    
+    @param[inout] x Input data matrix. Values are overwritten.
+    @param[out] s Vector of singular values.
+    @param[out] u Matrix of left singular vectors.
+    @param[out] vt Matrix of (transposed) right singular vectors.
+    
+    @impl Uses `linalg::qr()` and `linalg::svd()`, and if computing the
+    left/right singular vectors, `linalg::qr_R()` and `linalg::qr_Q()`.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void tssvd(cpumat<REAL> &x, cpuvec<REAL> &s, cpumat<REAL> &u, cpumat<REAL> &vt)
+  {
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
+    if (m <= n)
+      throw std::runtime_error("'x' must have more rows than cols");
+    
+    cpuvec<REAL> qraux(n);
+    cpuvec<REAL> work(m);
+    qr_internals(false, x, qraux, work);
+    
+    cpumat<REAL> R(n, n);
+    qr_R(x, R);
+    
+    cpumat<REAL> u_R(n, n);
+    svd(R, s, u_R, vt);
+    
+    u.resize(m, n);
+    u.fill_eye();
+    
+    qr_Q(x, qraux, u, work);
+    
+    matmult(false, false, (REAL)1.0, u, u_R, x);
+    cpuhelpers::cpu2cpu(x, u);
+  }
+  
+  /// \overload
+  template <typename REAL>
+  void tssvd(cpumat<REAL> &x, cpuvec<REAL> &s)
+  {
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
+    if (m <= n)
+      throw std::runtime_error("'x' must have more rows than cols");
+    
+    s.resize(n);
+    
+    cpuvec<REAL> qraux(n);
+    cpuvec<REAL> work(m);
+    qr_internals(false, x, qraux, work);
+    
+    REAL *x_d = x.data_ptr();
+    for (len_t j=0; j<n; j++)
+    {
+      for (len_t i=j+1; i<n; i++)
+        x_d[i + m*j] = (REAL) 0.0;
+    }
+    
+    int info = 0;
+    cpuvec<int> iwork(8*n);
+    
+    REAL tmp;
+    fml::lapack::gesdd('N', n, n, x_d, m, s.data_ptr(), NULL, m, NULL, 1, &tmp, -1, iwork.data_ptr(), &info);
+    int lwork = (int) tmp;
+    work.resize(lwork);
+    
+    fml::lapack::gesdd('N', n, n, x_d, m, s.data_ptr(), NULL, m, NULL, 1, work.data_ptr(), lwork, iwork.data_ptr(), &info);
+    fml::linalgutils::check_info(info, "gesdd");
   }
 }
 
