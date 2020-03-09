@@ -440,7 +440,7 @@ namespace linalg
     @param[inout] x Input data matrix. Values are overwritten.
     @param[out] s Vector of singular values.
     @param[out] u Matrix of left singular vectors.
-    @param[out] vt Matrix of (transposed) right singnular vectors.
+    @param[out] vt Matrix of (transposed) right singular vectors.
     
     @impl Uses the LAPACK function `Xgesvd()`.
     
@@ -662,20 +662,22 @@ namespace linalg
       
       REAL tmp;
       if (pivot)
-        fml::lapack::geqp3(m, n, NULL, NULL, NULL, &tmp, -1, &info);
+        fml::lapack::geqp3(m, n, NULL, m, NULL, NULL, &tmp, -1, &info);
       else
-        fml::lapack::geqrf(m, n, NULL, NULL, &tmp, -1, &info);
+        fml::lapack::geqrf(m, n, NULL, m, NULL, &tmp, -1, &info);
       
       int lwork = std::max((int) tmp, 1);
-      work.resize(lwork);
-      
-      cpuvec<int> p(n);
-      p.fill_zero();
+      if (lwork > work.size())
+        work.resize(lwork);
       
       if (pivot)
+      {
+        cpuvec<int> p(n);
+        p.fill_zero();
         fml::lapack::geqp3(m, n, x.data_ptr(), m, p.data_ptr(), qraux.data_ptr(), work.data_ptr(), lwork, &info);
+      }
       else
-        fml::lapack::geqrf(m, n, x.data_ptr(), qraux.data_ptr(), work.data_ptr(), lwork, &info);
+        fml::lapack::geqrf(m, n, x.data_ptr(), m, qraux.data_ptr(), work.data_ptr(), lwork, &info);
       
       if (info != 0)
       {
@@ -715,6 +717,77 @@ namespace linalg
   {
     cpuvec<REAL> work;
     qr_internals(pivot, x, qraux, work);
+  }
+  
+  /**
+    @brief Recover the Q matrix from a QR decomposition.
+    
+    @param[in] QR The compact QR factorization, as computed via `qr()`.
+    @param[in] qraux Auxiliary data for compact QR.
+    @param[out] The Q matrix.
+    @param[out] work Workspace array. Will be resized as necessary.
+    
+    @impl Uses the LAPACK function `Xormqr()`.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void qr_Q(const cpumat<REAL> &QR, const cpuvec<REAL> &qraux, cpumat<REAL> Q, cpuvec<REAL> &work)
+  {
+    const len_t m = QR.nrows();
+    const len_t n = QR.ncols();
+    const len_t minmn = std::min(m, n);
+    
+    int info = 0;
+    REAL tmp;
+    fml::lapack::ormqr('L', 'N', m, minmn, n, QR.data_ptr(), m, qraux.data_ptr(),
+      Q.data_ptr(), m, &tmp, -1, &info);
+    
+    int lwork = (int) tmp;
+    if (lwork > work.size())
+      work.resize(lwork);
+    
+    Q.resize(m, n);
+    Q.fill_eye();
+    
+    fml::lapack::ormqr('L', 'N', m, minmn, n, QR.data_ptr(), m, qraux.data_ptr(),
+      Q.data_ptr(), m, work.data_ptr(), lwork, &info);
+    fml::linalgutils::check_info(info, "ormqr");
+  }
+  
+  /**
+    @brief Recover the R matrix from a QR decomposition.
+    
+    @param[in] QR The compact QR factorization, as computed via `qr()`.
+    @param[out] R The R matrix.
+    
+    @impl Uses the LAPACK function `Xlacpy()`.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void qr_R(const cpumat<REAL> &QR, cpumat<REAL> R)
+  {
+    const len_t m = QR.nrows();
+    const len_t n = QR.ncols();
+    
+    R.resize(n, n);
+    R.fill_zero();
+    fml::lapack::lacpy('U', m, n, QR.data_ptr(), m, R.data_ptr(), n);
   }
 }
 
