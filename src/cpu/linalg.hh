@@ -740,7 +740,7 @@ namespace linalg
     @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
-  void qr_Q(const cpumat<REAL> &QR, const cpuvec<REAL> &qraux, cpumat<REAL> Q, cpuvec<REAL> &work)
+  void qr_Q(const cpumat<REAL> &QR, const cpuvec<REAL> &qraux, cpumat<REAL> &Q, cpuvec<REAL> &work)
   {
     const len_t m = QR.nrows();
     const len_t n = QR.ncols();
@@ -781,7 +781,7 @@ namespace linalg
     @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
-  void qr_R(const cpumat<REAL> &QR, cpumat<REAL> R)
+  void qr_R(const cpumat<REAL> &QR, cpumat<REAL> &R)
   {
     const len_t m = QR.nrows();
     const len_t n = QR.ncols();
