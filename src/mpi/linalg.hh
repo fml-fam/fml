@@ -786,6 +786,39 @@ namespace linalg
       qraux.data_ptr(), Q.data_ptr(), descQ, work.data_ptr(), lwork, &info);
     fml::linalgutils::check_info(info, "ormqr");
   }
+  
+  /**
+    @brief Recover the R matrix from a QR decomposition.
+    
+    @param[in] QR The compact QR factorization, as computed via `qr()`.
+    @param[out] R The R matrix.
+    
+    @impl Uses the ScaLAPACK function `pXlacpy()`.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @comm The method will communicate across all processes in the BLACS grid.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void qr_R(const mpimat<REAL> &QR, mpimat<REAL> &R)
+  {
+    check_grid(QR, R);
+    
+    const len_t m = QR.nrows();
+    const len_t n = QR.ncols();
+    
+    R.resize(n, n);
+    R.fill_zero();
+    fml::scalapack::lacpy('U', m, n, QR.data_ptr(), QR.desc_ptr(), R.data_ptr(),
+      R.desc_ptr());
+  }
 }
 
 
