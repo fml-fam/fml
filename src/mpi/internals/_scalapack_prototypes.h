@@ -139,6 +139,42 @@ extern void pdgesv_(const int *n, const int *nrhs, double *restrict a,
   int *info);
 
 
+
+extern void pslacpy_(const char *uplo, const int *m, const int *n,
+  const float *restrict a, const int *ia, const int *ja, const int *desca,
+  float *restrict b, const int *ib, const int *jb, const int *descb);
+
+extern void pdlacpy_(const char *uplo, const int *m, const int *n,
+  const double *restrict a, const int *ia, const int *ja, const int *desca,
+  double *restrict b, const int *ib, const int *jb, const int *descb);
+
+
+
+// geqp3
+
+extern void psgeqrf_(const int *m, const int *n, float *restrict a,
+  const int *ia, const int *ja, const int *desca, float *restrict tau,
+  float *restrict work, const int *lwork, int *info);
+
+extern void pdgeqrf_(const int *m, const int *n, double *restrict a,
+  const int *ia, const int *ja, const int *desca, double *restrict tau,
+  double *restrict work, const int *lwork, int *info);
+
+
+
+extern void psormqr_(const char *side, const char *trans, const int *m,
+  const int *n, const int *k, const float *restrict a, const int *ia,
+  const int *ja, const int *desca, float *restrict tau, float *restrict c,
+  const int *ic, const int *jc, const int *descc, float *restrict work,
+  const int *lwork, int *info);
+
+extern void pdormqr_(const char *side, const char *trans, const int *m,
+  const int *n, const int *k, const double *restrict a, const int *ia,
+  const int *ja, const int *desca, double *restrict tau, double *restrict c,
+  const int *ic, const int *jc, const int *descc, double *restrict work,
+  const int *lwork, int *info);
+
+
 #ifdef __cplusplus
 }
 #endif

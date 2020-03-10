@@ -181,6 +181,58 @@ namespace fml
       int ij = 1;
       pdgesv_(&n, &nrhs, a, &ij, &ij, desca, ipvt, b, &ij, &ij, descb, info);
     }
+    
+    
+    
+    inline void lacpy(const char uplo, const int m, const int n,
+      const float *a, const int *desca, float *b, const int *descb)
+    {
+      int ij = 1;
+      pslacpy_(&uplo, &m, &n, a, &ij, &ij, desca, b, &ij, &ij, descb);
+    }
+    
+    inline void lacpy(const char uplo, const int m, const int n,
+      const double *a, const int *desca, double *b, const int *descb)
+    {
+      int ij = 1;
+      pdlacpy_(&uplo, &m, &n, a, &ij, &ij, desca, b, &ij, &ij, descb);
+    }
+    
+    
+    
+    inline void geqrf(const int m, const int n, float *a, const int *desca,
+      float *tau, float *work, const int lwork, int *info)
+    {
+      int ij = 1;
+      psgeqrf_(&m, &n, a, &ij, &ij, desca, tau, work, &lwork, info);
+    }
+    
+    inline void geqrf(const int m, const int n, double *a, const int *desca,
+      double *tau, double *work, const int lwork, int *info)
+    {
+      int ij = 1;
+      pdgeqrf_(&m, &n, a, &ij, &ij, desca, tau, work, &lwork, info);
+    }
+    
+    
+    
+    inline void ormqr(const char side, const char trans, const int m,
+      const int n, const int k, const float *a, const int *desca, float *tau,
+      float *c, const int *descc, float *work, const int lwork, int *info)
+    {
+      int ij = 1;
+      psormqr_(&side, &trans, &m, &n, &k, a, &ij, &ij, desca, tau, c, &ij, &ij,
+        descc, work, &lwork, info);
+    }
+    
+    inline void ormqr(const char side, const char trans, const int m,
+      const int n, const int k, const double *a, const int *desca, double *tau,
+      double *c, const int *descc, double *work, const int lwork, int *info)
+    {
+      int ij = 1;
+      pdormqr_(&side, &trans, &m, &n, &k, a, &ij, &ij, desca, tau, c, &ij, &ij,
+        descc, work, &lwork, info);
+    }
   }
 }
 
