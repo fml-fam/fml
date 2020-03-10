@@ -657,6 +657,85 @@ namespace linalg
     fml::scalapack::gesv(n, y.ncols(), x.data_ptr(), x.desc_ptr(), p.data_ptr(), y.data_ptr(), y.desc_ptr(), &info);
     fml::linalgutils::check_info(info, "gesv");
   }
+  
+  
+  
+  namespace
+  {
+    template <typename REAL>
+    void qr_internals(const bool pivot, mpimat<REAL> &x, cpuvec<REAL> &qraux, cpuvec<REAL> &work)
+    {
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      const len_t minmn = std::min(m, n);
+      
+      const int *descx = x.desc_ptr();
+      
+      int info = 0;
+      qraux.resize(minmn);
+      
+      REAL tmp;
+      if (pivot)
+        fml::scalapack::geqpf(m, n, NULL, descx, NULL, NULL, &tmp, -1, &info);
+      else
+        fml::scalapack::geqrf(m, n, NULL, descx, NULL, &tmp, -1, &info);
+      
+      int lwork = std::max((int) tmp, 1);
+      if (lwork > work.size())
+        work.resize(lwork);
+      
+      if (pivot)
+      {
+        cpuvec<int> p(n);
+        p.fill_zero();
+        fml::scalapack::geqpf(m, n, x.data_ptr(), descx, p.data_ptr(),
+          qraux.data_ptr(), work.data_ptr(), lwork, &info);
+      }
+      else
+        fml::scalapack::geqrf(m, n, x.data_ptr(), descx, qraux.data_ptr(),
+          work.data_ptr(), lwork, &info);
+      
+      if (info != 0)
+      {
+        if (pivot)
+          fml::linalgutils::check_info(info, "geqpf");
+        else
+          fml::linalgutils::check_info(info, "geqrf");
+      }
+    }
+  }
+  
+  /**
+    @brief Computes the QR decomposition.
+    
+    @details The factorization works mostly in-place by modifying the input
+    data. After execution, the matrix will be the LAPACK-like compact QR
+    representation.
+    
+    @param[in] pivot Should the factorization use column pivoting?
+    @param[inout] x Input data matrix. Values are overwritten.
+    @param[out] qraux Auxiliary data for compact QR.
+    
+    @impl Uses the ScaLAPACK function `pXgeqpf()` if pivoting and `pXgeqrf()`
+    otherwise.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @comm The method will communicate across all processes in the BLACS grid.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void qr(const bool pivot, mpimat<REAL> &x, cpuvec<REAL> &qraux)
+  {
+    cpuvec<REAL> work;
+    qr_internals(pivot, x, qraux, work);
+  }
 }
 
 
