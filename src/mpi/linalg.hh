@@ -736,6 +736,56 @@ namespace linalg
     cpuvec<REAL> work;
     qr_internals(pivot, x, qraux, work);
   }
+  
+  /**
+    @brief Recover the Q matrix from a QR decomposition.
+    
+    @param[in] QR The compact QR factorization, as computed via `qr()`.
+    @param[in] qraux Auxiliary data for compact QR.
+    @param[out] The Q matrix.
+    @param[out] work Workspace array. Will be resized as necessary.
+    
+    @impl Uses the ScaLAPACK function `pXormqr()`.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @comm The method will communicate across all processes in the BLACS grid.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void qr_Q(const mpimat<REAL> &QR, const cpuvec<REAL> &qraux, mpimat<REAL> &Q, cpuvec<REAL> &work)
+  {
+    check_grid(QR, Q);
+    
+    const len_t m = QR.nrows();
+    const len_t n = QR.ncols();
+    const len_t minmn = std::min(m, n);
+    
+    const int *descQR = QR.desc_ptr();
+    
+    Q.resize(m, n);
+    Q.fill_eye();
+    const int *descQ = Q.desc_ptr();
+    
+    int info = 0;
+    REAL tmp;
+    fml::scalapack::ormqr('L', 'N', m, minmn, n, NULL, descQR,
+      NULL, NULL, descQ, &tmp, -1, &info);
+    
+    int lwork = (int) tmp;
+    if (lwork > work.size())
+      work.resize(lwork);
+    
+    fml::scalapack::ormqr('L', 'N', m, minmn, n, QR.data_ptr(), descQR,
+      qraux.data_ptr(), Q.data_ptr(), descQ, work.data_ptr(), lwork, &info);
+    fml::linalgutils::check_info(info, "ormqr");
+  }
 }
 
 
