@@ -654,9 +654,9 @@ namespace linalg
     template <typename REAL>
     void qr_internals(const bool pivot, cpumat<REAL> &x, cpuvec<REAL> &qraux, cpuvec<REAL> &work)
     {
-      len_t m = x.nrows();
-      len_t n = x.ncols();
-      len_t minmn = std::min(m, n);
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      const len_t minmn = std::min(m, n);
       
       int info = 0;
       qraux.resize(minmn);
