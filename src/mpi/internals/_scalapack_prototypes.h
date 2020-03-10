@@ -150,7 +150,17 @@ extern void pdlacpy_(const char *uplo, const int *m, const int *n,
 
 
 
-// geqp3
+extern void psgeqpf_(const int *m, const int *n, float *restrict a,
+  const int *ia, const int *ja, const int *desca, int *restrict ipiv,
+  float *restrict tau, float *restrict work, const int *lwork,
+  int *info);
+
+extern void pdgeqpf_(const int *m, const int *n, double *restrict a,
+  const int *ia, const int *ja, const int *desca, int *restrict ipiv,
+  double *restrict tau, double *restrict work, const int *lwork,
+  int *info);
+
+
 
 extern void psgeqrf_(const int *m, const int *n, float *restrict a,
   const int *ia, const int *ja, const int *desca, float *restrict tau,

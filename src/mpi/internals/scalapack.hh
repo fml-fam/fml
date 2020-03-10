@@ -200,6 +200,22 @@ namespace fml
     
     
     
+    inline void geqpf(const int m, const int n, float *a, const int *desca,
+      int *ipiv, float *tau, float *work, const int lwork, int *info)
+    {
+      int ij = 1;
+      psgeqpf_(&m, &n, a, &ij, &ij, desca, ipiv, tau, work, &lwork, info);
+    }
+    
+    inline void geqpf(const int m, const int n, double *a, const int *desca,
+      int *ipiv, double *tau, double *work, const int lwork, int *info)
+    {
+      int ij = 1;
+      pdgeqpf_(&m, &n, a, &ij, &ij, desca, ipiv, tau, work, &lwork, info);
+    }
+    
+    
+    
     inline void geqrf(const int m, const int n, float *a, const int *desca,
       float *tau, float *work, const int lwork, int *info)
     {
