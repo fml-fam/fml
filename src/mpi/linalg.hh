@@ -319,7 +319,7 @@ namespace linalg
     @param[inout] x Input data matrix, replaced by its LU factorization.
     @param[out] p Vector of pivots, representing the diagonal matrix P in the
     PLU.
-    @param[out] info The LAPACK return number.
+    @param[out] info The ScaLAPACK return number.
     
     @impl Uses the ScaLAPACK function `pXgetrf()`.
     
@@ -628,7 +628,7 @@ namespace linalg
     @param[inout] x Input LHS. Should be square. Overwritten by LU.
     @param[inout] y Input RHS. Overwritten by solution.
     
-    @impl Uses the LAPACK functions `pXgesv()`.
+    @impl Uses the ScaLAPACK functions `pXgesv()`.
     
     @allocs LU pivot data is allocated internally.
     
