@@ -688,7 +688,7 @@ void mpimat<REAL>::fill_diag(const cpuvec<REAL> &v)
 template <typename REAL>
 void mpimat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL max)
 {
-  std::mt19937 mt(seed);
+  std::mt19937 mt(seed + g.myrow()*g.npcol() + g.mycol());
   for (len_t j=0; j<this->n_local; j++)
   {
     for (len_t i=0; i<this->m_local; i++)
@@ -720,7 +720,7 @@ void mpimat<REAL>::fill_runif(const REAL min, const REAL max)
 template <typename REAL>
 void mpimat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL sd)
 {
-  std::mt19937 mt(seed);
+  std::mt19937 mt(seed + g.myrow()*g.npcol() + g.mycol());
   for (len_t j=0; j<this->n_local; j++)
   {
     for (len_t i=0; i<this->m_local; i++)
