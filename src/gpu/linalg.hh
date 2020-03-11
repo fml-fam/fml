@@ -14,6 +14,7 @@
 
 #include "arch/arch.hh"
 
+#include "internals/gpu_utils.hh"
 #include "internals/gpuscalar.hh"
 #include "internals/kernelfuns.hh"
 
@@ -821,6 +822,36 @@ namespace linalg
     info_device.get_val(&info);
     gpulapack::err::check_ret(check, "ormqr");
     fml::linalgutils::check_info(info, "ormqr");
+  }
+  
+  /**
+    @brief Recover the R matrix from a QR decomposition.
+    
+    @param[in] QR The compact QR factorization, as computed via `qr()`.
+    @param[out] R The R matrix.
+    
+    @impl Uses a custom LAPACK-like `lacpy()` clone.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void qr_R(const gpumat<REAL> &QR, gpumat<REAL> &R)
+  {
+    err::check_card(QR, R);
+    
+    const len_t m = QR.nrows();
+    const len_t n = QR.ncols();
+    
+    R.resize(n, n);
+    R.fill_zero();
+    fml::gpu_utils::lacpy(GPUBLAS_FILL_U, m, n, QR.data_ptr(), m, R.data_ptr(), n);
   }
 }
 
