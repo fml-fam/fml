@@ -412,7 +412,7 @@ namespace linalg
       const len_t n = x.ncols();
       const len_t minmn = std::min(m, n);
       
-      s.resize(c, minmn);
+      s.resize(minmn);
       
       signed char jobu, jobvt;
       if (nu == 0 && nv == 0)
@@ -422,11 +422,11 @@ namespace linalg
       }
       else //if (nu <= minmn && nv <= minmn)
       {
-        jobu = 'V';
-        jobvt = 'V';
+        jobu = 'S';
+        jobvt = 'S';
         
-        u.resize(c, m, minmn);
-        vt.resize(c, minmn, n);
+        u.resize(m, minmn);
+        vt.resize(minmn, n);
       }
       
       int lwork;
@@ -506,7 +506,7 @@ namespace linalg
       auto c = x.get_card();
       
       len_t n = x.nrows();
-      values.resize(c, n);
+      values.resize(n);
       
       cusolverEigMode_t jobz;
       if (only_values)
@@ -530,10 +530,11 @@ namespace linalg
       
       info_device.get_val(&info);
       gpulapack::err::check_ret(check, "syevd");
+      fml::linalgutils::check_info(info, "syevd");
       
       if (!only_values)
       {
-        vectors.resize(c, n, n);
+        vectors.resize(n, n);
         gpuhelpers::gpu2gpu(x, vectors);
       }
       
