@@ -767,6 +767,61 @@ namespace linalg
     gpuvec<REAL> work(x.get_card());
     qr_internals(pivot, x, qraux, work);
   }
+  
+  /**
+    @brief Recover the Q matrix from a QR decomposition.
+    
+    @param[in] QR The compact QR factorization, as computed via `qr()`.
+    @param[in] qraux Auxiliary data for compact QR.
+    @param[out] Q The Q matrix.
+    @param[out] work Workspace array. Will be resized as necessary.
+    
+    @impl Uses the cuSOLVER function `cusolverDnXormqr()`.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void qr_Q(const gpumat<REAL> &QR, const gpuvec<REAL> &qraux, gpumat<REAL> &Q, gpuvec<REAL> &work)
+  {
+    err::check_card(QR, qraux);
+    err::check_card(QR, Q);
+    err::check_card(QR, work);
+    
+    const len_t m = QR.nrows();
+    const len_t n = QR.ncols();
+    const len_t minmn = std::min(m, n);
+    
+    auto c = QR.get_card();
+    
+    int lwork;
+    gpulapack_status_t check = gpulapack::ormqr_buflen(c->lapack_handle(),
+      GPUBLAS_SIDE_LEFT, GPUBLAS_OP_N, m, minmn, n, QR.data_ptr(), m,
+      qraux.data_ptr(), Q.data_ptr(), m, &lwork);
+    
+    if (lwork > work.size())
+      work.resize(lwork);
+    
+    Q.resize(m, n);
+    Q.fill_eye();
+    
+    int info = 0;
+    gpuscalar<int> info_device(c, info);
+    
+    check = gpulapack::ormqr(c->lapack_handle(), GPUBLAS_SIDE_LEFT,
+      GPUBLAS_OP_N, m, minmn, n, QR.data_ptr(), m, qraux.data_ptr(),
+      Q.data_ptr(), m, work.data_ptr(), lwork, info_device.data_ptr());
+    
+    info_device.get_val(&info);
+    gpulapack::err::check_ret(check, "ormqr");
+    fml::linalgutils::check_info(info, "ormqr");
+  }
 }
 
 
