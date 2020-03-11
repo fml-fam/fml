@@ -742,7 +742,7 @@ namespace linalg
     
     @param[in] QR The compact QR factorization, as computed via `qr()`.
     @param[in] qraux Auxiliary data for compact QR.
-    @param[out] The Q matrix.
+    @param[out] Q The Q matrix.
     @param[out] work Workspace array. Will be resized as necessary.
     
     @impl Uses the ScaLAPACK function `pXormqr()`.
