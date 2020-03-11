@@ -30,6 +30,8 @@ typedef rocblas_fill gpublas_fillmode_t;
 #define GPUBLAS_OP_N rocblas_operation_none
 #define GPUBLAS_FILL_L rocblas_fill_lower
 #define GPUBLAS_FILL_U rocblas_fill_upper
+#define GPUBLAS_SIDE_LEFT rocblas_side_left
+#define GPUBLAS_SIDE_RIGHT rocblas_side_right
 
 // lapack/"solver"
 #define GPULAPACK_STATUS_SUCCESS CUSOLVER_STATUS_SUCCESS

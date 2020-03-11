@@ -176,6 +176,72 @@ namespace gpulapack
     return cusolverDnDgetrs(handle, trans, n, nrhs, A, lda, devIpiv, B, ldb,
       info);
   }
+  
+  
+  
+  inline cusolverStatus_t geqrf_buflen(cusolverDnHandle_t handle,
+    const int m, const int n, float *A, const int lda, int *lwork)
+  {
+    return cusolverDnSgeqrf_bufferSize(handle, m, n, A, lda, lwork);
+  }
+  
+  inline cusolverStatus_t geqrf_buflen(cusolverDnHandle_t handle,
+    const int m, const int n, double *A, const int lda, int *lwork)
+  {
+    return cusolverDnDgeqrf_bufferSize(handle, m, n, A, lda, lwork);
+  }
+  
+  inline cusolverStatus_t geqrf(cusolverDnHandle_t handle, const int m,
+    const int n, float *A, const int lda, float *tau, float *work,
+    const int lwork, int *info)
+  {
+    return cusolverDnSgeqrf(handle, m, n, A, lda, tau, work, lwork, info);
+  }
+  
+  inline cusolverStatus_t geqrf(cusolverDnHandle_t handle, const int m,
+    const int n, double *A, const int lda, double *tau, double *work,
+    const int lwork, int *info)
+  {
+    return cusolverDnDgeqrf(handle, m, n, A, lda, tau, work, lwork, info);
+  }
+  
+  
+  
+  inline cusolverStatus_t ormqr_buflen(cusolverDnHandle_t handle,
+    cublasSideMode_t side, cublasOperation_t trans, const int m, const int n,
+    const int k, const float *A, const int lda, const float *tau,
+    const float *C, const int ldc, int *lwork)
+  {
+    return cusolverDnSormqr_bufferSize(handle, side, trans, m, n, k, A, lda,
+      tau, C, ldc, lwork);
+  }
+  
+  inline cusolverStatus_t ormqr_buflen(cusolverDnHandle_t handle,
+    cublasSideMode_t side, cublasOperation_t trans, const int m, const int n,
+    const int k, const double *A, const int lda, const double *tau,
+    const double *C, const int ldc, int *lwork)
+  {
+    return cusolverDnDormqr_bufferSize(handle, side, trans, m, n, k, A, lda,
+      tau, C, ldc, lwork);
+  }
+  
+  inline cusolverStatus_t ormqr(cusolverDnHandle_t handle,
+    cublasSideMode_t side, cublasOperation_t trans, const int m, const int n,
+    const int k, const float *A, const int lda, const float *tau, float *C,
+    const int ldc, float *work, const int lwork, int *info)
+  {
+    return cusolverDnSormqr(handle, side, trans, m, n, k, A, lda, tau, C, ldc,
+      work, lwork, info);
+  }
+  
+  inline cusolverStatus_t ormqr(cusolverDnHandle_t handle,
+    cublasSideMode_t side, cublasOperation_t trans, const int m, const int n,
+    const int k, const double *A, const int lda, const double *tau, double *C,
+    const int ldc, double *work, const int lwork, int *info)
+  {
+    return cusolverDnDormqr(handle, side, trans, m, n, k, A, lda, tau, C, ldc,
+      work, lwork, info);
+  }
 }
 
 
