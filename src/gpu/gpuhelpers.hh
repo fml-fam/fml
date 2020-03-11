@@ -33,7 +33,7 @@ namespace gpuhelpers
     @except If the GPU can not be initialized, or if the allocation of one of the
     handles fails, the method will throw a 'runtime_error' exception.
   */
-  inline std::shared_ptr<card> new_card(int id)
+  inline std::shared_ptr<card> new_card(int id=0)
   {
     return std::make_shared<card>(id);
   }
