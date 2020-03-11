@@ -700,6 +700,73 @@ namespace linalg
     err::check_card(x, y);
     solver(x, y.nrows(), y.ncols(), y.data_ptr());
   }
+  
+  
+  
+  namespace
+  {
+    template <typename REAL>
+    void qr_internals(const bool pivot, gpumat<REAL> &x, gpuvec<REAL> &qraux, gpuvec<REAL> &work)
+    {
+      if (pivot)
+        throw std::runtime_error("pivoting not supported at this time");
+      
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      const len_t minmn = std::min(m, n);
+      auto c = x.get_card();
+      
+      qraux.resize(minmn);
+      
+      int lwork;
+      gpulapack_status_t check = gpulapack::geqrf_buflen(c->lapack_handle(), m,
+        n, x.data_ptr(), m, &lwork);
+      gpulapack::err::check_ret(check, "geqrf_bufferSize");
+      
+      if (lwork > work.size())
+        work.resize(lwork);
+      
+      int info = 0;
+      gpuscalar<int> info_device(c, info);
+      
+      check = gpulapack::geqrf(c->lapack_handle(), m, n, x.data_ptr(), m,
+        qraux.data_ptr(), work.data_ptr(), lwork, info_device.data_ptr());
+      
+      info_device.get_val(&info);
+      gpulapack::err::check_ret(check, "syevd");
+      fml::linalgutils::check_info(info, "geqrf");
+    }
+  }
+  
+  /**
+    @brief Computes the QR decomposition.
+    
+    @details The factorization works mostly in-place by modifying the input
+    data. After execution, the matrix will be the LAPACK-like compact QR
+    representation.
+    
+    @param[in] pivot NOTE Pivoting does not yet work on GPU. Should the factorization use column pivoting?
+    @param[inout] x Input data matrix. Values are overwritten.
+    @param[out] qraux Auxiliary data for compact QR.
+    
+    @impl Uses the cuSOLVER function `cusolverDnXgeqrf()`.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void qr(const bool pivot, gpumat<REAL> &x, gpuvec<REAL> &qraux)
+  {
+    err::check_card(x, qraux);
+    gpuvec<REAL> work(x.get_card());
+    qr_internals(pivot, x, qraux, work);
+  }
 }
 
 
