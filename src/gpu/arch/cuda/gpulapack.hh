@@ -17,9 +17,9 @@ namespace gpulapack
   {
     inline std::string get_cusolver_error_msg(cusolverStatus_t check)
     {
-      if (check == CUSOLVER_STATUS_SUCCESS)
-        return "";
-      else if (check == CUSOLVER_STATUS_NOT_INITIALIZED)
+      // if (check == CUSOLVER_STATUS_SUCCESS)
+      //   return "";
+      if (check == CUSOLVER_STATUS_NOT_INITIALIZED)
         return "cuSOLVER not initialized";
       else if (check == CUSOLVER_STATUS_ALLOC_FAILED)
         return "internal cuSOLVER memory allocation failed";
