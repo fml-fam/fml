@@ -295,6 +295,29 @@ namespace fml
           v[i] = data[i + m*j];
       }
     }
+    
+    
+    
+    template <typename REAL>
+    __global__ void kernel_root_abs(const len_t len, REAL *x)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      
+      if (i < len)
+        x[i] = sqrt(fabs(x[i]));
+    }
+    
+    
+    
+    template <typename REAL>
+    __global__ void kernel_sweep_cols_div(const len_t m, const len_t n, REAL *data, const REAL *v)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      int j = blockDim.y*blockIdx.y + threadIdx.y;
+      
+      if (i < m && j < n)
+          data[i + m*j] /= v[j];
+    }
   }
 }
 

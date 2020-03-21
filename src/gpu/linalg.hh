@@ -915,6 +915,113 @@ namespace linalg
     matmult(false, false, (REAL)1.0, u, u_R, x);
     gpuhelpers::gpu2gpu(x, u);
   }
+  
+  
+  
+  /**
+    @brief Computes the singular value decomposition using the
+    "crossproducts SVD". This method is not numerically stable.
+    
+    @details The operation works by computing the crossproducts matrix X^T * X
+    or X * X^T (whichever is smaller) and then computing the eigenvalue
+    decomposition. 
+    
+    @param[inout] x Input data matrix.
+    @param[out] s Vector of singular values.
+    @param[out] u Matrix of left singular vectors.
+    @param[out] vt Matrix of (transposed) right singular vectors.
+    
+    @impl Uses `crossprod()` or `tcrossprod()` (whichever is smaller), and
+    `eigen_sym()`.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void cpsvd(const gpumat<REAL> &x, gpuvec<REAL> &s, gpumat<REAL> &u, gpumat<REAL> &vt)
+  {
+    err::check_card(x, s);
+    err::check_card(x, u);
+    err::check_card(x, vt);
+    
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
+    const len_t minmn = std::min(m, n);
+    
+    auto c = x.get_card();
+    
+    gpumat<REAL> cp(c);
+    
+    if (m >= n)
+    {
+      crossprod((REAL)1.0, x, cp);
+      eigen_sym(cp, s, vt);
+      vt.rev_cols();
+      gpuhelpers::gpu2gpu(vt, cp);
+    }
+    else
+    {
+      tcrossprod((REAL)1.0, x, cp);
+      eigen_sym(cp, s, u);
+      u.rev_cols();
+      gpuhelpers::gpu2gpu(u, cp);
+    }
+    
+    s.rev();
+    auto sgrid = s.get_griddim();
+    auto sblock = s.get_blockdim();
+    fml::kernelfuns::kernel_root_abs<<<sgrid, sblock>>>(s.size(), s.data_ptr());
+    
+    REAL *ev_d;
+    if (m >= n)
+      ev_d = vt.data_ptr();
+    else
+      ev_d = cp.data_ptr();
+    
+    auto xgrid = x.get_griddim();
+    auto xblock = x.get_blockdim();
+    fml::kernelfuns::kernel_sweep_cols_div<<<xgrid, xblock>>>(minmn, minmn,
+      ev_d, s.data_ptr());
+    
+    if (m >= n)
+    {
+      matmult(false, false, (REAL)1.0, x, vt, u);
+      xpose(cp, vt);
+    }
+    else
+      matmult(true, false, (REAL)1.0, cp, x, vt);
+  }
+  
+  /// \overload
+  template <typename REAL>
+  void cpsvd(const gpumat<REAL> &x, gpuvec<REAL> &s)
+  {
+    err::check_card(x, s);
+    
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
+    const len_t minmn = std::min(m, n);
+    
+    auto c = x.get_card();
+    
+    gpumat<REAL> cp(c);
+    
+    if (m >= n)
+      crossprod((REAL)1.0, x, cp);
+    else
+      tcrossprod((REAL)1.0, x, cp);
+    
+    eigen_sym(cp, s);
+    
+    s.rev();
+    fml::kernelfuns::kernel_root_abs<<<s.get_griddim(), s.get_blockdim()>>>(s.size(), s.data_ptr());
+  }
 }
 
 
