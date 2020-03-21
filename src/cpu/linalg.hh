@@ -891,15 +891,16 @@ namespace linalg
     "crossproducts SVD". This method is not numerically stable.
     
     @details The operation works by computing the crossproducts matrix X^T * X
-    and then computing the eigenvalue decomposition. 
+    or X * X^T (whichever is smaller) and then computing the eigenvalue
+    decomposition. 
     
     @param[inout] x Input data matrix.
     @param[out] s Vector of singular values.
     @param[out] u Matrix of left singular vectors.
     @param[out] vt Matrix of (transposed) right singular vectors.
     
-    @impl Uses `linalg::qr()` and `linalg::svd()`, and if computing the
-    left/right singular vectors, `linalg::qr_R()` and `linalg::qr_Q()`.
+    @impl Uses `crossprod()` or `tcrossprod()` (whichever is smaller), and
+    `eigen_sym()`.
     
     @allocs If the any outputs are inappropriately sized, they will
     automatically be re-allocated. Additionally, some temporary work storage
