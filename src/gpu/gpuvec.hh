@@ -353,6 +353,7 @@ void gpuvec<REAL>::print(uint8_t ndigits, bool add_final_blank) const
     this->printval(tmp, ndigits);
   }
   
+  fml::print::putchar('\n');
   if (add_final_blank)
     fml::print::putchar('\n');
 }
