@@ -878,7 +878,8 @@ namespace linalg
     REAL tmp;
     fml::lapack::gesdd('N', n, n, x_d, m, s.data_ptr(), NULL, m, NULL, 1, &tmp, -1, iwork.data_ptr(), &info);
     int lwork = (int) tmp;
-    work.resize(lwork);
+    if (lwork > work.size())
+      work.resize(lwork);
     
     fml::lapack::gesdd('N', n, n, x_d, m, s.data_ptr(), NULL, m, NULL, 1, work.data_ptr(), lwork, iwork.data_ptr(), &info);
     fml::linalgutils::check_info(info, "gesdd");
@@ -969,7 +970,6 @@ namespace linalg
   {
     const len_t m = x.nrows();
     const len_t n = x.ncols();
-    const len_t minmn = std::min(m, n);
     
     cpumat<REAL> cp;
     
