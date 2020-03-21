@@ -974,15 +974,11 @@ namespace linalg
     cpumat<REAL> cp;
     
     if (m >= n)
-    {
       crossprod((REAL)1.0, x, cp);
-      eigen_sym(cp, s);
-    }
     else
-    {
       tcrossprod((REAL)1.0, x, cp);
-      eigen_sym(cp, s);
-    }
+    
+    eigen_sym(cp, s);
     
     s.rev();
     REAL *s_d = s.data_ptr();
