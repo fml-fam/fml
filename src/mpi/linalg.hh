@@ -931,6 +931,123 @@ namespace linalg
       NULL, NULL, NULL, work.data_ptr(), lwork, &info);
     fml::linalgutils::check_info(info, "gesvd");
   }
+  
+  
+  
+  /**
+    @brief Computes the singular value decomposition using the
+    "crossproducts SVD". This method is not numerically stable.
+    
+    @details The operation works by computing the crossproducts matrix X^T * X
+    or X * X^T (whichever is smaller) and then computing the eigenvalue
+    decomposition. 
+    
+    @param[inout] x Input data matrix.
+    @param[out] s Vector of singular values.
+    @param[out] u Matrix of left singular vectors.
+    @param[out] vt Matrix of (transposed) right singular vectors.
+    
+    @impl Uses `crossprod()` or `tcrossprod()` (whichever is smaller), and
+    `eigen_sym()`.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void cpsvd(const mpimat<REAL> &x, cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
+  {
+    check_grid(x, u);
+    check_grid(x, vt);
+    
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
+    const len_t minmn = std::min(m, n);
+    
+    grid g = x.get_grid();
+    mpimat<REAL> cp(g, x.bf_rows(), x.bf_cols());
+    
+    if (m >= n)
+    {
+      crossprod((REAL)1.0, x, cp);
+      eigen_sym(cp, s, vt);
+      vt.rev_cols();
+      mpihelpers::mpi2mpi(vt, cp);
+    }
+    else
+    {
+      tcrossprod((REAL)1.0, x, cp);
+      eigen_sym(cp, s, u);
+      u.rev_cols();
+      mpihelpers::mpi2mpi(u, cp);
+    }
+    
+    s.rev();
+    REAL *s_d = s.data_ptr();
+    #pragma omp for simd
+    for (len_t i=0; i<s.size(); i++)
+      s_d[i] = sqrt(fabs(s_d[i]));
+    
+    REAL *ev_d;
+    if (m >= n)
+      ev_d = vt.data_ptr();
+    else
+      ev_d = cp.data_ptr();
+    
+    const len_t m_local = x.nrows_local();
+    const len_t n_local = x.ncols_local();
+    const len_t mb = x.bf_rows();
+    const len_t nb = x.bf_cols();
+    for (len_t j=0; j<n_local; j++)
+    {
+      #pragma omp for simd
+      for (len_t i=0; i<m_local; i++)
+      {
+        const int gi = fml::bcutils::l2g(i, mb, g.nprow(), g.myrow());
+        const int gj = fml::bcutils::l2g(j, nb, g.npcol(), g.mycol());
+        
+        if (gi < minmn && gj < minmn)
+          ev_d[i + m_local*j] /= s_d[gj];
+      }
+    }
+    
+    if (m >= n)
+    {
+      matmult(false, false, (REAL)1.0, x, vt, u);
+      xpose(cp, vt);
+    }
+    else
+      matmult(true, false, (REAL)1.0, cp, x, vt);
+  }
+  
+  /// \overload
+  template <typename REAL>
+  void cpsvd(const mpimat<REAL> &x, cpuvec<REAL> &s)
+  {
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
+    
+    grid g = x.get_grid();
+    mpimat<REAL> cp(g, x.bf_rows(), x.bf_cols());
+    
+    if (m >= n)
+      crossprod((REAL)1.0, x, cp);
+    else
+      tcrossprod((REAL)1.0, x, cp);
+    
+    eigen_sym(cp, s);
+    
+    s.rev();
+    REAL *s_d = s.data_ptr();
+    #pragma omp for simd
+    for (len_t i=0; i<s.size(); i++)
+      s_d[i] = sqrt(fabs(s_d[i]));
+  }
 }
 
 
