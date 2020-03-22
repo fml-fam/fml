@@ -916,6 +916,48 @@ namespace linalg
     gpuhelpers::gpu2gpu(x, u);
   }
   
+  /// \overload
+  template <typename REAL>
+  void tssvd(gpumat<REAL> &x, gpuvec<REAL> &s)
+  {
+    err::check_card(x, s);
+    
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
+    if (m <= n)
+      throw std::runtime_error("'x' must have more rows than cols");
+    
+    auto c = x.get_card();
+    s.resize(n);
+    
+    gpuvec<REAL> qraux(c);
+    gpuvec<REAL> work(c);
+    qr_internals(false, x, qraux, work);
+    
+    fml::gpu_utils::tri2zero('L', false, n, n, x.data_ptr(), m);
+    
+    int lwork;
+    gpulapack_status_t check = gpulapack::gesvd_buflen(c->lapack_handle(), n, n,
+      x.data_ptr(), &lwork);
+    gpulapack::err::check_ret(check, "gesvd_bufferSize");
+    
+    if (lwork > work.size())
+      work.resize(lwork);
+    if (m-1 > qraux.size())
+      qraux.resize(m-1);
+    
+    int info = 0;
+    gpuscalar<int> info_device(c, info);
+    
+    check = gpulapack::gesvd(c->lapack_handle(), 'N', 'N', n, n, x.data_ptr(),
+      m, s.data_ptr(), NULL, m, NULL, 1, work.data_ptr(), lwork,
+      qraux.data_ptr(), info_device.data_ptr());
+    
+    info_device.get_val(&info);
+    gpulapack::err::check_ret(check, "gesvd");
+    fml::linalgutils::check_info(info, "gesvd");
+  }
+  
   
   
   /**
