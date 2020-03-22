@@ -1006,7 +1006,6 @@ namespace linalg
     
     const len_t m = x.nrows();
     const len_t n = x.ncols();
-    const len_t minmn = std::min(m, n);
     
     auto c = x.get_card();
     
