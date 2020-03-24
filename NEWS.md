@@ -1,17 +1,30 @@
-Release 0.2-0 (//):
+# Release 0.2-0 (//):
 
 New:
+  * * added to linalg namespace for cpumat, gpumat, and mpimat:
+      - qr()
+      - qr_Q()
+      - qr_R()
+      - tssvd()
+      - cpsvd()
 
-API Changes: None
+API Changes:
+  * Added default argument to gpuhelpers::new_card()
 
 Bug Fixes:
+  * Changed seed setter behavior in mpimat rng functions: local seed is now
+  computed as seed + myrow + nprow*mycol.
+  * Fixed several memory issues in gpumat linalg::svd().
+  * Fixed an internal logic error in gpumat linalg::svd().
 
 Documentation:
+  * 
 
 
 
 
-Release 0.1-0 (2/5/2020):
+
+# Release 0.1-0 (2/5/2020):
 
 New:
   * created cpumat and cpuvec classes
