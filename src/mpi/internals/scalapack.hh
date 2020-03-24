@@ -249,6 +249,22 @@ namespace fml
       pdormqr_(&side, &trans, &m, &n, &k, a, &ij, &ij, desca, tau, c, &ij, &ij,
         descc, work, &lwork, info);
     }
+    
+    
+    
+    inline void potrf(const char uplo, const int n, float *a, const int *desca,
+      int *info)
+    {
+      int ij = 1;
+      pspotrf_(&uplo, &n, a, &ij, &ij, desca, info);
+    }
+    
+    inline void potrf(const char uplo, const int n, double *a, const int *desca,
+      int *info)
+    {
+      int ij = 1;
+      pdpotrf_(&uplo, &n, a, &ij, &ij, desca, info);
+    }
   }
 }
 

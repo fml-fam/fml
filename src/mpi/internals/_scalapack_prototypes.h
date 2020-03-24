@@ -185,6 +185,14 @@ extern void pdormqr_(const char *side, const char *trans, const int *m,
   const int *lwork, int *info);
 
 
+
+extern void pspotrf_(const char *uplo, const int *n, float *const restrict a,
+  const int *ia, const int *ja, const int *desca, int *info);
+
+extern void pdpotrf_(const char *uplo, const int *n, double *const restrict a,
+  const int *ia, const int *ja, const int *desca, int *info);
+
+
 #ifdef __cplusplus
 }
 #endif
