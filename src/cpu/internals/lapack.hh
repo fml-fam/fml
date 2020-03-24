@@ -207,6 +207,20 @@ namespace fml
     {
       dormqr_(&side, &trans, &m, &n, &k, x, &lda, tau, c, &ldc, work, &lwork, info);
     }
+    
+    
+    
+    inline void potrf(const char uplo, const int n, float *A, const int lda,
+      int *info)
+    {
+      spotrf_(&uplo, &n, A, &lda, info);
+    }
+    
+    inline void potrf(const char uplo, const int n, double *A, const int lda,
+      int *info)
+    {
+      dpotrf_(&uplo, &n, A, &lda, info);
+    }
   }
 }
 

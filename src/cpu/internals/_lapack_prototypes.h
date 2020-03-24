@@ -163,6 +163,13 @@ extern void dormqr_(const char *side, const char *trans, const int *m,
   double *const restrict work, const int *lwork, int *const restrict info);
 
 
+
+extern void spotrf_(const char *uplo, const int *n, float *const restrict A,
+  const int *lda, int *info);
+
+extern void dpotrf_(const char *uplo, const int *n, double *const restrict A,
+  const int *lda, int *info);
+
 #ifdef __cplusplus
 }
 #endif
