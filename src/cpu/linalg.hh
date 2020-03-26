@@ -785,13 +785,139 @@ namespace linalg
   {
     const len_t m = QR.nrows();
     const len_t n = QR.ncols();
+    const len_t minmn = std::min(m, n);
     
-    R.resize(n, n);
+    R.resize(minmn, n);
     R.fill_zero();
-    fml::lapack::lacpy('U', m, n, QR.data_ptr(), m, R.data_ptr(), n);
+    fml::lapack::lacpy('U', m, n, QR.data_ptr(), m, R.data_ptr(), minmn);
   }
   
   
+  
+  namespace
+  {
+    template <typename REAL>
+    void lq_internals(cpumat<REAL> &x, cpuvec<REAL> &lqaux, cpuvec<REAL> &work)
+    {
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      const len_t minmn = std::min(m, n);
+      
+      int info = 0;
+      lqaux.resize(minmn);
+      
+      REAL tmp;
+      fml::lapack::gelqf(m, n, NULL, m, NULL, &tmp, -1, &info);
+      int lwork = std::max((int) tmp, 1);
+      if (lwork > work.size())
+        work.resize(lwork);
+      
+      fml::lapack::gelqf(m, n, x.data_ptr(), m, lqaux.data_ptr(), work.data_ptr(), lwork, &info);
+      
+      if (info != 0)
+        fml::linalgutils::check_info(info, "gelqf");
+    }
+  }
+  
+  /**
+    @brief Computes the LQ decomposition.
+    
+    @details The factorization works mostly in-place by modifying the input
+    data. After execution, the matrix will be the LAPACK-like compact LQ
+    representation.
+    
+    @param[inout] x Input data matrix. Values are overwritten.
+    @param[out] lqaux Auxiliary data for compact LQ.
+    
+    @impl Uses the LAPACK function `Xgelqf()`.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void lq(cpumat<REAL> &x, cpuvec<REAL> &lqaux)
+  {
+    cpuvec<REAL> work;
+    lq_internals(x, lqaux, work);
+  }
+  
+  /**
+    @brief Recover the R matrix from an LQ decomposition.
+    
+    @param[in] LQ The compact LQ factorization, as computed via `lq()`.
+    @param[out] L The L matrix.
+    
+    @impl Uses the LAPACK function `Xlacpy()`.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void lq_L(const cpumat<REAL> &LQ, cpumat<REAL> &L)
+  {
+    const len_t m = LQ.nrows();
+    const len_t n = LQ.ncols();
+    const len_t minmn = std::min(m, n);
+    
+    L.resize(m, minmn);
+    L.fill_zero();
+    fml::lapack::lacpy('L', m, n, LQ.data_ptr(), m, L.data_ptr(), m);
+  }
+  
+  /**
+    @brief Recover the Q matrix from an LQ decomposition.
+    
+    @param[in] LQ The compact LQ factorization, as computed via `lq()`.
+    @param[in] lqaux Auxiliary data for compact LQ.
+    @param[out] Q The Q matrix.
+    @param[out] work Workspace array. Will be resized as necessary.
+    
+    @impl Uses the LAPACK function `Xormlq()`.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void lq_Q(const cpumat<REAL> &LQ, const cpuvec<REAL> &lqaux, cpumat<REAL> &Q, cpuvec<REAL> &work)
+  {
+    const len_t m = LQ.nrows();
+    const len_t n = LQ.ncols();
+    const len_t minmn = std::min(m, n);
+    
+    int info = 0;
+    REAL tmp;
+    fml::lapack::ormlq('R', 'N', m, n, m, LQ.data_ptr(), m, lqaux.data_ptr(),
+      Q.data_ptr(), m, &tmp, -1, &info);
+    
+    int lwork = (int) tmp;
+    if (lwork > work.size())
+      work.resize(lwork);
+    
+    Q.resize(m, n);
+    Q.fill_eye();
+    
+    fml::lapack::ormlq('R', 'N', m, n, m, LQ.data_ptr(), m, lqaux.data_ptr(),
+      Q.data_ptr(), m, work.data_ptr(), lwork, &info);
+    fml::linalgutils::check_info(info, "ormlq");
+  }
   
   
   

@@ -164,6 +164,30 @@ extern void dormqr_(const char *side, const char *trans, const int *m,
 
 
 
+extern void sgelqf_(const int *const m, const int *const n,
+  float *const restrict A, const int *const lda, float *const restrict tau,
+  float *const restrict work, const int *const restrict lwork,
+  int *const restrict info);
+
+extern void dgelqf_(const int *const m, const int *const n,
+  double *const restrict A, const int *const lda, double *const restrict tau,
+  double *const restrict work, const int *const restrict lwork,
+  int *const restrict info);
+
+
+
+extern void sormlq_(const char *side, const char *trans, const int *m,
+  const int *n, const int *k, const float *const restrict A, const int *lda,
+  const float *const restrict tau, float *const restrict c, const int *ldc,
+  float *const restrict work, const int *lwork, int *const restrict info);
+
+extern void dormlq_(const char *side, const char *trans, const int *m,
+  const int *n, const int *k, const double *const restrict A, const int *lda,
+  const double *const restrict tau, double *const restrict c, const int *ldc,
+  double *const restrict work, const int *lwork, int *const restrict info);
+
+
+
 extern void spotrf_(const char *uplo, const int *n, float *const restrict A,
   const int *lda, int *info);
 

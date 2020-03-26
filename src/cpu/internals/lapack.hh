@@ -210,6 +210,38 @@ namespace fml
     
     
     
+    inline void gelqf(const int m, const int n, float *x, const int lda,
+      float *tau, float *work, const int lwork, int *info)
+    {
+      sgelqf_(&m, &n, x, &lda, tau, work, &lwork, info);
+    }
+    
+    inline void gelqf(const int m, const int n, double *x, const int lda,
+      double *tau, double *work, const int lwork, int *info)
+    {
+      dgelqf_(&m, &n, x, &lda, tau, work, &lwork, info);
+    }
+    
+    
+    
+    inline void ormlq(const char side, const char trans, const int m,
+      const int n, const int k, const float *x, const int lda,
+      const float *tau, float *c, const int ldc, float *work,
+      const int lwork, int *info)
+    {
+      sormlq_(&side, &trans, &m, &n, &k, x, &lda, tau, c, &ldc, work, &lwork, info);
+    }
+    
+    inline void ormlq(const char side, const char trans, const int m,
+      const int n, const int k, const double *x, const int lda,
+      const double *tau, double *c, const int ldc, double *work,
+      const int lwork, int *info)
+    {
+      dormlq_(&side, &trans, &m, &n, &k, x, &lda, tau, c, &ldc, work, &lwork, info);
+    }
+    
+    
+    
     inline void potrf(const char uplo, const int n, float *A, const int lda,
       int *info)
     {
