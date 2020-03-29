@@ -873,6 +873,7 @@ namespace linalg
     
     L.resize(m, minmn);
     L.fill_zero();
+    
     fml::lapack::lacpy('L', m, n, LQ.data_ptr(), m, L.data_ptr(), m);
   }
   
