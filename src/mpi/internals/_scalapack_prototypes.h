@@ -186,6 +186,30 @@ extern void pdormqr_(const char *side, const char *trans, const int *m,
 
 
 
+extern void psgelqf_(const int *m, const int *n, float *restrict a,
+  const int *ia, const int *ja, const int *desca, float *restrict tau,
+  float *restrict work, const int *lwork, int *info);
+
+extern void pdgelqf_(const int *m, const int *n, double *restrict a,
+  const int *ia, const int *ja, const int *desca, double *restrict tau,
+  double *restrict work, const int *lwork, int *info);
+
+
+
+extern void psormlq_(const char *side, const char *trans, const int *m,
+  const int *n, const int *k, const float *restrict a, const int *ia,
+  const int *ja, const int *desca, float *restrict tau, float *restrict c,
+  const int *ic, const int *jc, const int *descc, float *restrict work,
+  const int *lwork, int *info);
+
+extern void pdormlq_(const char *side, const char *trans, const int *m,
+  const int *n, const int *k, const double *restrict a, const int *ia,
+  const int *ja, const int *desca, double *restrict tau, double *restrict c,
+  const int *ic, const int *jc, const int *descc, double *restrict work,
+  const int *lwork, int *info);
+
+
+
 extern void pspotrf_(const char *uplo, const int *n, float *const restrict a,
   const int *ia, const int *ja, const int *desca, int *info);
 

@@ -823,6 +823,151 @@ namespace linalg
   
   
   
+  namespace
+  {
+    template <typename REAL>
+    void lq_internals(mpimat<REAL> &x, cpuvec<REAL> &lqaux, cpuvec<REAL> &work)
+    {
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      const len_t minmn = std::min(m, n);
+      
+      const int *descx = x.desc_ptr();
+      
+      int info = 0;
+      lqaux.resize(minmn);
+      
+      REAL tmp;
+      fml::scalapack::gelqf(m, n, NULL, descx, NULL, &tmp, -1, &info);
+      int lwork = std::max((int) tmp, 1);
+      if (lwork > work.size())
+        work.resize(lwork);
+      
+      fml::scalapack::gelqf(m, n, x.data_ptr(), descx, lqaux.data_ptr(),
+        work.data_ptr(), lwork, &info);
+      
+      if (info != 0)
+        fml::linalgutils::check_info(info, "gelqf");
+    }
+  }
+  
+  /**
+    @brief Computes the LQ decomposition.
+    
+    @details The factorization works mostly in-place by modifying the input
+    data. After execution, the matrix will be the LAPACK-like compact LQ
+    representation.
+    
+    @param[inout] x Input data matrix. Values are overwritten.
+    @param[out] lqaux Auxiliary data for compact LQ.
+    
+    @impl Uses the ScaLAPACK function `pXgelqf()`.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @comm The method will communicate across all processes in the BLACS grid.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void lq(mpimat<REAL> &x, cpuvec<REAL> &lqaux)
+  {
+    cpuvec<REAL> work;
+    lq_internals(x, lqaux, work);
+  }
+  
+  /**
+    @brief Recover the L matrix from a LQ decomposition.
+    
+    @param[in] LQ The compact LQ factorization, as computed via `lq()`.
+    @param[out] L The L matrix.
+    
+    @impl Uses the ScaLAPACK function `pXlacpy()`.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @comm The method will communicate across all processes in the BLACS grid.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void lq_L(const mpimat<REAL> &LQ, mpimat<REAL> &L)
+  {
+    check_grid(LQ, L);
+    
+    const len_t m = LQ.nrows();
+    const len_t n = LQ.ncols();
+    const len_t minmn = std::min(m, n);
+    
+    L.resize(m, minmn);
+    L.fill_zero();
+    
+    fml::scalapack::lacpy('L', m, n, LQ.data_ptr(), LQ.desc_ptr(), L.data_ptr(),
+      L.desc_ptr());
+  }
+  
+  /**
+    @brief Recover the Q matrix from a LQ decomposition.
+    
+    @param[in] LQ The compact LQ factorization, as computed via `lq()`.
+    @param[in] lqaux Auxiliary data for compact LQ.
+    @param[out] Q The Q matrix.
+    @param[out] work Workspace array. Will be resized as necessary.
+    
+    @impl Uses the ScaLAPACK function `pXormlq()`.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @comm The method will communicate across all processes in the BLACS grid.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void lq_Q(const mpimat<REAL> &LQ, const cpuvec<REAL> &lqaux, mpimat<REAL> &Q, cpuvec<REAL> &work)
+  {
+    check_grid(LQ, Q);
+    
+    const len_t m = LQ.nrows();
+    const len_t n = LQ.ncols();
+    const len_t minmn = std::min(m, n);
+    
+    const int *descLQ = LQ.desc_ptr();
+    
+    Q.resize(m, n);
+    Q.fill_eye();
+    const int *descQ = Q.desc_ptr();
+    
+    int info = 0;
+    REAL tmp;
+    fml::scalapack::ormlq('R', 'N', m, n, m, NULL, descLQ,
+      NULL, NULL, descQ, &tmp, -1, &info);
+    
+    int lwork = (int) tmp;
+    if (lwork > work.size())
+      work.resize(lwork);
+    
+    fml::scalapack::ormlq('R', 'N', m, n, m, LQ.data_ptr(), descLQ,
+      lqaux.data_ptr(), Q.data_ptr(), descQ, work.data_ptr(), lwork, &info);
+    fml::linalgutils::check_info(info, "ormlq");
+  }
+  
+  
+  
   /**
     @brief Computes the singular value decomposition for tall/skinny data.
     The number of rows must be greater than the number of columns. If the number

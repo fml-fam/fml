@@ -252,6 +252,42 @@ namespace fml
     
     
     
+    inline void gelqf(const int m, const int n, float *a, const int *desca,
+      float *tau, float *work, const int lwork, int *info)
+    {
+      int ij = 1;
+      psgelqf_(&m, &n, a, &ij, &ij, desca, tau, work, &lwork, info);
+    }
+    
+    inline void gelqf(const int m, const int n, double *a, const int *desca,
+      double *tau, double *work, const int lwork, int *info)
+    {
+      int ij = 1;
+      pdgelqf_(&m, &n, a, &ij, &ij, desca, tau, work, &lwork, info);
+    }
+    
+    
+    
+    inline void ormlq(const char side, const char trans, const int m,
+      const int n, const int k, const float *a, const int *desca, float *tau,
+      float *c, const int *descc, float *work, const int lwork, int *info)
+    {
+      int ij = 1;
+      psormlq_(&side, &trans, &m, &n, &k, a, &ij, &ij, desca, tau, c, &ij, &ij,
+        descc, work, &lwork, info);
+    }
+    
+    inline void ormlq(const char side, const char trans, const int m,
+      const int n, const int k, const double *a, const int *desca, double *tau,
+      double *c, const int *descc, double *work, const int lwork, int *info)
+    {
+      int ij = 1;
+      pdormlq_(&side, &trans, &m, &n, &k, a, &ij, &ij, desca, tau, c, &ij, &ij,
+        descc, work, &lwork, info);
+    }
+    
+    
+    
     inline void potrf(const char uplo, const int n, float *a, const int *desca,
       int *info)
     {
