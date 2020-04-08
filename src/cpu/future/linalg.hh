@@ -13,62 +13,6 @@
 namespace linalg
 {
   template <typename REAL>
-  void det(cpumat<REAL> &x, int &sign, REAL &modulus)
-  {
-    const len_t m = x.nrows();
-    if (!x.is_square())
-      throw std::runtime_error("'x' must be a square matrix");
-    
-    cpuvec<int> p;
-    int info;
-    lu(x, p, info);
-    
-    if (info != 0)
-    {
-      if (info > 0)
-      {
-        sign = 1;
-        modulus = -INFINITY;
-        return;
-      }
-      else
-        return;
-    }
-    
-    
-    // get determinant
-    REAL mod = 0.0;
-    int sgn = 1;
-    
-    const int *ipiv = p.data_ptr();
-    for (int i=0; i<m; i++)
-    {
-      if (ipiv[i] != (i + 1))
-        sgn = -sgn;
-    }
-    
-    const REAL *a = x.data_ptr();
-    
-    #pragma omp parallel for reduction(+:mod) reduction(*:sgn)
-    for (int i=0; i<m; i+=m+1)
-    {
-      const REAL d = a[i + m*i];
-      if (d < 0)
-      {
-        mod += log(-d);
-        sgn *= -1;
-      }
-      else
-        mod += log(d);
-    }
-    
-    modulus = mod;
-    sign = sgn;
-  }
-  
-  
-  
-  template <typename REAL>
   void rsvd(const int k, const int q, cpumat<REAL> &x, cpuvec<REAL> &s, cpumat<REAL> &u, cpumat<REAL> &vt)
   {
     const len_t m = x.nrows();
