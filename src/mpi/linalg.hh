@@ -361,6 +361,101 @@ namespace linalg
   
   
   /**
+    @brief Computes the determinant in logarithmic form.
+    
+    @details The input is replaced by its LU factorization.
+    
+    @param[inout] x Input data matrix, replaced by its LU factorization.
+    @param[out] sign The sign of the determinant.
+    @param[out] modulus Log of the modulus.
+    
+    @impl Uses `lu()`.
+    
+    @allocs Allocates temporary storage to compute the LU.
+    
+    @except If an allocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void det(mpimat<REAL> &x, int &sign, REAL &modulus)
+  {
+    if (!x.is_square())
+      throw std::runtime_error("'x' must be a square matrix");
+    
+    cpuvec<int> p;
+    int info;
+    lu(x, p, info);
+    
+    if (info != 0)
+    {
+      if (info > 0)
+      {
+        sign = 1;
+        modulus = -INFINITY;
+        return;
+      }
+      else
+        return;
+    }
+    
+    
+    // get determinant
+    REAL mod = 0.0;
+    int sgn = 1;
+    
+    const len_t m_local = x.nrows_local();
+    const len_t n_local = x.ncols_local();
+    const int mb = x.bf_rows();
+    const int nb = x.bf_cols();
+    
+    const int *ipiv = p.data_ptr();
+    const REAL *a = x.data_ptr();
+    
+    grid g = x.get_grid();
+    const int nprow = g.nprow();
+    const int npcol = g.npcol();
+    const int myrow = g.myrow();
+    const int mycol = g.mycol();
+    
+    for (len_t j=0; j<n_local; j++)
+    {
+      for (len_t i=0; i<m_local; i++)
+      {
+        len_t gi = fml::bcutils::l2g(i, mb, nprow, myrow);
+        len_t gj = fml::bcutils::l2g(j, nb, npcol, mycol);
+        
+        if (ipiv[i] != (gi + 1))
+          sgn = -sgn;
+        
+        if (gi == gj)
+        {
+          const REAL d = a[i + m_local*j];
+          if (d < 0)
+          {
+            mod += log(-d);
+            sgn *= -1;
+          }
+          else
+            mod += log(d);
+        }
+      }
+    }
+    
+    g.allreduce(1, 1, &mod);
+    
+    sgn = (sgn<0 ? 1 : 0);
+    g.allreduce(1, 1, &sgn);
+    sgn = (sgn%2==0 ? 1 : -1);
+    
+    modulus = mod;
+    sign = sgn;
+  }
+  
+  
+  
+  /**
     @brief Computes the trace, i.e. the sum of the diagonal.
     
     @param[in] x Input data matrix.
