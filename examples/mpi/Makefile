@@ -6,11 +6,14 @@ MPI_LDFLAGS = -lscalapack-openmpi
 WARNFLAGS = -Wall -pedantic -Wextra
 
 
-all: clean convert matmult mpimat svd
+all: clean convert det matmult mpimat svd
 
 
 convert:
 	$(MPICXX) $(CXXFLAGS) $(WARNFLAGS) $(OMPFLAGS) convert.cpp -o convert $(MPI_LDFLAGS)
+
+det:
+	$(MPICXX) $(CXXFLAGS) $(WARNFLAGS) $(OMPFLAGS) det.cpp -o det $(MPI_LDFLAGS)
 
 matmult:
 	$(MPICXX) $(CXXFLAGS) $(WARNFLAGS) $(OMPFLAGS) matmult.cpp -o matmult $(MPI_LDFLAGS)
@@ -23,4 +26,4 @@ svd:
 
 
 clean:
-	rm -rf convert matmult mpimat svd
+	rm -rf convert det matmult mpimat svd

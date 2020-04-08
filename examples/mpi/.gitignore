@@ -1,4 +1,5 @@
 convert
+det
 matmult
 mpimat
 svd
