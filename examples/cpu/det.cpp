@@ -1,8 +1,6 @@
 #include <cpu/cpumat.hh>
 #include <cpu/linalg.hh>
 
-#include <cpu/future/linalg.hh>
-
 
 static inline void print_det(int sign, float modulus)
 {
