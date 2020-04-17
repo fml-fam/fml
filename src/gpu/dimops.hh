@@ -256,9 +256,6 @@ namespace dimops
       colmeans(x, means);
       internals::colsdevs(x, means, sdevs);
       
-      means.print();
-      sdevs.print();
-      
       internals::sweep_sub(x, means);
       internals::sweep_div(x, sdevs);
     }
