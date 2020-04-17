@@ -100,6 +100,7 @@ namespace dimops
     static inline void colsdevs(const gpumat<REAL> &x,
       const gpuvec<REAL> &means, gpuvec<REAL> &sdevs)
     {
+      sdevs.fill_zero();
       kernel_colsdevs<<<x.get_griddim(), x.get_blockdim()>>>(x.nrows(),
         x.ncols(), x.data_ptr(), means.data_ptr(), sdevs.data_ptr());
       fml::kernelfuns::kernel_root_abs<<<sdevs.get_griddim(),
