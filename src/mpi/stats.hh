@@ -33,7 +33,8 @@ namespace stats
     @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
-  void pca(const bool rm_mean, const bool rm_sd, mpimat<REAL> &x, cpuvec<REAL> &sdev, mpimat<REAL> &rot)
+  void pca(const bool rm_mean, const bool rm_sd, mpimat<REAL> &x,
+    cpuvec<REAL> &sdev, mpimat<REAL> &rot)
   {
     linalg::err::check_grid(x, rot);
     
@@ -52,7 +53,8 @@ namespace stats
   
   /// \overload
   template <typename REAL>
-  void pca(const bool rm_mean, const bool rm_sd, mpimat<REAL> &x, cpuvec<REAL> &sdev)
+  void pca(const bool rm_mean, const bool rm_sd, mpimat<REAL> &x,
+    cpuvec<REAL> &sdev)
   {
     dimops::scale(rm_mean, rm_sd, x);
     

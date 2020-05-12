@@ -33,7 +33,8 @@ namespace stats
     @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
-  void pca(const bool rm_mean, const bool rm_sd, cpumat<REAL> &x, cpuvec<REAL> &sdev, cpumat<REAL> &rot)
+  void pca(const bool rm_mean, const bool rm_sd, cpumat<REAL> &x,
+    cpuvec<REAL> &sdev, cpumat<REAL> &rot)
   {
     dimops::scale(rm_mean, rm_sd, x);
     
@@ -49,7 +50,8 @@ namespace stats
   
   /// \overload
   template <typename REAL>
-  void pca(const bool rm_mean, const bool rm_sd, cpumat<REAL> &x, cpuvec<REAL> &sdev)
+  void pca(const bool rm_mean, const bool rm_sd, cpumat<REAL> &x,
+    cpuvec<REAL> &sdev)
   {
     dimops::scale(rm_mean, rm_sd, x);
     
