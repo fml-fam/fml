@@ -46,6 +46,18 @@ namespace stats
     
     linalg::xpose(trot, rot);
   }
+  
+  /// \overload
+  template <typename REAL>
+  void pca(const bool rm_mean, const bool rm_sd, cpumat<REAL> &x, cpuvec<REAL> &sdev)
+  {
+    dimops::scale(rm_mean, rm_sd, x);
+    
+    linalg::svd(x, sdev);
+    
+    const REAL d = 1.0 / sqrt((REAL)std::max(x.nrows()-1, 1));
+    sdev.scale(d);
+  }
 }
 
 
