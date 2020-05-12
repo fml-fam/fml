@@ -20,7 +20,7 @@
 
 namespace linalg
 {
-  namespace
+  namespace err
   {
     template <typename REAL>
     void check_grid(const mpimat<REAL> &a, const mpimat<REAL> &b)
@@ -53,8 +53,8 @@ namespace linalg
   template <typename REAL>
   void add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const mpimat<REAL> &x, const mpimat<REAL> &y, mpimat<REAL> &ret)
   {
-    check_grid(x, y);
-    check_grid(x, ret);
+    err::check_grid(x, y);
+    err::check_grid(x, ret);
     
     len_t m, n;
     fml::linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
@@ -73,7 +73,7 @@ namespace linalg
   template <typename REAL>
   mpimat<REAL> add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const mpimat<REAL> &x, const mpimat<REAL> &y)
   {
-    check_grid(x, y);
+    err::check_grid(x, y);
     
     len_t m, n;
     fml::linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
@@ -108,7 +108,7 @@ namespace linalg
   template <typename REAL>
   mpimat<REAL> matmult(const bool transx, const bool transy, const REAL alpha, const mpimat<REAL> &x, const mpimat<REAL> &y)
   {
-    check_grid(x, y);
+    err::check_grid(x, y);
     
     int m, n, k;
     fml::linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
@@ -149,8 +149,8 @@ namespace linalg
   template <typename REAL>
   void matmult(const bool transx, const bool transy, const REAL alpha, const mpimat<REAL> &x, const mpimat<REAL> &y, mpimat<REAL> &ret)
   {
-    check_grid(x, y);
-    check_grid(x, ret);
+    err::check_grid(x, y);
+    err::check_grid(x, ret);
     
     int m, n, k;
     fml::linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
@@ -190,7 +190,7 @@ namespace linalg
   template <typename REAL>
   void crossprod(const REAL alpha, const mpimat<REAL> &x, mpimat<REAL> &ret)
   {
-    check_grid(x, ret);
+    err::check_grid(x, ret);
     
     const len_t n = x.ncols();
     
@@ -238,7 +238,7 @@ namespace linalg
   template <typename REAL>
   void tcrossprod(const REAL alpha, const mpimat<REAL> &x, mpimat<REAL> &ret)
   {
-    check_grid(x, ret);
+    err::check_grid(x, ret);
     
     const len_t m = x.nrows();
     
@@ -285,7 +285,7 @@ namespace linalg
   template <typename REAL>
   void xpose(const mpimat<REAL> &x, mpimat<REAL> &tx)
   {
-    check_grid(x, tx);
+    err::check_grid(x, tx);
     
     const len_t m = x.nrows();
     const len_t n = x.ncols();
@@ -573,8 +573,8 @@ namespace linalg
   template <typename REAL>
   void svd(mpimat<REAL> &x, cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
   {
-    check_grid(x, u);
-    check_grid(x, vt);
+    err::check_grid(x, u);
+    err::check_grid(x, vt);
     
     int info = svd_internals(1, 1, x, s, u, vt);
     fml::linalgutils::check_info(info, "gesvd");
@@ -662,7 +662,7 @@ namespace linalg
   template <typename REAL>
   void eigen_sym(mpimat<REAL> &x, cpuvec<REAL> &values, mpimat<REAL> &vectors)
   {
-    check_grid(x, vectors);
+    err::check_grid(x, vectors);
     
     int info = eig_sym_internals(false, x, values, vectors);
     fml::linalgutils::check_info(info, "syevr");
@@ -740,7 +740,7 @@ namespace linalg
   template <typename REAL>
   void solve(mpimat<REAL> &x, mpimat<REAL> &y)
   {
-    check_grid(x, y);
+    err::check_grid(x, y);
     
     const len_t n = x.nrows();
     if (!x.is_square())
@@ -857,7 +857,7 @@ namespace linalg
   template <typename REAL>
   void qr_Q(const mpimat<REAL> &QR, const cpuvec<REAL> &qraux, mpimat<REAL> &Q, cpuvec<REAL> &work)
   {
-    check_grid(QR, Q);
+    err::check_grid(QR, Q);
     
     const len_t m = QR.nrows();
     const len_t n = QR.ncols();
@@ -905,7 +905,7 @@ namespace linalg
   template <typename REAL>
   void qr_R(const mpimat<REAL> &QR, mpimat<REAL> &R)
   {
-    check_grid(QR, R);
+    err::check_grid(QR, R);
     
     const len_t m = QR.nrows();
     const len_t n = QR.ncols();
@@ -998,7 +998,7 @@ namespace linalg
   template <typename REAL>
   void lq_L(const mpimat<REAL> &LQ, mpimat<REAL> &L)
   {
-    check_grid(LQ, L);
+    err::check_grid(LQ, L);
     
     const len_t m = LQ.nrows();
     const len_t n = LQ.ncols();
@@ -1035,7 +1035,7 @@ namespace linalg
   template <typename REAL>
   void lq_Q(const mpimat<REAL> &LQ, const cpuvec<REAL> &lqaux, mpimat<REAL> &Q, cpuvec<REAL> &work)
   {
-    check_grid(LQ, Q);
+    err::check_grid(LQ, Q);
     
     const len_t m = LQ.nrows();
     const len_t n = LQ.ncols();
@@ -1094,8 +1094,8 @@ namespace linalg
   template <typename REAL>
   void tssvd(mpimat<REAL> &x, cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
   {
-    check_grid(x, u);
-    check_grid(x, vt);
+    err::check_grid(x, u);
+    err::check_grid(x, vt);
     
     const len_t m = x.nrows();
     const len_t n = x.ncols();
@@ -1202,8 +1202,8 @@ namespace linalg
   template <typename REAL>
   void cpsvd(const mpimat<REAL> &x, cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
   {
-    check_grid(x, u);
-    check_grid(x, vt);
+    err::check_grid(x, u);
+    err::check_grid(x, vt);
     
     const len_t m = x.nrows();
     const len_t n = x.ncols();
