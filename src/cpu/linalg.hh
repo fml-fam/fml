@@ -13,6 +13,7 @@
 #include "../_internals/linalgutils.hh"
 #include "../_internals/omp.hh"
 
+#include "internals/cpu_utils.hh"
 #include "internals/lapack.hh"
 
 #include "cpuhelpers.hh"
@@ -1066,23 +1067,20 @@ namespace linalg
     cpuvec<REAL> work(m);
     qr_internals(false, x, qraux, work);
     
-    REAL *x_d = x.data_ptr();
-    for (len_t j=0; j<n; j++)
-    {
-      for (len_t i=j+1; i<n; i++)
-        x_d[i + m*j] = (REAL) 0.0;
-    }
+    fml::cpu_utils::tri2zero('L', false, n, n, x.data_ptr(), m);
     
     int info = 0;
     cpuvec<int> iwork(8*n);
     
     REAL tmp;
-    fml::lapack::gesdd('N', n, n, x_d, m, s.data_ptr(), NULL, m, NULL, 1, &tmp, -1, iwork.data_ptr(), &info);
+    fml::lapack::gesdd('N', n, n, x.data_ptr(), m, s.data_ptr(), NULL, m, NULL,
+      1, &tmp, -1, iwork.data_ptr(), &info);
     int lwork = (int) tmp;
     if (lwork > work.size())
       work.resize(lwork);
     
-    fml::lapack::gesdd('N', n, n, x_d, m, s.data_ptr(), NULL, m, NULL, 1, work.data_ptr(), lwork, iwork.data_ptr(), &info);
+    fml::lapack::gesdd('N', n, n, x.data_ptr(), m, s.data_ptr(), NULL, m, NULL,
+      1, work.data_ptr(), lwork, iwork.data_ptr(), &info);
     fml::linalgutils::check_info(info, "gesdd");
   }
   
