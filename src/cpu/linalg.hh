@@ -1221,6 +1221,8 @@ namespace linalg
       fml::linalgutils::check_info(info, "potrf");
     else if (info > 0)
       throw std::runtime_error("chol: leading minor of order " + std::to_string(info) + " is not positive definite");
+    
+    fml::cpu_utils::tri2zero('U', false, n, n, x.data_ptr(), n);
   }
 }
 
