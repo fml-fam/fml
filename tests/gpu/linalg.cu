@@ -256,3 +256,50 @@ TEMPLATE_TEST_CASE("solve", "[linalg]", float, double)
   REQUIRE( fltcmp::eq(y.get(0), 0.5) );
   REQUIRE( fltcmp::eq(y.get(1), (TestType)1/3) );
 }
+
+
+
+TEMPLATE_TEST_CASE("QR", "[linalg]", float, double)
+{
+  // test matrix from here https://en.wikipedia.org/wiki/QR_decomposition#Example_2
+  gpumat<TestType> x(c, 3, 3);
+  x.set(0, 0, 12);
+  x.set(1, 0, 6);
+  x.set(2, 0, -4);
+  x.set(0, 1, -51);
+  x.set(1, 1, 167);
+  x.set(2, 1, 24);
+  x.set(0, 2, 4);
+  x.set(1, 2, -68);
+  x.set(2, 2, -41);
+  
+  auto orig = x.dupe();
+  
+  
+  
+  // QR
+  gpuvec<TestType> aux(c);
+  linalg::qr(false, x, aux);
+  
+  gpumat<TestType> Q(c);
+  gpuvec<TestType> work(c);
+  linalg::qr_Q(x, aux, Q, work);
+  
+  REQUIRE( fltcmp::eq(fabs(Q.get(0, 0)), (TestType)6/7) );
+  REQUIRE( fltcmp::eq(fabs(Q.get(1, 0)), (TestType)3/7) );
+  REQUIRE( fltcmp::eq(fabs(Q.get(1, 1)), (TestType)158/175) );
+  REQUIRE( fltcmp::eq(fabs(Q.get(1, 2)), (TestType)6/175) );
+  
+  gpumat<TestType> R(c);
+  linalg::qr_R(x, R);
+  
+  REQUIRE( fltcmp::eq(fabs(R.get(0, 0)), (TestType)14) );
+  REQUIRE( fltcmp::eq(fabs(R.get(1, 0)), 0) );
+  REQUIRE( fltcmp::eq(fabs(R.get(0, 1)), (TestType)21) );
+  REQUIRE( fltcmp::eq(fabs(R.get(1, 2)), (TestType)70) );
+  
+  
+  
+  // LQ
+  // TODO: Not available in cusolver
+}
