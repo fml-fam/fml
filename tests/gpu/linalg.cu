@@ -303,3 +303,27 @@ TEMPLATE_TEST_CASE("QR", "[linalg]", float, double)
   // LQ
   // TODO: Not available in cusolver
 }
+
+
+
+TEMPLATE_TEST_CASE("chol", "[linalg]", float, double)
+{
+  // test matrix from here https://en.wikipedia.org/wiki/Cholesky_decomposition#Example
+  gpumat<TestType> x(c, 3, 3);
+  x.set(0, 0, 4);
+  x.set(1, 0, 12);
+  x.set(2, 0, -16);
+  x.set(0, 1, 12);
+  x.set(1, 1, 37);
+  x.set(2, 1, -43);
+  x.set(0, 2, -16);
+  x.set(1, 2, -43);
+  x.set(2, 2, 98);
+  
+  linalg::chol(x);
+  
+  REQUIRE( fltcmp::eq(fabs(x.get(0, 0)), (TestType)2) );
+  REQUIRE( fltcmp::eq(fabs(x.get(0, 1)), (TestType)0) );
+  REQUIRE( fltcmp::eq(fabs(x.get(1, 1)), (TestType)1) );
+  REQUIRE( fltcmp::eq(fabs(x.get(2, 1)), (TestType)5) );
+}
