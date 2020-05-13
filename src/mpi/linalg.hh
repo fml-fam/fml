@@ -13,7 +13,9 @@
 #include "../cpu/cpuvec.hh"
 
 #include "internals/bcutils.hh"
+#include "internals/mpi_utils.hh"
 #include "internals/scalapack.hh"
+
 #include "mpimat.hh"
 #include "mpihelpers.hh"
 
@@ -1143,32 +1145,20 @@ namespace linalg
     const len_t n_local = x.ncols_local();
     const len_t mb = x.bf_rows();
     const len_t nb = x.bf_cols();
-    REAL *x_d = x.data_ptr();
     
-    for (len_t j=0; j<n_local; j++)
-    {
-      #pragma omp for simd
-      for (len_t i=0; i<n_local; i++)
-      {
-        const int gi = fml::bcutils::l2g(i, mb, g.nprow(), g.myrow());
-        const int gj = fml::bcutils::l2g(j, nb, g.npcol(), g.mycol());
-        
-        if (gi > gj)
-          x_d[i + m_local*j] = (REAL) 0.0;
-      }
-    }
+    fml::mpi_utils::tri2zero('L', false, g, n, n, m_local, n_local, mb, nb, x.data_ptr());
     
     int info = 0;
     
     REAL tmp;
-    fml::scalapack::gesvd('N', 'N', n, n, x_d, x.desc_ptr(), s.data_ptr(), NULL,
-      NULL, NULL, NULL, &tmp, -1, &info);
+    fml::scalapack::gesvd('N', 'N', n, n, x.data_ptr(), x.desc_ptr(),
+      s.data_ptr(), NULL, NULL, NULL, NULL, &tmp, -1, &info);
     int lwork = (int) tmp;
     if (lwork > work.size())
       work.resize(lwork);
     
-    fml::scalapack::gesvd('N', 'N', n, n, x_d, x.desc_ptr(), s.data_ptr(), NULL,
-      NULL, NULL, NULL, work.data_ptr(), lwork, &info);
+    fml::scalapack::gesvd('N', 'N', n, n, x.data_ptr(), x.desc_ptr(),
+      s.data_ptr(), NULL, NULL, NULL, NULL, work.data_ptr(), lwork, &info);
     fml::linalgutils::check_info(info, "gesvd");
   }
   
@@ -1324,6 +1314,9 @@ namespace linalg
       fml::linalgutils::check_info(info, "potrf");
     else if (info > 0)
       throw std::runtime_error("chol: leading minor of order " + std::to_string(info) + " is not positive definite");
+    
+    fml::mpi_utils::tri2zero('U', false, x.get_grid(), n, n, x.nrows_local(),
+      x.ncols_local(), x.bf_rows(), x.bf_cols(), x.data_ptr());
   }
 }
 
