@@ -13,6 +13,8 @@
 #include <cstring>
 #include <stdexcept>
 
+#include "../_internals/arraytools/src/arraytools.hpp"
+
 #include "../_internals/omp.hh"
 #include "../_internals/print.hh"
 #include "../_internals/univec.hh"
@@ -441,7 +443,9 @@ bool cpuvec<T>::operator==(const cpuvec<T> &x) const
   const T *x_d = x.data_ptr();
   for (len_t i=0; i<this->_size; i++)
   {
-    if (this->data[i] != x_d[i])
+    const T a = this->data[i];
+    const T b = x_d[i];
+    if (!arraytools::fltcmp::eq(a, b))
       return false;
   }
   

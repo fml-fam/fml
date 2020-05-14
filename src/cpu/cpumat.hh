@@ -14,6 +14,8 @@
 #include <random>
 #include <stdexcept>
 
+#include "../_internals/arraytools/src/arraytools.hpp"
+
 #include "../_internals/rand.hh"
 #include "../_internals/omp.hh"
 #include "../_internals/print.hh"
@@ -782,7 +784,9 @@ bool cpumat<REAL>::operator==(const cpumat<REAL> &x) const
   {
     for (len_t i=0; i<this->m; i++)
     {
-      if (this->data[i + this->m*j] != x_d[i + this->m*j])
+      const REAL a = this->data[i + this->m*j];
+      const REAL b = x_d[i + this->m*j];
+      if (!arraytools::fltcmp::eq(a, b))
         return false;
     }
   }

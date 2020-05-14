@@ -17,6 +17,8 @@
 #include "grid.hh"
 #include "internals/bcutils.hh"
 
+#include "../_internals/arraytools/src/arraytools.hpp"
+
 #include "../_internals/print.hh"
 #include "../_internals/rand.hh"
 #include "../_internals/omp.hh"
@@ -1295,7 +1297,9 @@ bool mpimat<REAL>::operator==(const mpimat<REAL> &x) const
   {
     for (len_t i=0; i<this->m_local; i++)
     {
-      if (this->data[i + this->m_local*j] != x_d[i + this->m_local*j])
+      const REAL a = this->data[i + this->m_local*j];
+      const REAL b = x_d[i + this->m_local*j];
+      if (!arraytools::fltcmp::eq(a, b))
       {
         negation_ret = 1;
         break;
