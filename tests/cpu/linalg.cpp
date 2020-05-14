@@ -258,7 +258,7 @@ TEMPLATE_TEST_CASE("solve", "[linalg]", float, double)
 
 
 
-TEMPLATE_TEST_CASE("QR and LQ", "[linalg]", float, double)
+TEMPLATE_TEST_CASE("QR and LQ - square", "[linalg]", float, double)
 {
   // test matrix from here https://en.wikipedia.org/wiki/QR_decomposition#Example_2
   cpumat<TestType> x(3, 3);
@@ -317,6 +317,58 @@ TEMPLATE_TEST_CASE("QR and LQ", "[linalg]", float, double)
   REQUIRE( fltcmp::eq(fabs(Q.get(2, 1)), (TestType)6/175) );
   
   REQUIRE( tR == L );
+}
+
+
+
+TEMPLATE_TEST_CASE("QR", "[linalg]", float, double)
+{
+  cpuvec<TestType> aux, work;
+  cpumat<TestType> Q, R;
+  
+  cpumat<TestType> x(3, 2);
+  x.fill_linspace(1, 6);
+  linalg::qr(false, x, aux);
+  linalg::qr_Q(x, aux, Q, work);
+  linalg::qr_R(x, R);
+  auto test = linalg::matmult(false, false, (TestType)1.0, Q, R);
+  x.fill_linspace(1, 6);
+  REQUIRE( x == test );
+  
+  cpumat<TestType> y(2, 3);
+  y.fill_linspace(1, 6);
+  linalg::qr(false, y, aux);
+  linalg::qr_Q(y, aux, Q, work);
+  linalg::qr_R(y, R);
+  linalg::matmult(false, false, (TestType)1.0, Q, R, test);
+  y.fill_linspace(1, 6);
+  REQUIRE( y == test );
+}
+
+
+
+TEMPLATE_TEST_CASE("LQ", "[linalg]", float, double)
+{
+  cpuvec<TestType> aux, work;
+  cpumat<TestType> L, Q;
+  
+  cpumat<TestType> x(3, 2);
+  x.fill_linspace(1, 6);
+  linalg::lq(x, aux);
+  linalg::lq_Q(x, aux, Q, work);
+  linalg::lq_L(x, L);
+  auto test = linalg::matmult(false, false, (TestType)1.0, L, Q);
+  x.fill_linspace(1, 6);
+  REQUIRE( x == test );
+  
+  cpumat<TestType> y(2, 3);
+  y.fill_linspace(1, 6);
+  linalg::lq(y, aux);
+  linalg::lq_Q(y, aux, Q, work);
+  linalg::lq_L(y, L);
+  linalg::matmult(false, false, (TestType)1.0, L, Q, test);
+  y.fill_linspace(1, 6);
+  REQUIRE( y == test );
 }
 
 
