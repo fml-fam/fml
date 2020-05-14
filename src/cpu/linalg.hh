@@ -824,17 +824,17 @@ namespace linalg
     
     int info = 0;
     REAL tmp;
-    fml::lapack::ormqr('L', 'N', m, minmn, n, QR.data_ptr(), m, qraux.data_ptr(),
-      Q.data_ptr(), m, &tmp, -1, &info);
+    fml::lapack::ormqr('L', 'N', m, minmn, m, QR.data_ptr(), m, NULL,
+      NULL, m, &tmp, -1, &info);
     
     int lwork = (int) tmp;
     if (lwork > work.size())
       work.resize(lwork);
     
-    Q.resize(m, n);
+    Q.resize(m, minmn);
     Q.fill_eye();
     
-    fml::lapack::ormqr('L', 'N', m, minmn, n, QR.data_ptr(), m, qraux.data_ptr(),
+    fml::lapack::ormqr('L', 'N', m, minmn, m, QR.data_ptr(), m, qraux.data_ptr(),
       Q.data_ptr(), m, work.data_ptr(), lwork, &info);
     fml::linalgutils::check_info(info, "ormqr");
   }
@@ -888,7 +888,8 @@ namespace linalg
       if (lwork > work.size())
         work.resize(lwork);
       
-      fml::lapack::gelqf(m, n, x.data_ptr(), m, lqaux.data_ptr(), work.data_ptr(), lwork, &info);
+      fml::lapack::gelqf(m, n, x.data_ptr(), m, lqaux.data_ptr(), work.data_ptr(),
+        lwork, &info);
       
       if (info != 0)
         fml::linalgutils::check_info(info, "gelqf");
@@ -982,18 +983,18 @@ namespace linalg
     
     int info = 0;
     REAL tmp;
-    fml::lapack::ormlq('R', 'N', m, n, m, LQ.data_ptr(), m, lqaux.data_ptr(),
-      Q.data_ptr(), m, &tmp, -1, &info);
+    fml::lapack::ormlq('R', 'N', minmn, n, minmn, LQ.data_ptr(), m, NULL,
+      NULL, minmn, &tmp, -1, &info);
     
     int lwork = (int) tmp;
     if (lwork > work.size())
       work.resize(lwork);
     
-    Q.resize(m, n);
+    Q.resize(minmn, n);
     Q.fill_eye();
     
-    fml::lapack::ormlq('R', 'N', m, n, m, LQ.data_ptr(), m, lqaux.data_ptr(),
-      Q.data_ptr(), m, work.data_ptr(), lwork, &info);
+    fml::lapack::ormlq('R', 'N', minmn, n, minmn, LQ.data_ptr(), m, lqaux.data_ptr(),
+      Q.data_ptr(), minmn, work.data_ptr(), lwork, &info);
     fml::linalgutils::check_info(info, "ormlq");
   }
   
