@@ -867,20 +867,20 @@ namespace linalg
     
     const int *descQR = QR.desc_ptr();
     
-    Q.resize(m, n);
+    Q.resize(m, minmn);
     Q.fill_eye();
     const int *descQ = Q.desc_ptr();
     
     int info = 0;
     REAL tmp;
-    fml::scalapack::ormqr('L', 'N', m, minmn, n, NULL, descQR,
+    fml::scalapack::ormqr('L', 'N', m, minmn, minmn, NULL, descQR,
       NULL, NULL, descQ, &tmp, -1, &info);
     
     int lwork = (int) tmp;
     if (lwork > work.size())
       work.resize(lwork);
     
-    fml::scalapack::ormqr('L', 'N', m, minmn, n, QR.data_ptr(), descQR,
+    fml::scalapack::ormqr('L', 'N', m, minmn, minmn, QR.data_ptr(), descQR,
       qraux.data_ptr(), Q.data_ptr(), descQ, work.data_ptr(), lwork, &info);
     fml::linalgutils::check_info(info, "ormqr");
   }
@@ -911,8 +911,9 @@ namespace linalg
     
     const len_t m = QR.nrows();
     const len_t n = QR.ncols();
+    const len_t minmn = std::min(m, n);
     
-    R.resize(n, n);
+    R.resize(minmn, n);
     R.fill_zero();
     fml::scalapack::lacpy('U', m, n, QR.data_ptr(), QR.desc_ptr(), R.data_ptr(),
       R.desc_ptr());
@@ -1045,20 +1046,20 @@ namespace linalg
     
     const int *descLQ = LQ.desc_ptr();
     
-    Q.resize(m, n);
+    Q.resize(minmn, n);
     Q.fill_eye();
     const int *descQ = Q.desc_ptr();
     
     int info = 0;
     REAL tmp;
-    fml::scalapack::ormlq('R', 'N', m, n, m, NULL, descLQ,
+    fml::scalapack::ormlq('R', 'N', minmn, n, minmn, NULL, descLQ,
       NULL, NULL, descQ, &tmp, -1, &info);
     
     int lwork = (int) tmp;
     if (lwork > work.size())
       work.resize(lwork);
     
-    fml::scalapack::ormlq('R', 'N', m, n, m, LQ.data_ptr(), descLQ,
+    fml::scalapack::ormlq('R', 'N', minmn, n, minmn, LQ.data_ptr(), descLQ,
       lqaux.data_ptr(), Q.data_ptr(), descQ, work.data_ptr(), lwork, &info);
     fml::linalgutils::check_info(info, "ormlq");
   }
