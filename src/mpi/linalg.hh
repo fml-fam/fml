@@ -414,15 +414,20 @@ namespace linalg
     const REAL *a = x.data_ptr();
     const grid g = x.get_grid();
     
+    for (len_t i=0; i<m_local; i++)
+    {
+      len_t gi = fml::bcutils::l2g(i, x.bf_rows(), g.nprow(), g.myrow());
+      
+      if (ipiv[i] != (gi + 1))
+        sgn = -sgn;
+    }
+    
     for (len_t j=0; j<n_local; j++)
     {
       for (len_t i=0; i<m_local; i++)
       {
         len_t gi = fml::bcutils::l2g(i, x.bf_rows(), g.nprow(), g.myrow());
         len_t gj = fml::bcutils::l2g(j, x.bf_cols(), g.npcol(), g.mycol());
-        
-        if (ipiv[i] != (gi + 1))
-          sgn = -sgn;
         
         if (gi == gj)
         {
@@ -441,7 +446,7 @@ namespace linalg
     g.allreduce(1, 1, &mod);
     
     sgn = (sgn<0 ? 1 : 0);
-    g.allreduce(1, 1, &sgn);
+    g.allreduce(1, 1, &sgn, 'C');
     sgn = (sgn%2==0 ? 1 : -1);
     
     modulus = mod;
