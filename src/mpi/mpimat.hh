@@ -328,6 +328,12 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols)
   {
     this->m = nrows;
     this->n = ncols;
+    
+    this->m_local = fml::bcutils::numroc(nrows, this->mb, this->g.myrow(), 0, this->g.nprow());
+    this->n_local = fml::bcutils::numroc(ncols, this->nb, this->g.mycol(), 0, this->g.npcol());
+    
+    fml::bcutils::descinit(this->desc, this->g.ictxt(), nrows, ncols, this->mb, this->nb, this->m_local);
+    
     return;
   }
   
@@ -378,6 +384,12 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
   {
     this->m = nrows;
     this->n = ncols;
+    
+    this->m_local = fml::bcutils::numroc(nrows, bf_rows, this->g.myrow(), 0, this->g.nprow());
+    this->n_local = fml::bcutils::numroc(ncols, bf_cols, this->g.mycol(), 0, this->g.npcol());
+    
+    fml::bcutils::descinit(this->desc, this->g.ictxt(), nrows, ncols, bf_rows, bf_cols, this->m_local);
+    
     return;
   }
   
