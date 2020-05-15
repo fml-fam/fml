@@ -183,20 +183,30 @@ TEMPLATE_TEST_CASE("trace", "[linalg]", float, double)
 
 TEMPLATE_TEST_CASE("svd", "[linalg]", float, double)
 {
+  len_t m = 3;
   len_t n = 2;
   
   cpuvec<TestType> v(n);
   v.set(0, 2);
   v.set(1, 5);
   
-  cpumat<TestType> x(n, n);
-  x.fill_diag(v);
+  cpuvec<TestType> s1, s2, s3;
   
-  cpuvec<TestType> s;
-  linalg::svd(x, s);
+  cpumat<TestType> x(m, n);
+  
+  x.fill_diag(v);
+  linalg::svd(x, s1);
+  
+  x.fill_diag(v);
+  linalg::tssvd(x, s2);
+  
+  x.fill_diag(v);
+  linalg::cpsvd(x, s3);
   
   v.rev();
-  REQUIRE( v == s );
+  REQUIRE( v == s1 );
+  REQUIRE( v == s2 );
+  REQUIRE( v == s3 );
 }
 
 

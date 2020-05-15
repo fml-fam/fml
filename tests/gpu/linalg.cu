@@ -184,20 +184,30 @@ TEMPLATE_TEST_CASE("trace", "[linalg]", float, double)
 
 TEMPLATE_TEST_CASE("svd", "[linalg]", float, double)
 {
+  len_t m = 3;
   len_t n = 2;
   
   gpuvec<TestType> v(c, n);
   v.set(0, 2);
   v.set(1, 5);
   
-  gpumat<TestType> x(c, n, n);
-  x.fill_diag(v);
+  gpuvec<TestType> s1(c), s2(c), s3(c);
   
-  gpuvec<TestType> s(c);
-  linalg::svd(x, s);
+  gpumat<TestType> x(c, m, n);
+  
+  x.fill_diag(v);
+  linalg::svd(x, s1);
+  
+  x.fill_diag(v);
+  linalg::tssvd(x, s2);
+  
+  x.fill_diag(v);
+  linalg::cpsvd(x, s3);
   
   v.rev();
-  REQUIRE( v == s );
+  REQUIRE( v == s1 );
+  REQUIRE( v == s2 );
+  REQUIRE( v == s3 );
 }
 
 
