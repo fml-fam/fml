@@ -80,7 +80,7 @@ namespace linalg
     len_t m, n;
     fml::linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
     
-    grid g = x.get_grid();
+    const grid g = x.get_grid();
     mpimat<REAL> ret(g, m, n, x.bf_rows(), x.bf_cols());
     add(transx, transy, alpha, beta, x, y, ret);
     return ret;
@@ -115,7 +115,7 @@ namespace linalg
     len_t m, n, k;
     fml::linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
     
-    grid g = x.get_grid();
+    const grid g = x.get_grid();
     mpimat<REAL> ret(g, m, n, x.bf_rows(), x.bf_cols());
     
     const char ctransx = transx ? 'T' : 'N';
@@ -208,7 +208,7 @@ namespace linalg
   mpimat<REAL> crossprod(const REAL alpha, const mpimat<REAL> &x)
   {
     const len_t n = x.ncols();
-    grid g = x.get_grid();
+    const grid g = x.get_grid();
     mpimat<REAL> ret(g, n, n, x.bf_rows(), x.bf_cols());
     
     crossprod(alpha, x, ret);
@@ -256,7 +256,7 @@ namespace linalg
   mpimat<REAL> tcrossprod(const REAL alpha, const mpimat<REAL> &x)
   {
     const len_t n = x.nrows();
-    grid g = x.get_grid();
+    const grid g = x.get_grid();
     mpimat<REAL> ret(g, n, n, x.bf_rows(), x.bf_cols());
     
     tcrossprod(alpha, x, ret);
@@ -304,7 +304,7 @@ namespace linalg
   {
     const len_t m = x.nrows();
     const len_t n = x.ncols();
-    grid g = x.get_grid();
+    const grid g = x.get_grid();
     
     mpimat<REAL> tx(g, n, m, x.bf_rows(), x.bf_cols());
     xpose(x, tx);
@@ -409,24 +409,17 @@ namespace linalg
     
     const len_t m_local = x.nrows_local();
     const len_t n_local = x.ncols_local();
-    const int mb = x.bf_rows();
-    const int nb = x.bf_cols();
     
     const int *ipiv = p.data_ptr();
     const REAL *a = x.data_ptr();
-    
-    grid g = x.get_grid();
-    const int nprow = g.nprow();
-    const int npcol = g.npcol();
-    const int myrow = g.myrow();
-    const int mycol = g.mycol();
+    const grid g = x.get_grid();
     
     for (len_t j=0; j<n_local; j++)
     {
       for (len_t i=0; i<m_local; i++)
       {
-        len_t gi = fml::bcutils::l2g(i, mb, nprow, myrow);
-        len_t gj = fml::bcutils::l2g(j, nb, npcol, mycol);
+        len_t gi = fml::bcutils::l2g(i, x.bf_rows(), g.nprow(), g.myrow());
+        len_t gj = fml::bcutils::l2g(j, x.bf_cols(), g.npcol(), g.mycol());
         
         if (ipiv[i] != (gi + 1))
           sgn = -sgn;
@@ -474,7 +467,7 @@ namespace linalg
     const len_t m_local = x.nrows_local();
     const int mb = x.bf_rows();
     const int nb = x.bf_cols();
-    grid g = x.get_grid();
+    const grid g = x.get_grid();
     
     REAL tr = 0;
     for (len_t gi=0; gi<minmn; gi++)
@@ -1105,7 +1098,7 @@ namespace linalg
     if (m <= n)
       throw std::runtime_error("'x' must have more rows than cols");
     
-    grid g = x.get_grid();
+    const grid g = x.get_grid();
     
     cpuvec<REAL> qraux(n);
     cpuvec<REAL> work(m);
@@ -1135,7 +1128,7 @@ namespace linalg
     if (m <= n)
       throw std::runtime_error("'x' must have more rows than cols");
     
-    grid g = x.get_grid();
+    const grid g = x.get_grid();
     s.resize(n);
     
     cpuvec<REAL> qraux(n);
@@ -1200,7 +1193,7 @@ namespace linalg
     const len_t n = x.ncols();
     const len_t minmn = std::min(m, n);
     
-    grid g = x.get_grid();
+    const grid g = x.get_grid();
     mpimat<REAL> cp(g, x.bf_rows(), x.bf_cols());
     
     if (m >= n)
@@ -1263,7 +1256,7 @@ namespace linalg
     const len_t m = x.nrows();
     const len_t n = x.ncols();
     
-    grid g = x.get_grid();
+    const grid g = x.get_grid();
     mpimat<REAL> cp(g, x.bf_rows(), x.bf_cols());
     
     if (m >= n)
