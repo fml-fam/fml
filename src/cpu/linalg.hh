@@ -126,7 +126,7 @@ namespace linalg
   template <typename REAL>
   cpumat<REAL> matmult(const bool transx, const bool transy, const REAL alpha, const cpumat<REAL> &x, const cpumat<REAL> &y)
   {
-    int m, n, k;
+    len_t m, n, k;
     const len_t mx = x.nrows();
     const len_t my = y.nrows();
     
@@ -161,7 +161,7 @@ namespace linalg
   template <typename REAL>
   void matmult(const bool transx, const bool transy, const REAL alpha, const cpumat<REAL> &x, const cpumat<REAL> &y, cpumat<REAL> &ret)
   {
-    int m, n, k;
+    len_t m, n, k;
     const len_t mx = x.nrows();
     const len_t my = y.nrows();
     
@@ -173,7 +173,9 @@ namespace linalg
     const char ctransx = transx ? 'T' : 'N';
     const char ctransy = transy ? 'T' : 'N';
     
-    fml::lapack::gemm(ctransx, ctransy, m, n, k, alpha, x.data_ptr(), mx, y.data_ptr(), my, (REAL)0, ret.data_ptr(), m);
+    fml::lapack::gemm(ctransx, ctransy, m, n, k, alpha,
+      x.data_ptr(), mx, y.data_ptr(), my,
+      (REAL)0, ret.data_ptr(), m);
   }
   
   
