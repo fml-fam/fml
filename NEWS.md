@@ -1,19 +1,37 @@
 # Release 0.2-0 (//):
 
 New:
-  * * added to linalg namespace for cpumat, gpumat, and mpimat:
+  * Added to linalg namespace for cpumat, gpumat, and mpimat:
       - qr()
       - qr_Q()
       - qr_R()
+      - lq()
+      - lq_L()
+      - lq_Q()
       - tssvd()
       - cpsvd()
+      - det()
+      - chol()
+  * Created dimops namespace
+  * Added to dimops namespace for cpumat, gpumat, and mpimat:
+      - rowsums()
+      - rowmeans()
+      - colsums()
+      - colmeans()
+      - scale()
+  * Created stats namespace
+  * Added to stats namespace for cpumat, gpumat, and mpimat:
+      - pca()
 
 API Changes:
   * Added default argument to gpuhelpers::new_card()
 
 Bug Fixes:
+  * Fixed major resize bug in mpimat not updating descriptor arrays.
+  * Changed matrix object `==` tests to use `arraytools::fltcmp::eq()` instead
+    of `==` on fundamental types.
   * Changed seed setter behavior in mpimat rng functions: local seed is now
-  computed as seed + myrow + nprow*mycol.
+    computed as seed + myrow + nprow*mycol.
   * Fixed several memory issues in gpumat linalg::svd().
   * Fixed an internal logic error in gpumat linalg::svd().
 
@@ -27,11 +45,12 @@ Documentation:
 # Release 0.1-0 (2/5/2020):
 
 New:
-  * created cpumat and cpuvec classes
-  * created gpumat and gpuvec classes
-  * created mpimat class
-  * created parmat_cpu and parmat_gpu classes
-  * added to linalg namespace for cpumat, gpumat, and mpimat:
+  * Created cpumat and cpuvec classes
+  * Created gpumat and gpuvec classes
+  * Created mpimat class
+  * Created parmat_cpu and parmat_gpu classes
+  * Created linalg namespace
+  * Added to linalg namespace for cpumat, gpumat, and mpimat:
       - add()
       - matmult()
       - crossprod()
@@ -42,15 +61,18 @@ New:
       - eigen_sym()
       - invert()
       - solve()
-  * added to linalg namespace for parmat:
+  * Added to linalg namespace for parmat:
       - crossprod()
-  * added to cpuhelpers namespace
+  * Created cpuhelpers namespace
+  * Added to cpuhelpers namespace
       - cpu2cpu()
-  * added to gpuhelpers namespace
+  * Created gpuhelpers namespace
+  * Added to gpuhelpers namespace
       - gpu2cpu()
       - cpu2gpu()
       - gpu2gpu()
-  * added to mpihelpers namespace
+  * Created mpihelpers namespace
+  * Added to mpihelpers namespace
       - mpi2cpu()
       - cpu2mpi()
       - mpi2mpi()
