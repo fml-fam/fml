@@ -12,8 +12,8 @@ int main()
   
   mpimat<float> x(g, n, n, 1, 1);
   mpimat<float> y(g, n, n, 1, 1);
-  x.fill_linspace(1.f, (float) n*n);
-  y.fill_linspace((float) n*n, 1.f);
+  x.fill_linspace(1, n*n);
+  y.fill_linspace(n*n, 1);
   
   mpimat<float> z = linalg::matmult(false, false, 1.0f, x, y);
   z.info();

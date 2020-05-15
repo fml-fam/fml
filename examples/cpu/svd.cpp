@@ -8,7 +8,7 @@ int main()
   len_t n = 2;
   
   cpumat<float> x(m, n);
-  x.fill_linspace(1.f, (float)m*n);
+  x.fill_linspace(1, m*n);
   
   x.info();
   x.print(0);

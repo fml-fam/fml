@@ -11,7 +11,7 @@ int main()
   len_t n = 2;
   
   mpimat<float> x(g, m, n, 1, 1);
-  x.fill_linspace(1.f, (float)m*n);
+  x.fill_linspace(1, m*n);
   
   x.info();
   x.print(0);

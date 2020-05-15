@@ -12,7 +12,7 @@ int main()
   len_t n = 2;
   
   gpumat<float> x(c, m, n);
-  x.fill_linspace(1.f, (float)m*n);
+  x.fill_linspace(1, m*n);
   
   x.info();
   x.print(0);
