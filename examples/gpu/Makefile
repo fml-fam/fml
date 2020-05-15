@@ -7,7 +7,7 @@ NV_LDFLAGS = -lcudart -lcublas -lcusolver -lnvidia-ml
 WARNFLAGS = -Wall -pedantic -Wextra
 
 
-all: clean card gpumat half nvml
+all: clean card gpumat half nvml svd
 
 card:
 	$(NVCC) $(NVCCFLAGS) $(CXXFLAGS) card.cu -o card $(NV_LDFLAGS)
@@ -21,5 +21,8 @@ half:
 nvml:
 	$(CXX) $(CXXFLAGS) $(WARNFLAGS) -I/usr/local/cuda/include nvml.cpp -o nvml -lnvidia-ml
 
+svd:
+	$(NVCC) $(NVCCFLAGS) $(CXXFLAGS) svd.cu -o svd $(NV_LDFLAGS)
+
 clean:
-	rm -rf card gpumat half nvml
+	rm -rf card gpumat half nvml svd
