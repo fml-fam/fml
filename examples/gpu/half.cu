@@ -21,8 +21,10 @@ int main()
   gpuhelpers::gpu2gpu(y, yh);
   
   gpumat<__half> zh = linalg::matmult(false, false, (__half)1.f, xh, yh);
-  gpumat<float> z(c);
+  zh.info();
+  zh.print(0);
   
+  gpumat<float> z(c);
   gpuhelpers::gpu2gpu(zh, z);
   z.info();
   z.print(0);
