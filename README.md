@@ -82,14 +82,15 @@ The project is young and things are still mostly evolving. The current status is
 * Frozen - Existing APIs will not be developed further.
     - none
 * Stable - Existing APIs are not expected to change. Some new features may be added slowly.
-    - none
-* Stabilizing - Core class naming and construction/destruction is probably finalized. Function/method names and arguments are solidifying, but may change somewhat. New features are still being developed.
     - cpumat/gpumat/mpimat classes
     - cpuhelpers namespace functions
     - gpuhelpers namespace functions
-    - linalg namespace (all but parmat)
-* Evolving - Function/method names and arguments are subject to change. New features are actively being developed.
     - mpihelpers namespace functions
+* Stabilizing - Core class naming and construction/destruction is probably finalized. Function/method names and arguments are solidifying, but may change somewhat. New features are still being developed.
+    - linalg namespace functions (all but parmat)
+    - dimops namespace functions
+* Evolving - Function/method names and arguments are subject to change. New features are actively being developed.
+    - stats namespace functions
 * Experimental - Nothing is remotely finalized.
     - parmat - all functions and methods
 
