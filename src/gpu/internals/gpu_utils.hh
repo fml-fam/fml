@@ -7,6 +7,8 @@
 #pragma once
 
 
+#include "../../_internals/types.hh"
+
 #include "../arch/arch.hh"
 #include "launcher.hh"
 
@@ -18,11 +20,11 @@ namespace fml
     namespace internals
     {
       template <typename REAL>
-      __global__ void kernel_lacpy(const gpublas_fillmode_t uplo, const int m, const int n, const REAL *A, const int lda,
-        REAL *B, const int ldb)
+      __global__ void kernel_lacpy(const gpublas_fillmode_t uplo, const len_t m,
+        const len_t n, const REAL *A, const len_t lda, REAL *B, const len_t ldb)
       {
-        int i = blockDim.x*blockIdx.x + threadIdx.x;
-        int j = blockDim.y*blockIdx.y + threadIdx.y;
+        len_t i = blockDim.x*blockIdx.x + threadIdx.x;
+        len_t j = blockDim.y*blockIdx.y + threadIdx.y;
         
         if ((i < m && j < n) && (uplo == GPUBLAS_FILL_U && i <= j) || (uplo == GPUBLAS_FILL_L && i >= j))
             B[i + ldb*j] = A[i + lda*j];
@@ -30,8 +32,8 @@ namespace fml
     }
     
     template <typename REAL>
-    void lacpy(const gpublas_fillmode_t uplo, const int m, const int n,
-      const REAL *A, const int lda, REAL *B, const int ldb)
+    void lacpy(const gpublas_fillmode_t uplo, const len_t m, const len_t n,
+      const REAL *A, const len_t lda, REAL *B, const len_t ldb)
     {
       auto dim_block = fml::kernel_launcher::dim_block2();
       auto dim_grid = fml::kernel_launcher::dim_grid(m, n);
@@ -43,10 +45,11 @@ namespace fml
     namespace internals
     {
       template <typename REAL>
-      __global__ void kernel_tri2zero(const char uplo, const bool diag, const len_t m, const len_t n, REAL *A, const len_t lda)
+      __global__ void kernel_tri2zero(const char uplo, const bool diag,
+        const len_t m, const len_t n, REAL *A, const len_t lda)
       {
-        int i = blockDim.x*blockIdx.x + threadIdx.x;
-        int j = blockDim.y*blockIdx.y + threadIdx.y;
+        len_t i = blockDim.x*blockIdx.x + threadIdx.x;
+        len_t j = blockDim.y*blockIdx.y + threadIdx.y;
         
         if ((i < m && j < n) && ((diag && i == j) || (uplo == 'U' && i < j) || (uplo == 'L' && i > j)))
           A[i + lda*j] = (REAL) 0.0;
@@ -54,8 +57,8 @@ namespace fml
     }
     
     template <typename REAL>
-    void tri2zero(const char uplo, const bool diag, const int m, const int n,
-      REAL *A, const int lda)
+    void tri2zero(const char uplo, const bool diag, const len_t m, const len_t n,
+      REAL *A, const len_t lda)
     {
       auto dim_block = fml::kernel_launcher::dim_block2();
       auto dim_grid = fml::kernel_launcher::dim_grid(m, n);
