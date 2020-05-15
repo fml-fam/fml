@@ -112,7 +112,7 @@ namespace linalg
   {
     err::check_grid(x, y);
     
-    int m, n, k;
+    len_t m, n, k;
     fml::linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
     
     grid g = x.get_grid();
@@ -154,7 +154,7 @@ namespace linalg
     err::check_grid(x, y);
     err::check_grid(x, ret);
     
-    int m, n, k;
+    len_t m, n, k;
     fml::linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);
     
     if (m != ret.nrows() || n != ret.ncols())
