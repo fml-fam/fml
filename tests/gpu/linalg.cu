@@ -182,6 +182,31 @@ TEMPLATE_TEST_CASE("trace", "[linalg]", float, double)
 
 
 
+TEMPLATE_TEST_CASE("det", "[linalg]", float, double)
+{
+  len_t n = 2;
+  
+  gpumat<TestType> x(c, n, n);
+  x.fill_linspace(1, n*n);
+  
+  int sign;
+  TestType modulus;
+  
+  linalg::det(x, sign, modulus);
+  REQUIRE( fltcmp::eq(sign, -1) );
+  REQUIRE( fltcmp::eq(modulus, log(2.0)) );
+  
+  n = 4;
+  x.resize(n, n);
+  x.fill_linspace(1, n*n);
+  
+  linalg::det(x, sign, modulus);
+  REQUIRE( fltcmp::eq(sign, 1) );
+  REQUIRE( fltcmp::eq(sign*exp(modulus), 0) );
+}
+
+
+
 TEMPLATE_TEST_CASE("svd", "[linalg]", float, double)
 {
   len_t m = 3;
