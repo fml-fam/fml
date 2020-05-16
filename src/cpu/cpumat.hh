@@ -438,13 +438,12 @@ template <typename REAL>
 void cpumat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL max)
 {
   std::mt19937 mt(seed);
+  static std::uniform_real_distribution<REAL> dist(min, max);
+  
   for (len_t j=0; j<this->n; j++)
   {
     for (len_t i=0; i<this->m; i++)
-    {
-      static std::uniform_real_distribution<REAL> dist(min, max);
       this->data[i + this->m*j] = dist(mt);
-    }
   }
 }
 
@@ -468,13 +467,12 @@ template <typename REAL>
 void cpumat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL sd)
 {
   std::mt19937 mt(seed);
+  static std::normal_distribution<REAL> dist(mean, sd);
+  
   for (len_t j=0; j<this->n; j++)
   {
     for (len_t i=0; i<this->m; i++)
-    {
-      static std::normal_distribution<REAL> dist(mean, sd);
       this->data[i + this->m*j] = dist(mt);
-    }
   }
 }
 
