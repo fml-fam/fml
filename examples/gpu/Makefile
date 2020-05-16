@@ -7,10 +7,13 @@ NV_LDFLAGS = -lcudart -lcublas -lcusolver -lnvidia-ml
 WARNFLAGS = -Wall -pedantic -Wextra
 
 
-all: clean card gpumat half nvml svd
+all: clean card det gpumat half nvml svd
 
 card:
 	$(NVCC) $(NVCCFLAGS) $(CXXFLAGS) card.cu -o card $(NV_LDFLAGS)
+
+det:
+	$(NVCC) $(NVCCFLAGS) $(CXXFLAGS) det.cu -o det $(NV_LDFLAGS)
 
 gpumat:
 	$(NVCC) $(NVCCFLAGS) $(CXXFLAGS) gpumat.cu -o gpumat $(NV_LDFLAGS)
@@ -25,4 +28,4 @@ svd:
 	$(NVCC) $(NVCCFLAGS) $(CXXFLAGS) svd.cu -o svd $(NV_LDFLAGS)
 
 clean:
-	rm -rf card gpumat half nvml svd
+	rm -rf card det gpumat half nvml svd
