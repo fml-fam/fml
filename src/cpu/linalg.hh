@@ -927,7 +927,7 @@ namespace linalg
   }
   
   /**
-    @brief Recover the R matrix from an LQ decomposition.
+    @brief Recover the L matrix from an LQ decomposition.
     
     @param[in] LQ The compact LQ factorization, as computed via `lq()`.
     @param[out] L The L matrix.
