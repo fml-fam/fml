@@ -11,6 +11,8 @@
 
 #include "../../_internals/types.hh"
 
+#include "../../_internals/arraytools/src/arraytools.cuh"
+
 
 namespace fml
 {
@@ -221,7 +223,9 @@ namespace fml
       
       if (i < m && j < n)
       {
-        if (x[i + m*j] != y[i + m*j])
+        bool all_eq_local;
+        arraytools::fltcmp_gpu::eq(x + i + m*j, y + i + m*j, &all_eq_local);
+        if (!all_eq_local)
           atomicMin(all_eq, 0);
       }
     }
