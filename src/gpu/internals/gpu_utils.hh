@@ -26,7 +26,7 @@ namespace fml
         len_t i = blockDim.x*blockIdx.x + threadIdx.x;
         len_t j = blockDim.y*blockIdx.y + threadIdx.y;
         
-        if ((i < m && j < n) && (uplo == GPUBLAS_FILL_U && i <= j) || (uplo == GPUBLAS_FILL_L && i >= j))
+        if ((i < m && j < n) && ((uplo == GPUBLAS_FILL_U && i <= j) || (uplo == GPUBLAS_FILL_L && i >= j)))
             B[i + ldb*j] = A[i + lda*j];
       }
     }
