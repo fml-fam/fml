@@ -311,8 +311,6 @@ TEMPLATE_TEST_CASE("QR and LQ - square", "[linalg]", float, double)
   
   auto orig = x.dupe();
   
-  
-  
   // QR
   cpuvec<TestType> aux;
   linalg::qr(false, x, aux);
@@ -333,8 +331,6 @@ TEMPLATE_TEST_CASE("QR and LQ - square", "[linalg]", float, double)
   REQUIRE( fltcmp::eq(fabs(R.get(1, 0)), 0) );
   REQUIRE( fltcmp::eq(fabs(R.get(0, 1)), (TestType)21) );
   REQUIRE( fltcmp::eq(fabs(R.get(1, 2)), (TestType)70) );
-  
-  
   
   // LQ
   linalg::xpose(orig, x);
