@@ -898,7 +898,8 @@ namespace linalg
     @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
-  void qr_Q(const gpumat<REAL> &QR, const gpuvec<REAL> &qraux, gpumat<REAL> &Q, gpuvec<REAL> &work)
+  void qr_Q(const gpumat<REAL> &QR, const gpuvec<REAL> &qraux, gpumat<REAL> &Q,
+    gpuvec<REAL> &work)
   {
     err::check_card(QR, qraux);
     err::check_card(QR, Q);
@@ -912,20 +913,20 @@ namespace linalg
     
     int lwork;
     gpulapack_status_t check = gpulapack::ormqr_buflen(c->lapack_handle(),
-      GPUBLAS_SIDE_LEFT, GPUBLAS_OP_N, m, minmn, n, QR.data_ptr(), m,
+      GPUBLAS_SIDE_LEFT, GPUBLAS_OP_N, m, minmn, minmn, QR.data_ptr(), m,
       qraux.data_ptr(), Q.data_ptr(), m, &lwork);
     
     if (lwork > work.size())
       work.resize(lwork);
     
-    Q.resize(m, n);
+    Q.resize(m, minmn);
     Q.fill_eye();
     
     int info = 0;
     gpuscalar<int> info_device(c, info);
     
     check = gpulapack::ormqr(c->lapack_handle(), GPUBLAS_SIDE_LEFT,
-      GPUBLAS_OP_N, m, minmn, n, QR.data_ptr(), m, qraux.data_ptr(),
+      GPUBLAS_OP_N, m, minmn, minmn, QR.data_ptr(), m, qraux.data_ptr(),
       Q.data_ptr(), m, work.data_ptr(), lwork, info_device.data_ptr());
     
     info_device.get_val(&info);
@@ -957,10 +958,141 @@ namespace linalg
     
     const len_t m = QR.nrows();
     const len_t n = QR.ncols();
+    const len_t minmn = std::min(m, n);
     
-    R.resize(n, n);
+    R.resize(minmn, n);
     R.fill_zero();
-    fml::gpu_utils::lacpy(GPUBLAS_FILL_U, m, n, QR.data_ptr(), m, R.data_ptr(), n);
+    fml::gpu_utils::lacpy(GPUBLAS_FILL_U, m, n, QR.data_ptr(), m, R.data_ptr(), minmn);
+  }
+  
+  
+  
+  /**
+    @brief Computes the LQ decomposition.
+    
+    @details The factorization works mostly in-place by modifying the input
+    data. After execution, the matrix will be the LAPACK-like compact LQ
+    representation.
+    
+    @param[inout] x Input data matrix. Values are overwritten.
+    @param[out] lqaux Auxiliary data for compact LQ.
+    
+    @impl NOTE: not directly supported by cuSOLVER (vendor gpulapack + cuda
+    backend). In that case, the matrix is transposed and a QR is performed.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void lq(gpumat<REAL> &x, gpuvec<REAL> &lqaux)
+  {
+    err::check_card(x, lqaux);
+    
+    gpumat<REAL> tx(x.get_card());
+    xpose(x, tx);
+    
+    gpuvec<REAL> work(x.get_card());
+    qr_internals(false, tx, lqaux, work);
+    
+    xpose(tx, x);
+  }
+  
+  /**
+    @brief Recover the L matrix from an LQ decomposition.
+    
+    @param[in] LQ The compact LQ factorization, as computed via `lq()`.
+    @param[out] L The L matrix.
+    
+    @impl NOTE: not directly supported by cuSOLVER (vendor gpulapack + cuda
+    backend). In that case, the matrix is transposed and a QR is performed.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void lq_L(const gpumat<REAL> &LQ, gpumat<REAL> &L)
+  {
+    err::check_card(LQ, L);
+    
+    const len_t m = LQ.nrows();
+    const len_t n = LQ.ncols();
+    const len_t minmn = std::min(m, n);
+    
+    L.resize(m, minmn);
+    L.fill_zero();
+    fml::gpu_utils::lacpy(GPUBLAS_FILL_L, m, n, LQ.data_ptr(), m, L.data_ptr(), m);
+  }
+  
+  /**
+    @brief Recover the Q matrix from an LQ decomposition.
+    
+    @param[in] LQ The compact LQ factorization, as computed via `lq()`.
+    @param[in] lqaux Auxiliary data for compact LQ.
+    @param[out] Q The Q matrix.
+    @param[out] work Workspace array. Will be resized as necessary.
+    
+    @impl NOTE: not directly supported by cuSOLVER (vendor gpulapack + cuda
+    backend). In that case, the matrix is transposed and a QR is performed.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void lq_Q(const gpumat<REAL> &LQ, const gpuvec<REAL> &lqaux, gpumat<REAL> &Q,
+    gpuvec<REAL> &work)
+  {
+    err::check_card(LQ, lqaux);
+    err::check_card(LQ, Q);
+    err::check_card(LQ, work);
+    
+    gpumat<REAL> QR(LQ.get_card());
+    xpose(LQ, QR);
+    
+    const len_t m = LQ.nrows();
+    const len_t n = LQ.ncols();
+    const len_t minmn = std::min(m, n);
+    
+    auto c = QR.get_card();
+    
+    int lwork;
+    gpulapack_status_t check = gpulapack::ormqr_buflen(c->lapack_handle(),
+      GPUBLAS_SIDE_RIGHT, GPUBLAS_OP_T, minmn, n, n, QR.data_ptr(), QR.nrows(),
+      lqaux.data_ptr(), Q.data_ptr(), minmn, &lwork);
+    
+    if (lwork > work.size())
+      work.resize(lwork);
+    
+    Q.resize(minmn, n);
+    Q.fill_eye();
+    
+    int info = 0;
+    gpuscalar<int> info_device(c, info);
+    
+    check = gpulapack::ormqr(c->lapack_handle(), GPUBLAS_SIDE_RIGHT,
+      GPUBLAS_OP_T, minmn, n, n, QR.data_ptr(), QR.nrows(), lqaux.data_ptr(),
+      Q.data_ptr(), minmn, work.data_ptr(), lwork, info_device.data_ptr());
+    
+    info_device.get_val(&info);
+    gpulapack::err::check_ret(check, "ormqr");
+    fml::linalgutils::check_info(info, "ormqr");
   }
   
   

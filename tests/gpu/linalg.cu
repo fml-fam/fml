@@ -294,7 +294,7 @@ TEMPLATE_TEST_CASE("solve", "[linalg]", float, double)
 
 
 
-TEMPLATE_TEST_CASE("QR", "[linalg]", float, double)
+TEMPLATE_TEST_CASE("QR and LQ - square", "[linalg]", float, double)
 {
   // test matrix from here https://en.wikipedia.org/wiki/QR_decomposition#Example_2
   gpumat<TestType> x(c, 3, 3);
@@ -309,8 +309,6 @@ TEMPLATE_TEST_CASE("QR", "[linalg]", float, double)
   x.set(2, 2, -41);
   
   auto orig = x.dupe();
-  
-  
   
   // QR
   gpuvec<TestType> aux(c);
@@ -333,10 +331,76 @@ TEMPLATE_TEST_CASE("QR", "[linalg]", float, double)
   REQUIRE( fltcmp::eq(fabs(R.get(0, 1)), (TestType)21) );
   REQUIRE( fltcmp::eq(fabs(R.get(1, 2)), (TestType)70) );
   
-  
-  
   // LQ
-  // TODO: Not available in cusolver
+  linalg::xpose(orig, x);
+  gpumat<TestType> tR(c);
+  linalg::xpose(R, tR);
+  
+  linalg::lq(x, aux);
+  
+  gpumat<TestType> L(c);
+  linalg::lq_L(x, L);
+  
+  linalg::lq_Q(x, aux, Q, work);
+  
+  REQUIRE( fltcmp::eq(fabs(Q.get(0, 0)), (TestType)6/7) );
+  REQUIRE( fltcmp::eq(fabs(Q.get(0, 1)), (TestType)3/7) );
+  REQUIRE( fltcmp::eq(fabs(Q.get(1, 1)), (TestType)158/175) );
+  REQUIRE( fltcmp::eq(fabs(Q.get(2, 1)), (TestType)6/175) );
+  
+  REQUIRE( tR == L );
+}
+
+
+
+TEMPLATE_TEST_CASE("QR", "[linalg]", float, double)
+{
+  gpuvec<TestType> aux(c), work(c);
+  gpumat<TestType> Q(c), R(c);
+  
+  gpumat<TestType> x(c, 3, 2);
+  x.fill_linspace(1, 6);
+  linalg::qr(false, x, aux);
+  linalg::qr_Q(x, aux, Q, work);
+  linalg::qr_R(x, R);
+  auto test = linalg::matmult(false, false, (TestType)1.0, Q, R);
+  x.fill_linspace(1, 6);
+  REQUIRE( x == test );
+  
+  gpumat<TestType> y(c, 2, 3);
+  y.fill_linspace(1, 6);
+  linalg::qr(false, y, aux);
+  linalg::qr_Q(y, aux, Q, work);
+  linalg::qr_R(y, R);
+  linalg::matmult(false, false, (TestType)1.0, Q, R, test);
+  y.fill_linspace(1, 6);
+  REQUIRE( y == test );
+}
+
+
+
+TEMPLATE_TEST_CASE("LQ", "[linalg]", float, double)
+{
+  gpuvec<TestType> aux(c), work(c);
+  gpumat<TestType> L(c), Q(c);
+  
+  gpumat<TestType> x(c, 3, 2);
+  x.fill_linspace(1, 6);
+  linalg::lq(x, aux);
+  linalg::lq_Q(x, aux, Q, work);
+  linalg::lq_L(x, L);
+  auto test = linalg::matmult(false, false, (TestType)1.0, L, Q);
+  x.fill_linspace(1, 6);
+  REQUIRE( x == test );
+  
+  gpumat<TestType> y(c, 2, 3);
+  y.fill_linspace(1, 6);
+  linalg::lq(y, aux);
+  linalg::lq_Q(y, aux, Q, work);
+  linalg::lq_L(y, L);
+  linalg::matmult(false, false, (TestType)1.0, L, Q, test);
+  y.fill_linspace(1, 6);
+  REQUIRE( y == test );
 }
 
 
