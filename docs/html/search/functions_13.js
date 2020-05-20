@@ -1,0 +1,4 @@
+var searchData=
+[
+  ['xpose_285',['xpose',['../namespacelinalg.html#a38aa5c66c35f4c9200646f86cbac9783',1,'linalg::xpose(const cpumat&lt; REAL &gt; &amp;x, cpumat&lt; REAL &gt; &amp;tx)'],['../namespacelinalg.html#aa9608507fe1023547afad28ddc1d0770',1,'linalg::xpose(const cpumat&lt; REAL &gt; &amp;x)'],['../namespacelinalg.html#ad6f65f84ac39f9d688a49dfb4bd5c1f7',1,'linalg::xpose(const gpumat&lt; REAL &gt; &amp;x, gpumat&lt; REAL &gt; &amp;tx)'],['../namespacelinalg.html#af03c48700965e927bd95cff4c1141840',1,'linalg::xpose(const gpumat&lt; REAL &gt; &amp;x)'],['../namespacelinalg.html#a1d36f54cbabde4d6488c4dca65b87926',1,'linalg::xpose(const mpimat&lt; REAL &gt; &amp;x, mpimat&lt; REAL &gt; &amp;tx)'],['../namespacelinalg.html#a12d167ddd24b88513a250088dcaf428b',1,'linalg::xpose(const mpimat&lt; REAL &gt; &amp;x)']]]
+];

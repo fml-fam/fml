@@ -13,10 +13,10 @@ var classgpumat =
     [ "fill_diag", "classgpumat.html#a54488a6e7b1748245a0c2f89f58ab90a", null ],
     [ "fill_eye", "classgpumat.html#af5f5bc27649927b95608888389541bc0", null ],
     [ "fill_linspace", "classgpumat.html#a284b43eb33e9b6327d5b9b8f9972fe07", null ],
-    [ "fill_rnorm", "classgpumat.html#aa1be5781af71bda9e40afb68549a91ed", null ],
     [ "fill_rnorm", "classgpumat.html#a6c86ae63f0ba78972cfb2152bc30bbe2", null ],
-    [ "fill_runif", "classgpumat.html#a5eff84b6286b48f37a84e71b5504e05c", null ],
+    [ "fill_rnorm", "classgpumat.html#aa1be5781af71bda9e40afb68549a91ed", null ],
     [ "fill_runif", "classgpumat.html#a20b00c84ead854867b202c575b686a7a", null ],
+    [ "fill_runif", "classgpumat.html#a5eff84b6286b48f37a84e71b5504e05c", null ],
     [ "fill_val", "classgpumat.html#aaedb40624722fa214a887aeb399a3596", null ],
     [ "fill_zero", "classgpumat.html#a64d975ab9a4b1ed975cde845dffcb2a1", null ],
     [ "get", "classgpumat.html#abc6dfdc407121b32c51286116f0032d1", null ],
@@ -37,7 +37,7 @@ var classgpumat =
     [ "rev_cols", "classgpumat.html#a8a92348c262b81b3ca718c11a1729c3e", null ],
     [ "rev_rows", "classgpumat.html#a459ffdf00d680f9a3b7637e7b890f192", null ],
     [ "scale", "classgpumat.html#a5e45e2688ca8d4e9323e639718ff773d", null ],
-    [ "set", "classgpumat.html#a6ea663e1f94458582ac50ff37148eafa", null ],
     [ "set", "classgpumat.html#a6cbbbf787ce2e4a01f702801b5467cc3", null ],
+    [ "set", "classgpumat.html#a6ea663e1f94458582ac50ff37148eafa", null ],
     [ "c", "classgpumat.html#a889508b632cadf6fc751e545816266a0", null ]
 ];

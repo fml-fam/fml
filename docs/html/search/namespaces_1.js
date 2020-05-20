@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dimops',['dimops',['../namespacedimops.html',1,'']]]
+  ['dimops_160',['dimops',['../namespacedimops.html',1,'']]]
 ];
