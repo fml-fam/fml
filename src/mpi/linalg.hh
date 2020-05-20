@@ -1140,12 +1140,7 @@ namespace linalg
     cpuvec<REAL> work(m);
     qr_internals(false, x, qraux, work);
     
-    const len_t m_local = x.nrows_local();
-    const len_t n_local = x.ncols_local();
-    const len_t mb = x.bf_rows();
-    const len_t nb = x.bf_cols();
-    
-    fml::mpi_utils::tri2zero('L', false, g, n, n, m_local, n_local, mb, nb, x.data_ptr());
+    fml::mpi_utils::tri2zero('L', false, g, n, n, x.data_ptr(), x.desc_ptr());
     
     int info = 0;
     
@@ -1314,8 +1309,7 @@ namespace linalg
     else if (info > 0)
       throw std::runtime_error("chol: leading minor of order " + std::to_string(info) + " is not positive definite");
     
-    fml::mpi_utils::tri2zero('U', false, x.get_grid(), n, n, x.nrows_local(),
-      x.ncols_local(), x.bf_rows(), x.bf_cols(), x.data_ptr());
+    fml::mpi_utils::tri2zero('U', false, x.get_grid(), n, n, x.data_ptr(), x.desc_ptr());
   }
 }
 

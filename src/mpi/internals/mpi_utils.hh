@@ -19,9 +19,14 @@ namespace fml
     // zero specified triangle
     template <typename REAL>
     void tri2zero(const char uplo, const bool diag, const grid &g,
-      const len_t m, const len_t n, const len_t m_local, const len_t n_local,
-      const int mb, const int nb, REAL *A)
+      const len_t m, const len_t n, REAL *A, const int *desc)
     {
+      const int mb = desc[fml::bcutils::DESC_MB];
+      const int nb = desc[fml::bcutils::DESC_NB];
+      
+      const len_t m_local = fml::bcutils::numroc(desc[fml::bcutils::DESC_M], mb, g.myrow(), 0, g.nprow());
+      const len_t n_local = fml::bcutils::numroc(desc[fml::bcutils::DESC_N], nb, g.mycol(), 0, g.npcol());
+      
       for (len_t j=0; j<n_local; j++)
       {
         for (len_t i=0; i<m_local; i++)
