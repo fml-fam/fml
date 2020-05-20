@@ -7,7 +7,6 @@
 using namespace arraytools;
 
 
-
 TEMPLATE_TEST_CASE("basics", "[cpumat]", float, double)
 {
   len_t m = 3;

@@ -6,7 +6,6 @@
 using namespace arraytools;
 
 
-
 TEMPLATE_TEST_CASE("basics - vec", "[cpuvec]", float, double)
 {
   len_t n = 2;
