@@ -9,6 +9,41 @@ using namespace arraytools;
 extern std::shared_ptr<card> c;
 
 
+TEMPLATE_TEST_CASE("lacpy", "[gpu_utils]", float, double)
+{
+  len_t m = 3;
+  len_t n = 2;
+  gpumat<TestType> x(c, m, n);
+  gpumat<TestType> test(c, m, n);
+  gpumat<TestType> truth(c, m, n);
+  truth.fill_linspace(1, m*n);
+  
+  x.fill_linspace(1, m*n);
+  test.fill_zero();
+  fml::gpu_utils::lacpy(GPUBLAS_FILL_U, m, n, x.data_ptr(), m, test.data_ptr(), m);
+  truth.fill_linspace(1, m*n);
+  truth.set(1, 0, 0);
+  truth.set(2, 0, 0);
+  truth.set(2, 1, 0);
+  REQUIRE( test == truth );
+  
+  test.fill_zero();
+  fml::gpu_utils::lacpy(GPUBLAS_FILL_L, n, n, x.data_ptr(), m, test.data_ptr(), m);
+  truth.fill_linspace(1, m*n);
+  truth.set(0, 1, 0);
+  truth.set(2, 0, 0);
+  truth.set(2, 1, 0);
+  REQUIRE( test == truth );
+  
+  test.fill_zero();
+  fml::gpu_utils::lacpy(GPUBLAS_FILL_L, m, n, x.data_ptr(), m, test.data_ptr(), m);
+  truth.fill_linspace(1, m*n);
+  truth.set(0, 1, 0);
+  REQUIRE( test == truth );
+}
+
+
+
 TEMPLATE_TEST_CASE("tri2zero - tall", "[gpu_utils]", float, double)
 {
   len_t m = 5;
