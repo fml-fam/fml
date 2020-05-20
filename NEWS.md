@@ -1,4 +1,4 @@
-# Release 0.2-0 (//):
+# Release 0.2-0 (5/20/20):
 
 New:
   * Added to linalg namespace for cpumat, gpumat, and mpimat:
@@ -36,7 +36,7 @@ Bug Fixes:
   * Fixed an internal logic error in gpumat linalg::svd().
 
 Documentation:
-  * 
+  * Minor corrections; no major changes.
 
 
 
