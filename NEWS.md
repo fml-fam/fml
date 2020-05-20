@@ -1,4 +1,6 @@
-# Release 0.2-0 (5/20/20):
+# NEWS
+
+## Release 0.2-0 (5/20/20):
 
 New:
   * Added to linalg namespace for cpumat, gpumat, and mpimat:
@@ -42,7 +44,7 @@ Documentation:
 
 
 
-# Release 0.1-0 (2/5/2020):
+## Release 0.1-0 (2/5/2020):
 
 New:
   * Created cpumat and cpuvec classes
