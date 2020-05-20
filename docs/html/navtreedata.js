@@ -23,7 +23,7 @@ for the JavaScript code in this file
 var NAVTREE =
 [
   [ "fml", "index.html", [
-    [ "Release 0.2-0 (5/20/20):", "md_fml__n_e_w_s.html", null ],
+    [ "NEWS", "md_fml__n_e_w_s.html", null ],
     [ "Modules", "modules.html", "modules" ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],

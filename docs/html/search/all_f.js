@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['release_200_2e2_2d0_20_285_2f20_2f20_29_3a_113',['Release 0.2-0 (5/20/20):',['../md_fml__n_e_w_s.html',1,'']]],
   ['rank_114',['rank',['../classcomm.html#a044b73d1f0356516c3c704462b6262e2',1,'comm']]],
   ['rank0_115',['rank0',['../classgrid.html#af3fdbb261ae5af6f6c5b17b9e18f2b0f',1,'grid::rank0()'],['../classcomm.html#a3f7bde6514c73119713bd37626d6d977',1,'comm::rank0()']]],
   ['recv_116',['recv',['../classgrid.html#ad3c95571997162b032244eaee1dc0889',1,'grid::recv()'],['../classcomm.html#ad4de153ba41c0754793f0aa7531910d4',1,'comm::recv()']]],
