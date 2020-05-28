@@ -184,7 +184,8 @@ void cpuvec<T>::resize(len_t size)
   {
     this->_size = size;
     return;
-  } else if (this->_size == size)
+  }
+  else if (this->_size == size)
     return;
   
   const size_t len = (size_t) size * sizeof(T);
