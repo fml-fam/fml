@@ -49,13 +49,13 @@ namespace mpihelpers
     if (!g.ingrid())
       return;
     
-    len_local_t m_local = mpi.nrows_local();
-    len_local_t n_local = mpi.ncols_local();
+    const len_local_t m_local = mpi.nrows_local();
+    const len_local_t n_local = mpi.ncols_local();
     
-    int mb = mpi.bf_rows();
+    const int mb = mpi.bf_rows();
     
-    len_t m = mpi.nrows();
-    len_t n = mpi.ncols();
+    const len_t m = mpi.nrows();
+    const len_t n = mpi.ncols();
     
     if (m != cpu.nrows() || n != cpu.ncols())
       cpu.resize(m, n);
