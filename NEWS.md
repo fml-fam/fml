@@ -1,5 +1,23 @@
 # NEWS
 
+## Release 0.2-1 (//):
+
+New: None
+
+API Changes: None
+
+Bug Fixes:
+  * Fixed det() bug for cpumat.
+  * Expanded cpu2mpi() to accept objects of different fundamental types.
+  * Fixed indexing bug in mpi2cpu().
+  * Fixed mixed type bug in mpi2cpu().
+
+Documentation: None
+
+
+
+
+
 ## Release 0.2-0 (5/20/20):
 
 New:
