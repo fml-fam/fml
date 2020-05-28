@@ -125,19 +125,19 @@ namespace mpihelpers
   template <typename REAL_IN, typename REAL_OUT>
   void mpi2cpu(const mpimat<REAL_IN> &mpi, cpumat<REAL_OUT> &cpu, int rdest=0, int cdest=0)
   {
-    grid g = mpi.get_grid();
+    const grid g = mpi.get_grid();
     if (!g.ingrid())
       return;
     
     bool i_am_ret = (g.myrow() == rdest && g.mycol() == cdest) ? true : false;
     
-    len_local_t m_local = mpi.nrows_local();
+    const len_local_t m_local = mpi.nrows_local();
     
-    int mb = mpi.bf_rows();
-    int nb = mpi.bf_cols();
+    const int mb = mpi.bf_rows();
+    const int nb = mpi.bf_cols();
     
-    len_t m = mpi.nrows();
-    len_t n = mpi.ncols();
+    const len_t m = mpi.nrows();
+    const len_t n = mpi.ncols();
     
     if (i_am_ret)
     {
@@ -150,18 +150,20 @@ namespace mpihelpers
     REAL_OUT *gbl = cpu.data_ptr();
     const REAL_IN *sub = mpi.data_ptr();
     
+    cpumat<REAL_OUT> tmp(mb, nb);
+    REAL_OUT *tmp_d = tmp.data_ptr();
+    
     for (len_t gj=0; gj<n; gj+=nb)
     {
       const int pc = fml::bcutils::g2p(gj, nb, g.npcol());
-      const int j = fml::bcutils::g2l(gj, nb, g.npcol());
+      const len_t j = fml::bcutils::g2l(gj, nb, g.npcol());
+      const len_t col_copylen = std::min(nb, n-gj);
       
       for (len_t gi=0; gi<m; gi+=mb)
       {
         const int pr = fml::bcutils::g2p(gi, mb, g.nprow());
-        const int i = fml::bcutils::g2l(gi, mb, g.nprow());
-        
-        const int row_copylen = std::min(mb, m-gi);
-        const int col_copylen = std::min(nb, n-gj);
+        const len_t i = fml::bcutils::g2l(gi, mb, g.nprow());
+        const len_t row_copylen = std::min(mb, m-gi);
         
         if (i_am_ret)
         {
@@ -171,10 +173,18 @@ namespace mpihelpers
               arraytools::copy(row_copylen, sub + i+m_local*(j+jj), gbl + gi+m*(gj+jj));
           }
           else
-            g.recv(row_copylen, col_copylen, m, gbl + gi+m*j, pr, pc);
+            g.recv(row_copylen, col_copylen, m, gbl + gi+m*gj, pr, pc);
         }
         else if (pr == g.myrow() && pc == g.mycol())
-          g.send(row_copylen, col_copylen, m_local, sub + i+m_local*j, rdest, cdest);
+        {
+          for (len_t jj=0; jj<col_copylen; jj++)
+          {
+            for (len_t ii=0; ii<row_copylen; ii++)
+              tmp_d[ii + mb*jj] = (REAL_OUT) sub[i+ii + m_local*(j+jj)];
+          }
+          
+          g.send(row_copylen, col_copylen, mb, tmp_d, rdest, cdest);
+        }
       }
     }
   }
