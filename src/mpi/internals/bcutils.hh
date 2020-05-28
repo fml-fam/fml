@@ -51,7 +51,7 @@ namespace fml
       desc[DESC_NB] = nb;
       desc[DESC_RSRC] = 0;
       desc[DESC_CSRC] = 0;
-      desc[DESC_LLD] = lld;
+      desc[DESC_LLD] = (lld<1?1:lld);
     }
     
     
