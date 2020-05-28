@@ -1,6 +1,6 @@
 # NEWS
 
-## Release 0.2-1 (//):
+## Release 0.2-1 (5/28/20):
 
 New: None
 
@@ -11,6 +11,8 @@ Bug Fixes:
   * Expanded cpu2mpi() to accept objects of different fundamental types.
   * Fixed indexing bug in mpi2cpu().
   * Fixed mixed type bug in mpi2cpu().
+  * Fixed 0 value ownership issue with mpimat.
+  * Fixed 0 value ownership issue with invert() for mpimat.
 
 Documentation: None
 
