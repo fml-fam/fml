@@ -702,7 +702,7 @@ namespace linalg
     REAL tmp;
     int liwork;
     fml::scalapack::getri(n, x.data_ptr(), x.desc_ptr(), p.data_ptr(), &tmp, -1, &liwork, -1, &info);
-    int lwork = (int) tmp;
+    int lwork = std::max(1, (int)tmp);
     cpuvec<REAL> work(lwork);
     cpuvec<int> iwork(liwork);
     
