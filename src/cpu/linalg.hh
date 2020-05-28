@@ -422,7 +422,7 @@ namespace linalg
     const REAL *a = x.data_ptr();
     
     #pragma omp parallel for reduction(+:mod) reduction(*:sgn)
-    for (int i=0; i<m; i+=m+1)
+    for (int i=0; i<m; i++)
     {
       const REAL d = a[i + m*i];
       if (d < 0)
