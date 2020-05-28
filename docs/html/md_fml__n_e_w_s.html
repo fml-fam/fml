@@ -95,7 +95,19 @@ $(document).ready(function(){initNavTree('md_fml__n_e_w_s.html',''); initResizab
 <div class="title">NEWS </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1>Release 0.2-0 (5/20/20):</h1>
+<div class="textblock"><h1>Release 0.2-1 (5/28/20):</h1>
+<p>New: None</p>
+<p>API Changes: None</p>
+<p>Bug Fixes:</p><ul>
+<li>Fixed det() bug for cpumat.</li>
+<li>Expanded cpu2mpi() to accept objects of different fundamental types.</li>
+<li>Fixed indexing bug in mpi2cpu().</li>
+<li>Fixed mixed type bug in mpi2cpu().</li>
+<li>Fixed 0 value ownership issue with mpimat.</li>
+<li>Fixed 0 value ownership issue with invert() for mpimat.</li>
+</ul>
+<p>Documentation: None</p>
+<h1>Release 0.2-0 (5/20/20):</h1>
 <p>New:</p><ul>
 <li>Added to linalg namespace for cpumat, gpumat, and mpimat:<ul>
 <li>qr()</li>
