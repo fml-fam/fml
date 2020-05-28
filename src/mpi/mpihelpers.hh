@@ -222,26 +222,28 @@ namespace mpihelpers
     
     @comm The method has no communication.
     
-    @tparam REAL Should be `float` or `double`.
+    @tparam REAL_IN,REAL_OUT Should be `float` or `double`. They do not have to
+    be the same type.
   */
-  template <typename REAL>
-  void cpu2mpi(const cpumat<REAL> &cpu, mpimat<REAL> &mpi)
+  template <typename REAL_IN, typename REAL_OUT>
+  void cpu2mpi(const cpumat<REAL_IN> &cpu, mpimat<REAL_OUT> &mpi)
   {
-    len_t m = cpu.nrows();
-    len_t n = cpu.ncols();
+    const len_t m = cpu.nrows();
+    const len_t n = cpu.ncols();
     
     if (m != mpi.nrows() || n != mpi.ncols())
       mpi.resize(m, n);
     
     mpi.fill_zero();
     
-    grid g = mpi.get_grid();
+    const grid g = mpi.get_grid();
     
-    len_local_t m_local = mpi.nrows_local();
-    len_local_t n_local = mpi.ncols_local();
+    const len_local_t m_local = mpi.nrows_local();
+    const len_local_t n_local = mpi.ncols_local();
+    const int mb = mpi.bf_rows();
     
-    const REAL *gbl = cpu.data_ptr();
-    REAL *sub = mpi.data_ptr();
+    const REAL_IN *gbl = cpu.data_ptr();
+    REAL_OUT *sub = mpi.data_ptr();
     
     if (m_local > 0 && n_local > 0)
     {
@@ -249,12 +251,12 @@ namespace mpihelpers
       {
         const int gj = fml::bcutils::l2g(j, mpi.bf_cols(), g.npcol(), g.mycol());
         
-        #pragma omp for simd
-        for (len_local_t i=0; i<m_local; i++)
+        for (len_local_t i=0; i<m_local; i+=mb)
         {
           const int gi = fml::bcutils::l2g(i, mpi.bf_rows(), g.nprow(), g.myrow());
           
-          sub[i + m_local*j] = gbl[gi + m*gj];
+          for (int ii=0; ii<mb && ii+i<m_local; ii++)
+            sub[i+ii + m_local*j] = (REAL_OUT) gbl[gi+ii + m*gj];
         }
       }
     }
