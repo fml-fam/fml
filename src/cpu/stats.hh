@@ -11,6 +11,8 @@
 #include "linalg.hh"
 
 
+namespace fml
+{
 /// @brief Statistics kernels.
 namespace stats
 {
@@ -60,6 +62,7 @@ namespace stats
     const REAL d = 1.0 / sqrt((REAL)std::max(x.nrows()-1, 1));
     sdev.scale(d);
   }
+}
 }
 
 

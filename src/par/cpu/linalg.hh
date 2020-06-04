@@ -11,6 +11,8 @@
 #include "../../cpu/linalg.hh"
 
 
+namespace fml
+{
 namespace linalg
 {
   /// @brief Computes lower triangle of alpha*x^T*x
@@ -37,6 +39,7 @@ namespace linalg
     crossprod(alpha, x, ret);
     return ret;
   }
+}
 }
 
 

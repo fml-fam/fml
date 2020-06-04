@@ -7,11 +7,11 @@
 
 int main()
 {
-  auto c = gpuhelpers::new_card(0);
+  auto c = fml::gpuhelpers::new_card(0);
   c->info();
   
   len_t n = 5;
-  gpumat<float> x(c, n, n);
+  fml::gpumat<float> x(c, n, n);
   x.info();
   
   x.fill_eye();
@@ -20,8 +20,8 @@ int main()
   
   x.fill_linspace(1.f, (float) n*n);
   
-  cpumat<float> x_cpu;
-  gpuhelpers::gpu2cpu(x, x_cpu);
+  fml::cpumat<float> x_cpu;
+  fml::gpuhelpers::gpu2cpu(x, x_cpu);
   x_cpu.print();
   
   return 0;

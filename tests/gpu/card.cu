@@ -5,7 +5,7 @@
 
 using namespace arraytools;
 
-extern std::shared_ptr<card> c;
+extern std::shared_ptr<fml::card> c;
 
 
 TEMPLATE_TEST_CASE("memory operations", "[card]", float, double)

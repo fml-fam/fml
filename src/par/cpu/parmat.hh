@@ -15,23 +15,26 @@
 #include "../internals/parmat.hh"
 
 
-template <typename REAL>
-class parmat_cpu : public parmat<cpumat<REAL>, cpuvec<REAL>, REAL>
+namespace fml
 {
-  using parmat<cpumat<REAL>, cpuvec<REAL>, REAL>::parmat;
-  
-  public:
-    parmat_cpu(comm &mpi_comm, const len_global_t nrows, const len_t ncols);
+  template <typename REAL>
+  class parmat_cpu : public parmat<cpumat<REAL>, cpuvec<REAL>, REAL>
+  {
+    using parmat<cpumat<REAL>, cpuvec<REAL>, REAL>::parmat;
     
-    void fill_linspace(const REAL start, const REAL stop);
-    void fill_eye();
-    void fill_diag(const cpuvec<REAL> &d);
-};
+    public:
+      parmat_cpu(comm &mpi_comm, const len_global_t nrows, const len_t ncols);
+      
+      void fill_linspace(const REAL start, const REAL stop);
+      void fill_eye();
+      void fill_diag(const cpuvec<REAL> &d);
+  };
+}
 
 
 
 template <typename REAL>
-parmat_cpu<REAL>::parmat_cpu(comm &mpi_comm, const len_global_t nrows, const len_t ncols)
+fml::parmat_cpu<REAL>::parmat_cpu(fml::comm &mpi_comm, const len_global_t nrows, const len_t ncols)
 {
   this->r = mpi_comm;
   
@@ -47,7 +50,7 @@ parmat_cpu<REAL>::parmat_cpu(comm &mpi_comm, const len_global_t nrows, const len
 
 
 template <typename REAL>
-void parmat_cpu<REAL>::fill_linspace(const REAL start, const REAL stop)
+void fml::parmat_cpu<REAL>::fill_linspace(const REAL start, const REAL stop)
 {
   if (start == stop)
     this->fill_val(start);
@@ -74,9 +77,9 @@ void parmat_cpu<REAL>::fill_linspace(const REAL start, const REAL stop)
 
 
 template <typename REAL>
-void parmat_cpu<REAL>::fill_eye()
+void fml::parmat_cpu<REAL>::fill_eye()
 {
-  cpuvec<REAL> v(1);
+  fml::cpuvec<REAL> v(1);
   v(0) = (REAL) 1;
   this->fill_diag(v);
 }
@@ -84,7 +87,7 @@ void parmat_cpu<REAL>::fill_eye()
 
 
 template <typename REAL>
-void parmat_cpu<REAL>::fill_diag(const cpuvec<REAL> &d)
+void fml::parmat_cpu<REAL>::fill_diag(const fml::cpuvec<REAL> &d)
 {
   const len_t m_local = this->data.nrows();
   const len_t n = this->data.ncols();

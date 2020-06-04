@@ -14,21 +14,42 @@
 #include "../internals/parmat.hh"
 
 
-template <typename REAL>
-class parmat_gpu : public parmat<gpumat<REAL>, gpuvec<REAL>, REAL>
+namespace fml
 {
-  using parmat<gpumat<REAL>, gpuvec<REAL>, REAL>::parmat;
-  
-  public:
-    void fill_linspace(const REAL start, const REAL stop);
-    void fill_eye();
-    void fill_diag(const gpuvec<REAL> &d);
-};
+  template <typename REAL>
+  class parmat_gpu : public parmat<gpumat<REAL>, gpuvec<REAL>, REAL>
+  {
+    using parmat<gpumat<REAL>, gpuvec<REAL>, REAL>::parmat;
+    
+    public:
+      parmat_gpu(comm &mpi_comm, const len_global_t nrows, const len_t ncols);
+      
+      void fill_linspace(const REAL start, const REAL stop);
+      void fill_eye();
+      void fill_diag(const gpuvec<REAL> &d);
+  };
+}
 
 
 
 template <typename REAL>
-void parmat_gpu<REAL>::fill_linspace(const REAL start, const REAL stop)
+fml::parmat_gpu<REAL>::parmat_gpu(fml::comm &mpi_comm, const len_global_t nrows, const len_t ncols)
+{
+  this->r = mpi_comm;
+  
+  this->m_global = nrows;
+  len_t nrows_local = this->get_local_dim();
+  this->data.resize(nrows_local, ncols);
+  
+  this->m_global = (len_global_t) nrows_local;
+  this->r.allreduce(1, &(this->m_global));
+  this->num_preceding_rows();
+}
+
+
+
+template <typename REAL>
+void fml::parmat_gpu<REAL>::fill_linspace(const REAL start, const REAL stop)
 {
   if (start == stop)
     this->fill_val(start);
@@ -49,9 +70,9 @@ void parmat_gpu<REAL>::fill_linspace(const REAL start, const REAL stop)
 
 
 template <typename REAL>
-void parmat_cpu<REAL>::fill_eye()
+void fml::parmat_gpu<REAL>::fill_eye()
 {
-  gpuvec<REAL> v(1);
+  fml::gpuvec<REAL> v(1);
   v.fill_val(1);
   this->fill_diag(v);
 }
@@ -59,7 +80,7 @@ void parmat_cpu<REAL>::fill_eye()
 
 
 template <typename REAL>
-void parmat_cpu<REAL>::fill_diag(const cpuvec<REAL> &d)
+void fml::parmat_gpu<REAL>::fill_diag(const fml::gpuvec<REAL> &d)
 {
   
 }

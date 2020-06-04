@@ -10,6 +10,8 @@
 #include <cublas.h>
 
 
+namespace fml
+{
 namespace gpublas
 {
   namespace err
@@ -112,6 +114,7 @@ namespace gpublas
     return cublasDgeam(handle, transa, transb, m, n, &alpha, A, lda, &beta, B,
       ldb, C, ldc);
   }
+}
 }
 
 

@@ -5,6 +5,7 @@
 #include <cpu/cpuvec.hh>
 
 using namespace arraytools;
+using namespace fml;
 
 
 TEMPLATE_TEST_CASE("basics", "[cpumat]", float, double)

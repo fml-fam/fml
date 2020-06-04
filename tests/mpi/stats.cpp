@@ -5,7 +5,7 @@
 
 using namespace arraytools;
 
-extern grid g;
+extern fml::grid g;
 
 
 TEMPLATE_TEST_CASE("stats - pca", "[stats]", float, double)
@@ -13,12 +13,12 @@ TEMPLATE_TEST_CASE("stats - pca", "[stats]", float, double)
   len_t m = 3;
   len_t n = 2;
   
-  mpimat<TestType> x(g, m, n, 1, 1);
+  fml::mpimat<TestType> x(g, m, n, 1, 1);
   x.fill_linspace(1, m*n);
   
-  cpuvec<TestType> sdev;
-  mpimat<TestType> rot(g, 1, 1);
-  stats::pca(true, true, x, sdev, rot);
+  fml::cpuvec<TestType> sdev;
+  fml::mpimat<TestType> rot(g, 1, 1);
+  fml::stats::pca(true, true, x, sdev, rot);
   
   TestType sq2 = sqrt(2.0);
   

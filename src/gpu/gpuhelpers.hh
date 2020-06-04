@@ -21,6 +21,8 @@
 #include "gpuvec.hh"
 
 
+namespace fml
+{
 /// @brief GPU class helpers.
 namespace gpuhelpers
 {
@@ -256,6 +258,7 @@ namespace gpuhelpers
     
     return gpu_out;
   }
+}
 }
 
 

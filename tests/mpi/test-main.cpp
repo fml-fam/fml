@@ -4,13 +4,13 @@
 #include <mpi/grid.hh>
 #include <cstdio>
 
-grid g;
+fml::grid g;
 
 
 int main(int argc, char *argv[])
 {
   int num_failed_tests;
-  g = grid(PROC_GRID_SQUARE);
+  g = fml::grid(fml::PROC_GRID_SQUARE);
   
   if (!g.rank0())
     fclose(stdout);

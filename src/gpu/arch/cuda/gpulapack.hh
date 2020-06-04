@@ -11,6 +11,8 @@
 #include <cusolverDn.h>
 
 
+namespace fml
+{
 namespace gpulapack
 {
   namespace err
@@ -270,6 +272,7 @@ namespace gpulapack
   {
     return cusolverDnDpotrf(handle, uplo, n, A, lda, work, lwork, info);
   }
+}
 }
 
 

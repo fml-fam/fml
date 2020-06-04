@@ -21,6 +21,8 @@
 #include "cpuvec.hh"
 
 
+namespace fml
+{
 /// @brief Linear algebra functions.
 namespace linalg
 {
@@ -1230,6 +1232,7 @@ namespace linalg
     
     fml::cpu_utils::tri2zero('U', false, n, n, x.data_ptr(), n);
   }
+}
 }
 
 

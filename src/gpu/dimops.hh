@@ -14,6 +14,8 @@
 #include "linalg.hh"
 
 
+namespace fml
+{
 /// @brief Row/column operations.
 namespace dimops
 {
@@ -276,6 +278,7 @@ namespace dimops
       internals::sweep_div(x, sdevs);
     }
   }
+}
 }
 
 

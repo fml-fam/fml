@@ -7,15 +7,15 @@ int main()
   len_t m = 3;
   len_t n = 2;
   
-  cpumat<float> x(m, n);
+  fml::cpumat<float> x(m, n);
   x.fill_linspace(1, m*n);
   
   x.info();
   x.print(0);
   
-  cpuvec<float> s;
-  cpumat<float> u, vt;
-  linalg::svd(x, s, u, vt);
+  fml::cpuvec<float> s;
+  fml::cpumat<float> u, vt;
+  fml::linalg::svd(x, s, u, vt);
   
   s.info();
   s.print();

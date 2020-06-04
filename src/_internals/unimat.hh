@@ -18,46 +18,52 @@
 
 
 /**
- * @brief Base matrix class. Not meant for direct use. Instead see `cpumat`,
- * `gpumat`, and `mpimat`.
+ * @brief Core namespace.
  */
-template <typename REAL>
-class unimat
+namespace fml
 {
-  public:
-    /// Is the matrix square?
-    bool is_square() const {return (this->m==this->n);};
-    /// Number of rows.
-    len_t nrows() const {return m;};
-    /// Number of columns.
-    len_t ncols() const {return n;};
-    /// Pointer to the internal array.
-    REAL* data_ptr() {return data;};
-    REAL* data_ptr() const {return data;};
-  
-  protected:
-    len_t m;
-    len_t n;
-    REAL *data;
-    bool free_data;
+  /**
+   * @brief Base matrix class. Not meant for direct use. Instead see `cpumat`,
+   * `gpumat`, and `mpimat`.
+   */
+  template <typename REAL>
+  class unimat
+  {
+    public:
+      /// Is the matrix square?
+      bool is_square() const {return (this->m==this->n);};
+      /// Number of rows.
+      len_t nrows() const {return m;};
+      /// Number of columns.
+      len_t ncols() const {return n;};
+      /// Pointer to the internal array.
+      REAL* data_ptr() {return data;};
+      REAL* data_ptr() const {return data;};
     
-    bool should_free() const {return free_data;};
-    void check_index(const len_t i) const;
-    void check_index(const len_t i, const len_t j) const;
-    void printval(const REAL val, uint8_t ndigits) const;
-};
+    protected:
+      len_t m;
+      len_t n;
+      REAL *data;
+      bool free_data;
+      
+      bool should_free() const {return free_data;};
+      void check_index(const len_t i) const;
+      void check_index(const len_t i, const len_t j) const;
+      void printval(const REAL val, uint8_t ndigits) const;
+  };
+}
 
 
 
 template <typename REAL>
-void unimat<REAL>::check_index(const len_t i) const
+void fml::unimat<REAL>::check_index(const len_t i) const
 {
   if (i < 0 || i >= (this->m * this->n))
     throw std::runtime_error("index out of bounds");
 }
 
 template <typename REAL>
-void unimat<REAL>::check_index(const len_t i, const len_t j) const
+void fml::unimat<REAL>::check_index(const len_t i, const len_t j) const
 {
   if (i < 0 || i >= this->m || j < 0 || j >= this->n)
     throw std::runtime_error("index out of bounds");
@@ -66,7 +72,7 @@ void unimat<REAL>::check_index(const len_t i, const len_t j) const
 
 
 template <>
-inline void unimat<int>::printval(const int val, uint8_t ndigits) const
+inline void fml::unimat<int>::printval(const int val, uint8_t ndigits) const
 {
   (void)ndigits;
   fml::print::printf("%d ", val);
@@ -74,14 +80,14 @@ inline void unimat<int>::printval(const int val, uint8_t ndigits) const
 
 #ifdef __CUDACC__
 template <>
-inline void unimat<__half>::printval(const __half val, uint8_t ndigits) const
+inline void fml::unimat<__half>::printval(const __half val, uint8_t ndigits) const
 {
   fml::print::printf("%.*f ", ndigits, (float)val);
 }
 #endif
 
 template <typename REAL>
-void unimat<REAL>::printval(const REAL val, uint8_t ndigits) const
+void fml::unimat<REAL>::printval(const REAL val, uint8_t ndigits) const
 {
   fml::print::printf("%.*f ", ndigits, val);
 }

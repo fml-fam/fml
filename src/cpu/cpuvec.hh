@@ -20,47 +20,50 @@
 #include "../_internals/univec.hh"
 
 
-/**
-  @brief Vector class for data held on a single CPU.
-  
-  @tparam T should be 'int', 'float' or 'double'.
- */
-template <typename T>
-class cpuvec : public univec<T>
+namespace fml
 {
-  public:
-    cpuvec();
-    cpuvec(len_t size);
-    cpuvec(T *data, len_t size, bool free_on_destruct=false);
-    cpuvec(const cpuvec &x);
-    ~cpuvec();
+  /**
+    @brief Vector class for data held on a single CPU.
     
-    void resize(len_t size);
-    void inherit(T *data, len_t size, bool free_on_destruct=false);
-    cpuvec<T> dupe() const;
+    @tparam T should be 'int', 'float' or 'double'.
+   */
+  template <typename T>
+  class cpuvec : public univec<T>
+  {
+    public:
+      cpuvec();
+      cpuvec(len_t size);
+      cpuvec(T *data, len_t size, bool free_on_destruct=false);
+      cpuvec(const cpuvec &x);
+      ~cpuvec();
+      
+      void resize(len_t size);
+      void inherit(T *data, len_t size, bool free_on_destruct=false);
+      cpuvec<T> dupe() const;
+      
+      void print(uint8_t ndigits=4, bool add_final_blank=true) const;
+      void info() const;
+      
+      void fill_zero();
+      void fill_val(const T v);
+      void fill_linspace(const T start, const T stop);
+      
+      void scale(const T s);
+      void rev();
+      T sum();
+      
+      T get(const len_t i) const;
+      void set(const len_t i, const T v);
+      
+      bool operator==(const cpuvec<T> &x) const;
+      bool operator!=(const cpuvec<T> &x) const;
+      cpuvec<T>& operator=(const cpuvec<T> &x);
     
-    void print(uint8_t ndigits=4, bool add_final_blank=true) const;
-    void info() const;
-    
-    void fill_zero();
-    void fill_val(const T v);
-    void fill_linspace(const T start, const T stop);
-    
-    void scale(const T s);
-    void rev();
-    T sum();
-    
-    T get(const len_t i) const;
-    void set(const len_t i, const T v);
-    
-    bool operator==(const cpuvec<T> &x) const;
-    bool operator!=(const cpuvec<T> &x) const;
-    cpuvec<T>& operator=(const cpuvec<T> &x);
-  
-  private:
-    void free();
-    void check_params(len_t size);
-};
+    private:
+      void free();
+      void check_params(len_t size);
+  };
+}
 
 
 
@@ -78,7 +81,7 @@ class cpuvec : public univec<T>
   @endcode
  */
 template <typename T>
-cpuvec<T>::cpuvec()
+fml::cpuvec<T>::cpuvec()
 {
   this->_size = 0;
   this->data = NULL;
@@ -101,7 +104,7 @@ cpuvec<T>::cpuvec()
   @endcode
  */
 template <typename T>
-cpuvec<T>::cpuvec(len_t size)
+fml::cpuvec<T>::cpuvec(len_t size)
 {
   check_params(size);
   
@@ -132,7 +135,7 @@ cpuvec<T>::cpuvec(len_t size)
   thrown.
  */
 template <typename T>
-cpuvec<T>::cpuvec(T *data_, len_t size, bool free_on_destruct)
+fml::cpuvec<T>::cpuvec(T *data_, len_t size, bool free_on_destruct)
 {
   check_params(size);
   
@@ -145,7 +148,7 @@ cpuvec<T>::cpuvec(T *data_, len_t size, bool free_on_destruct)
 
 
 template <typename T>
-cpuvec<T>::cpuvec(const cpuvec<T> &x)
+fml::cpuvec<T>::cpuvec(const cpuvec<T> &x)
 {
   this->_size = x.size();
   this->data = x.data_ptr();
@@ -156,7 +159,7 @@ cpuvec<T>::cpuvec(const cpuvec<T> &x)
 
 
 template <typename T>
-cpuvec<T>::~cpuvec()
+fml::cpuvec<T>::~cpuvec()
 {
   this->free();
 }
@@ -176,7 +179,7 @@ cpuvec<T>::~cpuvec()
   If the input values are invalid, a `runtime_error` exception will be thrown.
  */
 template <typename T>
-void cpuvec<T>::resize(len_t size)
+void fml::cpuvec<T>::resize(len_t size)
 {
   check_params(size);
   
@@ -218,7 +221,7 @@ void cpuvec<T>::resize(len_t size)
   thrown.
  */
 template <typename T>
-void cpuvec<T>::inherit(T *data, len_t size, bool free_on_destruct)
+void fml::cpuvec<T>::inherit(T *data, len_t size, bool free_on_destruct)
 {
   check_params(size);
   
@@ -234,9 +237,9 @@ void cpuvec<T>::inherit(T *data, len_t size, bool free_on_destruct)
 
 /// @brief Duplicate the object in a deep copy.
 template <typename T>
-cpuvec<T> cpuvec<T>::dupe() const
+fml::cpuvec<T> fml::cpuvec<T>::dupe() const
 {
-  cpuvec<T> cpy(this->_size);
+  fml::cpuvec<T> cpy(this->_size);
   
   const size_t len = (size_t) this->_size * sizeof(T);
   memcpy(cpy.data_ptr(), this->data, len);
@@ -255,7 +258,7 @@ cpuvec<T> cpuvec<T>::dupe() const
   @param[in] add_final_blank Should a final blank line be printed?
  */
 template <typename T>
-void cpuvec<T>::print(uint8_t ndigits, bool add_final_blank) const
+void fml::cpuvec<T>::print(uint8_t ndigits, bool add_final_blank) const
 {
   for (len_t i=0; i<this->_size; i++)
     this->printval(this->data[i], ndigits);
@@ -269,7 +272,7 @@ void cpuvec<T>::print(uint8_t ndigits, bool add_final_blank) const
 
 /// @brief Print some brief information about the object.
 template <typename T>
-void cpuvec<T>::info() const
+void fml::cpuvec<T>::info() const
 {
   fml::print::printf("# cpuvec");
   fml::print::printf(" %d", this->_size);
@@ -283,7 +286,7 @@ void cpuvec<T>::info() const
 
 /// @brief Set all values to zero.
 template <typename T>
-void cpuvec<T>::fill_zero()
+void fml::cpuvec<T>::fill_zero()
 {
   const size_t len = (size_t) this->_size * sizeof(T);
   memset(this->data, 0, len);
@@ -297,7 +300,7 @@ void cpuvec<T>::fill_zero()
   @param[in] v Value to set all data values to.
  */
 template <typename T>
-void cpuvec<T>::fill_val(const T v)
+void fml::cpuvec<T>::fill_val(const T v)
 {
   #pragma omp parallel for simd if(this->_size > fml::omp::OMP_MIN_SIZE)
   for (len_t i=0; i<this->_size; i++)
@@ -312,7 +315,7 @@ void cpuvec<T>::fill_val(const T v)
   @param[in] start,stop Beginning/ending numbers.
  */
 template <typename REAL>
-void cpuvec<REAL>::fill_linspace(const REAL start, const REAL stop)
+void fml::cpuvec<REAL>::fill_linspace(const REAL start, const REAL stop)
 {
   if (start == stop)
     this->fill_val(start);
@@ -327,7 +330,7 @@ void cpuvec<REAL>::fill_linspace(const REAL start, const REAL stop)
 }
 
 template <>
-inline void cpuvec<int>::fill_linspace(const int start, const int stop)
+inline void fml::cpuvec<int>::fill_linspace(const int start, const int stop)
 {
   if (start == stop)
     this->fill_val(start);
@@ -349,7 +352,7 @@ inline void cpuvec<int>::fill_linspace(const int start, const int stop)
   @param[in] s Scaling value.
  */
 template <typename T>
-void cpuvec<T>::scale(const T s)
+void fml::cpuvec<T>::scale(const T s)
 {
   #pragma omp parallel for simd if(this->_size > fml::omp::OMP_MIN_SIZE)
   for (len_t i=0; i<this->_size; i++)
@@ -360,7 +363,7 @@ void cpuvec<T>::scale(const T s)
 
 /// @brief Reverse the vector.
 template <typename T>
-void cpuvec<T>::rev()
+void fml::cpuvec<T>::rev()
 {
   len_t j = this->_size - 1;
   
@@ -377,7 +380,7 @@ void cpuvec<T>::rev()
 
 /// @brief Sum the vector.
 template <typename T>
-T cpuvec<T>::sum()
+T fml::cpuvec<T>::sum()
 {
   T s = 0;
   
@@ -401,7 +404,7 @@ T cpuvec<T>::sum()
   exception.
  */
 template <typename T>
-T cpuvec<T>::get(const len_t i) const
+T fml::cpuvec<T>::get(const len_t i) const
 {
   this->check_index(i);
   return this->data[i];
@@ -417,7 +420,7 @@ T cpuvec<T>::get(const len_t i) const
   exception.
  */
 template <typename T>
-void cpuvec<T>::set(const len_t i, const T v)
+void fml::cpuvec<T>::set(const len_t i, const T v)
 {
   this->check_index(i);
   this->data[i] = v;
@@ -434,7 +437,7 @@ void cpuvec<T>::set(const len_t i, const T v)
   necessarily returned. Otherwise the objects are compared value by value.
  */
 template <typename T>
-bool cpuvec<T>::operator==(const cpuvec<T> &x) const
+bool fml::cpuvec<T>::operator==(const fml::cpuvec<T> &x) const
 {
   if (this->_size != x.size())
     return false;
@@ -460,7 +463,7 @@ bool cpuvec<T>::operator==(const cpuvec<T> &x) const
   @param[in] Comparison object.
  */
 template <typename T>
-bool cpuvec<T>::operator!=(const cpuvec<T> &x) const
+bool fml::cpuvec<T>::operator!=(const fml::cpuvec<T> &x) const
 {
   return !(*this == x);
 }
@@ -474,7 +477,7 @@ bool cpuvec<T>::operator!=(const cpuvec<T> &x) const
   @param[in] x Setter value.
  */
 template <typename T>
-cpuvec<T>& cpuvec<T>::operator=(const cpuvec<T> &x)
+fml::cpuvec<T>& fml::cpuvec<T>::operator=(const fml::cpuvec<T> &x)
 {
   this->_size = x.size();
   this->data = x.data_ptr();
@@ -490,7 +493,7 @@ cpuvec<T>& cpuvec<T>::operator=(const cpuvec<T> &x)
 // -----------------------------------------------------------------------------
 
 template <typename T>
-void cpuvec<T>::free()
+void fml::cpuvec<T>::free()
 {
   if (this->free_data && this->data)
   {
@@ -502,7 +505,7 @@ void cpuvec<T>::free()
 
 
 template <typename REAL>
-void cpuvec<REAL>::check_params(len_t size)
+void fml::cpuvec<REAL>::check_params(len_t size)
 {
   if (size < 0)
     throw std::runtime_error("invalid dimensions");

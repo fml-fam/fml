@@ -10,7 +10,7 @@ TEMPLATE_TEST_CASE("basics - vec", "[cpuvec]", float, double)
 {
   len_t n = 2;
   
-  cpuvec<TestType> x(n);
+  fml::cpuvec<TestType> x(n);
   REQUIRE( x.size() == n );
   
   x.fill_zero();
@@ -27,12 +27,12 @@ TEMPLATE_TEST_CASE("inheriting memory - vec", "[cpuvec]", float, double)
   
   TestType *data = (TestType*) malloc(n*sizeof(*data));
   
-  cpuvec<TestType> x(data, n);
+  fml::cpuvec<TestType> x(data, n);
   x.fill_val(1);
   x.~cpuvec();
   REQUIRE( fltcmp::eq(data[0], 1) );
   
-  cpuvec<TestType> y;
+  fml::cpuvec<TestType> y;
   y.inherit(data, n);
   y.fill_zero();
   y.~cpuvec();
@@ -47,7 +47,7 @@ TEMPLATE_TEST_CASE("resize - vec", "[cpuvec]", float, double)
 {
   len_t n = 1;
   
-  cpuvec<TestType> x(n);
+  fml::cpuvec<TestType> x(n);
   REQUIRE( x.size() == n );
   x.fill_val(1);
   
@@ -66,7 +66,7 @@ TEMPLATE_TEST_CASE("scale - vec", "[cpuvec]", float, double)
 {
   len_t n = 2;
   
-  cpuvec<TestType> x(n);
+  fml::cpuvec<TestType> x(n);
   x.fill_val(1);
   
   x.scale((TestType) 3);
@@ -80,8 +80,8 @@ TEMPLATE_TEST_CASE("indexing - vec", "[cpuvec]", float, double)
 {
   len_t n = 2;
   
-  cpuvec<TestType> x(n);
-  cpuvec<TestType> y(n);
+  fml::cpuvec<TestType> x(n);
+  fml::cpuvec<TestType> y(n);
   
   for (len_t i=0; i<n; i++)
     x.set(i, i+1);
@@ -99,7 +99,7 @@ TEMPLATE_TEST_CASE("rev - vec", "[cpuvec]", float, double)
 {
   len_t n = 2;
   
-  cpuvec<TestType> x(n);
+  fml::cpuvec<TestType> x(n);
   x.fill_linspace(1, n);
   
   x.rev();
@@ -113,7 +113,7 @@ TEMPLATE_TEST_CASE("sum - vec", "[cpuvec]", float, double)
 {
   len_t n = 5;
   
-  cpuvec<TestType> x(n);
+  fml::cpuvec<TestType> x(n);
   x.fill_linspace(1, n);
   
   TestType s = x.sum();

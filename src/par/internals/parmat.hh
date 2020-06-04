@@ -17,66 +17,72 @@
 #include "../comm.hh"
 
 
-template <class MAT, class VEC, typename REAL>
-class parmat
+namespace fml
 {
-  public:
-    parmat(){};
-    parmat(comm &mpi_comm, MAT &_data);
-    
-    void print(uint8_t ndigits=4, bool add_final_blank=true);
-    void info();
-    
-    void fill_zero();
-    void fill_val(const REAL v);
-    void fill_linspace(const REAL start, const REAL stop);
-    void fill_eye();
-    void fill_diag(const VEC &d);
-    void fill_runif(const uint32_t seed, const REAL min=0, const REAL max=1);
-    void fill_runif(const REAL min=0, const REAL max=1);
-    void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
-    void fill_rnorm(const REAL mean=0, const REAL sd=1);
-    
-    // void diag(cpuvec<REAL> &v);
-    // void antidiag(cpuvec<REAL> &v);
-    void scale(const REAL s);
-    // void rev_rows();
-    void rev_cols();
-    
-    bool any_inf() const;
-    bool any_nan() const;
-    
-    REAL get(const len_global_t i) const;
-    REAL get(const len_global_t i, const len_t j) const;
-    void set(const len_global_t i, const REAL v);
-    void set(const len_global_t i, const len_t j, const REAL v);
+  template <class MAT, class VEC, typename REAL>
+  class parmat
+  {
+    public:
+      parmat(){};
+      parmat(comm &mpi_comm, MAT &_data);
+      
+      void print(uint8_t ndigits=4, bool add_final_blank=true);
+      void info();
+      
+      void fill_zero();
+      void fill_val(const REAL v);
+      void fill_linspace(const REAL start, const REAL stop);
+      void fill_eye();
+      void fill_diag(const VEC &d);
+      void fill_runif(const uint32_t seed, const REAL min=0, const REAL max=1);
+      void fill_runif(const REAL min=0, const REAL max=1);
+      void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
+      void fill_rnorm(const REAL mean=0, const REAL sd=1);
+      
+      // void diag(cpuvec<REAL> &v);
+      // void antidiag(cpuvec<REAL> &v);
+      void scale(const REAL s);
+      // void rev_rows();
+      void rev_cols();
+      
+      bool any_inf() const;
+      bool any_nan() const;
+      
+      REAL get(const len_global_t i) const;
+      REAL get(const len_global_t i, const len_t j) const;
+      void set(const len_global_t i, const REAL v);
+      void set(const len_global_t i, const len_t j, const REAL v);
+      // void get_row(const len_global_t i, VEC &v) const;
+      // void get_col(const len_global_t j, VEC &v) const;
 
-    bool operator==(const parmat<MAT, VEC, REAL> &x) const;
-    bool operator!=(const parmat<MAT, VEC, REAL> &x) const;
-    
-    len_global_t nrows() const {return m_global;};
-    len_local_t nrows_local() const {return data.nrows();};
-    len_local_t ncols() const {return data.ncols();};
-    comm get_comm() const {return r;};
-    const MAT& data_obj() const {return data;};
-    MAT& data_obj() {return data;};
-    
-  protected:
-    MAT data;
-    len_global_t m_global;
-    comm r;
-    len_global_t nb4;
-    
-    void num_preceding_rows();
-    len_t get_local_dim();
-    void check_index(const len_global_t i) const;
-    void check_index(const len_global_t i, const len_t j) const;
-};
+      bool operator==(const parmat<MAT, VEC, REAL> &x) const;
+      bool operator!=(const parmat<MAT, VEC, REAL> &x) const;
+      // parmat<MAT, VEC, REAL>& operator=(const parmat<MAT, VEC, REAL> &x);
+      
+      len_global_t nrows() const {return m_global;};
+      len_local_t nrows_local() const {return data.nrows();};
+      len_local_t ncols() const {return data.ncols();};
+      comm get_comm() const {return r;};
+      const MAT& data_obj() const {return data;};
+      MAT& data_obj() {return data;};
+      
+    protected:
+      MAT data;
+      len_global_t m_global;
+      comm r;
+      len_global_t nb4;
+      
+      void num_preceding_rows();
+      len_t get_local_dim();
+      void check_index(const len_global_t i) const;
+      void check_index(const len_global_t i, const len_t j) const;
+  };
+}
 
 
 
 template <class MAT, class VEC, typename REAL>
-parmat<MAT, VEC, REAL>::parmat(comm &mpi_comm, MAT &_data)
+fml::parmat<MAT, VEC, REAL>::parmat(fml::comm &mpi_comm, MAT &_data)
 {
   r = mpi_comm;
   data = _data;
@@ -89,7 +95,7 @@ parmat<MAT, VEC, REAL>::parmat(comm &mpi_comm, MAT &_data)
 
 
 template <class MAT, class VEC, typename REAL>
-void parmat<MAT, VEC, REAL>::print(uint8_t ndigits, bool add_final_blank)
+void fml::parmat<MAT, VEC, REAL>::print(uint8_t ndigits, bool add_final_blank)
 {
   len_t n = data.ncols();
   VEC pv(n);
@@ -136,7 +142,7 @@ void parmat<MAT, VEC, REAL>::print(uint8_t ndigits, bool add_final_blank)
 
 
 template <class MAT, class VEC, typename REAL>
-void parmat<MAT, VEC, REAL>::info()
+void fml::parmat<MAT, VEC, REAL>::info()
 {
   r.printf(0, "# parmat");
   r.printf(0, " %" PRIu64 "x%d", m_global, data.ncols());
@@ -147,7 +153,7 @@ void parmat<MAT, VEC, REAL>::info()
 
 
 template <class MAT, class VEC, typename REAL>
-void parmat<MAT, VEC, REAL>::fill_zero()
+void fml::parmat<MAT, VEC, REAL>::fill_zero()
 {
   data.fill_zero();
 }
@@ -155,7 +161,7 @@ void parmat<MAT, VEC, REAL>::fill_zero()
 
 
 template <class MAT, class VEC, typename REAL>
-void parmat<MAT, VEC, REAL>::fill_val(const REAL v)
+void fml::parmat<MAT, VEC, REAL>::fill_val(const REAL v)
 {
   data.fill_val(v);
 }
@@ -163,13 +169,13 @@ void parmat<MAT, VEC, REAL>::fill_val(const REAL v)
 
 
 template <class MAT, class VEC, typename REAL>
-void parmat<MAT, VEC, REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL max)
+void fml::parmat<MAT, VEC, REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL max)
 {
   data.fill_runif(seed, min, max);
 }
 
 template <class MAT, class VEC, typename REAL>
-void parmat<MAT, VEC, REAL>::fill_runif(const REAL min, const REAL max)
+void fml::parmat<MAT, VEC, REAL>::fill_runif(const REAL min, const REAL max)
 {
   uint32_t seed = fml::rand::get_seed() + r.rank();
   data.fill_runif(seed, min, max);
@@ -178,13 +184,13 @@ void parmat<MAT, VEC, REAL>::fill_runif(const REAL min, const REAL max)
 
 
 template <class MAT, class VEC, typename REAL>
-void parmat<MAT, VEC, REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL sd)
+void fml::parmat<MAT, VEC, REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL sd)
 {
   data.fill_rnorm(seed, mean, sd);
 }
 
 template <class MAT, class VEC, typename REAL>
-void parmat<MAT, VEC, REAL>::fill_rnorm(const REAL mean, const REAL sd)
+void fml::parmat<MAT, VEC, REAL>::fill_rnorm(const REAL mean, const REAL sd)
 {
   uint32_t seed = fml::rand::get_seed() + r.rank();
   data.fill_rnorm(seed, mean, sd);
@@ -193,7 +199,7 @@ void parmat<MAT, VEC, REAL>::fill_rnorm(const REAL mean, const REAL sd)
 
 
 template <class MAT, class VEC, typename REAL>
-void parmat<MAT, VEC, REAL>::scale(const REAL v)
+void fml::parmat<MAT, VEC, REAL>::scale(const REAL v)
 {
   data.scale(v);
 }
@@ -201,7 +207,7 @@ void parmat<MAT, VEC, REAL>::scale(const REAL v)
 
 
 template <class MAT, class VEC, typename REAL>
-void parmat<MAT, VEC, REAL>::rev_cols()
+void fml::parmat<MAT, VEC, REAL>::rev_cols()
 {
   data.rev_cols();
 }
@@ -209,7 +215,7 @@ void parmat<MAT, VEC, REAL>::rev_cols()
 
 
 template <class MAT, class VEC, typename REAL>
-bool parmat<MAT, VEC, REAL>::any_inf() const
+bool fml::parmat<MAT, VEC, REAL>::any_inf() const
 {
   int ret = (int) data.any_inf();
   r.allreduce(1, &ret);
@@ -219,7 +225,7 @@ bool parmat<MAT, VEC, REAL>::any_inf() const
 
 
 template <class MAT, class VEC, typename REAL>
-bool parmat<MAT, VEC, REAL>::any_nan() const
+bool fml::parmat<MAT, VEC, REAL>::any_nan() const
 {
   int ret = (int) data.any_nan();
   r.allreduce(1, &ret);
@@ -229,7 +235,7 @@ bool parmat<MAT, VEC, REAL>::any_nan() const
 
 
 template <class MAT, class VEC, typename REAL>
-REAL parmat<MAT, VEC, REAL>::get(const len_global_t i) const
+REAL fml::parmat<MAT, VEC, REAL>::get(const len_global_t i) const
 {
   check_index(i);
   
@@ -247,7 +253,7 @@ REAL parmat<MAT, VEC, REAL>::get(const len_global_t i) const
 }
 
 template <class MAT, class VEC, typename REAL>
-REAL parmat<MAT, VEC, REAL>::get(const len_global_t i, const len_t j) const
+REAL fml::parmat<MAT, VEC, REAL>::get(const len_global_t i, const len_t j) const
 {
   check_index(i, j);
   
@@ -262,7 +268,7 @@ REAL parmat<MAT, VEC, REAL>::get(const len_global_t i, const len_t j) const
 }
 
 template <class MAT, class VEC, typename REAL>
-void parmat<MAT, VEC, REAL>::set(const len_global_t i, const REAL v)
+void fml::parmat<MAT, VEC, REAL>::set(const len_global_t i, const REAL v)
 {
   check_index(i);
   
@@ -274,7 +280,7 @@ void parmat<MAT, VEC, REAL>::set(const len_global_t i, const REAL v)
 }
 
 template <class MAT, class VEC, typename REAL>
-void parmat<MAT, VEC, REAL>::set(const len_global_t i, const len_t j, const REAL v)
+void fml::parmat<MAT, VEC, REAL>::set(const len_global_t i, const len_t j, const REAL v)
 {
   check_index(i, j);
   
@@ -285,7 +291,7 @@ void parmat<MAT, VEC, REAL>::set(const len_global_t i, const len_t j, const REAL
 
 
 template <class MAT, class VEC, typename REAL>
-bool parmat<MAT, VEC, REAL>::operator==(const parmat<MAT, VEC, REAL> &x) const
+bool fml::parmat<MAT, VEC, REAL>::operator==(const fml::parmat<MAT, VEC, REAL> &x) const
 {
   int neq_count = (int) (data != x.data_obj());
   r.allreduce(1, &neq_count);
@@ -294,7 +300,7 @@ bool parmat<MAT, VEC, REAL>::operator==(const parmat<MAT, VEC, REAL> &x) const
 }
 
 template <class MAT, class VEC, typename REAL>
-bool parmat<MAT, VEC, REAL>::operator!=(const parmat<MAT, VEC, REAL> &x) const
+bool fml::parmat<MAT, VEC, REAL>::operator!=(const fml::parmat<MAT, VEC, REAL> &x) const
 {
   return !(*this == x);
 }
@@ -306,7 +312,7 @@ bool parmat<MAT, VEC, REAL>::operator!=(const parmat<MAT, VEC, REAL> &x) const
 // -----------------------------------------------------------------------------
 
 template <class MAT, class VEC, typename REAL>
-void parmat<MAT, VEC, REAL>::num_preceding_rows()
+void fml::parmat<MAT, VEC, REAL>::num_preceding_rows()
 {
   int myrank = r.rank();
   int size = r.size();;
@@ -334,7 +340,7 @@ void parmat<MAT, VEC, REAL>::num_preceding_rows()
 
 
 template <class MAT, class VEC, typename REAL>
-len_t parmat<MAT, VEC, REAL>::get_local_dim()
+len_t fml::parmat<MAT, VEC, REAL>::get_local_dim()
 {
   len_t local = m_global / r.size();
   len_t rem = (len_t) (m_global - (len_global_t) local*r.size());
@@ -347,14 +353,14 @@ len_t parmat<MAT, VEC, REAL>::get_local_dim()
 
 
 template <class MAT, class VEC, typename REAL>
-void parmat<MAT, VEC, REAL>::check_index(const len_global_t i) const
+void fml::parmat<MAT, VEC, REAL>::check_index(const len_global_t i) const
 {
   if (i < 0 || i >= (m_global * data.ncols()))
     throw std::runtime_error("index out of bounds");
 }
 
 template <class MAT, class VEC, typename REAL>
-void parmat<MAT, VEC, REAL>::check_index(const len_global_t i, const len_t j) const
+void fml::parmat<MAT, VEC, REAL>::check_index(const len_global_t i, const len_t j) const
 {
   if (i < 0 || i >= m_global || j < 0 || j >= data.ncols())
     throw std::runtime_error("index out of bounds");

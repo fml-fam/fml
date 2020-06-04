@@ -6,16 +6,16 @@
 
 using namespace arraytools;
 
-extern std::shared_ptr<card> c;
+extern std::shared_ptr<fml::card> c;
 
 
 TEMPLATE_TEST_CASE("lacpy", "[gpu_utils]", float, double)
 {
   len_t m = 3;
   len_t n = 2;
-  gpumat<TestType> x(c, m, n);
-  gpumat<TestType> test(c, m, n);
-  gpumat<TestType> truth(c, m, n);
+  fml::gpumat<TestType> x(c, m, n);
+  fml::gpumat<TestType> test(c, m, n);
+  fml::gpumat<TestType> truth(c, m, n);
   truth.fill_linspace(1, m*n);
   
   x.fill_linspace(1, m*n);
@@ -48,8 +48,8 @@ TEMPLATE_TEST_CASE("tri2zero - tall", "[gpu_utils]", float, double)
 {
   len_t m = 5;
   len_t n = 3;
-  gpumat<TestType> x(c, m, n);
-  gpumat<TestType> truth(c, m, n);
+  fml::gpumat<TestType> x(c, m, n);
+  fml::gpumat<TestType> truth(c, m, n);
   truth.fill_linspace(1, m*n);
   
   x.fill_linspace(1, m*n);
@@ -99,8 +99,8 @@ TEMPLATE_TEST_CASE("tri2zero - wide", "[gpu_utils]", float, double)
 {
   len_t m = 3;
   len_t n = 5;
-  gpumat<TestType> x(c, m, n);
-  gpumat<TestType> truth(c, m, n);
+  fml::gpumat<TestType> x(c, m, n);
+  fml::gpumat<TestType> truth(c, m, n);
   truth.fill_linspace(1, m*n);
   
   x.fill_linspace(1, m*n);

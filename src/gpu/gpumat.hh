@@ -24,74 +24,77 @@
 #include "gpuvec.hh"
 
 
-/**
-  @brief Matrix class for data held on a single GPU. 
-  
-  @tparam REAL should be '__half', 'float', or 'double'.
- */
-template <typename REAL>
-class gpumat : public unimat<REAL>
+namespace fml
 {
-  public:
-    gpumat(std::shared_ptr<card> gpu);
-    gpumat(std::shared_ptr<card> gpu, len_t nrows, len_t ncols);
-    gpumat(std::shared_ptr<card> gpu, REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
-    gpumat(const gpumat &x);
-    ~gpumat();
+  /**
+    @brief Matrix class for data held on a single GPU. 
     
-    void resize(len_t nrows, len_t ncols);
-    void resize(std::shared_ptr<card> gpu, len_t nrows, len_t ncols);
-    void inherit(std::shared_ptr<card> gpu, REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
-    gpumat<REAL> dupe() const;
+    @tparam REAL should be '__half', 'float', or 'double'.
+   */
+  template <typename REAL>
+  class gpumat : public fml::unimat<REAL>
+  {
+    public:
+      gpumat(std::shared_ptr<card> gpu);
+      gpumat(std::shared_ptr<card> gpu, len_t nrows, len_t ncols);
+      gpumat(std::shared_ptr<card> gpu, REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
+      gpumat(const gpumat &x);
+      ~gpumat();
+      
+      void resize(len_t nrows, len_t ncols);
+      void resize(std::shared_ptr<card> gpu, len_t nrows, len_t ncols);
+      void inherit(std::shared_ptr<card> gpu, REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
+      gpumat<REAL> dupe() const;
+      
+      void print(uint8_t ndigits=4, bool add_final_blank=true) const;
+      void info() const;
+      
+      void fill_zero();
+      void fill_val(const REAL v);
+      void fill_linspace(const REAL start, const REAL stop);
+      void fill_eye();
+      void fill_diag(const gpuvec<REAL> &v);
+      void fill_runif(const uint32_t seed, const REAL min=0, const REAL max=1);
+      void fill_runif(const REAL min=0, const REAL max=1);
+      void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
+      void fill_rnorm(const REAL mean=0, const REAL sd=1);
+      
+      void diag(gpuvec<REAL> &v);
+      void antidiag(gpuvec<REAL> &v);
+      void scale(const REAL s);
+      void rev_rows();
+      void rev_cols();
+      
+      bool any_inf() const;
+      bool any_nan() const;
+      
+      REAL get(const len_t i) const;
+      REAL get(const len_t i, const len_t j) const;
+      void set(const len_t i, const REAL v);
+      void set(const len_t i, const len_t j, const REAL v);
+      void get_row(const len_t i, gpuvec<REAL> &v) const;
+      void get_col(const len_t j, gpuvec<REAL> &v) const;
+      
+      bool operator==(const gpumat<REAL> &x) const;
+      bool operator!=(const gpumat<REAL> &x) const;
+      gpumat<REAL>& operator=(const gpumat<REAL> &x);
+      
+      std::shared_ptr<card> get_card() const {return c;};
+      dim3 get_blockdim() const {return dim_block;};
+      dim3 get_griddim() const {return dim_grid;};
+      
+    protected:
+      std::shared_ptr<card> c;
     
-    void print(uint8_t ndigits=4, bool add_final_blank=true) const;
-    void info() const;
-    
-    void fill_zero();
-    void fill_val(const REAL v);
-    void fill_linspace(const REAL start, const REAL stop);
-    void fill_eye();
-    void fill_diag(const gpuvec<REAL> &v);
-    void fill_runif(const uint32_t seed, const REAL min=0, const REAL max=1);
-    void fill_runif(const REAL min=0, const REAL max=1);
-    void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
-    void fill_rnorm(const REAL mean=0, const REAL sd=1);
-    
-    void diag(gpuvec<REAL> &v);
-    void antidiag(gpuvec<REAL> &v);
-    void scale(const REAL s);
-    void rev_rows();
-    void rev_cols();
-    
-    bool any_inf() const;
-    bool any_nan() const;
-    
-    REAL get(const len_t i) const;
-    REAL get(const len_t i, const len_t j) const;
-    void set(const len_t i, const REAL v);
-    void set(const len_t i, const len_t j, const REAL v);
-    void get_row(const len_t i, gpuvec<REAL> &v) const;
-    void get_col(const len_t j, gpuvec<REAL> &v) const;
-    
-    bool operator==(const gpumat<REAL> &x) const;
-    bool operator!=(const gpumat<REAL> &x) const;
-    gpumat<REAL>& operator=(const gpumat<REAL> &x);
-    
-    std::shared_ptr<card> get_card() const {return c;};
-    dim3 get_blockdim() const {return dim_block;};
-    dim3 get_griddim() const {return dim_grid;};
-    
-  protected:
-    std::shared_ptr<card> c;
-  
-  private:
-    dim3 dim_block;
-    dim3 dim_grid;
-    
-    void free();
-    void check_params(len_t nrows, len_t ncols);
-    void check_gpu(std::shared_ptr<card> gpu);
-};
+    private:
+      dim3 dim_block;
+      dim3 dim_grid;
+      
+      void free();
+      void check_params(len_t nrows, len_t ncols);
+      void check_gpu(std::shared_ptr<card> gpu);
+  };
+}
 
 
 
@@ -112,7 +115,7 @@ class gpumat : public unimat<REAL>
   @endcode
  */
 template <typename REAL>
-gpumat<REAL>::gpumat(std::shared_ptr<card> gpu)
+fml::gpumat<REAL>::gpumat(std::shared_ptr<fml::card> gpu)
 {
   check_gpu(gpu);
   
@@ -142,7 +145,7 @@ gpumat<REAL>::gpumat(std::shared_ptr<card> gpu)
   @endcode
  */
 template <typename REAL>
-gpumat<REAL>::gpumat(std::shared_ptr<card> gpu, len_t nrows, len_t ncols)
+fml::gpumat<REAL>::gpumat(std::shared_ptr<fml::card> gpu, len_t nrows, len_t ncols)
 {
   check_params(nrows, ncols);
   check_gpu(gpu);
@@ -178,7 +181,7 @@ gpumat<REAL>::gpumat(std::shared_ptr<card> gpu, len_t nrows, len_t ncols)
   thrown.
  */
 template <typename REAL>
-gpumat<REAL>::gpumat(std::shared_ptr<card> gpu, REAL *data_, len_t nrows, len_t ncols, bool free_on_destruct)
+fml::gpumat<REAL>::gpumat(std::shared_ptr<fml::card> gpu, REAL *data_, len_t nrows, len_t ncols, bool free_on_destruct)
 {
   check_params(nrows, ncols);
   check_gpu(gpu);
@@ -198,7 +201,7 @@ gpumat<REAL>::gpumat(std::shared_ptr<card> gpu, REAL *data_, len_t nrows, len_t 
 
 
 template <typename REAL>
-gpumat<REAL>::gpumat(const gpumat<REAL> &x)
+fml::gpumat<REAL>::gpumat(const gpumat<REAL> &x)
 {
   this->m = x.nrows();
   this->n = x.ncols();
@@ -215,7 +218,7 @@ gpumat<REAL>::gpumat(const gpumat<REAL> &x)
 
 
 template <typename REAL>
-gpumat<REAL>::~gpumat()
+fml::gpumat<REAL>::~gpumat()
 {
   this->free();
   c = NULL;
@@ -236,7 +239,7 @@ gpumat<REAL>::~gpumat()
   If the input values are invalid, a `runtime_error` exception will be thrown.
  */
 template <typename REAL>
-void gpumat<REAL>::resize(len_t nrows, len_t ncols)
+void fml::gpumat<REAL>::resize(len_t nrows, len_t ncols)
 {
   check_params(nrows, ncols);
   
@@ -279,7 +282,7 @@ void gpumat<REAL>::resize(len_t nrows, len_t ncols)
   If the input values are invalid, a `runtime_error` exception will be thrown.
  */
 template <typename REAL>
-void gpumat<REAL>::resize(std::shared_ptr<card> gpu, len_t nrows, len_t ncols)
+void fml::gpumat<REAL>::resize(std::shared_ptr<fml::card> gpu, len_t nrows, len_t ncols)
 {
   check_gpu(gpu);
   
@@ -303,7 +306,7 @@ void gpumat<REAL>::resize(std::shared_ptr<card> gpu, len_t nrows, len_t ncols)
   thrown.
  */
 template <typename REAL>
-void gpumat<REAL>::inherit(std::shared_ptr<card> gpu, REAL *data, len_t nrows, len_t ncols, bool free_on_destruct)
+void fml::gpumat<REAL>::inherit(std::shared_ptr<fml::card> gpu, REAL *data, len_t nrows, len_t ncols, bool free_on_destruct)
 {
   check_params(nrows, ncols);
   check_gpu(gpu);
@@ -326,9 +329,9 @@ void gpumat<REAL>::inherit(std::shared_ptr<card> gpu, REAL *data, len_t nrows, l
 
 /// @brief Duplicate the object in a deep copy.
 template <typename REAL>
-gpumat<REAL> gpumat<REAL>::dupe() const
+fml::gpumat<REAL> fml::gpumat<REAL>::dupe() const
 {
-  gpumat<REAL> cpy(this->c, this->m, this->n);
+  fml::gpumat<REAL> cpy(this->c, this->m, this->n);
   
   const size_t len = (size_t) this->m * this->n * sizeof(REAL);
   this->c->mem_gpu2gpu(cpy.data_ptr(), this->data, len);
@@ -347,7 +350,7 @@ gpumat<REAL> gpumat<REAL>::dupe() const
   @param[in] add_final_blank Should a final blank line be printed?
  */
 template <typename REAL>
-void gpumat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
+void fml::gpumat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 {
   for (int i=0; i<this->m; i++)
   {
@@ -369,7 +372,7 @@ void gpumat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 
 /// @brief Print some brief information about the object.
 template <typename REAL>
-void gpumat<REAL>::info() const
+void fml::gpumat<REAL>::info() const
 {
   fml::print::printf("# gpumat ");
   fml::print::printf("%dx%d ", this->m, this->n);
@@ -383,7 +386,7 @@ void gpumat<REAL>::info() const
 
 /// @brief Set all values to zero.
 template <typename REAL>
-void gpumat<REAL>::fill_zero()
+void fml::gpumat<REAL>::fill_zero()
 {
   const size_t len = (size_t) this->m * this->n * sizeof(REAL);
   this->c->mem_set(this->data, 0, len);
@@ -397,7 +400,7 @@ void gpumat<REAL>::fill_zero()
   @param[in] v Value to set all data values to.
  */
 template <typename REAL>
-void gpumat<REAL>::fill_val(const REAL v)
+void fml::gpumat<REAL>::fill_val(const REAL v)
 {
   fml::kernelfuns::kernel_fill_val<<<dim_grid, dim_block>>>(v, this->m, this->n, this->data);
   this->c->check();
@@ -411,22 +414,22 @@ void gpumat<REAL>::fill_val(const REAL v)
   @param[in] start,stop Beginning/ending numbers.
  */
 template <typename REAL>
-void gpumat<REAL>::fill_linspace(REAL start, REAL stop)
+void fml::gpumat<REAL>::fill_linspace(REAL start, REAL stop)
 {
   // if (start == stop)
   //   this->fill_val(start);
   // else
-  {
+  // {
     fml::kernelfuns::kernel_fill_linspace<<<dim_grid, dim_block>>>(start, stop, this->m, this->n, this->data);
     this->c->check();
-  }
+  // }
 }
 
 
 
 /// @brief Set diagonal entries to 1 and non-diagonal entries to 0.
 template <typename REAL>
-void gpumat<REAL>::fill_eye()
+void fml::gpumat<REAL>::fill_eye()
 {
   fml::kernelfuns::kernel_fill_eye<<<dim_grid, dim_block>>>(this->m, this->n, this->data);
   this->c->check();
@@ -444,7 +447,7 @@ void gpumat<REAL>::fill_eye()
   @param[in] v Vector of values to set the matrix diagonal to.
  */
 template <typename REAL>
-void gpumat<REAL>::fill_diag(const gpuvec<REAL> &v)
+void fml::gpumat<REAL>::fill_diag(const gpuvec<REAL> &v)
 {
   fml::kernelfuns::kernel_fill_diag<<<dim_grid, dim_block>>>(v.size(), v.data_ptr(), this->m, this->n, this->data);
   this->c->check();
@@ -464,7 +467,7 @@ void gpumat<REAL>::fill_diag(const gpuvec<REAL> &v)
   exception will be thrown.
  */
 template <typename REAL>
-void gpumat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL max)
+void fml::gpumat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL max)
 {
   const size_t len = (size_t) this->m * this->n;
   gpurand::gen_runif(seed, len, this->data);
@@ -474,7 +477,7 @@ void gpumat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL ma
 
 /// \overload
 template <typename REAL>
-void gpumat<REAL>::fill_runif(const REAL min, const REAL max)
+void fml::gpumat<REAL>::fill_runif(const REAL min, const REAL max)
 {
   uint32_t seed = fml::rand::get_seed();
   this->fill_runif(seed, min, max);
@@ -494,7 +497,7 @@ void gpumat<REAL>::fill_runif(const REAL min, const REAL max)
   exception will be thrown.
  */
 template <typename REAL>
-void gpumat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL sd)
+void fml::gpumat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL sd)
 {
   const size_t len = (size_t) this->m * this->n;
   gpurand::gen_rnorm(seed, mean, sd, len, this->data);
@@ -502,7 +505,7 @@ void gpumat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL s
 
 /// \overload
 template <typename REAL>
-void gpumat<REAL>::fill_rnorm(const REAL mean, const REAL sd)
+void fml::gpumat<REAL>::fill_rnorm(const REAL mean, const REAL sd)
 {
   uint32_t seed = fml::rand::get_seed();
   this->fill_rnorm(mean, sd);
@@ -524,7 +527,7 @@ void gpumat<REAL>::fill_rnorm(const REAL mean, const REAL sd)
   will be thrown.
  */
 template <typename REAL>
-void gpumat<REAL>::diag(gpuvec<REAL> &v)
+void fml::gpumat<REAL>::diag(gpuvec<REAL> &v)
 {
   const len_t minmn = std::min(this->m, this->n);
   v.resize(minmn);
@@ -550,7 +553,7 @@ void gpumat<REAL>::diag(gpuvec<REAL> &v)
   will be thrown.
  */
 template <typename REAL>
-void gpumat<REAL>::antidiag(gpuvec<REAL> &v)
+void fml::gpumat<REAL>::antidiag(gpuvec<REAL> &v)
 {
   const len_t minmn = std::min(this->m, this->n);
   v.resize(minmn);
@@ -567,7 +570,7 @@ void gpumat<REAL>::antidiag(gpuvec<REAL> &v)
   @param[in] s Scaling value.
  */
 template <typename REAL>
-void gpumat<REAL>::scale(const REAL s)
+void fml::gpumat<REAL>::scale(const REAL s)
 {
   fml::kernelfuns::kernel_scale<<<dim_grid, dim_block>>>(s, this->m, this->n, this->data);
   this->c->check();
@@ -577,7 +580,7 @@ void gpumat<REAL>::scale(const REAL s)
 
 /// @brief Reverse the rows of the matrix.
 template <typename REAL>
-void gpumat<REAL>::rev_rows()
+void fml::gpumat<REAL>::rev_rows()
 {
   fml::kernelfuns::kernel_rev_rows<<<dim_grid, dim_block>>>(this->m, this->n, this->data);
   this->c->check();
@@ -587,7 +590,7 @@ void gpumat<REAL>::rev_rows()
 
 /// @brief Reverse the columns of the matrix.
 template <typename REAL>
-void gpumat<REAL>::rev_cols()
+void fml::gpumat<REAL>::rev_cols()
 {
   fml::kernelfuns::kernel_rev_cols<<<dim_grid, dim_block>>>(this->m, this->n, this->data);
   this->c->check();
@@ -597,7 +600,7 @@ void gpumat<REAL>::rev_cols()
 
 /// @brief Are any values infinite?
 template <typename REAL>
-bool gpumat<REAL>::any_inf() const
+bool fml::gpumat<REAL>::any_inf() const
 {
   int has_inf = 0;
   gpuscalar<int> has_inf_gpu(c, has_inf);
@@ -613,7 +616,7 @@ bool gpumat<REAL>::any_inf() const
 
 
 template <typename REAL>
-bool gpumat<REAL>::any_nan() const
+bool fml::gpumat<REAL>::any_nan() const
 {
   int has_nan = 0;
   gpuscalar<int> has_nan_gpu(c, has_nan);
@@ -640,7 +643,7 @@ bool gpumat<REAL>::any_nan() const
   exception.
  */
 template <typename REAL>
-REAL gpumat<REAL>::get(const len_t i) const
+REAL fml::gpumat<REAL>::get(const len_t i) const
 {
   this->check_index(i);
 
@@ -658,7 +661,7 @@ REAL gpumat<REAL>::get(const len_t i) const
   exception.
  */
 template <typename REAL>
-REAL gpumat<REAL>::get(const len_t i, const len_t j) const
+REAL fml::gpumat<REAL>::get(const len_t i, const len_t j) const
 {
   this->check_index(i, j);
 
@@ -678,7 +681,7 @@ REAL gpumat<REAL>::get(const len_t i, const len_t j) const
   exception.
  */
 template <typename REAL>
-void gpumat<REAL>::set(const len_t i, const REAL v)
+void fml::gpumat<REAL>::set(const len_t i, const REAL v)
 {
   this->check_index(i);
   this->c->mem_cpu2gpu(this->data + i, &v, sizeof(REAL));
@@ -694,7 +697,7 @@ void gpumat<REAL>::set(const len_t i, const REAL v)
   exception.
  */
 template <typename REAL>
-void gpumat<REAL>::set(const len_t i, const len_t j, const REAL v)
+void fml::gpumat<REAL>::set(const len_t i, const len_t j, const REAL v)
 {
   this->check_index(i, j);
   this->c->mem_cpu2gpu(this->data + (i + this->m*j), &v, sizeof(REAL));
@@ -716,7 +719,7 @@ void gpumat<REAL>::set(const len_t i, const len_t j, const REAL v)
   is triggered and fails, a `bad_alloc` exception will be thrown.
  */
 template <typename REAL>
-void gpumat<REAL>::get_row(const len_t i, gpuvec<REAL> &v) const
+void fml::gpumat<REAL>::get_row(const len_t i, fml::gpuvec<REAL> &v) const
 {
   if (i < 0 || i >= this->m)
     throw std::logic_error("invalid matrix row");
@@ -743,7 +746,7 @@ void gpumat<REAL>::get_row(const len_t i, gpuvec<REAL> &v) const
   reallocation is triggered and fails, a `bad_alloc` exception will be thrown.
  */
 template <typename REAL>
-void gpumat<REAL>::get_col(const len_t j, gpuvec<REAL> &v) const
+void fml::gpumat<REAL>::get_col(const len_t j, fml::gpuvec<REAL> &v) const
 {
   if (j < 0 || j >= this->n)
     throw std::logic_error("invalid matrix column");
@@ -766,7 +769,7 @@ void gpumat<REAL>::get_col(const len_t j, gpuvec<REAL> &v) const
   `true` is returned. Otherwise the objects are compared value by value.
  */
 template <typename T>
-bool gpumat<T>::operator==(const gpumat<T> &x) const
+bool fml::gpumat<T>::operator==(const fml::gpumat<T> &x) const
 {
   if (this->m != x.nrows() || this->n != x.ncols())
     return false;
@@ -776,7 +779,7 @@ bool gpumat<T>::operator==(const gpumat<T> &x) const
     return true;
   
   int all_eq = 1;
-  gpuscalar<int> all_eq_gpu(c, all_eq);
+  fml::gpuscalar<int> all_eq_gpu(c, all_eq);
   
   fml::kernelfuns::kernel_all_eq<<<dim_grid, dim_block>>>(this->m, this->n, this->data, x.data_ptr(), all_eq_gpu.data_ptr());
   
@@ -793,7 +796,7 @@ bool gpumat<T>::operator==(const gpumat<T> &x) const
   @param[in] Comparison object.
  */
 template <typename T>
-bool gpumat<T>::operator!=(const gpumat<T> &x) const
+bool fml::gpumat<T>::operator!=(const fml::gpumat<T> &x) const
 {
   return !(*this == x);
 }
@@ -807,7 +810,7 @@ bool gpumat<T>::operator!=(const gpumat<T> &x) const
   @param[in] x Setter value.
  */
 template <typename REAL>
-gpumat<REAL>& gpumat<REAL>::operator=(const gpumat<REAL> &x)
+fml::gpumat<REAL>& fml::gpumat<REAL>::operator=(const fml::gpumat<REAL> &x)
 {
   this->c = x.get_card();
   
@@ -826,7 +829,7 @@ gpumat<REAL>& gpumat<REAL>::operator=(const gpumat<REAL> &x)
 // -----------------------------------------------------------------------------
 
 template <typename REAL>
-void gpumat<REAL>::free()
+void fml::gpumat<REAL>::free()
 {
   if (this->free_data && this->data)
   {
@@ -838,7 +841,7 @@ void gpumat<REAL>::free()
 
 
 template <typename REAL>
-void gpumat<REAL>::check_params(len_t nrows, len_t ncols)
+void fml::gpumat<REAL>::check_params(len_t nrows, len_t ncols)
 {
   if (nrows < 0 || ncols < 0)
     throw std::runtime_error("invalid dimensions");
@@ -847,7 +850,7 @@ void gpumat<REAL>::check_params(len_t nrows, len_t ncols)
 
 
 template <typename REAL>
-void gpumat<REAL>::check_gpu(std::shared_ptr<card> gpu)
+void fml::gpumat<REAL>::check_gpu(std::shared_ptr<fml::card> gpu)
 {
   if (!gpu->valid_card())
     throw std::runtime_error("GPU card object is invalid");

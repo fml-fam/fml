@@ -5,10 +5,10 @@
 
 int main()
 {
-  grid g = grid(PROC_GRID_SQUARE);
+  fml::grid g = fml::grid(fml::PROC_GRID_SQUARE);
   g.info();
   
-  mpimat<float> x(g, 5, 5, 2, 2);
+  fml::mpimat<float> x(g, 5, 5, 2, 2);
   x.info();
   
   x.fill_eye();

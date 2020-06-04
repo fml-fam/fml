@@ -10,6 +10,8 @@
 #include <curand.h>
 
 
+namespace fml
+{
 namespace gpurand
 {
   namespace defs
@@ -104,6 +106,7 @@ namespace gpurand
     
     curandDestroyGenerator(gen);
   }
+}
 }
 
 

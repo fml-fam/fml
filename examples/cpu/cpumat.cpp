@@ -3,7 +3,7 @@
 
 int main()
 {
-  cpumat<float> x(5, 5);
+  fml::cpumat<float> x(5, 5);
   x.info();
   
   x.fill_eye();

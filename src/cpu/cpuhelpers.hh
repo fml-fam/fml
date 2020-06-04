@@ -15,6 +15,8 @@
 #include "cpuvec.hh"
 
 
+namespace fml
+{
 /// @brief CPU class helpers.
 namespace cpuhelpers
 {
@@ -71,6 +73,7 @@ namespace cpuhelpers
     
     return cpu_out;
   }
+}
 }
 
 

@@ -11,8 +11,8 @@ TEMPLATE_TEST_CASE("tri2zero - tall", "[cpu_utils]", float, double)
 {
   len_t m = 5;
   len_t n = 3;
-  cpumat<TestType> x(m, n);
-  cpumat<TestType> truth(m, n);
+  fml::cpumat<TestType> x(m, n);
+  fml::cpumat<TestType> truth(m, n);
   truth.fill_linspace(1, m*n);
   
   x.fill_linspace(1, m*n);
@@ -62,8 +62,8 @@ TEMPLATE_TEST_CASE("tri2zero - wide", "[cpu_utils]", float, double)
 {
   len_t m = 3;
   len_t n = 5;
-  cpumat<TestType> x(m, n);
-  cpumat<TestType> truth(m, n);
+  fml::cpumat<TestType> x(m, n);
+  fml::cpumat<TestType> truth(m, n);
   truth.fill_linspace(1, m*n);
   
   x.fill_linspace(1, m*n);

@@ -16,11 +16,11 @@ static inline void print_det(int sign, float modulus)
 
 int main()
 {
-  auto c = gpuhelpers::new_card(0);
+  auto c = fml::gpuhelpers::new_card(0);
   
   len_t n = 2;
   
-  gpumat<float> x(c, n, n);
+  fml::gpumat<float> x(c, n, n);
   x.fill_linspace(1, n*n);
   
   x.info();
@@ -29,7 +29,7 @@ int main()
   int sign;
   float modulus;
   
-  linalg::det(x, sign, modulus);
+  fml::linalg::det(x, sign, modulus);
   print_det(sign, modulus);
   
   n = 4;
@@ -39,7 +39,7 @@ int main()
   x.info();
   x.print(0);
   
-  linalg::det(x, sign, modulus);
+  fml::linalg::det(x, sign, modulus);
   print_det(sign, modulus);
   
   return 0;

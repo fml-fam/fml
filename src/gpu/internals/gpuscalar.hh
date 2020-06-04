@@ -10,30 +10,33 @@
 #include "../card.hh"
 
 
-template <typename T>
-class gpuscalar
+namespace fml
 {
-  public:
-    gpuscalar(std::shared_ptr<card> gpu);
-    gpuscalar(std::shared_ptr<card> gpu, const T v);
-    ~gpuscalar();
+  template <typename T>
+  class gpuscalar
+  {
+    public:
+      gpuscalar(std::shared_ptr<card> gpu);
+      gpuscalar(std::shared_ptr<card> gpu, const T v);
+      ~gpuscalar();
+      
+      void set_zero();
+      void set_val(const T v);
+      void get_val(T *v);
+      
+      T* data_ptr() {return data;};
+      T* data_ptr() const {return data;};
     
-    void set_zero();
-    void set_val(const T v);
-    void get_val(T *v);
-    
-    T* data_ptr() {return data;};
-    T* data_ptr() const {return data;};
-  
-  protected:
-    std::shared_ptr<card> c;
-    T *data;
-};
+    protected:
+      std::shared_ptr<card> c;
+      T *data;
+  };
+}
 
 
 
 template <typename T>
-gpuscalar<T>::gpuscalar(std::shared_ptr<card> gpu)
+fml::gpuscalar<T>::gpuscalar(std::shared_ptr<fml::card> gpu)
 {
   c = gpu;
   data = (T*) c->mem_alloc(sizeof(T));
@@ -42,7 +45,7 @@ gpuscalar<T>::gpuscalar(std::shared_ptr<card> gpu)
 
 
 template <typename T>
-gpuscalar<T>::gpuscalar(std::shared_ptr<card> gpu, const T v)
+fml::gpuscalar<T>::gpuscalar(std::shared_ptr<fml::card> gpu, const T v)
 {
   c = gpu;
   data = (T*) c->mem_alloc(sizeof(T));
@@ -52,7 +55,7 @@ gpuscalar<T>::gpuscalar(std::shared_ptr<card> gpu, const T v)
 
 
 template <typename T>
-gpuscalar<T>::~gpuscalar()
+fml::gpuscalar<T>::~gpuscalar()
 {
   c->mem_free(data);
   data = NULL;
@@ -61,7 +64,7 @@ gpuscalar<T>::~gpuscalar()
 
 
 template <typename T>
-void gpuscalar<T>::set_zero()
+void fml::gpuscalar<T>::set_zero()
 {
   c->mem_set(data, 0, sizeof(T));
 }
@@ -69,7 +72,7 @@ void gpuscalar<T>::set_zero()
 
 
 template <typename T>
-void gpuscalar<T>::set_val(const T v)
+void fml::gpuscalar<T>::set_val(const T v)
 {
   c->mem_set(data, &v, sizeof(T));
 }
@@ -77,7 +80,7 @@ void gpuscalar<T>::set_val(const T v)
 
 
 template <typename T>
-void gpuscalar<T>::get_val(T *v)
+void fml::gpuscalar<T>::get_val(T *v)
 {
   c->mem_gpu2cpu(v, data, sizeof(T));
 }

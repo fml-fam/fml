@@ -13,66 +13,73 @@
 #include "arch/arch.hh"
 
 
-/**
-  @brief GPU data and methods.
-  
-  @impl Stores GPU ordinal and BLAS/LAPACK handles. Methods are wrappers
-  around core GPU operations, allowing GPU malloc, memset, etc.
-  
-  @details You probably should not use these methods directly unless you know
-  what you are doing (in which case you probably do not even need them). Simply
-  pass a card object to a GPU object constructor and move on.
- */
-class card
+namespace fml
 {
-  public:
-    card();
-    card(const int id=0);
-    card(const card &x);
-    ~card();
+  /**
+    @brief GPU data and methods.
     
-    void set(const int id);
+    @impl Stores GPU ordinal and BLAS/LAPACK handles. Methods are wrappers
+    around core GPU operations, allowing GPU malloc, memset, etc.
     
-    void info() const;
+    @details You probably should not use these methods directly unless you know
+    what you are doing (in which case you probably do not even need them). Simply
+    pass a card object to a GPU object constructor and move on.
+   */
+  class card
+  {
+    public:
+      card();
+      card(const int id=0);
+      card(const card &x);
+      ~card();
+      
+      void set(const int id);
+      
+      void info() const;
+      
+      void* mem_alloc(const size_t len);
+      void mem_set(void *ptr, const int value, const size_t len);
+      void mem_free(void *ptr);
+      void mem_cpu2gpu(void *dst, const void *src, const size_t len);
+      void mem_gpu2cpu(void *dst, const void *src, const size_t len);
+      void mem_gpu2gpu(void *dst, const void *src, const size_t len);
+      
+      void synch();
+      void check();
+      
+      ///@{
+      /// The ordinal number corresponding to the GPU device.
+      int get_id() {return _id;};
+      int get_id() const {return _id;};
+      /// GPU BLAS handle.
+      gpublas_handle_t blas_handle() {return _blas_handle;};
+      gpublas_handle_t blas_handle() const {return _blas_handle;};
+      /// GPU LAPACK handle.
+      gpulapack_handle_t lapack_handle() {return _lapack_handle;};
+      gpulapack_handle_t lapack_handle() const {return _lapack_handle;};
+      /// Is the gpu data valid?
+      bool valid_card() const {return (_id!=UNINITIALIZED_CARD && _id!=DESTROYED_CARD);};
+      ///@}
     
-    void* mem_alloc(const size_t len);
-    void mem_set(void *ptr, const int value, const size_t len);
-    void mem_free(void *ptr);
-    void mem_cpu2gpu(void *dst, const void *src, const size_t len);
-    void mem_gpu2cpu(void *dst, const void *src, const size_t len);
-    void mem_gpu2gpu(void *dst, const void *src, const size_t len);
+    protected:
+      int _id;
+      gpublas_handle_t _blas_handle;
+      gpulapack_handle_t _lapack_handle;
     
-    void synch();
-    void check();
-    
-    ///@{
-    /// The ordinal number corresponding to the GPU device.
-    int get_id() {return _id;};
-    int get_id() const {return _id;};
-    /// GPU BLAS handle.
-    gpublas_handle_t blas_handle() {return _blas_handle;};
-    gpublas_handle_t blas_handle() const {return _blas_handle;};
-    /// GPU LAPACK handle.
-    gpulapack_handle_t lapack_handle() {return _lapack_handle;};
-    gpulapack_handle_t lapack_handle() const {return _lapack_handle;};
-    /// Is the gpu data valid?
-    bool valid_card() const {return (_id!=UNINITIALIZED_CARD && _id!=DESTROYED_CARD);};
-    ///@}
+    private:
+      static const int UNINITIALIZED_CARD = -1;
+      static const int DESTROYED_CARD = -11;
+      
+      void init();
+      void cleanup();
+      gpu_error_t err;
+      void check_gpu_error();
+  };
   
-  protected:
-    int _id;
-    gpublas_handle_t _blas_handle;
-    gpulapack_handle_t _lapack_handle;
   
-  private:
-    static const int UNINITIALIZED_CARD = -1;
-    static const int DESTROYED_CARD = -11;
-    
-    void init();
-    void cleanup();
-    gpu_error_t err;
-    void check_gpu_error();
-};
+  
+  typedef std::shared_ptr<fml::card> card_sp_t;
+}
 
 
 
@@ -83,7 +90,7 @@ class card
 // constructors/destructor
 
 /// @brief Create a new card object. Does not initialize any GPU data.
-inline card::card()
+inline fml::card::card()
 {
   _id = UNINITIALIZED_CARD;
   _blas_handle = NULL;
@@ -103,23 +110,23 @@ inline card::card()
   @except If the GPU can not be initialized, or if the allocation of one of the
   handles fails, the method will throw a 'runtime_error' exception.
 */
-inline card::card(const int id)
+inline fml::card::card(const int id)
 {
   _id = id;
   init();
   
-  gpublas_status_t blas_status = gpuprims::gpu_blas_init(&_blas_handle);
+  gpublas_status_t blas_status = fml::gpuprims::gpu_blas_init(&_blas_handle);
   if (blas_status != GPUBLAS_STATUS_SUCCESS)
     throw std::runtime_error("unable to initialize GPU BLAS");
   
-  gpulapack_status_t lapack_status = gpuprims::gpu_lapack_init(&_lapack_handle);
+  gpulapack_status_t lapack_status = fml::gpuprims::gpu_lapack_init(&_lapack_handle);
   if (lapack_status != GPULAPACK_STATUS_SUCCESS)
     throw std::runtime_error("unable to initialize GPU LAPACK");
 }
 
 
 
-inline card::card(const card &x)
+inline fml::card::card(const card &x)
 {
   _id = x.get_id();
   _blas_handle = x.blas_handle();
@@ -128,7 +135,7 @@ inline card::card(const card &x)
 
 
 
-inline card::~card()
+inline fml::card::~card()
 {
   cleanup();
 }
@@ -147,7 +154,7 @@ inline card::~card()
   @except If the GPU can not be initialized, or if the allocation of one of the
   handles fails, the method will throw a 'runtime_error' exception.
 */
-inline void card::set(const int id)
+inline void fml::card::set(const int id)
 {
   if (id == _id)
     return;
@@ -157,11 +164,11 @@ inline void card::set(const int id)
   _id = id;
   init();
   
-  gpublas_status_t blas_status = gpuprims::gpu_blas_init(&_blas_handle);
+  gpublas_status_t blas_status = fml::gpuprims::gpu_blas_init(&_blas_handle);
   if (blas_status != GPUBLAS_STATUS_SUCCESS)
     throw std::runtime_error("unable to initialize GPU BLAS");
   
-  gpulapack_status_t lapack_status = gpuprims::gpu_lapack_init(&_lapack_handle);
+  gpulapack_status_t lapack_status = fml::gpuprims::gpu_lapack_init(&_lapack_handle);
   if (lapack_status != GPULAPACK_STATUS_SUCCESS)
     throw std::runtime_error("unable to initialize GPU LAPACK");
 }
@@ -175,26 +182,30 @@ inline void card::set(const int id)
   
   @impl Uses NVML.
 */
-inline void card::info() const
+inline void fml::card::info() const
 {
-  nvml::init();
+  fml::nvml::init();
   
+#ifdef FML_USE_CUDA
   int version = nvml::system::get_cuda_driver_version();
   int version_major = version / 1000;
   int version_minor = (version % 1000) / 10;
   
-  nvmlDevice_t device = nvml::device::get_handle_by_index(_id);
-  std::string name = nvml::device::get_name(device);
+  nvmlDevice_t device = fml::nvml::device::get_handle_by_index(_id);
+  std::string name = fml::nvml::device::get_name(device);
   double mem_used, mem_total;
-  nvml::device::get_memory_info(device, &mem_used, &mem_total);
+  fml::nvml::device::get_memory_info(device, &mem_used, &mem_total);
   
   printf("## GPU %d ", _id);
   printf("(%s) ", name.c_str());
   printf("%.0f/%.0f MB ", mem_used/1024/1024, mem_total/1024/1024);
   printf("- CUDA %d.%d", version_major, version_minor);
   printf("\n\n");
+#else // FML_USE_HIP
+  printf("## GPU %d ", _id);
+#endif
   
-  nvml::shutdown();
+  fml::nvml::shutdown();
 }
 
 
@@ -211,11 +222,11 @@ inline void card::info() const
   
   @except If the allocation fails, this throws a 'runtime_error' exception.
 */
-inline void* card::mem_alloc(const size_t len)
+inline void* fml::card::mem_alloc(const size_t len)
 {
   init();
   void *ptr;
-  err = gpuprims::gpu_malloc(&ptr, len);
+  err = fml::gpuprims::gpu_malloc(&ptr, len);
   check_gpu_error();
   return ptr;
 }
@@ -236,10 +247,10 @@ inline void* card::mem_alloc(const size_t len)
   @except If the function fails (e.g., being by given non-device memory), this
   throws a 'runtime_error' exception.
 */
-inline void card::mem_set(void *ptr, const int value, const size_t len)
+inline void fml::card::mem_set(void *ptr, const int value, const size_t len)
 {
   init();
-  err = gpuprims::gpu_memset(ptr, value, len);
+  err = fml::gpuprims::gpu_memset(ptr, value, len);
   check_gpu_error();
 }
 
@@ -255,12 +266,12 @@ inline void card::mem_set(void *ptr, const int value, const size_t len)
   @except If the function fails (e.g., being by given non-device memory), this
   throws a 'runtime_error' exception.
 */
-inline void card::mem_free(void *ptr)
+inline void fml::card::mem_free(void *ptr)
 {
   init();
   if (ptr)
   {
-    err = gpuprims::gpu_free(ptr);
+    err = fml::gpuprims::gpu_free(ptr);
     check_gpu_error();
   }
 }
@@ -279,10 +290,10 @@ inline void card::mem_free(void *ptr)
   @except If the function fails (e.g., being by improperly using device
   memory), this throws a 'runtime_error' exception.
 */
-inline void card::mem_cpu2gpu(void *dst, const void *src, const size_t len)
+inline void fml::card::mem_cpu2gpu(void *dst, const void *src, const size_t len)
 {
   init();
-  err = gpuprims::gpu_memcpy(dst, src, len, GPU_MEMCPY_HOST_TO_DEVICE);
+  err = fml::gpuprims::gpu_memcpy(dst, src, len, GPU_MEMCPY_HOST_TO_DEVICE);
   check_gpu_error();
 }
 
@@ -300,10 +311,10 @@ inline void card::mem_cpu2gpu(void *dst, const void *src, const size_t len)
   @except If the function fails (e.g., being by improperly using device
   memory), this throws a 'runtime_error' exception.
 */
-inline void card::mem_gpu2cpu(void *dst, const void *src, const size_t len)
+inline void fml::card::mem_gpu2cpu(void *dst, const void *src, const size_t len)
 {
   init();
-  err = gpuprims::gpu_memcpy(dst, src, len, GPU_MEMCPY_DEVICE_TO_HOST);
+  err = fml::gpuprims::gpu_memcpy(dst, src, len, GPU_MEMCPY_DEVICE_TO_HOST);
   check_gpu_error();
 }
 
@@ -321,10 +332,10 @@ inline void card::mem_gpu2cpu(void *dst, const void *src, const size_t len)
   @except If the function fails (e.g., being by improperly using device
   memory), this throws a 'runtime_error' exception.
 */
-inline void card::mem_gpu2gpu(void *dst, const void *src, const size_t len)
+inline void fml::card::mem_gpu2gpu(void *dst, const void *src, const size_t len)
 {
   init();
-  err = gpuprims::gpu_memcpy(dst, src, len, GPU_MEMCPY_DEVICE_TO_DEVICE);
+  err = fml::gpuprims::gpu_memcpy(dst, src, len, GPU_MEMCPY_DEVICE_TO_DEVICE);
   check_gpu_error();
 }
 
@@ -340,10 +351,10 @@ inline void card::mem_gpu2gpu(void *dst, const void *src, const size_t len)
   
   @except If a CUDA error is detected, this throws a 'runtime_error' exception.
 */
-inline void card::synch()
+inline void fml::card::synch()
 {
   init();
-  err = gpuprims::gpu_synch();
+  err = fml::gpuprims::gpu_synch();
   check_gpu_error();
 }
 
@@ -356,9 +367,9 @@ inline void card::synch()
   
   @except If a CUDA error is detected, this throws a 'runtime_error' exception.
 */
-inline void card::check()
+inline void fml::card::check()
 {
-  err = gpuprims::gpu_last_error();
+  err = fml::gpuprims::gpu_last_error();
   check_gpu_error();
 }
 
@@ -368,49 +379,49 @@ inline void card::check()
 // private
 // -----------------------------------------------------------------------------
 
-inline void card::init()
+inline void fml::card::init()
 {
   if (_id == UNINITIALIZED_CARD)
     throw std::runtime_error("invalid card (uninitialized)");
   else if (_id == DESTROYED_CARD)
     throw std::runtime_error("invalid card (destroyed)");
   
-  err = gpuprims::gpu_set_device(_id);
+  err = fml::gpuprims::gpu_set_device(_id);
   check_gpu_error();
 }
 
 
 
-inline void card::cleanup()
+inline void fml::card::cleanup()
 {
   init();
   
   if (_lapack_handle)
   {
-    gpuprims::gpu_lapack_free(_lapack_handle);
+    fml::gpuprims::gpu_lapack_free(_lapack_handle);
     _lapack_handle = NULL;
   }
   
   if (_blas_handle)
   {
-    gpuprims::gpu_blas_free(_blas_handle);
+    fml::gpuprims::gpu_blas_free(_blas_handle);
     _blas_handle = NULL;
   }
   
-  err = gpuprims::gpu_device_reset();
+  err = fml::gpuprims::gpu_device_reset();
   
   _id = DESTROYED_CARD;
 }
 
 
 
-inline void card::check_gpu_error()
+inline void fml::card::check_gpu_error()
 {
   if (err != GPU_SUCCESS)
   {
     cleanup();
     
-    std::string s = gpuprims::gpu_error_string(err);
+    std::string s = fml::gpuprims::gpu_error_string(err);
     throw std::runtime_error(s);
   }
 }

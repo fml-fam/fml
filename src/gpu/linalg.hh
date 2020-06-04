@@ -23,6 +23,8 @@
 #include "gpuvec.hh"
 
 
+namespace fml
+{
 namespace linalg
 {
   namespace err
@@ -338,26 +340,37 @@ namespace linalg
     err::check_card(x, p);
     
     info = 0;
-    const int m = x.nrows();
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
     auto c = x.get_card();
     
-    const len_t lipiv = std::min(m, x.ncols());
+    const len_t lipiv = std::min(m, n);
     if (!p.get_card()->valid_card())
       p.inherit(c);
     
     p.resize(lipiv);
     
-    int lwork;
-    gpulapack_status_t check = gpulapack::getrf_buflen(c->lapack_handle(), m, m, x.data_ptr(), m, &lwork);
-    gpulapack::err::check_ret(check, "getrf_bufferSize");
-    
-    gpuvec<REAL> work(c, lwork);
-    gpuscalar<int> info_device(c, info);
-    
-    check = gpulapack::getrf(c->lapack_handle(), m, m, x.data_ptr(), m, work.data_ptr(), p.data_ptr(), info_device.data_ptr());
-    
-    info_device.get_val(&info);
-    gpulapack::err::check_ret(check, "getrf");
+    #if defined(FML_GPULAPACK_VENDOR)
+      int lwork;
+      gpulapack_status_t check = gpulapack::getrf_buflen(c->lapack_handle(), m,
+        n, x.data_ptr(), m, &lwork);
+      gpulapack::err::check_ret(check, "getrf_bufferSize");
+      
+      gpuvec<REAL> work(c, lwork);
+      gpuscalar<int> info_device(c, info);
+      
+      check = gpulapack::getrf(c->lapack_handle(), m, n, x.data_ptr(), m,
+        work.data_ptr(), p.data_ptr(), info_device.data_ptr());
+      
+      info_device.get_val(&info);
+      gpulapack::err::check_ret(check, "getrf");
+    #elif defined(FML_GPULAPACK_MAGMA)
+      cpuvec<int> p_cpu(lipiv);
+      gpulapack::getrf(m, n, x.data_ptr(), m, p_cpu.data_ptr(), &info);
+      gpuhelpers::cpu2gpu(p_cpu, p);
+    #else
+      #error "Unsupported GPU lapack"
+    #endif
   }
   
   /// \overload
@@ -1357,6 +1370,7 @@ namespace linalg
     
     fml::gpu_utils::tri2zero('U', false, n, n, x.data_ptr(), n);
   }
+}
 }
 
 

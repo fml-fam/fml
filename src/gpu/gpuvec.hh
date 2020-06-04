@@ -21,60 +21,63 @@
 #include "card.hh"
 
 
-/**
-  @brief Vector class for data held on a single GPU.
-  
-  @tparam T should be 'int', '__half', 'float' or 'double'.
- */
-template <typename T>
-class gpuvec : public univec<T>
+namespace fml
 {
-  public:
-    gpuvec(std::shared_ptr<card> gpu);
-    gpuvec(std::shared_ptr<card> gpu, len_t size);
-    gpuvec(std::shared_ptr<card> gpu, T *data, len_t size, bool free_on_destruct=false);
-    gpuvec(const gpuvec &x);
-    ~gpuvec();
+  /**
+    @brief Vector class for data held on a single GPU.
     
-    void resize(len_t size);
-    void resize(std::shared_ptr<card> gpu, len_t size);
-    void inherit(std::shared_ptr<card> gpu);
-    void inherit(std::shared_ptr<card> gpu, T *data, len_t size, bool free_on_destruct=false);
-    gpuvec<T> dupe() const;
+    @tparam T should be 'int', '__half', 'float' or 'double'.
+   */
+  template <typename T>
+  class gpuvec : public fml::univec<T>
+  {
+    public:
+      gpuvec(std::shared_ptr<card> gpu);
+      gpuvec(std::shared_ptr<card> gpu, len_t size);
+      gpuvec(std::shared_ptr<card> gpu, T *data, len_t size, bool free_on_destruct=false);
+      gpuvec(const gpuvec &x);
+      ~gpuvec();
+      
+      void resize(len_t size);
+      void resize(std::shared_ptr<card> gpu, len_t size);
+      void inherit(std::shared_ptr<card> gpu);
+      void inherit(std::shared_ptr<card> gpu, T *data, len_t size, bool free_on_destruct=false);
+      gpuvec<T> dupe() const;
+      
+      void print(uint8_t ndigits=4, bool add_final_blank=true) const;
+      void info() const;
+      
+      void fill_zero();
+      void fill_val(const T v);
+      void fill_linspace(const T start, const T stop);
+      
+      void scale(const T s);
+      void rev();
+      T sum() const;
+      
+      T get(const len_t i) const;
+      void set(const len_t i, const T v);
+      
+      bool operator==(const gpuvec<T> &x) const;
+      bool operator!=(const gpuvec<T> &x) const;
+      gpuvec<T>& operator=(const gpuvec<T> &x);
+      
+      std::shared_ptr<card> get_card() const {return c;};
+      dim3 get_blockdim() const {return dim_block;};
+      dim3 get_griddim() const {return dim_grid;};
+      
+    protected:
+      std::shared_ptr<card> c;
     
-    void print(uint8_t ndigits=4, bool add_final_blank=true) const;
-    void info() const;
-    
-    void fill_zero();
-    void fill_val(const T v);
-    void fill_linspace(const T start, const T stop);
-    
-    void scale(const T s);
-    void rev();
-    T sum() const;
-    
-    T get(const len_t i) const;
-    void set(const len_t i, const T v);
-    
-    bool operator==(const gpuvec<T> &x) const;
-    bool operator!=(const gpuvec<T> &x) const;
-    gpuvec<T>& operator=(const gpuvec<T> &x);
-    
-    std::shared_ptr<card> get_card() const {return c;};
-    dim3 get_blockdim() const {return dim_block;};
-    dim3 get_griddim() const {return dim_grid;};
-    
-  protected:
-    std::shared_ptr<card> c;
-  
-  private:
-    dim3 dim_block;
-    dim3 dim_grid;
-    
-    void free();
-    void check_params(len_t size);
-    void check_gpu(std::shared_ptr<card> gpu);
-};
+    private:
+      dim3 dim_block;
+      dim3 dim_grid;
+      
+      void free();
+      void check_params(len_t size);
+      void check_gpu(std::shared_ptr<card> gpu);
+  };
+}
 
 
 
@@ -95,7 +98,7 @@ class gpuvec : public univec<T>
   @endcode
  */
 template <typename T>
-gpuvec<T>::gpuvec(std::shared_ptr<card> gpu)
+fml::gpuvec<T>::gpuvec(std::shared_ptr<fml::card> gpu)
 {
   check_gpu(gpu);
   
@@ -124,7 +127,7 @@ gpuvec<T>::gpuvec(std::shared_ptr<card> gpu)
   @endcode
  */
 template <typename T>
-gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, len_t size)
+fml::gpuvec<T>::gpuvec(std::shared_ptr<fml::card> gpu, len_t size)
 {
   check_params(size);
   check_gpu(gpu);
@@ -158,7 +161,7 @@ gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, len_t size)
   thrown.
  */
 template <typename T>
-gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, T *data_, len_t size, bool free_on_destruct)
+fml::gpuvec<T>::gpuvec(std::shared_ptr<fml::card> gpu, T *data_, len_t size, bool free_on_destruct)
 {
   check_params(size);
   check_gpu(gpu);
@@ -177,7 +180,7 @@ gpuvec<T>::gpuvec(std::shared_ptr<card> gpu, T *data_, len_t size, bool free_on_
 
 
 template <typename REAL>
-gpuvec<REAL>::gpuvec(const gpuvec<REAL> &x)
+fml::gpuvec<REAL>::gpuvec(const fml::gpuvec<REAL> &x)
 {
   this->_size = x.size();
   this->data = x.data_ptr();
@@ -193,7 +196,7 @@ gpuvec<REAL>::gpuvec(const gpuvec<REAL> &x)
 
 
 template <typename T>
-gpuvec<T>::~gpuvec()
+fml::gpuvec<T>::~gpuvec()
 {
   this->free();
   c = NULL;
@@ -214,7 +217,7 @@ gpuvec<T>::~gpuvec()
   If the input values are invalid, a `runtime_error` exception will be thrown.
  */
 template <typename T>
-void gpuvec<T>::resize(len_t size)
+void fml::gpuvec<T>::resize(len_t size)
 {
   check_params(size);
   
@@ -252,7 +255,7 @@ void gpuvec<T>::resize(len_t size)
   If the input values are invalid, a `runtime_error` exception will be thrown.
  */
 template <typename T>
-void gpuvec<T>::resize(std::shared_ptr<card> gpu, len_t size)
+void fml::gpuvec<T>::resize(std::shared_ptr<fml::card> gpu, len_t size)
 {
   check_gpu(gpu);
   
@@ -273,7 +276,7 @@ void gpuvec<T>::resize(std::shared_ptr<card> gpu, len_t size)
   thrown.
  */
 template <typename T>
-void gpuvec<T>::inherit(std::shared_ptr<card> gpu)
+void fml::gpuvec<T>::inherit(std::shared_ptr<fml::card> gpu)
 {
   check_gpu(gpu);
   
@@ -301,7 +304,7 @@ void gpuvec<T>::inherit(std::shared_ptr<card> gpu)
   thrown.
  */
 template <typename T>
-void gpuvec<T>::inherit(std::shared_ptr<card> gpu, T *data, len_t size, bool free_on_destruct)
+void fml::gpuvec<T>::inherit(std::shared_ptr<fml::card> gpu, T *data, len_t size, bool free_on_destruct)
 {
   check_params(size);
   check_gpu(gpu);
@@ -323,9 +326,9 @@ void gpuvec<T>::inherit(std::shared_ptr<card> gpu, T *data, len_t size, bool fre
 
 /// @brief Duplicate the object in a deep copy.
 template <typename T>
-gpuvec<T> gpuvec<T>::dupe() const
+fml::gpuvec<T> fml::gpuvec<T>::dupe() const
 {
-  gpuvec<T> cpy(this->c, this->_size);
+  fml::gpuvec<T> cpy(this->c, this->_size);
   
   size_t len = (size_t) this->_size * sizeof(T);
   this->c->mem_gpu2gpu(cpy.data_ptr(), this->data, len);
@@ -344,7 +347,7 @@ gpuvec<T> gpuvec<T>::dupe() const
   @param[in] add_final_blank Should a final blank line be printed?
  */
 template <typename REAL>
-void gpuvec<REAL>::print(uint8_t ndigits, bool add_final_blank) const
+void fml::gpuvec<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 {
   for (int i=0; i<this->_size; i++)
   {
@@ -362,7 +365,7 @@ void gpuvec<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 
 /// @brief Print some brief information about the object.
 template <typename T>
-void gpuvec<T>::info() const
+void fml::gpuvec<T>::info() const
 {
   fml::print::printf("# gpuvec ");
   fml::print::printf("%d ", this->_size);
@@ -376,7 +379,7 @@ void gpuvec<T>::info() const
 
 /// @brief Set all values to zero.
 template <typename T>
-void gpuvec<T>::fill_zero()
+void fml::gpuvec<T>::fill_zero()
 {
   size_t len = (size_t) this->_size * sizeof(T);
   this->c->mem_set(this->data, 0, len);
@@ -390,7 +393,7 @@ void gpuvec<T>::fill_zero()
   @param[in] v Value to set all data values to.
  */
 template <typename T>
-void gpuvec<T>::fill_val(const T v)
+void fml::gpuvec<T>::fill_val(const T v)
 {
   fml::kernelfuns::kernel_fill_val<<<dim_grid, dim_block>>>(v, this->_size, 1, this->data);
   this->c->check();
@@ -404,7 +407,7 @@ void gpuvec<T>::fill_val(const T v)
   @param[in] start,stop Beginning/ending numbers.
  */
 template <typename T>
-void gpuvec<T>::fill_linspace(const T start, const T stop)
+void fml::gpuvec<T>::fill_linspace(const T start, const T stop)
 {
   fml::kernelfuns::kernel_fill_linspace<<<dim_grid, dim_block>>>(start, stop, this->_size, 1, this->data);
   this->c->check();
@@ -418,7 +421,7 @@ void gpuvec<T>::fill_linspace(const T start, const T stop)
   @param[in] s Scaling value.
  */
 template <typename T>
-void gpuvec<T>::scale(const T s)
+void fml::gpuvec<T>::scale(const T s)
 {
   fml::kernelfuns::kernel_scale<<<dim_grid, dim_block>>>(s, this->_size, 1, this->data);
   this->c->check();
@@ -428,7 +431,7 @@ void gpuvec<T>::scale(const T s)
 
 /// @brief Reverse the vector.
 template <typename T>
-void gpuvec<T>::rev()
+void fml::gpuvec<T>::rev()
 {
   fml::kernelfuns::kernel_rev_rows<<<dim_grid, dim_block>>>(this->_size, 1, this->data);
   this->c->check();
@@ -438,10 +441,10 @@ void gpuvec<T>::rev()
 
 /// @brief Sum the vector.
 template <typename T>
-T gpuvec<T>::sum() const
+T fml::gpuvec<T>::sum() const
 {
   T s = 0;
-  gpuscalar<T> s_gpu(c, s);
+  fml::gpuscalar<T> s_gpu(c, s);
   
   fml::kernelfuns::kernel_sum<<<dim_grid, dim_block>>>(this->_size, this->data, s_gpu.data_ptr());
   s_gpu.get_val(&s);
@@ -463,7 +466,7 @@ T gpuvec<T>::sum() const
   exception.
  */
 template <typename T>
-T gpuvec<T>::get(const len_t i) const
+T fml::gpuvec<T>::get(const len_t i) const
 {
   this->check_index(i);
 
@@ -482,7 +485,7 @@ T gpuvec<T>::get(const len_t i) const
   exception.
  */
 template <typename T>
-void gpuvec<T>::set(const len_t i, const T v)
+void fml::gpuvec<T>::set(const len_t i, const T v)
 {
   this->check_index(i);
   this->c->mem_cpu2gpu(this->data + i, &v, sizeof(T));
@@ -499,7 +502,7 @@ void gpuvec<T>::set(const len_t i, const T v)
   necessarily returned. Otherwise the objects are compared value by value.
  */
 template <typename T>
-bool gpuvec<T>::operator==(const gpuvec<T> &x) const
+bool fml::gpuvec<T>::operator==(const fml::gpuvec<T> &x) const
 {
   if (this->_size != x.size())
     return false;
@@ -509,7 +512,7 @@ bool gpuvec<T>::operator==(const gpuvec<T> &x) const
     return true;
   
   int all_eq = 1;
-  gpuscalar<int> all_eq_gpu(c, all_eq);
+  fml::gpuscalar<int> all_eq_gpu(c, all_eq);
   
   fml::kernelfuns::kernel_all_eq<<<dim_grid, dim_block>>>(this->_size, 1, this->data, x.data_ptr(), all_eq_gpu.data_ptr());
   
@@ -526,7 +529,7 @@ bool gpuvec<T>::operator==(const gpuvec<T> &x) const
   @param[in] Comparison object.
  */
 template <typename T>
-bool gpuvec<T>::operator!=(const gpuvec<T> &x) const
+bool fml::gpuvec<T>::operator!=(const fml::gpuvec<T> &x) const
 {
   return !(*this == x);
 }
@@ -540,7 +543,7 @@ bool gpuvec<T>::operator!=(const gpuvec<T> &x) const
   @param[in] x Setter value.
  */
 template <typename T>
-gpuvec<T>& gpuvec<T>::operator=(const gpuvec<T> &x)
+fml::gpuvec<T>& fml::gpuvec<T>::operator=(const fml::gpuvec<T> &x)
 {
   this->c = x.get_card();
   this->_size = x.size();
@@ -557,7 +560,7 @@ gpuvec<T>& gpuvec<T>::operator=(const gpuvec<T> &x)
 // -----------------------------------------------------------------------------
 
 template <typename T>
-void gpuvec<T>::free()
+void fml::gpuvec<T>::free()
 {
   if (this->free_data && this->data)
   {
@@ -569,7 +572,7 @@ void gpuvec<T>::free()
 
 
 template <typename T>
-void gpuvec<T>::check_params(len_t size)
+void fml::gpuvec<T>::check_params(len_t size)
 {
   if (size < 0)
     throw std::runtime_error("invalid dimensions");
@@ -578,7 +581,7 @@ void gpuvec<T>::check_params(len_t size)
 
 
 template <typename T>
-void gpuvec<T>::check_gpu(std::shared_ptr<card> gpu)
+void fml::gpuvec<T>::check_gpu(std::shared_ptr<fml::card> gpu)
 {
   if (!gpu->valid_card())
     throw std::runtime_error("GPU card object is invalid");

@@ -3,7 +3,7 @@
 
 int main()
 {
-  card c(0);
+  fml::card c(0);
   c.info();
   
   double *d = (double*) c.mem_alloc(134217728 * sizeof(*d));

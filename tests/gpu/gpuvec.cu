@@ -5,6 +5,7 @@
 #include <gpu/gpuvec.hh>
 
 using namespace arraytools;
+using namespace fml;
 
 extern std::shared_ptr<card> c;
 

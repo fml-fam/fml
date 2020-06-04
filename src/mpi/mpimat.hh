@@ -28,83 +28,86 @@
 #include "../cpu/cpuvec.hh"
 
 
-/**
- * @brief Matrix class for data distributed over MPI in the 2-d block cyclic
-    format. 
- * 
- * @tparam REAL should be 'float' or 'double'.
- */
-template <typename REAL>
-class mpimat : public unimat<REAL>
+namespace fml
 {
-  public:
-    mpimat(const grid &blacs_grid);
-    mpimat(const grid &blacs_grid, int bf_rows, int bf_cols);
-    mpimat(const grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols);
-    mpimat(const grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct=false);
-    mpimat(const mpimat &x);
-    ~mpimat();
-    
-    void resize(len_t nrows, len_t ncols);
-    void resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols);
-    void inherit(grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct=false);
-    mpimat<REAL> dupe() const;
-    
-    void print(uint8_t ndigits=4, bool add_final_blank=true) const;
-    void info() const;
-    
-    void fill_zero();
-    void fill_val(const REAL v);
-    void fill_linspace(const REAL start, const REAL stop);
-    void fill_eye();
-    void fill_diag(const cpuvec<REAL> &v);
-    void fill_runif(const uint32_t seed, const REAL min=0, const REAL max=1);
-    void fill_runif(const REAL min=0, const REAL max=1);
-    void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
-    void fill_rnorm(const REAL mean=0, const REAL sd=1);
-    
-    void diag(cpuvec<REAL> &v);
-    void antidiag(cpuvec<REAL> &v);
-    void scale(const REAL s);
-    void rev_rows();
-    void rev_cols();
-    
-    bool any_inf() const;
-    bool any_nan() const;
-    
-    REAL get(const len_t i) const;
-    REAL get(const len_t i, const len_t j) const;
-    void set(const len_t i, const REAL v);
-    void set(const len_t i, const len_t j, const REAL v);
-    void get_row(const len_t i, cpuvec<REAL> &v) const;
-    void get_col(const len_t j, cpuvec<REAL> &v) const;
-    
-    bool operator==(const mpimat<REAL> &x) const;
-    bool operator!=(const mpimat<REAL> &x) const;
-    mpimat<REAL>& operator=(const mpimat<REAL> &x);
-    
-    len_local_t nrows_local() const {return m_local;};
-    len_local_t ncols_local() const {return n_local;};
-    int bf_rows() const {return mb;};
-    int bf_cols() const {return nb;};
-    int* desc_ptr() {return desc;};
-    const int* desc_ptr() const {return desc;};
-    const grid get_grid() const {return g;};
-    
-  protected:
-    len_local_t m_local;
-    len_local_t n_local;
-    int mb;
-    int nb;
-    int desc[9];
-    grid g;
-    
-  private:
-    void free();
-    void check_params(len_t nrows, len_t ncols, int bf_rows, int bf_cols);
-    void check_grid(const grid &blacs_grid);
-    REAL get_val_from_global_index(len_t gi, len_t gj) const;
-};
+  /**
+   * @brief Matrix class for data distributed over MPI in the 2-d block cyclic
+      format. 
+   * 
+   * @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  class mpimat : public fml::unimat<REAL>
+  {
+    public:
+      mpimat(const grid &blacs_grid);
+      mpimat(const grid &blacs_grid, int bf_rows, int bf_cols);
+      mpimat(const grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols);
+      mpimat(const grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct=false);
+      mpimat(const mpimat &x);
+      ~mpimat();
+      
+      void resize(len_t nrows, len_t ncols);
+      void resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols);
+      void inherit(grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct=false);
+      mpimat<REAL> dupe() const;
+      
+      void print(uint8_t ndigits=4, bool add_final_blank=true) const;
+      void info() const;
+      
+      void fill_zero();
+      void fill_val(const REAL v);
+      void fill_linspace(const REAL start, const REAL stop);
+      void fill_eye();
+      void fill_diag(const cpuvec<REAL> &v);
+      void fill_runif(const uint32_t seed, const REAL min=0, const REAL max=1);
+      void fill_runif(const REAL min=0, const REAL max=1);
+      void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
+      void fill_rnorm(const REAL mean=0, const REAL sd=1);
+      
+      void diag(cpuvec<REAL> &v);
+      void antidiag(cpuvec<REAL> &v);
+      void scale(const REAL s);
+      void rev_rows();
+      void rev_cols();
+      
+      bool any_inf() const;
+      bool any_nan() const;
+      
+      REAL get(const len_t i) const;
+      REAL get(const len_t i, const len_t j) const;
+      void set(const len_t i, const REAL v);
+      void set(const len_t i, const len_t j, const REAL v);
+      void get_row(const len_t i, cpuvec<REAL> &v) const;
+      void get_col(const len_t j, cpuvec<REAL> &v) const;
+      
+      bool operator==(const mpimat<REAL> &x) const;
+      bool operator!=(const mpimat<REAL> &x) const;
+      mpimat<REAL>& operator=(const mpimat<REAL> &x);
+      
+      len_local_t nrows_local() const {return m_local;};
+      len_local_t ncols_local() const {return n_local;};
+      int bf_rows() const {return mb;};
+      int bf_cols() const {return nb;};
+      int* desc_ptr() {return desc;};
+      const int* desc_ptr() const {return desc;};
+      const grid get_grid() const {return g;};
+      
+    protected:
+      len_local_t m_local;
+      len_local_t n_local;
+      int mb;
+      int nb;
+      int desc[9];
+      grid g;
+      
+    private:
+      void free();
+      void check_params(len_t nrows, len_t ncols, int bf_rows, int bf_cols);
+      void check_grid(const grid &blacs_grid);
+      REAL get_val_from_global_index(len_t gi, len_t gj) const;
+  };
+}
 
 
 
@@ -127,7 +130,7 @@ class mpimat : public unimat<REAL>
   @endcode
  */
 template <typename REAL>
-mpimat<REAL>::mpimat(const grid &blacs_grid)
+fml::mpimat<REAL>::mpimat(const fml::grid &blacs_grid)
 {
   check_grid(blacs_grid);
   
@@ -165,7 +168,7 @@ mpimat<REAL>::mpimat(const grid &blacs_grid)
   @endcode
  */
 template <typename REAL>
-mpimat<REAL>::mpimat(const grid &blacs_grid, int bf_rows, int bf_cols)
+fml::mpimat<REAL>::mpimat(const fml::grid &blacs_grid, int bf_rows, int bf_cols)
 {
   check_grid(blacs_grid);
   
@@ -204,7 +207,7 @@ mpimat<REAL>::mpimat(const grid &blacs_grid, int bf_rows, int bf_cols)
   @endcode
  */
 template <typename REAL>
-mpimat<REAL>::mpimat(const grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols)
+fml::mpimat<REAL>::mpimat(const fml::grid &blacs_grid, len_t nrows, len_t ncols, int bf_rows, int bf_cols)
 {
   check_params(nrows, ncols, bf_rows, bf_cols);
   check_grid(blacs_grid);
@@ -248,7 +251,7 @@ mpimat<REAL>::mpimat(const grid &blacs_grid, len_t nrows, len_t ncols, int bf_ro
   @comm The method has no communication.
  */
 template <typename REAL>
-mpimat<REAL>::mpimat(const grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct)
+fml::mpimat<REAL>::mpimat(const fml::grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct)
 {
   check_params(nrows, ncols, bf_rows, bf_cols);
   check_grid(blacs_grid);
@@ -272,7 +275,7 @@ mpimat<REAL>::mpimat(const grid &blacs_grid, REAL *data_, len_t nrows, len_t nco
 
 
 template <typename REAL>
-mpimat<REAL>::mpimat(const mpimat<REAL> &x)
+fml::mpimat<REAL>::mpimat(const fml::mpimat<REAL> &x)
 {
   this->m = x.nrows();
   this->n = x.ncols();
@@ -284,7 +287,7 @@ mpimat<REAL>::mpimat(const mpimat<REAL> &x)
   
   memcpy(this->desc, x.desc_ptr(), 9*sizeof(int));
   
-  grid g = x.get_grid();
+  fml::grid g = x.get_grid();
   this->g = g;
   
   this->data = x.data_ptr();
@@ -295,7 +298,7 @@ mpimat<REAL>::mpimat(const mpimat<REAL> &x)
 
 
 template <typename REAL>
-mpimat<REAL>::~mpimat()
+fml::mpimat<REAL>::~mpimat()
 {
   this->free();
 }
@@ -317,7 +320,7 @@ mpimat<REAL>::~mpimat()
   @comm The method has no communication.
  */
 template <typename REAL>
-void mpimat<REAL>::resize(len_t nrows, len_t ncols)
+void fml::mpimat<REAL>::resize(len_t nrows, len_t ncols)
 {
   check_params(nrows, ncols, this->mb, this->nb);
   
@@ -373,7 +376,7 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols)
   @comm The method has no communication.
  */
 template <typename REAL>
-void mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
+void fml::mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
 {
   check_params(nrows, ncols, bf_rows, bf_cols);
   
@@ -434,7 +437,7 @@ void mpimat<REAL>::resize(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
   @comm The method has no communication.
  */
 template <typename REAL>
-void mpimat<REAL>::inherit(grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct)
+void fml::mpimat<REAL>::inherit(fml::grid &blacs_grid, REAL *data_, len_t nrows, len_t ncols, int bf_rows, int bf_cols, bool free_on_destruct)
 {
   check_params(nrows, ncols, bf_rows, bf_cols);
   check_grid(blacs_grid);
@@ -460,9 +463,9 @@ void mpimat<REAL>::inherit(grid &blacs_grid, REAL *data_, len_t nrows, len_t nco
 
 /// @brief Duplicate the object in a deep copy.
 template <typename REAL>
-mpimat<REAL> mpimat<REAL>::dupe() const
+fml::mpimat<REAL> fml::mpimat<REAL>::dupe() const
 {
-  mpimat<REAL> dup(this->g, this->m, this->n, this->mb, this->nb);
+  fml::mpimat<REAL> dup(this->g, this->m, this->n, this->mb, this->nb);
   
   const size_t len = (size_t) this->m_local * this->n_local * sizeof(REAL);
   
@@ -487,7 +490,7 @@ mpimat<REAL> mpimat<REAL>::dupe() const
   @comm The method will communicate across all processes in the BLACS grid.
  */
 template <typename REAL>
-void mpimat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
+void fml::mpimat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 {
   for (len_t gi=0; gi<this->m; gi++)
   {
@@ -533,7 +536,7 @@ void mpimat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
   @comm The method has no communication.
  */
 template <typename REAL>
-void mpimat<REAL>::info() const
+void fml::mpimat<REAL>::info() const
 {
   if (this->g.rank0())
   {
@@ -556,7 +559,7 @@ void mpimat<REAL>::info() const
   @comm The method has no communication.
  */
 template <typename REAL>
-void mpimat<REAL>::fill_zero()
+void fml::mpimat<REAL>::fill_zero()
 {
   const size_t len = (size_t) m_local * n_local * sizeof(REAL);
   memset(this->data, 0, len);
@@ -572,7 +575,7 @@ void mpimat<REAL>::fill_zero()
   @comm The method has no communication.
  */
 template <typename REAL>
-void mpimat<REAL>::fill_val(const REAL v)
+void fml::mpimat<REAL>::fill_val(const REAL v)
 {
   #pragma omp parallel for if((this->m_local)*(this->n_local) > fml::omp::OMP_MIN_SIZE)
   for (len_t j=0; j<this->n_local; j++)
@@ -593,7 +596,7 @@ void mpimat<REAL>::fill_val(const REAL v)
   @comm The method has no communication.
  */
 template <typename REAL>
-void mpimat<REAL>::fill_linspace(const REAL start, const REAL stop)
+void fml::mpimat<REAL>::fill_linspace(const REAL start, const REAL stop)
 {
   if (start == stop)
     this->fill_val(start);
@@ -617,7 +620,7 @@ void mpimat<REAL>::fill_linspace(const REAL start, const REAL stop)
 }
 
 template <>
-inline void mpimat<int>::fill_linspace(const int start, const int stop)
+inline void fml::mpimat<int>::fill_linspace(const int start, const int stop)
 {
   if (start == stop)
     this->fill_val(start);
@@ -648,9 +651,9 @@ inline void mpimat<int>::fill_linspace(const int start, const int stop)
   @comm The method has no communication.
  */
 template <typename REAL>
-void mpimat<REAL>::fill_eye()
+void fml::mpimat<REAL>::fill_eye()
 {
-  cpuvec<REAL> v(1);
+  fml::cpuvec<REAL> v(1);
   v.set(0, 1);
   this->fill_diag(v);
 }
@@ -669,7 +672,7 @@ void mpimat<REAL>::fill_eye()
   @comm The method has no communication.
  */
 template <typename REAL>
-void mpimat<REAL>::fill_diag(const cpuvec<REAL> &v)
+void fml::mpimat<REAL>::fill_diag(const fml::cpuvec<REAL> &v)
 {
   REAL *v_d = v.data_ptr();
   
@@ -700,7 +703,7 @@ void mpimat<REAL>::fill_diag(const cpuvec<REAL> &v)
   @comm The method has no communication.
  */
 template <typename REAL>
-void mpimat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL max)
+void fml::mpimat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL max)
 {
   std::mt19937 mt(seed + g.myrow() + g.nprow()*g.mycol());
   static std::uniform_real_distribution<REAL> dist(min, max);
@@ -714,7 +717,7 @@ void mpimat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL ma
 
 /// \overload
 template <typename REAL>
-void mpimat<REAL>::fill_runif(const REAL min, const REAL max)
+void fml::mpimat<REAL>::fill_runif(const REAL min, const REAL max)
 {
   uint32_t seed = fml::rand::get_seed() + (g.myrow() + g.nprow()*g.mycol());
   this->fill_runif(seed, min, max);
@@ -731,7 +734,7 @@ void mpimat<REAL>::fill_runif(const REAL min, const REAL max)
   @comm The method has no communication.
  */
 template <typename REAL>
-void mpimat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL sd)
+void fml::mpimat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL sd)
 {
   std::mt19937 mt(seed + g.myrow() + g.nprow()*g.mycol());
   static std::normal_distribution<REAL> dist(mean, sd);
@@ -745,7 +748,7 @@ void mpimat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL s
 
 /// \overload
 template <typename REAL>
-void mpimat<REAL>::fill_rnorm(const REAL mean, const REAL sd)
+void fml::mpimat<REAL>::fill_rnorm(const REAL mean, const REAL sd)
 {
   uint32_t seed = fml::rand::get_seed() + (g.myrow() + g.nprow()*g.mycol());
   this->fill_rnorm(seed, mean, sd);
@@ -769,7 +772,7 @@ void mpimat<REAL>::fill_rnorm(const REAL mean, const REAL sd)
   @comm The method will communicate across all processes in the BLACS grid.
  */
 template <typename REAL>
-void mpimat<REAL>::diag(cpuvec<REAL> &v)
+void fml::mpimat<REAL>::diag(fml::cpuvec<REAL> &v)
 {
   const len_t minmn = std::min(this->m, this->n);
   v.resize(minmn);
@@ -811,7 +814,7 @@ void mpimat<REAL>::diag(cpuvec<REAL> &v)
   @comm The method will communicate across all processes in the BLACS grid.
  */
 template <typename REAL>
-void mpimat<REAL>::antidiag(cpuvec<REAL> &v)
+void fml::mpimat<REAL>::antidiag(fml::cpuvec<REAL> &v)
 {
   const len_t minmn = std::min(this->m, this->n);
   v.resize(minmn);
@@ -844,7 +847,7 @@ void mpimat<REAL>::antidiag(cpuvec<REAL> &v)
   @comm The method has no communication.
  */
 template <typename REAL>
-void mpimat<REAL>::scale(const REAL s)
+void fml::mpimat<REAL>::scale(const REAL s)
 {
   #pragma omp parallel for if((this->m_local)*(this->n_local) > fml::omp::OMP_MIN_SIZE)
   for (len_local_t j=0; j<this->n_local; j++)
@@ -863,7 +866,7 @@ void mpimat<REAL>::scale(const REAL s)
   @comm The method will communicate with all rows in the BLACS grid.
  */
 template <typename REAL>
-void mpimat<REAL>::rev_rows()
+void fml::mpimat<REAL>::rev_rows()
 {
   cpuvec<REAL> tmp(this->nb);
   REAL *tmp_d = tmp.data_ptr();
@@ -945,7 +948,7 @@ void mpimat<REAL>::rev_rows()
   @comm The method will communicate with all columns in the BLACS grid.
  */
 template <typename REAL>
-void mpimat<REAL>::rev_cols()
+void fml::mpimat<REAL>::rev_cols()
 {
   cpuvec<REAL> tmp(this->mb);
   REAL *tmp_d = tmp.data_ptr();
@@ -1027,7 +1030,7 @@ void mpimat<REAL>::rev_cols()
   @comm The method will communicate across all processes in the BLACS grid.
  */
 template <typename REAL>
-bool mpimat<REAL>::any_inf() const
+bool fml::mpimat<REAL>::any_inf() const
 {
   int found_inf = 0;
   for (len_local_t j=0; j<n_local; j++)
@@ -1055,7 +1058,7 @@ bool mpimat<REAL>::any_inf() const
   @comm The method will communicate across all processes in the BLACS grid.
  */
 template <typename REAL>
-bool mpimat<REAL>::any_nan() const
+bool fml::mpimat<REAL>::any_nan() const
 {
   int found_nan = 0;
   for (len_local_t j=0; j<n_local; j++)
@@ -1093,7 +1096,7 @@ bool mpimat<REAL>::any_nan() const
   @comm The method will communicate across all processes in the BLACS grid.
  */
 template <typename REAL>
-REAL mpimat<REAL>::get(const len_t i) const
+REAL fml::mpimat<REAL>::get(const len_t i) const
 {
   this->check_index(i);
   
@@ -1117,7 +1120,7 @@ REAL mpimat<REAL>::get(const len_t i) const
   @comm The method will communicate across all processes in the BLACS grid.
  */
 template <typename REAL>
-REAL mpimat<REAL>::get(const len_t i, const len_t j) const
+REAL fml::mpimat<REAL>::get(const len_t i, const len_t j) const
 {
   this->check_index(i, j);
   
@@ -1138,7 +1141,7 @@ REAL mpimat<REAL>::get(const len_t i, const len_t j) const
   @comm The method has no communication.
  */
 template <typename REAL>
-void mpimat<REAL>::set(const len_t i, const REAL v)
+void fml::mpimat<REAL>::set(const len_t i, const REAL v)
 {
   this->check_index(i);
   
@@ -1167,7 +1170,7 @@ void mpimat<REAL>::set(const len_t i, const REAL v)
   @comm The method has no communication.
  */
 template <typename REAL>
-void mpimat<REAL>::set(const len_t i, const len_t j, const REAL v)
+void fml::mpimat<REAL>::set(const len_t i, const len_t j, const REAL v)
 {
   this->check_index(i, j);
   
@@ -1201,7 +1204,7 @@ void mpimat<REAL>::set(const len_t i, const len_t j, const REAL v)
   @comm The method will communicate across all processes in the BLACS grid.
  */
 template <typename REAL>
-void mpimat<REAL>::get_row(const len_t i, cpuvec<REAL> &v) const
+void fml::mpimat<REAL>::get_row(const len_t i, fml::cpuvec<REAL> &v) const
 {
   if (i < 0 || i >= this->m)
     throw std::logic_error("invalid matrix row");
@@ -1246,7 +1249,7 @@ void mpimat<REAL>::get_row(const len_t i, cpuvec<REAL> &v) const
   @comm The method will communicate across all processes in the BLACS grid.
  */
 template <typename REAL>
-void mpimat<REAL>::get_col(const len_t j, cpuvec<REAL> &v) const
+void fml::mpimat<REAL>::get_col(const len_t j, fml::cpuvec<REAL> &v) const
 {
   if (j < 0 || j >= this->n)
     throw std::logic_error("invalid matrix column");
@@ -1288,7 +1291,7 @@ void mpimat<REAL>::get_col(const len_t j, cpuvec<REAL> &v) const
   @comm The method will communicate across all processes in the BLACS grid.
  */
 template <typename REAL>
-bool mpimat<REAL>::operator==(const mpimat<REAL> &x) const
+bool fml::mpimat<REAL>::operator==(const fml::mpimat<REAL> &x) const
 {
   // same dim, same blocking, same grid
   if (this->m != x.nrows() || this->n != x.ncols())
@@ -1331,7 +1334,7 @@ bool mpimat<REAL>::operator==(const mpimat<REAL> &x) const
   @comm The method will communicate across all processes in the BLACS grid.
  */
 template <typename REAL>
-bool mpimat<REAL>::operator!=(const mpimat<REAL> &x) const
+bool fml::mpimat<REAL>::operator!=(const fml::mpimat<REAL> &x) const
 {
   return !(*this == x);
 }
@@ -1347,7 +1350,7 @@ bool mpimat<REAL>::operator!=(const mpimat<REAL> &x) const
   @comm The method has no communication.
  */
 template <typename REAL>
-mpimat<REAL>& mpimat<REAL>::operator=(const mpimat<REAL> &x)
+fml::mpimat<REAL>& fml::mpimat<REAL>::operator=(const fml::mpimat<REAL> &x)
 {
   this->g = x.get_grid();
   
@@ -1373,7 +1376,7 @@ mpimat<REAL>& mpimat<REAL>::operator=(const mpimat<REAL> &x)
 // -----------------------------------------------------------------------------
 
 template <typename REAL>
-void mpimat<REAL>::free()
+void fml::mpimat<REAL>::free()
 {
   if (this->free_data && this->data)
   {
@@ -1385,7 +1388,7 @@ void mpimat<REAL>::free()
 
 
 template <typename REAL>
-void mpimat<REAL>::check_params(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
+void fml::mpimat<REAL>::check_params(len_t nrows, len_t ncols, int bf_rows, int bf_cols)
 {
   if (nrows < 0 || ncols < 0)
     throw std::runtime_error("invalid dimensions");
@@ -1397,7 +1400,7 @@ void mpimat<REAL>::check_params(len_t nrows, len_t ncols, int bf_rows, int bf_co
 
 
 template <typename REAL>
-void mpimat<REAL>::check_grid(const grid &blacs_grid)
+void fml::mpimat<REAL>::check_grid(const fml::grid &blacs_grid)
 {
   if (!blacs_grid.valid_grid())
     throw std::runtime_error("invalid blacs grid");
@@ -1406,7 +1409,7 @@ void mpimat<REAL>::check_grid(const grid &blacs_grid)
 
 
 template <typename REAL>
-REAL mpimat<REAL>::get_val_from_global_index(len_t gi, len_t gj) const
+REAL fml::mpimat<REAL>::get_val_from_global_index(len_t gi, len_t gj) const
 {
   REAL ret;
   

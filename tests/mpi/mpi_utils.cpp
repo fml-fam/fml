@@ -6,7 +6,7 @@
 
 using namespace arraytools;
 
-extern grid g;
+extern fml::grid g;
 
 
 TEMPLATE_TEST_CASE("tri2zero - tall", "[mpi_utils]", float, double)
@@ -15,8 +15,8 @@ TEMPLATE_TEST_CASE("tri2zero - tall", "[mpi_utils]", float, double)
   len_t n = 3;
   int mb = 1;
   int nb = 1;
-  mpimat<TestType> x(g, m, n, mb, nb);
-  mpimat<TestType> truth(g, m, n, mb, nb);
+  fml::mpimat<TestType> x(g, m, n, mb, nb);
+  fml::mpimat<TestType> truth(g, m, n, mb, nb);
   truth.fill_linspace(1, m*n);
   
   x.fill_linspace(1, m*n);
@@ -68,8 +68,8 @@ TEMPLATE_TEST_CASE("tri2zero - wide", "[mpi_utils]", float, double)
   len_t n = 5;
   int mb = 1;
   int nb = 1;
-  mpimat<TestType> x(g, m, n, mb, nb);
-  mpimat<TestType> truth(g, m, n, 1, 1);
+  fml::mpimat<TestType> x(g, m, n, mb, nb);
+  fml::mpimat<TestType> truth(g, m, n, 1, 1);
   truth.fill_linspace(1, m*n);
   
   x.fill_linspace(1, m*n);

@@ -14,6 +14,8 @@
 #include "mpimat.hh"
 
 
+namespace fml
+{
 /// @brief Row/column operations.
 namespace dimops
 {
@@ -244,6 +246,7 @@ namespace dimops
     else if (rm_sd)
       internals::scale(x);
   }
+}
 }
 
 

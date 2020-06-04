@@ -14,11 +14,11 @@ static inline void print_det(int sign, float modulus)
 
 int main()
 {
-  grid g = grid(PROC_GRID_SQUARE);
+  fml::grid g = fml::grid(fml::PROC_GRID_SQUARE);
   g.info();
   
   len_t n = 2;
-  mpimat<float> x(g, n, n, 1, 1);
+  fml::mpimat<float> x(g, n, n, 1, 1);
   x.fill_linspace(1, n*n);
   
   x.info();
@@ -26,7 +26,7 @@ int main()
   
   int sign;
   float modulus;
-  linalg::det(x, sign, modulus);
+  fml::linalg::det(x, sign, modulus);
   if (g.rank0())
     print_det(sign, modulus);
   
@@ -37,7 +37,7 @@ int main()
   x.info();
   x.print(0);
   
-  linalg::det(x, sign, modulus);
+  fml::linalg::det(x, sign, modulus);
   if (g.rank0())
     print_det(sign, modulus);
   

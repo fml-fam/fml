@@ -19,6 +19,8 @@
 #include "mpimat.hh"
 
 
+namespace fml
+{
 /// @brief MPI class helpers.
 namespace mpihelpers
 {
@@ -291,6 +293,7 @@ namespace mpihelpers
     size_t len = (size_t) mpi_in.nrows_local() * mpi_in.ncols_local();
     arraytools::copy(len, mpi_in.data_ptr(), mpi_out.data_ptr());
   }
+}
 }
 
 

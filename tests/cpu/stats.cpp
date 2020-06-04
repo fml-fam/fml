@@ -11,12 +11,12 @@ TEMPLATE_TEST_CASE("stats - pca", "[stats]", float, double)
   len_t m = 3;
   len_t n = 2;
   
-  cpumat<TestType> x(m, n);
+  fml::cpumat<TestType> x(m, n);
   x.fill_linspace(1, m*n);
   
-  cpuvec<TestType> sdev;
-  cpumat<TestType> rot;
-  stats::pca(true, true, x, sdev, rot);
+  fml::cpuvec<TestType> sdev;
+  fml::cpumat<TestType> rot;
+  fml::stats::pca(true, true, x, sdev, rot);
   
   TestType sq2 = sqrt(2.0);
   

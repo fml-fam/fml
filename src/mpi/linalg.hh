@@ -20,6 +20,8 @@
 #include "mpihelpers.hh"
 
 
+namespace fml
+{
 namespace linalg
 {
   namespace err
@@ -1307,6 +1309,7 @@ namespace linalg
     
     fml::mpi_utils::tri2zero('U', false, x.get_grid(), n, n, x.data_ptr(), x.desc_ptr());
   }
+}
 }
 
 

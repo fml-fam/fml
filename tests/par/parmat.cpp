@@ -5,7 +5,7 @@
 
 using namespace arraytools;
 
-extern comm r;
+extern fml::comm r;
 
 
 TEMPLATE_TEST_CASE("basics", "[parmat_cpu]", float, double)
@@ -13,7 +13,7 @@ TEMPLATE_TEST_CASE("basics", "[parmat_cpu]", float, double)
   len_global_t m = 3;
   len_t n = 2;
   
-  parmat_cpu<TestType> x(r, m, n);
+  fml::parmat_cpu<TestType> x(r, m, n);
   REQUIRE( x.nrows() == m );
   REQUIRE( x.ncols() == n );
   
@@ -30,7 +30,7 @@ TEMPLATE_TEST_CASE("scale", "[parmat_cpu]", float, double)
   len_t m = 3;
   len_t n = 2;
   
-  parmat_cpu<TestType> x(r, m, n);
+  fml::parmat_cpu<TestType> x(r, m, n);
   x.fill_val(1);
   x.scale((TestType) 3);
   
@@ -44,8 +44,8 @@ TEMPLATE_TEST_CASE("indexing", "[parmat_cpu]", float, double)
 {
   len_t n = 4;
   
-  parmat_cpu<TestType> x(r, n, n);
-  parmat_cpu<TestType> y(r, n, n);
+  fml::parmat_cpu<TestType> x(r, n, n);
+  fml::parmat_cpu<TestType> y(r, n, n);
   
   for (len_t i=0; i<n*n; i++)
     x.set(i, i+1);
@@ -63,7 +63,7 @@ TEMPLATE_TEST_CASE("rev", "[parmat_cpu]", float, double)
 {
   len_t n = 2;
   
-  parmat_cpu<TestType> x(r, n, n);
+  fml::parmat_cpu<TestType> x(r, n, n);
   x.fill_linspace(1, n*n);
   
   x.rev_cols();

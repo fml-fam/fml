@@ -25,62 +25,65 @@
 #include "cpuvec.hh"
 
 
-/**
-  @brief Matrix class for data held on a single CPU.
-  
-  @tparam REAL should be 'float' or 'double'.
- */
-template <typename REAL>
-class cpumat : public unimat<REAL>
+namespace fml
 {
-  public:
-    cpumat();
-    cpumat(len_t nrows, len_t ncols);
-    cpumat(REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
-    cpumat(const cpumat &x);
-    ~cpumat();
+  /**
+    @brief Matrix class for data held on a single CPU.
     
-    void resize(len_t nrows, len_t ncols);
-    void inherit(REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
-    cpumat<REAL> dupe() const;
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  class cpumat : public fml::unimat<REAL>
+  {
+    public:
+      cpumat();
+      cpumat(len_t nrows, len_t ncols);
+      cpumat(REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
+      cpumat(const cpumat &x);
+      ~cpumat();
+      
+      void resize(len_t nrows, len_t ncols);
+      void inherit(REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
+      cpumat<REAL> dupe() const;
+      
+      void print(uint8_t ndigits=4, bool add_final_blank=true) const;
+      void info() const;
+      
+      void fill_zero();
+      void fill_val(const REAL v);
+      void fill_linspace(const REAL start, const REAL stop);
+      void fill_eye();
+      void fill_diag(const cpuvec<REAL> &v);
+      void fill_runif(const uint32_t seed, const REAL min=0, const REAL max=1);
+      void fill_runif(const REAL min=0, const REAL max=1);
+      void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
+      void fill_rnorm(const REAL mean=0, const REAL sd=1);
+      
+      void diag(cpuvec<REAL> &v);
+      void antidiag(cpuvec<REAL> &v);
+      void scale(const REAL s);
+      void rev_rows();
+      void rev_cols();
+      
+      bool any_inf() const;
+      bool any_nan() const;
+      
+      REAL get(const len_t i) const;
+      REAL get(const len_t i, const len_t j) const;
+      void set(const len_t i, const REAL v);
+      void set(const len_t i, const len_t j, const REAL v);
+      void get_row(const len_t i, cpuvec<REAL> &v) const;
+      void get_col(const len_t j, cpuvec<REAL> &v) const;
+      
+      bool operator==(const cpumat<REAL> &x) const;
+      bool operator!=(const cpumat<REAL> &x) const;
+      cpumat<REAL>& operator=(const cpumat<REAL> &x);
     
-    void print(uint8_t ndigits=4, bool add_final_blank=true) const;
-    void info() const;
-    
-    void fill_zero();
-    void fill_val(const REAL v);
-    void fill_linspace(const REAL start, const REAL stop);
-    void fill_eye();
-    void fill_diag(const cpuvec<REAL> &v);
-    void fill_runif(const uint32_t seed, const REAL min=0, const REAL max=1);
-    void fill_runif(const REAL min=0, const REAL max=1);
-    void fill_rnorm(const uint32_t seed, const REAL mean=0, const REAL sd=1);
-    void fill_rnorm(const REAL mean=0, const REAL sd=1);
-    
-    void diag(cpuvec<REAL> &v);
-    void antidiag(cpuvec<REAL> &v);
-    void scale(const REAL s);
-    void rev_rows();
-    void rev_cols();
-    
-    bool any_inf() const;
-    bool any_nan() const;
-    
-    REAL get(const len_t i) const;
-    REAL get(const len_t i, const len_t j) const;
-    void set(const len_t i, const REAL v);
-    void set(const len_t i, const len_t j, const REAL v);
-    void get_row(const len_t i, cpuvec<REAL> &v) const;
-    void get_col(const len_t j, cpuvec<REAL> &v) const;
-    
-    bool operator==(const cpumat<REAL> &x) const;
-    bool operator!=(const cpumat<REAL> &x) const;
-    cpumat<REAL>& operator=(const cpumat<REAL> &x);
-  
-  private:
-    void free();
-    void check_params(len_t nrows, len_t ncols);
-};
+    private:
+      void free();
+      void check_params(len_t nrows, len_t ncols);
+  };
+}
 
 
 
@@ -98,7 +101,7 @@ class cpumat : public unimat<REAL>
   @endcode
  */
 template <typename REAL>
-cpumat<REAL>::cpumat()
+fml::cpumat<REAL>::cpumat()
 {
   this->m = 0;
   this->n = 0;
@@ -122,7 +125,7 @@ cpumat<REAL>::cpumat()
   @endcode
  */
 template <typename REAL>
-cpumat<REAL>::cpumat(len_t nrows, len_t ncols)
+fml::cpumat<REAL>::cpumat(len_t nrows, len_t ncols)
 {
   check_params(nrows, ncols);
   
@@ -155,7 +158,7 @@ cpumat<REAL>::cpumat(len_t nrows, len_t ncols)
   thrown.
  */
 template <typename REAL>
-cpumat<REAL>::cpumat(REAL *data_, len_t nrows, len_t ncols, bool free_on_destruct)
+fml::cpumat<REAL>::cpumat(REAL *data_, len_t nrows, len_t ncols, bool free_on_destruct)
 {
   check_params(nrows, ncols);
   
@@ -169,7 +172,7 @@ cpumat<REAL>::cpumat(REAL *data_, len_t nrows, len_t ncols, bool free_on_destruc
 
 
 template <typename REAL>
-cpumat<REAL>::cpumat(const cpumat<REAL> &x)
+fml::cpumat<REAL>::cpumat(const cpumat<REAL> &x)
 {
   this->m = x.nrows();
   this->n = x.ncols();
@@ -181,7 +184,7 @@ cpumat<REAL>::cpumat(const cpumat<REAL> &x)
 
 
 template <typename REAL>
-cpumat<REAL>::~cpumat()
+fml::cpumat<REAL>::~cpumat()
 {
   this->free();
 }
@@ -201,7 +204,7 @@ cpumat<REAL>::~cpumat()
   If the input values are invalid, a `runtime_error` exception will be thrown.
  */
 template <typename REAL>
-void cpumat<REAL>::resize(len_t nrows, len_t ncols)
+void fml::cpumat<REAL>::resize(len_t nrows, len_t ncols)
 {
   check_params(nrows, ncols);
   
@@ -245,7 +248,7 @@ void cpumat<REAL>::resize(len_t nrows, len_t ncols)
   thrown.
  */
 template <typename REAL>
-void cpumat<REAL>::inherit(REAL *data, len_t nrows, len_t ncols, bool free_on_destruct)
+void fml::cpumat<REAL>::inherit(REAL *data, len_t nrows, len_t ncols, bool free_on_destruct)
 {
   check_params(nrows, ncols);
   
@@ -262,9 +265,9 @@ void cpumat<REAL>::inherit(REAL *data, len_t nrows, len_t ncols, bool free_on_de
 
 /// @brief Duplicate the object in a deep copy.
 template <typename REAL>
-cpumat<REAL> cpumat<REAL>::dupe() const
+fml::cpumat<REAL> fml::cpumat<REAL>::dupe() const
 {
-  cpumat<REAL> cpy(this->m, this->n);
+  fml::cpumat<REAL> cpy(this->m, this->n);
   
   const size_t len = (size_t) this->m * this->n * sizeof(REAL);
   memcpy(cpy.data_ptr(), this->data, len);
@@ -283,7 +286,7 @@ cpumat<REAL> cpumat<REAL>::dupe() const
   @param[in] add_final_blank Should a final blank line be printed?
  */
 template <typename REAL>
-void cpumat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
+void fml::cpumat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 {
   for (len_t i=0; i<this->m; i++)
   {
@@ -301,7 +304,7 @@ void cpumat<REAL>::print(uint8_t ndigits, bool add_final_blank) const
 
 /// @brief Print some brief information about the object.
 template <typename REAL>
-void cpumat<REAL>::info() const
+void fml::cpumat<REAL>::info() const
 {
   fml::print::printf("# cpumat");
   fml::print::printf(" %dx%d", this->m, this->n);
@@ -315,7 +318,7 @@ void cpumat<REAL>::info() const
 
 /// @brief Set all values to zero.
 template <typename REAL>
-void cpumat<REAL>::fill_zero()
+void fml::cpumat<REAL>::fill_zero()
 {
   const size_t len = (size_t) this->m * this->n * sizeof(REAL);
   memset(this->data, 0, len);
@@ -329,7 +332,7 @@ void cpumat<REAL>::fill_zero()
   @param[in] v Value to set all data values to.
  */
 template <typename REAL>
-void cpumat<REAL>::fill_val(const REAL v)
+void fml::cpumat<REAL>::fill_val(const REAL v)
 {
   #pragma omp parallel for if((this->m)*(this->n) > fml::omp::OMP_MIN_SIZE)
   for (len_t j=0; j<this->n; j++)
@@ -348,7 +351,7 @@ void cpumat<REAL>::fill_val(const REAL v)
   @param[in] start,stop Beginning/ending numbers.
  */
 template <typename REAL>
-void cpumat<REAL>::fill_linspace(const REAL start, const REAL stop)
+void fml::cpumat<REAL>::fill_linspace(const REAL start, const REAL stop)
 {
   if (start == stop)
     this->fill_val(start);
@@ -370,7 +373,7 @@ void cpumat<REAL>::fill_linspace(const REAL start, const REAL stop)
 }
 
 template <>
-inline void cpumat<int>::fill_linspace(const int start, const int stop)
+inline void fml::cpumat<int>::fill_linspace(const int start, const int stop)
 {
   if (start == stop)
     this->fill_val(start);
@@ -395,7 +398,7 @@ inline void cpumat<int>::fill_linspace(const int start, const int stop)
 
 /// @brief Set diagonal entries to 1 and non-diagonal entries to 0.
 template <typename REAL>
-void cpumat<REAL>::fill_eye()
+void fml::cpumat<REAL>::fill_eye()
 {
   cpuvec<REAL> v(1);
   v.set(0, (REAL)1);
@@ -414,7 +417,7 @@ void cpumat<REAL>::fill_eye()
   @param[in] v Vector of values to set the matrix diagonal to.
  */
 template <typename REAL>
-void cpumat<REAL>::fill_diag(const cpuvec<REAL> &v)
+void fml::cpumat<REAL>::fill_diag(const cpuvec<REAL> &v)
 {
   this->fill_zero();
   
@@ -435,7 +438,7 @@ void cpumat<REAL>::fill_diag(const cpuvec<REAL> &v)
   @param[in] min,max Parameters for the generator.
  */
 template <typename REAL>
-void cpumat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL max)
+void fml::cpumat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL max)
 {
   std::mt19937 mt(seed);
   static std::uniform_real_distribution<REAL> dist(min, max);
@@ -449,7 +452,7 @@ void cpumat<REAL>::fill_runif(const uint32_t seed, const REAL min, const REAL ma
 
 /// \overload
 template <typename REAL>
-void cpumat<REAL>::fill_runif(const REAL min, const REAL max)
+void fml::cpumat<REAL>::fill_runif(const REAL min, const REAL max)
 {
   uint32_t seed = fml::rand::get_seed();
   this->fill_runif(seed, min, max);
@@ -464,7 +467,7 @@ void cpumat<REAL>::fill_runif(const REAL min, const REAL max)
   @param[in] mean,sd Parameters for the generator.
  */
 template <typename REAL>
-void cpumat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL sd)
+void fml::cpumat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL sd)
 {
   std::mt19937 mt(seed);
   static std::normal_distribution<REAL> dist(mean, sd);
@@ -478,7 +481,7 @@ void cpumat<REAL>::fill_rnorm(const uint32_t seed, const REAL mean, const REAL s
 
 /// \overload
 template <typename REAL>
-void cpumat<REAL>::fill_rnorm(const REAL mean, const REAL sd)
+void fml::cpumat<REAL>::fill_rnorm(const REAL mean, const REAL sd)
 {
   uint32_t seed = fml::rand::get_seed();
   this->fill_rnorm(seed, mean, sd);
@@ -500,7 +503,7 @@ void cpumat<REAL>::fill_rnorm(const REAL mean, const REAL sd)
   will be thrown.
  */
 template <typename REAL>
-void cpumat<REAL>::diag(cpuvec<REAL> &v)
+void fml::cpumat<REAL>::diag(cpuvec<REAL> &v)
 {
   const len_t minmn = std::min(this->m, this->n);
   v.resize(minmn);
@@ -528,7 +531,7 @@ void cpumat<REAL>::diag(cpuvec<REAL> &v)
   will be thrown.
  */
 template <typename REAL>
-void cpumat<REAL>::antidiag(cpuvec<REAL> &v)
+void fml::cpumat<REAL>::antidiag(cpuvec<REAL> &v)
 {
   const len_t minmn = std::min(this->m, this->n);
   v.resize(minmn);
@@ -547,7 +550,7 @@ void cpumat<REAL>::antidiag(cpuvec<REAL> &v)
   @param[in] s Scaling value.
  */
 template <typename REAL>
-void cpumat<REAL>::scale(const REAL s)
+void fml::cpumat<REAL>::scale(const REAL s)
 {
   #pragma omp parallel for if((this->m)*(this->n) > fml::omp::OMP_MIN_SIZE)
   for (len_t j=0; j<this->n; j++)
@@ -562,7 +565,7 @@ void cpumat<REAL>::scale(const REAL s)
 
 /// @brief Reverse the rows of the matrix.
 template <typename REAL>
-void cpumat<REAL>::rev_rows()
+void fml::cpumat<REAL>::rev_rows()
 {
   for (len_t j=0; j<this->n; j++)
   {
@@ -582,7 +585,7 @@ void cpumat<REAL>::rev_rows()
 
 /// @brief Reverse the columns of the matrix.
 template <typename REAL>
-void cpumat<REAL>::rev_cols()
+void fml::cpumat<REAL>::rev_cols()
 {
   len_t last = this->n - 1;
   
@@ -603,7 +606,7 @@ void cpumat<REAL>::rev_cols()
 
 /// @brief Are any values infinite?
 template <typename REAL>
-bool cpumat<REAL>::any_inf() const
+bool fml::cpumat<REAL>::any_inf() const
 {
   for (len_t j=0; j<this->n; j++)
   {
@@ -621,7 +624,7 @@ bool cpumat<REAL>::any_inf() const
 
 /// @brief Are any values NaN?
 template <typename REAL>
-bool cpumat<REAL>::any_nan() const
+bool fml::cpumat<REAL>::any_nan() const
 {
   for (len_t j=0; j<this->n; j++)
   {
@@ -649,7 +652,7 @@ bool cpumat<REAL>::any_nan() const
   exception.
  */
 template <typename REAL>
-REAL cpumat<REAL>::get(const len_t i) const
+REAL fml::cpumat<REAL>::get(const len_t i) const
 {
   this->check_index(i);
   return this->data[i];
@@ -664,7 +667,7 @@ REAL cpumat<REAL>::get(const len_t i) const
   exception.
  */
 template <typename REAL>
-REAL cpumat<REAL>::get(const len_t i, const len_t j) const
+REAL fml::cpumat<REAL>::get(const len_t i, const len_t j) const
 {
   this->check_index(i, j);
   return this->data[i + (this->m)*j];
@@ -681,7 +684,7 @@ REAL cpumat<REAL>::get(const len_t i, const len_t j) const
   exception.
  */
 template <typename REAL>
-void cpumat<REAL>::set(const len_t i, const REAL v)
+void fml::cpumat<REAL>::set(const len_t i, const REAL v)
 {
   this->check_index(i);
   this->data[i] = v;
@@ -697,7 +700,7 @@ void cpumat<REAL>::set(const len_t i, const REAL v)
   exception.
  */
 template <typename REAL>
-void cpumat<REAL>::set(const len_t i, const len_t j, const REAL v)
+void fml::cpumat<REAL>::set(const len_t i, const len_t j, const REAL v)
 {
   this->check_index(i, j);
   this->data[i + (this->m)*j] = v;
@@ -719,7 +722,7 @@ void cpumat<REAL>::set(const len_t i, const len_t j, const REAL v)
   is triggered and fails, a `bad_alloc` exception will be thrown.
  */
 template <typename REAL>
-void cpumat<REAL>::get_row(const len_t i, cpuvec<REAL> &v) const
+void fml::cpumat<REAL>::get_row(const len_t i, cpuvec<REAL> &v) const
 {
   if (i < 0 || i >= this->m)
     throw std::logic_error("invalid matrix row");
@@ -747,7 +750,7 @@ void cpumat<REAL>::get_row(const len_t i, cpuvec<REAL> &v) const
   reallocation is triggered and fails, a `bad_alloc` exception will be thrown.
  */
 template <typename REAL>
-void cpumat<REAL>::get_col(const len_t j, cpuvec<REAL> &v) const
+void fml::cpumat<REAL>::get_col(const len_t j, cpuvec<REAL> &v) const
 {
   if (j < 0 || j >= this->n)
     throw std::logic_error("invalid matrix column");
@@ -770,7 +773,7 @@ void cpumat<REAL>::get_col(const len_t j, cpuvec<REAL> &v) const
   necessarily returned. Otherwise the objects are compared value by value.
  */
 template <typename REAL>
-bool cpumat<REAL>::operator==(const cpumat<REAL> &x) const
+bool fml::cpumat<REAL>::operator==(const fml::cpumat<REAL> &x) const
 {
   if (this->m != x.nrows() || this->n != x.ncols())
     return false;
@@ -799,7 +802,7 @@ bool cpumat<REAL>::operator==(const cpumat<REAL> &x) const
   @param[in] Comparison object.
  */
 template <typename REAL>
-bool cpumat<REAL>::operator!=(const cpumat<REAL> &x) const
+bool fml::cpumat<REAL>::operator!=(const fml::cpumat<REAL> &x) const
 {
   return !(*this == x);
 }
@@ -813,7 +816,7 @@ bool cpumat<REAL>::operator!=(const cpumat<REAL> &x) const
   @param[in] x Setter value.
  */
 template <typename REAL>
-cpumat<REAL>& cpumat<REAL>::operator=(const cpumat<REAL> &x)
+fml::cpumat<REAL>& fml::cpumat<REAL>::operator=(const fml::cpumat<REAL> &x)
 {
   this->m = x.nrows();
   this->n = x.ncols();
@@ -830,7 +833,7 @@ cpumat<REAL>& cpumat<REAL>::operator=(const cpumat<REAL> &x)
 // -----------------------------------------------------------------------------
 
 template <typename REAL>
-void cpumat<REAL>::free()
+void fml::cpumat<REAL>::free()
 {
   if (this->free_data && this->data)
   {
@@ -842,7 +845,7 @@ void cpumat<REAL>::free()
 
 
 template <typename REAL>
-void cpumat<REAL>::check_params(len_t nrows, len_t ncols)
+void fml::cpumat<REAL>::check_params(len_t nrows, len_t ncols)
 {
   if (nrows < 0 || ncols < 0)
     throw std::runtime_error("invalid dimensions");
