@@ -8,18 +8,37 @@
 
 
 #include <cstdarg>
-#include "../../_internals/types.hh"
 
 #if (!defined(FML_USE_CUDA) && !defined(FML_USE_HIP))
   #define FML_USE_CUDA
 #endif
 
-#if (defined(FML_USE_CUDA))
-  // -------------------------
-  // NOTE include order matters; something is wrong with cublas/cusolver internals
-  #include "cuda/gpulapack.hh"
+#if (!defined(FML_GPULAPACK_MAGMA))
+  #define FML_GPULAPACK_VENDOR
+#endif
+
+
+
+// NOTE: include order matters with cusolver/cublas. cusolver MUST come first.
+// something is wrong with their internals
+#if defined(FML_GPULAPACK_MAGMA)
+  #error "MAGMA is currently unsupported"
+  // #include "gpulapack_magma.hh"
+#else
+  #if defined(FML_USE_CUDA)
+    #include "cuda/gpulapack.hh"
+  #elif defined(FML_USE_HIP)
+    #error "HIP is currently unsupported"
+    // #include "hip/gpulapack.hh"
+  #else
+    #error "Unsupported GPU lapack"
+  #endif
+#endif
+
+
+
+#if defined(FML_USE_CUDA)
   #include "cuda/gpublas.hh"
-  // -------------------------
   #include "cuda/gpuprims.hh"
   #include "cuda/gpurand.hh"
   #include "cuda/nvml.hh"
@@ -27,7 +46,6 @@
 #elif defined(FML_USE_HIP)
   #error "HIP is currently unsupported"
   // #include "hip/gpublas.hh"
-  // #include "hip/gpulapack.hh"
   // #include "hip/gpuprims.hh"
   // #include "hip/gpurand.hh"
   // #include "hip/rocm_smi.hh"
@@ -35,6 +53,7 @@
 #else
   #error "Unsupported kernel launcher"
 #endif
+
 
 
 #if defined(FML_USE_CUDA)
