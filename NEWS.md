@@ -1,5 +1,37 @@
 # NEWS
 
+## Release 0.3-0 (//):
+
+New:
+  * Added singular backend headers.
+      - `#include <fml/cpu.hh>` includes all standard headers in `src/fml/cpu`.
+      - `#include <fml/gpu.hh>` includes all standard headers in `src/fml/gpu`.
+      - etc.
+  * Added `fml::card_sp_t` typedef for `std::shared_ptr<fml::card>` in `card.hh`.
+
+API Changes:
+  * All headers are now contained in the `fml/` tree.
+      - `src/cpu/cpumat.hh` becomes `src/fml/cpu/cpumat.hh`
+      - `src/gpu/gpumat.hh` becomes `src/fml/gpu/gpumat.hh`
+      - etc.
+  * All classes and namespaces are now in the fml namespace.
+      - `cpumat<float>` becomes `fml::cpumat<float>`
+      - `linalg::svd()` becomes `fml::linalg::svd()`
+      - etc.
+  * All Xhelpers namespaces are renamed to the singular copy namespace.
+      - `cpuhelpers::cpu2cpu()` becomes `fml::copy::cpu2cpu()`
+      - `gpuhelpers::cpu2gpu()` becomes `fml::copy::cpu2gpu()`
+      - etc.
+
+Bug Fixes:
+  * 
+
+Documentation: None
+
+
+
+
+
 ## Release 0.2-1 (5/28/20):
 
 New: None
