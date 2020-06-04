@@ -30,7 +30,7 @@ There are some differences in how objects of any particular type are constructed
 The library is header-only so no installation is strictly necessary. You can just include a copy/submodule in your project. However, if you want some analogue of `make install`, then you could do something like:
 
 ```bash
-ln -s ./src /usr/include/fml
+ln -s ./src/fml /usr/include/
 ```
 
 
@@ -69,42 +69,12 @@ Check the makefiles in the `examples/` tree if none of that makes sense.
 
 
 
-## High-Level Language Bindings
-
-* R bindings: [fmlr](https://github.com/fml-fam/fmlr)
-
-
-
-## API Stability
-
-The project is young and things are still mostly evolving. The current status is:
-
-* Frozen - Existing APIs will not be developed further.
-    - none
-* Stable - Existing APIs are not expected to change. Some new features may be added slowly.
-    - cpumat/gpumat/mpimat classes
-    - cpuhelpers namespace functions
-    - gpuhelpers namespace functions
-    - mpihelpers namespace functions
-* Stabilizing - Core class naming and construction/destruction is probably finalized. Function/method names and arguments are solidifying, but may change somewhat. New features are still being developed.
-    - linalg namespace functions (all but parmat)
-    - dimops namespace functions
-* Evolving - Function/method names and arguments are subject to change. New features are actively being developed.
-    - stats namespace functions
-* Experimental - Nothing is remotely finalized.
-    - parmat - all functions and methods
-
-Internals are evolving and subject to change at basically any time.
-
-
-
 ## Example
 
 Here's a simple example computing the SVD with some data held on a single CPU:
 
 ```C++
-#include <cpu/cpumat.hh>
-#include <cpu/linalg.hh>
+#include <fml/cpu.hh>
 
 
 int main()
@@ -149,8 +119,7 @@ You should see output like
 The API is largely the same if we change the object storage, but we have to change the object initialization. For example, if `x` is an object of class `mpimat`, we still call `linalg::svd(x, s)`. The differences lie in the creation of the objects. Here is how we might change the above example to use distributed data:
 
 ```C++
-#include <mpi/mpimat.hh>
-#include <mpi/linalg.hh>
+#include <fml/mpi.hh>
 
 
 int main()
@@ -208,6 +177,33 @@ And here we see:
 # cpuvec 2 type=f
 9.5080 0.7729 
 ```
+
+
+
+## High-Level Language Bindings
+
+* R bindings: [fmlr](https://github.com/fml-fam/fmlr)
+
+
+
+## API Stability
+
+The project is young and things are still mostly evolving. The current status is:
+
+* **Frozen**: Existing APIs will not be developed further.
+    - none
+* **Stable**: Existing APIs are not expected to change. Some new features may be added slowly.
+    - cpumat/gpumat/mpimat classes
+    - copy namespace functions
+    - linalg namespace functions (all but parmat)
+* **Stabilizing**: Core class naming and construction/destruction is probably finalized. Function/method names and arguments are solidifying, but may change somewhat. New features are still being developed.
+    - dimops namespace functions
+* **Evolving**: Function/method names and arguments are subject to change. New features are actively being developed.
+    - stats namespace functions
+* **Experimental**: Nothing is remotely finalized.
+    - parmat - all functions and methods
+
+Internals are evolving and subject to change at basically any time.
 
 
 
