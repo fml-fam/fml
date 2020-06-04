@@ -1,8 +1,8 @@
 #include "../catch.hpp"
 
-#include <mpi/grid.hh>
-#include <mpi/mpihelpers.hh>
-#include <mpi/mpimat.hh>
+#include <fml/mpi/grid.hh>
+#include <fml/mpi/mpihelpers.hh>
+#include <fml/mpi/mpimat.hh>
 
 using namespace arraytools;
 

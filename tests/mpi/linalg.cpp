@@ -1,9 +1,9 @@
 #include "../catch.hpp"
 
-#include <_internals/arraytools/src/arraytools.hpp>
-#include <mpi/grid.hh>
-#include <mpi/linalg.hh>
-#include <mpi/mpimat.hh>
+#include <fml/_internals/arraytools/src/arraytools.hpp>
+#include <fml/mpi/grid.hh>
+#include <fml/mpi/linalg.hh>
+#include <fml/mpi/mpimat.hh>
 
 using namespace arraytools;
 

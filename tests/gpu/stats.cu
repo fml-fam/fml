@@ -1,7 +1,7 @@
 #include "../catch.hpp"
 
-#include <_internals/arraytools/src/arraytools.hpp>
-#include <gpu/stats.hh>
+#include <fml/_internals/arraytools/src/arraytools.hpp>
+#include <fml/gpu/stats.hh>
 
 using namespace arraytools;
 using namespace fml;

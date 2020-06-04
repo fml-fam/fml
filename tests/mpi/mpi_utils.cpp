@@ -1,8 +1,8 @@
 #include "../catch.hpp"
 
-#include <_internals/arraytools/src/arraytools.hpp>
-#include <mpi/mpimat.hh>
-#include <mpi/internals/mpi_utils.hh>
+#include <fml/_internals/arraytools/src/arraytools.hpp>
+#include <fml/mpi/mpimat.hh>
+#include <fml/mpi/internals/mpi_utils.hh>
 
 using namespace arraytools;
 

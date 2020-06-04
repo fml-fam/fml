@@ -1,8 +1,8 @@
 #include "../catch.hpp"
 
-#include <gpu/card.hh>
-#include <gpu/gpuhelpers.hh>
-#include <gpu/gpuvec.hh>
+#include <fml/gpu/card.hh>
+#include <fml/gpu/gpuhelpers.hh>
+#include <fml/gpu/gpuvec.hh>
 
 using namespace arraytools;
 using namespace fml;

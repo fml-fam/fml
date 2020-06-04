@@ -1,5 +1,4 @@
-#include <mpi/mpimat.hh>
-#include <mpi/linalg.hh>
+#include <fml/mpi.hh>
 
 
 int main()

@@ -1,7 +1,4 @@
-#include <gpu/card.hh>
-#include <gpu/gpuhelpers.hh>
-#include <gpu/gpumat.hh>
-#include <gpu/linalg.hh>
+#include <fml/gpu.hh>
 
 
 static inline void print_det(int sign, float modulus)

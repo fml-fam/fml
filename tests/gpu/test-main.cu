@@ -1,8 +1,8 @@
 #define CATCH_CONFIG_RUNNER
 #include "../catch.hpp"
 
-#include <gpu/card.hh>
-#include <gpu/gpuhelpers.hh>
+#include <fml/gpu/card.hh>
+#include <fml/gpu/gpuhelpers.hh>
 
 std::shared_ptr<fml::card> c;
 

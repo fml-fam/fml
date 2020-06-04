@@ -1,10 +1,10 @@
 #include "../catch.hpp"
 
-#include <_internals/arraytools/src/arraytools.hpp>
-#include <cpu/cpumat.hh>
-#include <gpu/card.hh>
-#include <gpu/gpuhelpers.hh>
-#include <gpu/gpumat.hh>
+#include <fml/_internals/arraytools/src/arraytools.hpp>
+#include <fml/cpu/cpumat.hh>
+#include <fml/gpu/card.hh>
+#include <fml/gpu/gpuhelpers.hh>
+#include <fml/gpu/gpumat.hh>
 
 using namespace arraytools;
 using namespace fml;

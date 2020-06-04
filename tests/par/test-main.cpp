@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_RUNNER
 #include "../catch.hpp"
 
-#include <par/comm.hh>
+#include <fml/par/comm.hh>
 #include <cstdio>
 
 fml::comm r;

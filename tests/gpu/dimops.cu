@@ -1,7 +1,7 @@
 #include "../catch.hpp"
 
-#include <_internals/arraytools/src/arraytools.hpp>
-#include <gpu/dimops.hh>
+#include <fml/_internals/arraytools/src/arraytools.hpp>
+#include <fml/gpu/dimops.hh>
 
 using namespace arraytools;
 

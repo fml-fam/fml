@@ -1,7 +1,7 @@
 #include "../catch.hpp"
 
-#include <_internals/arraytools/src/arraytools.hpp>
-#include <mpi/stats.hh>
+#include <fml/_internals/arraytools/src/arraytools.hpp>
+#include <fml/mpi/stats.hh>
 
 using namespace arraytools;
 

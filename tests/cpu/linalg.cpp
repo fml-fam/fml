@@ -1,9 +1,9 @@
 #include "../catch.hpp"
 
-#include <_internals/arraytools/src/arraytools.hpp>
-#include <cpu/cpumat.hh>
-#include <cpu/cpuvec.hh>
-#include <cpu/linalg.hh>
+#include <fml/_internals/arraytools/src/arraytools.hpp>
+#include <fml/cpu/cpumat.hh>
+#include <fml/cpu/cpuvec.hh>
+#include <fml/cpu/linalg.hh>
 
 using namespace arraytools;
 

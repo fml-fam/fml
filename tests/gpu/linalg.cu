@@ -1,8 +1,8 @@
 #include "../catch.hpp"
 
-#include <_internals/arraytools/src/arraytools.hpp>
-#include <gpu/gpumat.hh>
-#include <gpu/linalg.hh>
+#include <fml/_internals/arraytools/src/arraytools.hpp>
+#include <fml/gpu/gpumat.hh>
+#include <fml/gpu/linalg.hh>
 
 using namespace arraytools;
 using namespace fml;

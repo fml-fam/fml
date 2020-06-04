@@ -1,7 +1,7 @@
 #define CATCH_CONFIG_RUNNER
 #include "../catch.hpp"
 
-#include <mpi/grid.hh>
+#include <fml/mpi/grid.hh>
 #include <cstdio>
 
 fml::grid g;

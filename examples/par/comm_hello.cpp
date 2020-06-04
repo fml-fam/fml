@@ -1,9 +1,9 @@
-#include <par/comm.hh>
+#include <fml/par/comm.hh>
 
 
 int main()
 {
-  comm c = comm();
+  fml::comm c = fml::comm();
   
   c.info();
   c.barrier();

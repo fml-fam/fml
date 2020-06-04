@@ -1,5 +1,4 @@
-#include <cpu/cpumat.hh>
-#include <cpu/linalg.hh>
+#include <fml/cpu.hh>
 
 
 static inline void print_det(int sign, float modulus)

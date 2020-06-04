@@ -1,4 +1,4 @@
-#include <gpu/card.hh>
+#include <fml/gpu.hh>
 
 
 int main()

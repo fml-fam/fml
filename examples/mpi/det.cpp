@@ -1,5 +1,4 @@
-#include <mpi/mpimat.hh>
-#include <mpi/linalg.hh>
+#include <fml/mpi.hh>
 
 
 static inline void print_det(int sign, float modulus)

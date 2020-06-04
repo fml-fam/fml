@@ -1,4 +1,4 @@
-#include <cpu/cpumat.hh>
+#include <fml/cpu.hh>
 
 
 int main()

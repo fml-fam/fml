@@ -1,6 +1,4 @@
-#include <mpi/grid.hh>
-#include <mpi/mpimat.hh>
-#include <mpi/mpihelpers.hh>
+#include <fml/mpi.hh>
 
 
 int main()

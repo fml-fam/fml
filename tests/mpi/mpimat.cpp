@@ -1,10 +1,10 @@
 #include "../catch.hpp"
 
-#include <_internals/arraytools/src/arraytools.hpp>
-#include <mpi/internals/bcutils.hh>
-#include <mpi/grid.hh>
-#include <mpi/mpihelpers.hh>
-#include <mpi/mpimat.hh>
+#include <fml/_internals/arraytools/src/arraytools.hpp>
+#include <fml/mpi/internals/bcutils.hh>
+#include <fml/mpi/grid.hh>
+#include <fml/mpi/mpihelpers.hh>
+#include <fml/mpi/mpimat.hh>
 
 using namespace arraytools;
 
