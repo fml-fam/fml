@@ -19,7 +19,22 @@ namespace diag
   template <typename REAL>
   bool is_diag(const cpumat<REAL> &x)
   {
+    if (!x.is_square())
+      return false;
     
+    const len_t m = x.nrows();
+    x_d = x.data_ptr();
+    for (len_t j=0; j<x.ncols(); j++)
+    {
+      for (len_t i=0; i<m; i++)
+      {
+        if (i == j)
+          continue;
+        
+        if (fabs(x_d[i + m*j]) > (REAL)0.0)
+          return false;
+      }
+    }
     
     return true;
   }
