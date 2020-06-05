@@ -4,7 +4,7 @@
 
 int main()
 {
-  auto c = fml::gpuhelpers::new_card(0);
+  auto c = fml::new_card(0);
   c->info();
   
   len_t n = 5;
@@ -18,7 +18,7 @@ int main()
   x.fill_linspace(1.f, (float) n*n);
   
   fml::cpumat<float> x_cpu;
-  fml::gpuhelpers::gpu2cpu(x, x_cpu);
+  fml::copy::gpu2cpu(x, x_cpu);
   x_cpu.print();
   
   return 0;

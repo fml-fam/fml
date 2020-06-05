@@ -6,7 +6,7 @@
 
 using namespace arraytools;
 
-extern std::shared_ptr<fml::card> c;
+extern fml::card_sp_t c;
 
 
 TEMPLATE_TEST_CASE("lacpy", "[gpu_utils]", float, double)

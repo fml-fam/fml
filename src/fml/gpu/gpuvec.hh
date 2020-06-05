@@ -93,7 +93,7 @@ namespace fml
   @param[in] gpu Shared pointer to GPU card object.
   
   @code
-  auto c = gpuhelpers::new_card(0);
+  auto c = fml::new_card(0);
   gpuvec<float> x(c);
   @endcode
  */
@@ -122,7 +122,7 @@ fml::gpuvec<T>::gpuvec(std::shared_ptr<fml::card> gpu)
   If the input values are invalid, a `runtime_error` exception will be thrown.
   
   @code
-  auto c = gpuhelpers::new_card(0);
+  auto c = fml::new_card(0);
   gpuvec<float> x(c, 5);
   @endcode
  */

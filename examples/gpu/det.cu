@@ -13,7 +13,7 @@ static inline void print_det(int sign, float modulus)
 
 int main()
 {
-  auto c = fml::gpuhelpers::new_card(0);
+  auto c = fml::new_card(0);
   
   len_t n = 2;
   

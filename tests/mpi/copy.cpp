@@ -1,7 +1,7 @@
 #include "../catch.hpp"
 
+#include <fml/mpi/copy.hh>
 #include <fml/mpi/grid.hh>
-#include <fml/mpi/mpihelpers.hh>
 #include <fml/mpi/mpimat.hh>
 
 using namespace arraytools;
@@ -23,11 +23,11 @@ TEMPLATE_TEST_CASE("mpi2cpu_all", "[mpimat]", float, double)
     
     dx.fill_linspace(1, m*n);
     x_true.fill_linspace(1, m*n);
-    fml::cpumat<TestType> x_test = fml::mpihelpers::mpi2cpu_all(dx);
+    fml::cpumat<TestType> x_test = fml::copy::mpi2cpu_all(dx);
     REQUIRE( x_test == x_true );
     
     dx.fill_eye();
-    fml::mpihelpers::mpi2cpu_all(dx, x_test);
+    fml::copy::mpi2cpu_all(dx, x_test);
     x_true.fill_eye();
     REQUIRE( x_test == x_true );
   }
@@ -41,11 +41,11 @@ TEMPLATE_TEST_CASE("mpi2cpu_all", "[mpimat]", float, double)
     
     dx.fill_linspace(1, m*n);
     x_true.fill_linspace(1, m*n);
-    fml::cpumat<TestType> x_test = fml::mpihelpers::mpi2cpu_all(dx);
+    fml::cpumat<TestType> x_test = fml::copy::mpi2cpu_all(dx);
     REQUIRE( x_test == x_true );
     
     dx.fill_eye();
-    fml::mpihelpers::mpi2cpu_all(dx, x_test);
+    fml::copy::mpi2cpu_all(dx, x_test);
     x_true.fill_eye();
     REQUIRE( x_test == x_true );
   }
@@ -74,7 +74,7 @@ TEMPLATE_TEST_CASE("mpi2cpu", "[mpimat]", float, double)
       x_test.fill_linspace(1, m*n);
     }
     
-    fml::mpihelpers::mpi2cpu(dx, x_test);
+    fml::copy::mpi2cpu(dx, x_test);
     if (g.rank0())
     {
       fml::cpumat<TestType> x_true(m, n);
@@ -104,7 +104,7 @@ TEMPLATE_TEST_CASE("mpi2cpu", "[mpimat]", float, double)
       x_test.fill_linspace(1, m*n);
     }
     
-    fml::mpihelpers::mpi2cpu(dx, x_test);
+    fml::copy::mpi2cpu(dx, x_test);
     if (g.rank0())
     {
       fml::cpumat<TestType> x_true(m, n);
@@ -137,7 +137,7 @@ TEMPLATE_TEST_CASE("cpu2mpi", "[mpimat]", float, double)
     fml::cpumat<TestType> x(m, n);
     x.fill_linspace(1, m*n);
     
-    fml::mpihelpers::cpu2mpi(x, dx_test);
+    fml::copy::cpu2mpi(x, dx_test);
     
     REQUIRE( dx_test == dx_true );
   }
@@ -152,7 +152,7 @@ TEMPLATE_TEST_CASE("cpu2mpi", "[mpimat]", float, double)
     fml::cpumat<TestType> x(m, n);
     x.fill_linspace(1, m*n);
     
-    fml::mpihelpers::cpu2mpi(x, dx_test);
+    fml::copy::cpu2mpi(x, dx_test);
     
     REQUIRE( dx_test == dx_true );
   }
@@ -173,7 +173,7 @@ TEMPLATE_TEST_CASE("mpi2mpi", "[mpimat]", float, double)
     fml::mpimat<TestType> dx_true(g, m, n, mb, nb);
     dx_true.fill_linspace(1, m*n);
     
-    fml::mpihelpers::mpi2mpi(dx_true, dx_test);
+    fml::copy::mpi2mpi(dx_true, dx_test);
     
     REQUIRE( dx_test == dx_true );
   }
@@ -186,7 +186,7 @@ TEMPLATE_TEST_CASE("mpi2mpi", "[mpimat]", float, double)
     fml::mpimat<TestType> dx_true(g, m, n, mb, nb);
     dx_true.fill_linspace(1, m*n);
     
-    fml::mpihelpers::mpi2mpi(dx_true, dx_test);
+    fml::copy::mpi2mpi(dx_true, dx_test);
     
     REQUIRE( dx_test == dx_true );
   }

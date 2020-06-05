@@ -2,16 +2,16 @@
 #include "../catch.hpp"
 
 #include <fml/gpu/card.hh>
-#include <fml/gpu/gpuhelpers.hh>
+#include <fml/gpu/copy.hh>
 
-std::shared_ptr<fml::card> c;
+fml::card_sp_t c;
 
 
 int main(int argc, char *argv[])
 {
   int num_failed_tests;
   // c = std::make_shared<card>(0);
-  c = fml::gpuhelpers::new_card(0);
+  c = fml::new_card(0);
   
   num_failed_tests = Catch::Session().run(argc, argv);
   

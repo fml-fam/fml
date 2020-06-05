@@ -79,6 +79,20 @@ namespace fml
   
   
   typedef std::shared_ptr<fml::card> card_sp_t;
+  
+  /**
+    @brief Initialize a new card.
+    
+    @param[in] id GPU id number.
+    @return Shared pointer to initialized card object.
+    
+    @except If the GPU can not be initialized, or if the allocation of one of the
+    handles fails, the method will throw a 'runtime_error' exception.
+  */
+  inline card_sp_t new_card(int id=0)
+  {
+    return std::make_shared<fml::card>(id);
+  }
 }
 
 

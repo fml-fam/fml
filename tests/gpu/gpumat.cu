@@ -3,13 +3,13 @@
 #include <fml/_internals/arraytools/src/arraytools.hpp>
 #include <fml/cpu/cpumat.hh>
 #include <fml/gpu/card.hh>
-#include <fml/gpu/gpuhelpers.hh>
+#include <fml/gpu/copy.hh>
 #include <fml/gpu/gpumat.hh>
 
 using namespace arraytools;
 using namespace fml;
 
-extern std::shared_ptr<card> c;
+extern card_sp_t c;
 
 
 TEMPLATE_TEST_CASE("basics", "[gpumat]", float, double)

@@ -8,8 +8,8 @@
 
 
 #include "gpu/card.hh"
+#include "gpu/copy.hh"
 #include "gpu/dimops.hh"
-#include "gpu/gpuhelpers.hh"
 #include "gpu/gpumat.hh"
 #include "gpu/gpuvec.hh"
 #include "gpu/linalg.hh"

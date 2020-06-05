@@ -2,8 +2,8 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_MPI_MPIHELPERS_H
-#define FML_MPI_MPIHELPERS_H
+#ifndef FML_MPI_COPY_H
+#define FML_MPI_COPY_H
 #pragma once
 
 
@@ -22,7 +22,7 @@
 namespace fml
 {
 /// @brief MPI class helpers.
-namespace mpihelpers
+namespace copy
 {
   /**
     @brief Copy data from an MPI object to a CPU object.

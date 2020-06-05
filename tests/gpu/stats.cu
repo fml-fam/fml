@@ -6,7 +6,7 @@
 using namespace arraytools;
 using namespace fml;
 
-extern std::shared_ptr<card> c;
+extern fml::card_sp_t c;
 
 
 TEMPLATE_TEST_CASE("stats - pca", "[stats]", float, double)

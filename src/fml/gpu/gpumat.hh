@@ -110,7 +110,7 @@ namespace fml
   @param[in] gpu Shared pointer to GPU card object.
   
   @code
-  auto c = gpuhelpers::new_card(0);
+  auto c = fml::new_card(0);
   gpumat<float> x(c);
   @endcode
  */
@@ -140,7 +140,7 @@ fml::gpumat<REAL>::gpumat(std::shared_ptr<fml::card> gpu)
   If the input values are invalid, a `runtime_error` exception will be thrown.
   
   @code
-  auto c = gpuhelpers::new_card(0);
+  auto c = fml::new_card(0);
   gpumat<float> x(c, 3, 2);
   @endcode
  */

@@ -10,7 +10,7 @@ int main()
   
   x.fill_val(1);
   
-  fml::cpumat<float> x_gbl = fml::mpihelpers::mpi2cpu(x);
+  fml::cpumat<float> x_gbl = fml::copy::mpi2cpu(x);
   if (g.rank0())
   {
     x_gbl.info();

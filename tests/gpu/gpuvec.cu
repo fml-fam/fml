@@ -1,13 +1,13 @@
 #include "../catch.hpp"
 
 #include <fml/gpu/card.hh>
-#include <fml/gpu/gpuhelpers.hh>
+#include <fml/gpu/copy.hh>
 #include <fml/gpu/gpuvec.hh>
 
 using namespace arraytools;
 using namespace fml;
 
-extern std::shared_ptr<card> c;
+extern fml::card_sp_t c;
 
 
 TEMPLATE_TEST_CASE("basics - vec", "[gpuvec]", float, double)

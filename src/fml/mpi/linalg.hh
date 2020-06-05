@@ -16,8 +16,8 @@
 #include "internals/mpi_utils.hh"
 #include "internals/scalapack.hh"
 
+#include "copy.hh"
 #include "mpimat.hh"
-#include "mpihelpers.hh"
 
 
 namespace fml
@@ -1119,7 +1119,7 @@ namespace linalg
     qr_Q(x, qraux, u, work);
     
     matmult(false, false, (REAL)1.0, u, u_R, x);
-    mpihelpers::mpi2mpi(x, u);
+    copy::mpi2mpi(x, u);
   }
   
   /// \overload
@@ -1199,14 +1199,14 @@ namespace linalg
       crossprod((REAL)1.0, x, cp);
       eigen_sym(cp, s, vt);
       vt.rev_cols();
-      mpihelpers::mpi2mpi(vt, cp);
+      copy::mpi2mpi(vt, cp);
     }
     else
     {
       tcrossprod((REAL)1.0, x, cp);
       eigen_sym(cp, s, u);
       u.rev_cols();
-      mpihelpers::mpi2mpi(u, cp);
+      copy::mpi2mpi(u, cp);
     }
     
     s.rev();

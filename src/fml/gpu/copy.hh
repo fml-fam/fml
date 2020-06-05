@@ -2,8 +2,8 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_GPU_GPUHELPERS_H
-#define FML_GPU_GPUHELPERS_H
+#ifndef FML_GPU_COPY_H
+#define FML_GPU_COPY_H
 #pragma once
 
 
@@ -23,25 +23,8 @@
 
 namespace fml
 {
-/// @brief GPU class helpers.
-namespace gpuhelpers
+namespace copy
 {
-  /**
-    @brief Initialize a new card.
-    
-    @param[in] id GPU id number.
-    @return Shared pointer to initialized card object.
-    
-    @except If the GPU can not be initialized, or if the allocation of one of the
-    handles fails, the method will throw a 'runtime_error' exception.
-  */
-  inline std::shared_ptr<card> new_card(int id=0)
-  {
-    return std::make_shared<card>(id);
-  }
-  
-  
-  
   namespace internals
   {
     static const size_t CPLEN = 1024;

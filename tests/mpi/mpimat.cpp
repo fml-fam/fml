@@ -2,8 +2,8 @@
 
 #include <fml/_internals/arraytools/src/arraytools.hpp>
 #include <fml/mpi/internals/bcutils.hh>
+#include <fml/mpi/copy.hh>
 #include <fml/mpi/grid.hh>
-#include <fml/mpi/mpihelpers.hh>
 #include <fml/mpi/mpimat.hh>
 
 using namespace arraytools;
@@ -117,7 +117,7 @@ TEMPLATE_TEST_CASE("indexing", "[mpimat]", float, double)
     x_d[i] = (TestType) i+1;
   
   fml::mpimat<TestType> x(g, 1, 1);
-  fml::mpihelpers::cpu2mpi(x_cpu, x);
+  fml::copy::cpu2mpi(x_cpu, x);
   fml::mpimat<TestType> y(g, n, n, 1, 1);
   
   y.fill_linspace(1, n*n);

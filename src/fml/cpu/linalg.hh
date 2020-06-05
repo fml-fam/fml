@@ -16,7 +16,7 @@
 #include "internals/cpu_utils.hh"
 #include "internals/lapack.hh"
 
-#include "cpuhelpers.hh"
+#include "copy.hh"
 #include "cpumat.hh"
 #include "cpuvec.hh"
 
@@ -1056,7 +1056,7 @@ namespace linalg
     qr_Q(x, qraux, u, work);
     
     matmult(false, false, (REAL)1.0, u, u_R, x);
-    cpuhelpers::cpu2cpu(x, u);
+    copy::cpu2cpu(x, u);
   }
   
   /// \overload
@@ -1133,14 +1133,14 @@ namespace linalg
       crossprod((REAL)1.0, x, cp);
       eigen_sym(cp, s, vt);
       vt.rev_cols();
-      cpuhelpers::cpu2cpu(vt, cp);
+      copy::cpu2cpu(vt, cp);
     }
     else
     {
       tcrossprod((REAL)1.0, x, cp);
       eigen_sym(cp, s, u);
       u.rev_cols();
-      cpuhelpers::cpu2cpu(u, cp);
+      copy::cpu2cpu(u, cp);
     }
     
     s.rev();

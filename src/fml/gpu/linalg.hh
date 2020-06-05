@@ -18,7 +18,7 @@
 #include "internals/gpuscalar.hh"
 #include "internals/kernelfuns.hh"
 
-#include "gpuhelpers.hh"
+#include "copy.hh"
 #include "gpumat.hh"
 #include "gpuvec.hh"
 
@@ -367,7 +367,7 @@ namespace linalg
     #elif defined(FML_GPULAPACK_MAGMA)
       cpuvec<int> p_cpu(lipiv);
       gpulapack::getrf(m, n, x.data_ptr(), m, p_cpu.data_ptr(), &info);
-      gpuhelpers::cpu2gpu(p_cpu, p);
+      copy::cpu2gpu(p_cpu, p);
     #else
       #error "Unsupported GPU lapack"
     #endif
@@ -658,7 +658,7 @@ namespace linalg
       if (!only_values)
       {
         vectors.resize(n, n);
-        gpuhelpers::gpu2gpu(x, vectors);
+        copy::gpu2gpu(x, vectors);
       }
       
       return info;
@@ -755,7 +755,7 @@ namespace linalg
     gpulapack::err::check_ret(check, "getrs");
     fml::linalgutils::check_info(info, "getrs");
     
-    gpuhelpers::gpu2gpu(inv, x);
+    copy::gpu2gpu(inv, x);
   }
   
   
@@ -1167,7 +1167,7 @@ namespace linalg
     qr_Q(x, qraux, u, work);
     
     matmult(false, false, (REAL)1.0, u, u_R, x);
-    gpuhelpers::gpu2gpu(x, u);
+    copy::gpu2gpu(x, u);
   }
   
   /// \overload
@@ -1259,14 +1259,14 @@ namespace linalg
       crossprod((REAL)1.0, x, cp);
       eigen_sym(cp, s, vt);
       vt.rev_cols();
-      gpuhelpers::gpu2gpu(vt, cp);
+      copy::gpu2gpu(vt, cp);
     }
     else
     {
       tcrossprod((REAL)1.0, x, cp);
       eigen_sym(cp, s, u);
       u.rev_cols();
-      gpuhelpers::gpu2gpu(u, cp);
+      copy::gpu2gpu(u, cp);
     }
     
     s.rev();
