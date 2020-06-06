@@ -217,6 +217,20 @@ namespace fml
     {
       dpotrf_(&uplo, &n, A, &lda, info);
     }
+    
+    
+    
+    inline void lassq(const int n, const float *x, const int incx,
+      float *scale, float *sumsq)
+    {
+      slassq_(&n, x, &incx, scale, sumsq);
+    }
+    
+    inline void lassq(const int n, const double *x, const int incx,
+      double *scale, double *sumsq)
+    {
+      dlassq_(&n, x, &incx, scale, sumsq);
+    }
   }
 }
 

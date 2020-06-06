@@ -10,6 +10,7 @@
 #include "linalg/linalg_blas.hh"
 #include "linalg/linalg_factorizations.hh"
 #include "linalg/linalg_misc.hh"
+#include "linalg/linalg_norm.hh"
 
 
 #endif

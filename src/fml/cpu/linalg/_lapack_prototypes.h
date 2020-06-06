@@ -171,6 +171,14 @@ extern void dpotrf_(const char *uplo, const int *n, double *const restrict A,
   const int *lda, int *info);
 
 
+
+extern void slassq_(const int *n, const float *restrict x, const int *incx,
+  float *scale, float *sumsq);
+
+extern void dlassq_(const int *n, const double *restrict x, const int *incx,
+  double *scale, double *sumsq);
+
+
 #ifdef __cplusplus
 }
 #endif
