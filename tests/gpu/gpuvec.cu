@@ -116,13 +116,30 @@ TEMPLATE_TEST_CASE("rev - vec", "[gpuvec]", float, double)
 
 
 
-TEMPLATE_TEST_CASE("sum - vec", "[gpuvec]", float, double)
+TEMPLATE_TEST_CASE("sum/max/min - vec", "[cpuvec]", float, double)
 {
   len_t n = 5;
   
   gpuvec<TestType> x(c, n);
   x.fill_linspace(1, n);
   
-  TestType s = x.sum();
-  REQUIRE( fltcmp::eq(s, (n*(n+1))/2) );
+  TestType s;
+  
+  SECTION("sum")
+  {
+    s = x.sum();
+    REQUIRE( fltcmp::eq(s, (n*(n+1))/2) );
+  }
+  
+  SECTION("max")
+  {
+    s = x.max();
+    REQUIRE( fltcmp::eq(s, 5) );
+  }
+  
+  SECTION("min")
+  {
+    s = x.min();
+    REQUIRE( fltcmp::eq(s, 1) );
+  }
 }

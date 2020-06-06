@@ -478,8 +478,8 @@ T fml::gpuvec<T>::max() const
 template <typename T>
 T fml::gpuvec<T>::min() const
 {
-  T mn = 0;
-  fml::gpuscalar<T> mn_gpu(c, mn);
+  T mn;
+  fml::gpuscalar<T> mn_gpu(c);
   
   fml::kernelfuns::kernel_min<<<dim_grid, dim_block>>>(this->_size, this->data, mn_gpu.data_ptr());
   mn_gpu.get_val(&mn);

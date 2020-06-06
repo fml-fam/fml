@@ -22,7 +22,8 @@ namespace fml
     static __device__ float atomicMaxf(float *address, float val)
     {
       int *address_int = (int*) address;
-      int old = *address_int, assumed;
+      int old = *address_int;
+      int assumed;
       
       while (val > __int_as_float(old))
       {
@@ -36,7 +37,8 @@ namespace fml
     static __device__ double atomicMaxf(double *address, double val)
     {
       unsigned long long *address_ull = (unsigned long long*) address;
-      unsigned long long old = *address_ull, assumed;
+      unsigned long long old = *address_ull;
+      unsigned long long assumed;
       
       while (val > __longlong_as_double(old))
       {
@@ -52,27 +54,30 @@ namespace fml
     static __device__ float atomicMinf(float *address, float val)
     {
       int *address_int = (int*) address;
-      int old = *address_int, assumed;
+      int old = *address_int;
+      int assumed;
       
-      while (val < __int_as_float(old))
+      do
       {
         assumed = old;
-        old = atomicCAS(address_int, assumed, __float_as_int(val));
-      }
+        old = atomicCAS(address_int, assumed,
+              __float_as_int(fmin(val, __int_as_float(assumed))));
+      } while (old != assumed);
       
       return __int_as_float(old);
     }
     
     static __device__ double atomicMinf(double *address, double val)
     {
-      unsigned long long *address_ull = (unsigned long long*) address;
-      unsigned long long old = *address_ull, assumed;
+      unsigned long long * address_as_ull = (unsigned long long*) address;
+      unsigned long long old = *address_as_ull;
+      unsigned long long assumed;
       
-      while (val < __longlong_as_double(old))
-      {
+      do {
         assumed = old;
-        old = atomicCAS(address_ull, assumed, __double_as_longlong(val));
-      }
+        old = atomicCAS(address_as_ull, assumed,
+              __double_as_longlong(fmin(val, __longlong_as_double(assumed))));
+      } while (assumed != old);
       
       return __longlong_as_double(old);
     }
