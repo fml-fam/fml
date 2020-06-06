@@ -38,3 +38,20 @@ TEMPLATE_TEST_CASE("norm", "[linalg]", float, double)
     REQUIRE( fltcmp::eq(norm, 6) );
   }
 }
+
+
+
+TEMPLATE_TEST_CASE("norm_2", "[linalg]", float, double)
+{
+  // matrix from https://en.wikipedia.org/wiki/Singular_value_decomposition#Example
+  TestType norm;
+  fml::cpumat<TestType> x(4, 5);
+  x.fill_zero();
+  x.set(0, 0, 1);
+  x.set(3, 1, 2);
+  x.set(1, 2, 3);
+  x.set(0, 4, 2);
+  
+  norm = fml::linalg::norm_2(x);
+  REQUIRE( fltcmp::eq(norm, 3) );
+}
