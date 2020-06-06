@@ -47,7 +47,7 @@ namespace linalg
     {
       REAL tmp = 0;
       for (len_t i=0; i<m; i++)
-        tmp += fabsf(x_d[i + m*j]);
+        tmp += fabs(x_d[i + m*j]);
       
       if (tmp > norm)
         norm = tmp;
@@ -87,7 +87,7 @@ namespace linalg
     for (len_t j=0; j<n; j++)
     {
       for (len_t i=0; i<m; i++)
-        tmp_d[i] += fabsf(x_d[i + m*j]);
+        tmp_d[i] += fabs(x_d[i + m*j]);
     }
     
     for (len_t i=0; i<m; i++)
@@ -150,7 +150,7 @@ namespace linalg
     {
       for (len_t i=0; i<m; i++)
       {
-        REAL tmp = fabsf(x_d[i + m*j]);
+        REAL tmp = fabs(x_d[i + m*j]);
         if (tmp > norm)
           norm = tmp;
       }
