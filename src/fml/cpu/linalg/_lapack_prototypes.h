@@ -179,6 +179,26 @@ extern void dlassq_(const int *n, const double *restrict x, const int *incx,
   double *scale, double *sumsq);
 
 
+
+extern void sgecon_(const char *norm, const int *n,
+  const float *const restrict A, const int *lda, const float *anorm,
+  float *rcond, float *work, float *work2, int *info);
+
+extern void dgecon_(const char *norm, const int *n,
+  const double *const restrict A, const int *lda, const double *anorm,
+  double *rcond, double *work, double *work2, int *info);
+
+
+
+extern void strcon_(const char *norm, const char *uplo, const char *diag,
+  const int *n, const float *const restrict A, const int *lda, float *rcond,
+  float *work, float *work2, int *info);
+
+extern void dtrcon_(const char *norm, const char *uplo, const char *diag,
+  const int *n, const double *const restrict A, const int *lda, double *rcond,
+  double *work, double *work2, int *info);
+
+
 #ifdef __cplusplus
 }
 #endif

@@ -231,6 +231,38 @@ namespace fml
     {
       dlassq_(&n, x, &incx, scale, sumsq);
     }
+    
+    
+    
+    inline void gecon(const char norm, const int n, const float *A,
+      const int lda, const float anorm, float *rcond, float *work,
+      float *work2, int *info)
+    {
+      sgecon_(&norm, &n, A, &lda, &anorm, rcond, work, work2, info);
+    }
+    
+    inline void gecon(const char norm, const int n, const double *A,
+      const int lda, const double anorm, double *rcond, double *work,
+      double *work2, int *info)
+    {
+      dgecon_(&norm, &n, A, &lda, &anorm, rcond, work, work2, info);
+    }
+    
+    
+    
+    inline void trcon(const char norm, const char uplo, const char diag,
+      const int n, const float *A, const int lda, float *rcond, float *work,
+      float *work2, int *info)
+    {
+      strcon_(&norm, &uplo, &diag, &n, A, &lda, rcond, work, work2, info);
+    }
+    
+    inline void trcon(const char norm, const char uplo, const char diag,
+      const int n, const double *A, const int lda, double *rcond, double *work,
+      double *work2, int *info)
+    {
+      dtrcon_(&norm, &uplo, &diag, &n, A, &lda, rcond, work, work2, info);
+    }
   }
 }
 

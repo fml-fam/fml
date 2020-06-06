@@ -188,6 +188,169 @@ namespace linalg
     
     return ret;
   }
+  
+  
+  
+  namespace
+  {
+    template <typename REAL>
+    REAL cond_square_internals(const char norm, cpumat<REAL> &x)
+    {
+      const len_t n = x.nrows();
+      
+      REAL ret;
+      int info;
+      
+      lu(x);
+      
+      cpuvec<REAL> work(4*n);
+      cpuvec<REAL> work2(n);
+      REAL xnorm = norm_1(x);
+      lapack::gecon(norm, n, x.data_ptr(), n, xnorm, &ret, work.data_ptr(),
+        work2.data_ptr(), &info);
+      
+      fml::linalgutils::check_info(info, "gecon");
+      
+      return ((REAL)1)/ret;
+    }
+    
+    template <typename REAL>
+    REAL cond_nonsquare_internals(const char norm, cpumat<REAL> &x)
+    {
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      
+      REAL ret;
+      int info;
+      
+      cpuvec<REAL> aux;
+      
+      if (m > n)
+      {
+        cpumat<REAL> R;
+        qr(false, x, aux);
+        qr_R(x, R);
+        
+        aux.resize(R.nrows());
+        lapack::trcon(norm, 'U', 'N', n, R.data_ptr(), n, &ret,
+          x.data_ptr(), aux.data_ptr(), &info);
+      }
+      else
+      {
+        cpumat<REAL> L;
+        lq(x, aux);
+        lq_L(x, L);
+        
+        aux.resize(L.nrows());
+        lapack::trcon(norm, 'L', 'N', m, L.data_ptr(), m, &ret,
+          x.data_ptr(), aux.data_ptr(), &info);
+      }
+      
+      fml::linalgutils::check_info(info, "trcon");
+      
+      return ((REAL)1)/ret;
+    }
+  }
+  
+  /**
+    @brief Estimates the condition number under the 1-norm.
+    
+    @param[in] x Input data matrix.
+    
+    @param[inout] x Input data matrix. The data is overwritten.
+    
+    @impl Computes L or R (whichever is smaller) and the LAPACK function
+    `Xtrcon()` if the input is not square, and `Xgecon()` on the LU of the input
+    otherwise.
+    
+    @allocs Allocates temporary storage to compute the QR/LQ/LU, as well as
+    workspace arrays for the LAPACK condition number function.
+    
+    @except If an allocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  REAL cond_1(cpumat<REAL> &x)
+  {
+    if (x.is_square())
+      return cond_square_internals('1', x);
+    else
+      return cond_nonsquare_internals('1', x);
+  }
+  
+  
+  
+  /**
+    @brief Estimates the condition number under the infinity norm.
+    
+    @param[in] x Input data matrix.
+    
+    @param[inout] x Input data matrix. The data is overwritten.
+    
+    @impl Computes L or R (whichever is smaller) and the LAPACK function
+    `Xtrcon()` if the input is not square, and `Xgecon()` on the LU of the input
+    otherwise.
+    
+    @allocs Allocates temporary storage to compute the QR/LQ/LU, as well as
+    workspace arrays for the LAPACK condition number function.
+    
+    @except If an allocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  REAL cond_I(cpumat<REAL> &x)
+  {
+    if (x.is_square())
+      return cond_square_internals('I', x);
+    else
+      return cond_nonsquare_internals('I', x);
+  }
+  
+  
+  
+  /**
+    @brief Estimates the condition number under the 2 norm.
+    
+    @param[in] x Input data matrix.
+    
+    @param[inout] x Input data matrix. The data is overwritten.
+    
+    @impl Computes L or R (whichever is smaller) and the LAPACK function
+    `Xtrcon()` if the input is not square, and `Xgecon()` on the LU of the input
+    otherwise.
+    
+    @allocs Allocates temporary storage to compute the QR/LQ/LU, as well as
+    workspace arrays for the LAPACK condition number function.
+    
+    @except If an allocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  REAL cond_2(cpumat<REAL> &x)
+  {
+    cpuvec<REAL> s;
+    svd(x, s);
+    
+    REAL *s_d = s.data_ptr();
+    
+    REAL max = s_d[0];
+    REAL min = s_d[0];
+    for (len_t i=1; i<s.size(); i++)
+    {
+      if (s_d[i] > max)
+        max = s_d[i];
+      if (s_d[i] > 0 && s_d[i] < min)
+        min = s_d[i];
+    }
+    
+    return max/min;
+  }
 }
 }
 
