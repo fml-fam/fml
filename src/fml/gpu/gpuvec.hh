@@ -53,7 +53,10 @@ namespace fml
       
       void scale(const T s);
       void rev();
+      
       T sum() const;
+      T max() const;
+      T min() const;
       
       T get(const len_t i) const;
       void set(const len_t i, const T v);
@@ -451,6 +454,38 @@ T fml::gpuvec<T>::sum() const
   this->c->check();
   
   return s;
+}
+
+
+
+/// @brief Maximum value of the vector.
+template <typename T>
+T fml::gpuvec<T>::max() const
+{
+  T mx = 0;
+  fml::gpuscalar<T> mx_gpu(c, mx);
+  
+  fml::kernelfuns::kernel_max<<<dim_grid, dim_block>>>(this->_size, this->data, mx_gpu.data_ptr());
+  mx_gpu.get_val(&mx);
+  this->c->check();
+  
+  return mx;
+}
+
+
+
+/// @brief Minimum value of the vector.
+template <typename T>
+T fml::gpuvec<T>::min() const
+{
+  T mn = 0;
+  fml::gpuscalar<T> mn_gpu(c, mn);
+  
+  fml::kernelfuns::kernel_min<<<dim_grid, dim_block>>>(this->_size, this->data, mn_gpu.data_ptr());
+  mn_gpu.get_val(&mn);
+  this->c->check();
+  
+  return mn;
 }
 
 

@@ -13,6 +13,8 @@
 
 #include "../../_internals/arraytools/src/arraytools.cuh"
 
+#include "../internals/atomics.hh"
+
 
 namespace fml
 {
@@ -181,6 +183,60 @@ namespace fml
       
       if (i < len)
         atomicAdd(s, data[i]);
+    }
+    
+    
+    
+    static __global__ void kernel_max(const len_t len, const float *data, float *mx)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      
+      if (i < len)
+        atomics::atomicMaxf(mx, data[i]);
+    }
+    
+    static __global__ void kernel_max(const len_t len, const double *data, double *mx)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      
+      if (i < len)
+        atomics::atomicMaxf(mx, data[i]);
+    }
+    
+    template <typename T>
+    __global__ void kernel_max(const len_t len, const T *data, T *mx)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      
+      if (i < len)
+        atomicMax(mx, data[i]);
+    }
+    
+    
+    
+    static __global__ void kernel_min(const len_t len, const float *data, float *mn)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      
+      if (i < len)
+        atomics::atomicMinf(mn, data[i]);
+    }
+    
+    static __global__ void kernel_min(const len_t len, const double *data, double *mn)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      
+      if (i < len)
+        atomics::atomicMinf(mn, data[i]);
+    }
+    
+    template <typename T>
+    __global__ void kernel_min(const len_t len, const T *data, T *mn)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      
+      if (i < len)
+        atomicMin(mn, data[i]);
     }
     
     
