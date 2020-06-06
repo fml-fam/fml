@@ -109,13 +109,20 @@ TEMPLATE_TEST_CASE("rev - vec", "[cpuvec]", float, double)
 
 
 
-TEMPLATE_TEST_CASE("sum - vec", "[cpuvec]", float, double)
+TEMPLATE_TEST_CASE("sum/max/min - vec", "[cpuvec]", float, double)
 {
   len_t n = 5;
   
   fml::cpuvec<TestType> x(n);
   x.fill_linspace(1, n);
   
-  TestType s = x.sum();
+  TestType s;
+  s = x.sum();
   REQUIRE( fltcmp::eq(s, (n*(n+1))/2) );
+  
+  s = x.max();
+  REQUIRE( fltcmp::eq(s, 5) );
+  
+  s = x.min();
+  REQUIRE( fltcmp::eq(s, 1) );
 }

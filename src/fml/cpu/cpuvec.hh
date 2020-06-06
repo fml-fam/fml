@@ -50,7 +50,10 @@ namespace fml
       
       void scale(const T s);
       void rev();
+      
       T sum();
+      T max();
+      T min();
       
       T get(const len_t i) const;
       void set(const len_t i, const T v);
@@ -389,6 +392,42 @@ T fml::cpuvec<T>::sum()
     s += this->data[i];
   
   return s;
+}
+
+
+
+/// @brief Maximum value of the vector.
+template <typename T>
+T fml::cpuvec<T>::max()
+{
+  T mx = this->data[0];
+  
+  #pragma omp simd reduction(max:mx)
+  for (len_t i=1; i<this->_size; i++)
+  {
+    if (mx < this->data[i])
+      mx = this->data[i];
+  }
+  
+  return mx;
+}
+
+
+
+/// @brief Minimum value of the vector.
+template <typename T>
+T fml::cpuvec<T>::min()
+{
+  T mn = this->data[0];
+  
+  #pragma omp simd reduction(min:mn)
+  for (len_t i=1; i<this->_size; i++)
+  {
+    if (mn < this->data[i])
+      mn = this->data[i];
+  }
+  
+  return mn;
 }
 
 
