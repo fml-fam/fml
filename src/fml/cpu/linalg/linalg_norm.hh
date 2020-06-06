@@ -80,20 +80,21 @@ namespace linalg
     const REAL *x_d = x.data_ptr();
     
     REAL norm = 0;
-    cpuvec<REAL> tmp(m);
-    tmp.fill_zero();
-    REAL *tmp_d = tmp.data_ptr();
+    
+    cpuvec<REAL> mars(m);
+    mars.fill_zero();
+    REAL *mars_d = mars.data_ptr();
     
     for (len_t j=0; j<n; j++)
     {
       for (len_t i=0; i<m; i++)
-        tmp_d[i] += fabs(x_d[i + m*j]);
+        mars_d[i] += fabs(x_d[i + m*j]);
     }
     
     for (len_t i=0; i<m; i++)
     {
-      if (tmp_d[i] > norm)
-        norm = tmp_d[i];
+      if (mars_d[i] > norm)
+        norm = mars_d[i];
     }
     
     return norm;
