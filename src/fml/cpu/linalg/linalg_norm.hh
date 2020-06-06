@@ -28,7 +28,7 @@ namespace linalg
   /**
     @brief Computes the 1 matrix norm, the maximum absolute column sum.
     
-    @param[in] x Input data matrix, replaced by its LU factorization.
+    @param[in] x Input data matrix.
     
     @return Returns the norm.
     
@@ -61,7 +61,7 @@ namespace linalg
   /**
     @brief Computes the infinity matrix norm, the maximum absolute row sum.
     
-    @param[in] x Input data matrix, replaced by its LU factorization.
+    @param[in] x Input data matrix.
     
     @return Returns the norm.
     
@@ -105,7 +105,7 @@ namespace linalg
   /**
     @brief Computes the Frobenius/Euclidean matrix norm.
     
-    @param[in] x Input data matrix, replaced by its LU factorization.
+    @param[in] x Input data matrix.
     
     @return Returns the norm.
     
@@ -132,7 +132,7 @@ namespace linalg
   /**
     @brief Computes the maximum modulus matrix norm.
     
-    @param[in] x Input data matrix, replaced by its LU factorization.
+    @param[in] x Input data matrix.
     
     @return Returns the norm.
     
@@ -158,6 +158,35 @@ namespace linalg
     }
     
     return norm;
+  }
+  
+  
+  
+  /**
+    @brief Computes the 2/spectral matrix norm.
+    
+    @details Returns the largest singular value.
+    
+    @param[inout] x Input data matrix. Values are overwritten.
+    
+    @return Returns the norm.
+    
+    @allocs Allocates temporary storage to compute the singular values.
+    
+    @except If an allocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  REAL norm_2(cpumat<REAL> &x)
+  {
+    REAL ret;
+    cpuvec<REAL> s;
+    svd(x, s);
+    ret = s.get(0);
+    
+    return ret;
   }
 }
 }
