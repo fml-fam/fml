@@ -79,6 +79,11 @@ namespace linalg
     
     @return Returns the norm.
     
+    @allocs Allocates temporary storage to store the col sums.
+    
+    @except If an allocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
     @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
