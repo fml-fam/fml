@@ -203,6 +203,16 @@ extern void pdpotrf_(const char *uplo, const int *n, double *const restrict a,
   const int *ia, const int *ja, const int *desca, int *info);
 
 
+
+extern void pslassq_(const int *n, const float *const restrict x,
+  const int *ix, const int *jx, const int *descx, const int *incx, float *scale,
+  float *sumsq);
+
+extern void pdlassq_(const int *n, const double *const restrict x,
+  const int *ix, const int *jx, const int *descx, const int *incx, double *scale,
+  double *sumsq);
+
+
 #ifdef __cplusplus
 }
 #endif

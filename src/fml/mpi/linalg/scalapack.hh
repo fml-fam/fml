@@ -223,6 +223,22 @@ namespace fml
       int ij = 1;
       pdpotrf_(&uplo, &n, a, &ij, &ij, desca, info);
     }
+    
+    
+    
+    inline void lassq(const int n, const float *x, const int *descx,
+      const int incx, float *scale, float *sumsq)
+    {
+      int ij = 1;
+      pslassq_(&n, x, &ij, &ij, descx, &incx, scale, sumsq);
+    }
+    
+    inline void lassq(const int n, const double *x, const int *descx,
+      const int incx, double *scale, double *sumsq)
+    {
+      int ij = 1;
+      pdlassq_(&n, x, &ij, &ij, descx, &incx, scale, sumsq);
+    }
   }
 }
 
