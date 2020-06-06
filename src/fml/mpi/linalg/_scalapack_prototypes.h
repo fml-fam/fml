@@ -2,8 +2,8 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_MPI_INTERNALS__SCALAPACK_PROTOTYPES_H
-#define FML_MPI_INTERNALS__SCALAPACK_PROTOTYPES_H
+#ifndef FML_MPI_LINALG__SCALAPACK_PROTOTYPES_H
+#define FML_MPI_LINALG__SCALAPACK_PROTOTYPES_H
 #pragma once
 
 
@@ -99,20 +99,6 @@ extern void pdsyevr_(const char *restrict jobz, const char *restrict range,
   const int *iz, const int *jz, const int *restrict descz,
   double *restrict work, const int *restrict lwork, int *restrict iwork,
   const int *restrict liwork, int *restrict info);
-
-
-
-extern void psgeadd_(const char *restrict trans, const int *restrict m,
-  const int *restrict n, const float *restrict alpha, const float *restrict a,
-  const int *ia, const int *ja, const int *restrict desca,
-  const float *restrict beta, float *restrict c, const int *ic, const int *jc,
-  const int *restrict descc);
-
-extern void pdgeadd_(const char *restrict trans, const int *restrict m,
-  const int *restrict n, const double *restrict alpha, const double *restrict a,
-  const int *ia, const int *ja, const int *restrict desca,
-  const double *restrict beta, double *restrict c, const int *ic, const int *jc,
-  const int *restrict descc);
 
 
 
