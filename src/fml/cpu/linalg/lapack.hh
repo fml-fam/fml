@@ -2,8 +2,8 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_CPU_INTERNALS_LAPACK_H
-#define FML_CPU_INTERNALS_LAPACK_H
+#ifndef FML_CPU_LINALG_LAPACK_H
+#define FML_CPU_LINALG_LAPACK_H
 #pragma once
 
 
@@ -14,42 +14,6 @@ namespace fml
 {
   namespace lapack
   {
-    inline void gemm(const char transa, const char transb, const int m,
-      const int n, const int k, const float alpha,
-      const float *restrict a, const int lda, const float *restrict b,
-      const int ldb, const float beta, float *restrict c, const int ldc)
-    {
-      sgemm_(&transa, &transb, &m, &n, &k, &alpha, a, &lda, b, &ldb, &beta, c,
-        &ldc);
-    }
-    
-    inline void gemm(const char transa, const char transb, const int m,
-      const int n, const int k, const double alpha,
-      const double *restrict a, const int lda, const double *restrict b,
-      const int ldb, const double beta, double *restrict c, const int ldc)
-    {
-      dgemm_(&transa, &transb, &m, &n, &k, &alpha, a, &lda, b, &ldb, &beta, c,
-        &ldc);
-    }
-    
-    
-    
-    inline void syrk(const char uplo, const char trans, const int n, const int k, 
-      const float alpha, const float *restrict a, const int lda,
-      const float beta, float *restrict c, const int ldc)
-    {
-      ssyrk_(&uplo, &trans, &n, &k, &alpha, a, &lda, &beta, c, &ldc);
-    }
-    
-    inline void syrk(const char uplo, const char trans, const int n, const int k, 
-      const double alpha, const double *restrict a, const int lda,
-      const double beta, double *restrict c, const int ldc)
-    {
-      dsyrk_(&uplo, &trans, &n, &k, &alpha, a, &lda, &beta, c, &ldc);
-    }
-    
-    
-    
     inline void getrf(const int m, const int n, float *a, const int lda,
       int *ipiv, int *info)
     {
