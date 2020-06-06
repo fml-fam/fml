@@ -11,8 +11,8 @@
 
 #include "../arch/arch.hh"
 
+#include "../internals/atomics.hh"
 #include "../internals/gpuscalar.hh"
-#include "../internals/kernelfuns.hh"
 
 #include "../gpumat.hh"
 
@@ -21,40 +21,6 @@ namespace fml
 {
 namespace linalg
 {
-  namespace
-  {
-    // Based on https://forums.developer.nvidia.com/t/atomicmax-with-floats/8791/10
-    static __device__ float atomicMaxf(float *address, float val)
-    {
-      int *address_int = (int*) address;
-      int old = *address_int, assumed;
-      
-      while (val > __int_as_float(old))
-      {
-        assumed = old;
-        old = atomicCAS(address_int, assumed, __float_as_int(val));
-      }
-      
-      return __int_as_float(old);
-    }
-    
-    static __device__ double atomicMaxf(double *address, double val)
-    {
-      unsigned long long *address_ull = (unsigned long long*) address;
-      unsigned long long old = *address_ull, assumed;
-      
-      while (val > __longlong_as_double(old))
-      {
-        assumed = old;
-        old = atomicCAS(address_ull, assumed, __double_as_longlong(val));
-      }
-      
-      return __longlong_as_double(old);
-    }
-  }
-  
-  
-  
   namespace
   {
     template <typename REAL>
@@ -67,7 +33,7 @@ namespace linalg
       {
         REAL tmp = fabs(x[i + m*j]);
         atomicAdd(macs + j, tmp);
-        atomicMaxf(norm, macs[j]);
+        atomics::atomicMaxf(norm, macs[j]);
       }
     }
   }
@@ -116,7 +82,7 @@ namespace linalg
       {
         REAL tmp = fabs(x[i + m*j]);
         atomicAdd(mars + i, tmp);
-        atomicMaxf(norm, mars[i]);
+        atomics::atomicMaxf(norm, mars[i]);
       }
     }
   }
@@ -205,7 +171,7 @@ namespace linalg
       if (i < m && j < n)
       {
         REAL tmp = fabs(x[i + m*j]);
-        atomicMaxf(norm, tmp);
+        atomics::atomicMaxf(norm, tmp);
       }
     }
   }
