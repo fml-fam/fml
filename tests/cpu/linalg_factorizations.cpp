@@ -34,23 +34,14 @@ TEMPLATE_TEST_CASE("svd", "[linalg]", float, double)
   v.set(0, 2);
   v.set(1, 5);
   
-  fml::cpuvec<TestType> s1, s2, s3;
-  
   fml::cpumat<TestType> x(m, n);
   
   x.fill_diag(v);
-  fml::linalg::svd(x, s1);
-  
-  x.fill_diag(v);
-  fml::linalg::tssvd(x, s2);
-  
-  x.fill_diag(v);
-  fml::linalg::cpsvd(x, s3);
+  fml::cpuvec<TestType> s;
+  fml::linalg::svd(x, s);
   
   v.rev();
-  REQUIRE( v == s1 );
-  REQUIRE( v == s2 );
-  REQUIRE( v == s3 );
+  REQUIRE( v == s );
 }
 
 

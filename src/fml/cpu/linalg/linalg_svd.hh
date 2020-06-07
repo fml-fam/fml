@@ -117,6 +117,95 @@ namespace linalg
   
   
   /**
+    @brief Computes the singular value decomposition for short/fat data.
+    The number of columns must be greater than the number of rows. If the number
+    of columns is not significantly larger than the number of rows, this may not
+    be more efficient than simply calling `linalg::svd()`.
+    
+    @details The operation works by computing an LQ and then taking the SVD of
+    the L matrix. The left singular vectors are Q times the right singular
+    vectors from L's SVD, and the singular value and the left singular vectors
+    are those from L's SVD.
+    
+    @param[inout] x Input data matrix. Values are overwritten.
+    @param[out] s Vector of singular values.
+    @param[out] u Matrix of left singular vectors.
+    @param[out] vt Matrix of (transposed) right singular vectors.
+    
+    @impl Uses `linalg::lq()` and `linalg::svd()`, and if computing the
+    left/right singular vectors, `linalg::lq_L()` and `linalg::lq_Q()`.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void sfsvd(cpumat<REAL> &x, cpuvec<REAL> &s, cpumat<REAL> &u, cpumat<REAL> &vt)
+  {
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
+    if (m >= n)
+      throw std::runtime_error("'x' must have more cols than rows");
+    
+    cpuvec<REAL> lqaux;
+    cpuvec<REAL> work;
+    lq_internals(x, lqaux, work);
+    
+    cpumat<REAL> L(m, m);
+    lq_L(x, L);
+    
+    cpumat<REAL> vt_L(m, m);
+    svd(L, s, u, vt_L);
+    
+    vt.resize(n, m);
+    vt.fill_eye();
+    
+    lq_Q(x, lqaux, vt, work);
+    
+    matmult(false, false, (REAL)1.0, vt_L, vt, x);
+    copy::cpu2cpu(x, vt);
+  }
+  
+  /// \overload
+  template <typename REAL>
+  void sfsvd(cpumat<REAL> &x, cpuvec<REAL> &s)
+  {
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
+    if (m >= n)
+      throw std::runtime_error("'x' must have more cols than rows");
+    
+    s.resize(m);
+    
+    cpuvec<REAL> lqaux;
+    cpuvec<REAL> work;
+    lq_internals(x, lqaux, work);
+    
+    fml::cpu_utils::tri2zero('U', false, m, m, x.data_ptr(), m);
+    
+    int info = 0;
+    cpuvec<int> iwork(8*n);
+    
+    REAL tmp;
+    fml::lapack::gesdd('N', m, m, x.data_ptr(), m, s.data_ptr(), NULL, m, NULL,
+      1, &tmp, -1, iwork.data_ptr(), &info);
+    int lwork = (int) tmp;
+    if (lwork > work.size())
+      work.resize(lwork);
+    
+    fml::lapack::gesdd('N', m, m, x.data_ptr(), m, s.data_ptr(), NULL, m, NULL,
+      1, work.data_ptr(), lwork, iwork.data_ptr(), &info);
+    fml::linalgutils::check_info(info, "gesdd");
+  }
+  
+  
+  
+  /**
     @brief Computes the singular value decomposition using the
     "crossproducts SVD". This method is not numerically stable.
     
