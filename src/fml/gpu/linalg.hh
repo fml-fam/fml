@@ -11,6 +11,7 @@
 #include "linalg/linalg_factorizations.hh"
 #include "linalg/linalg_misc.hh"
 #include "linalg/linalg_norm.hh"
+#include "linalg/linalg_svd.hh"
 
 
 #endif
