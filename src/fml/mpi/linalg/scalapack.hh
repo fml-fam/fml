@@ -239,6 +239,50 @@ namespace fml
       int ij = 1;
       pdlassq_(&n, x, &ij, &ij, descx, &incx, scale, sumsq);
     }
+    
+    
+    
+    inline void gecon(const char norm, const int n,
+      const float *const restrict A, const int *desca, const float anorm,
+      float *rcond, float *work, const int lwork, int *iwork, const int liwork,
+      int *info)
+    {
+      int ij = 1;
+      psgecon_(&norm, &n, A, &ij, &ij, desca, &anorm, rcond, work, &lwork,
+        iwork, &liwork, info);
+    }
+    
+    inline void gecon(const char norm, const int n,
+      const double *const restrict A, const int *desca, const double anorm,
+      double *rcond, double *work, const int lwork, int *iwork, const int liwork,
+      int *info)
+    {
+      int ij = 1;
+      pdgecon_(&norm, &n, A, &ij, &ij, desca, &anorm, rcond, work, &lwork,
+        iwork, &liwork, info);
+    }
+    
+    
+    
+    inline void trcon(const char norm, const char uplo, const char diag,
+      const int n, const float *const restrict A, const int *desca,
+      float *rcond, float *work, const int lwork, int *iwork,
+      const int liwork, int *info)
+    {
+      int ij = 1;
+      pstrcon_(&norm, &uplo, &diag, &n, A, &ij, &ij, desca, rcond, work, &lwork,
+        iwork, &liwork, info);
+    }
+    
+    inline void trcon(const char norm, const char uplo, const char diag,
+      const int n, const double *const restrict A, const int *desca,
+      double *rcond, double *work, const int lwork, int *iwork,
+      const int liwork, int *info)
+    {
+      int ij = 1;
+      pdtrcon_(&norm, &uplo, &diag, &n, A, &ij, &ij, desca, rcond, work, &lwork,
+        iwork, &liwork, info);
+    }
   }
 }
 

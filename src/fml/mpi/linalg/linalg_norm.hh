@@ -179,6 +179,235 @@ namespace linalg
     
     return norm;
   }
+  
+  
+  
+  /**
+    @brief Computes the 2/spectral matrix norm.
+    
+    @details Returns the largest singular value.
+    
+    @param[inout] x Input data matrix. Values are overwritten.
+    
+    @return Returns the norm.
+    
+    @allocs Allocates temporary storage to compute the singular values.
+    
+    @except If an allocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  REAL norm_2(mpimat<REAL> &x)
+  {
+    REAL ret;
+    cpuvec<REAL> s;
+    svd(x, s);
+    ret = s.get(0);
+    
+    return ret;
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  namespace
+  {
+    template <typename REAL>
+    REAL cond_square_internals(const char norm, mpimat<REAL> &x)
+    {
+      const len_t n = x.nrows();
+      
+      REAL ret;
+      int info;
+      
+      REAL xnorm = norm_1(x);
+      
+      lu(x);
+      
+      REAL tmp;
+      int liwork;
+      scalapack::gecon(norm, n, x.data_ptr(), x.desc_ptr(), xnorm,
+        &ret, &tmp, -1, &liwork, -1, &info);
+      
+      int lwork = (int) tmp;
+      cpuvec<REAL> work(lwork);
+      cpuvec<int> iwork(liwork);
+      
+      scalapack::gecon(norm, n, x.data_ptr(), x.desc_ptr(), xnorm,
+        &ret, work.data_ptr(), lwork, iwork.data_ptr(), liwork, &info);
+      
+      fml::linalgutils::check_info(info, "gecon");
+      
+      return ((REAL)1)/ret;
+    }
+    
+    template <typename REAL>
+    REAL cond_nonsquare_internals(const char norm, mpimat<REAL> &x)
+    {
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      
+      REAL ret;
+      int info;
+      
+      cpuvec<REAL> aux;
+      
+      if (m > n)
+      {
+        mpimat<REAL> R(x.get_grid(), x.bf_rows(), x.bf_cols());
+        qr(false, x, aux);
+        qr_R(x, R);
+        
+        REAL tmp;
+        int liwork;
+        scalapack::trcon(norm, 'U', 'N', n, R.data_ptr(), R.desc_ptr(), &ret,
+          &tmp, -1, &liwork, -1, &info);
+        
+        int lwork = (int) tmp;
+        cpuvec<REAL> work(lwork);
+        cpuvec<int> iwork(liwork);
+        
+        scalapack::trcon(norm, 'U', 'N', n, R.data_ptr(), R.desc_ptr(), &ret,
+          x.data_ptr(), lwork, iwork.data_ptr(), iwork.size(), &info);
+      }
+      else
+      {
+        mpimat<REAL> L(x.get_grid(), x.bf_rows(), x.bf_cols());
+        lq(x, aux);
+        lq_L(x, L);
+        
+        REAL tmp;
+        int liwork;
+        scalapack::trcon(norm, 'L', 'N', m, L.data_ptr(), L.desc_ptr(), &ret,
+          &tmp, -1, &liwork, -1, &info);
+        
+        int lwork = (int) tmp;
+        cpuvec<REAL> work(lwork);
+        cpuvec<int> iwork(liwork);
+        
+        scalapack::trcon(norm, 'L', 'N', m, L.data_ptr(), L.desc_ptr(), &ret,
+          x.data_ptr(), x.nrows()*x.ncols(), iwork.data_ptr(), iwork.size(), &info);
+      }
+      
+      fml::linalgutils::check_info(info, "trcon");
+      
+      return ((REAL)1)/ret;
+    }
+  }
+  
+  /**
+    @brief Estimates the condition number under the 1-norm.
+    
+    @param[in] x Input data matrix.
+    
+    @param[inout] x Input data matrix. The data is overwritten.
+    
+    @impl Computes L or R (whichever is smaller) and the LAPACK function
+    `Xtrcon()` if the input is not square, and `Xgecon()` on the LU of the input
+    otherwise.
+    
+    @allocs Allocates temporary storage to compute the QR/LQ/LU, as well as
+    workspace arrays for the LAPACK condition number function.
+    
+    @except If an allocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  REAL cond_1(mpimat<REAL> &x)
+  {
+    if (x.is_square())
+      return cond_square_internals('1', x);
+    else
+      return cond_nonsquare_internals('1', x);
+  }
+  
+  
+  
+  /**
+    @brief Estimates the condition number under the infinity norm.
+    
+    @param[in] x Input data matrix.
+    
+    @param[inout] x Input data matrix. The data is overwritten.
+    
+    @impl Computes L or R (whichever is smaller) and the LAPACK function
+    `Xtrcon()` if the input is not square, and `Xgecon()` on the LU of the input
+    otherwise.
+    
+    @allocs Allocates temporary storage to compute the QR/LQ/LU, as well as
+    workspace arrays for the LAPACK condition number function.
+    
+    @except If an allocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  REAL cond_I(mpimat<REAL> &x)
+  {
+    if (x.is_square())
+      return cond_square_internals('I', x);
+    else
+      return cond_nonsquare_internals('I', x);
+  }
+  
+  
+  
+  /**
+    @brief Estimates the condition number under the 2 norm.
+    
+    @param[in] x Input data matrix.
+    
+    @param[inout] x Input data matrix. The data is overwritten.
+    
+    @impl Uses `linalg::svd()`.
+    
+    @allocs Allocates temporary storage to compute the QR/LQ/LU, as well as
+    workspace arrays for the LAPACK condition number function.
+    
+    @except If an allocation is triggered and fails, a `bad_alloc` exception
+    will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  REAL cond_2(mpimat<REAL> &x)
+  {
+    cpuvec<REAL> s;
+    svd(x, s);
+    
+    REAL *s_d = s.data_ptr();
+    
+    REAL max = s_d[0];
+    REAL min = s_d[0];
+    for (len_t i=1; i<s.size(); i++)
+    {
+      if (s_d[i] > max)
+        max = s_d[i];
+      if (s_d[i] > 0 && s_d[i] < min)
+        min = s_d[i];
+    }
+    
+    if (max == 0)
+      return 0;
+    else
+      return max/min;
+  }
 }
 }
 

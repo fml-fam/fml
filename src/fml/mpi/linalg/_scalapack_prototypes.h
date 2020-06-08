@@ -213,6 +213,30 @@ extern void pdlassq_(const int *n, const double *const restrict x,
   double *sumsq);
 
 
+
+extern void psgecon_(const char *norm, const int *n,
+  const float *const restrict A, const int *ia, const int *ja,
+  const int *desca, const float *anorm, float *rcond, float *work,
+  const int *lwork, int *iwork, const int *liwork, int *info);
+
+extern void pdgecon_(const char *norm, const int *n,
+  const double *const restrict A, const int *ia, const int *ja,
+  const int *desca, const double *anorm, double *rcond, double *work,
+  const int *lwork, int *iwork, const int *liwork, int *info);
+
+
+
+extern void pstrcon_(const char *norm, const char *uplo, const char *diag,
+  const int *n, const float *const restrict A, const int *ia, const int *ja,
+  const int *desca, float *rcond, float *work, const int *lwork, int *iwork,
+  const int *liwork, int *info);
+
+extern void pdtrcon_(const char *norm, const char *uplo, const char *diag,
+  const int *n, const double *const restrict A, const int *ia, const int *ja,
+  const int *desca, double *rcond, double *work, const int *lwork, int *iwork,
+  const int *liwork, int *info);
+
+
 #ifdef __cplusplus
 }
 #endif
