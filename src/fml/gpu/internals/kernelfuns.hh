@@ -241,6 +241,24 @@ namespace fml
     
     
     
+    static __global__ void kernel_min_nz(const len_t len, const float *data, float *mn)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      
+      if (i < len && data[i] > 0)
+        atomics::atomicMinf(mn, data[i]);
+    }
+    
+    static __global__ void kernel_min_nz(const len_t len, const double *data, double *mn)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      
+      if (i < len && data[i] > 0)
+        atomics::atomicMinf(mn, data[i]);
+    }
+    
+    
+    
     template <typename REAL>
     __global__ void kernel_any_inf(const len_t m, const len_t n, const REAL *data, int *has_inf)
     {
