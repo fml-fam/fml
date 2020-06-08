@@ -114,6 +114,26 @@ namespace gpublas
     return cublasDgeam(handle, transa, transb, m, n, &alpha, A, lda, &beta, B,
       ldb, C, ldc);
   }
+  
+  
+  
+  inline cublasStatus_t trsm(cublasHandle_t handle, cublasSideMode_t side,
+    cublasFillMode_t uplo, cublasOperation_t trans, cublasDiagType_t diag,
+    int m, int n, const float alpha, const float *A, int lda, float *B,
+    int ldb)
+  {
+    return cublasStrsm(handle, side, uplo, trans, diag, m, n, &alpha, A, lda,
+      B, ldb);
+  }
+  
+  inline cublasStatus_t trsm(cublasHandle_t handle, cublasSideMode_t side,
+    cublasFillMode_t uplo, cublasOperation_t trans, cublasDiagType_t diag,
+    int m, int n, const double alpha, const double *A, int lda, double *B,
+    int ldb)
+  {
+    return cublasDtrsm(handle, side, uplo, trans, diag, m, n, &alpha, A, lda,
+      B, ldb);
+  }
 }
 }
 
