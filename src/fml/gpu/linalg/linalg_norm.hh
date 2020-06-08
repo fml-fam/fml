@@ -214,6 +214,8 @@ namespace linalg
     
     @return Returns the norm.
     
+    @impl Uses `linalg::cpsvd()`.
+    
     @allocs Allocates temporary storage to compute the singular values.
     
     @except If an allocation is triggered and fails, a `bad_alloc` exception
@@ -333,9 +335,8 @@ namespace linalg
     
     @param[inout] x Input data matrix. The data is overwritten.
     
-    @impl Computes L or R (whichever is smaller) and the LAPACK function
-    `Xtrcon()` if the input is not square, and `Xgecon()` on the LU of the input
-    otherwise.
+    @impl Computes L or R (whichever is smaller) if the input is not square, and
+    the inverse otherwise.
     
     @allocs Allocates temporary storage to compute the QR/LQ/LU, as well as
     workspace arrays for the LAPACK condition number function.
@@ -363,9 +364,8 @@ namespace linalg
     
     @param[inout] x Input data matrix. The data is overwritten.
     
-    @impl Computes L or R (whichever is smaller) and the LAPACK function
-    `Xtrcon()` if the input is not square, and `Xgecon()` on the LU of the input
-    otherwise.
+    @impl Computes L or R (whichever is smaller) if the input is not square, and
+    the inverse otherwise.
     
     @allocs Allocates temporary storage to compute the QR/LQ/LU, as well as
     workspace arrays for the LAPACK condition number function.
@@ -393,9 +393,7 @@ namespace linalg
     
     @param[inout] x Input data matrix. The data is overwritten.
     
-    @impl Computes L or R (whichever is smaller) and the LAPACK function
-    `Xtrcon()` if the input is not square, and `Xgecon()` on the LU of the input
-    otherwise.
+    @impl Uses `linalg::cpsvd()`.
     
     @allocs Allocates temporary storage to compute the QR/LQ/LU, as well as
     workspace arrays for the LAPACK condition number function.
