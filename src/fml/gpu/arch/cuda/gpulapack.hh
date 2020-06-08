@@ -272,6 +272,34 @@ namespace gpulapack
   {
     return cusolverDnDpotrf(handle, uplo, n, A, lda, work, lwork, info);
   }
+  
+  
+  
+  inline cusolverStatus_t potri_buflen(cusolverDnHandle_t handle,
+    cublasFillMode_t uplo, int n, float *A, int lda, int *lwork)
+  {
+    return cusolverDnSpotri_bufferSize(handle, uplo, n, A, lda, lwork);
+  }
+  
+  inline cusolverStatus_t potri_buflen(cusolverDnHandle_t handle,
+    cublasFillMode_t uplo, int n, double *A, int lda, int *lwork)
+  {
+    return cusolverDnDpotri_bufferSize(handle, uplo, n, A, lda, lwork);
+  }
+  
+  inline cusolverStatus_t potri(cusolverDnHandle_t handle,
+    cublasFillMode_t uplo, const int n, float *A, const int lda, float *work,
+    const int lwork, int *info)
+  {
+    return cusolverDnSpotri(handle, uplo, n, A, lda, work, lwork, info);
+  }
+  
+  inline cusolverStatus_t potri(cusolverDnHandle_t handle,
+    cublasFillMode_t uplo, const int n, double *A, const int lda, double *work,
+    const int lwork, int *info)
+  {
+    return cusolverDnDpotri(handle, uplo, n, A, lda, work, lwork, info);
+  }
 }
 }
 
