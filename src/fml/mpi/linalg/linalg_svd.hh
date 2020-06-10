@@ -25,24 +25,154 @@ namespace fml
 {
 namespace linalg
 {
-  /**
-    @brief Computes the singular value decomposition for tall/skinny data.
-    The number of rows must be greater than the number of columns. If the number
-    of rows is not significantly larger than the number of columns, this may not
-    be more efficient than simply calling `linalg::svd()`.
+  namespace
+  {
+    template <typename REAL>
+    void tssvd(mpimat<REAL> &x, cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
+    {
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      if (m <= n)
+        throw std::runtime_error("'x' must have more rows than cols");
+      
+      const grid g = x.get_grid();
+      
+      cpuvec<REAL> qraux(n);
+      cpuvec<REAL> work(m);
+      qr_internals(false, x, qraux, work);
+      
+      mpimat<REAL> R(g, n, n, x.bf_rows(), x.bf_cols());
+      qr_R(x, R);
+      
+      mpimat<REAL> u_R(g, n, n, x.bf_rows(), x.bf_cols());
+      svd(R, s, u_R, vt);
+      
+      u.resize(m, n);
+      u.fill_eye();
+      
+      qr_Q(x, qraux, u, work);
+      
+      matmult(false, false, (REAL)1.0, u, u_R, x);
+      copy::mpi2mpi(x, u);
+    }
     
-    @details The operation works by computing a QR and then taking the SVD of
-    the R matrix. The left singular vectors are Q times the left singular
-    vectors from R's SVD, and the singular value and the right singular vectors
-    are those from R's SVD.
+    template <typename REAL>
+    void tssvd(mpimat<REAL> &x, cpuvec<REAL> &s)
+    {
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      if (m <= n)
+        throw std::runtime_error("'x' must have more rows than cols");
+      
+      const grid g = x.get_grid();
+      s.resize(n);
+      
+      cpuvec<REAL> qraux(n);
+      cpuvec<REAL> work(m);
+      qr_internals(false, x, qraux, work);
+      
+      fml::mpi_utils::tri2zero('L', false, g, n, n, x.data_ptr(), x.desc_ptr());
+      
+      int info = 0;
+      
+      REAL tmp;
+      fml::scalapack::gesvd('N', 'N', n, n, x.data_ptr(), x.desc_ptr(),
+        s.data_ptr(), NULL, NULL, NULL, NULL, &tmp, -1, &info);
+      int lwork = (int) tmp;
+      if (lwork > work.size())
+        work.resize(lwork);
+      
+      fml::scalapack::gesvd('N', 'N', n, n, x.data_ptr(), x.desc_ptr(),
+        s.data_ptr(), NULL, NULL, NULL, NULL, work.data_ptr(), lwork, &info);
+      fml::linalgutils::check_info(info, "gesvd");
+    }
+    
+    
+    
+    template <typename REAL>
+    void sfsvd(mpimat<REAL> &x, cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
+    {
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      if (m >= n)
+        throw std::runtime_error("'x' must have more cols than rows");
+      
+      const grid g = x.get_grid();
+      
+      cpuvec<REAL> lqaux;
+      cpuvec<REAL> work;
+      lq_internals(x, lqaux, work);
+      
+      mpimat<REAL> L(g, m, m, x.bf_rows(), x.bf_cols());
+      lq_L(x, L);
+      
+      mpimat<REAL> vt_L(g, m, m, x.bf_rows(), x.bf_cols());
+      svd(L, s, u, vt_L);
+      
+      vt.resize(n, m);
+      vt.fill_eye();
+      
+      lq_Q(x, lqaux, vt, work);
+      
+      matmult(false, false, (REAL)1.0, vt_L, vt, x);
+      copy::mpi2mpi(x, vt);
+    }
+    
+    template <typename REAL>
+    void sfsvd(mpimat<REAL> &x, cpuvec<REAL> &s)
+    {
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      if (m >= n)
+        throw std::runtime_error("'x' must have more cols than rows");
+      
+      const grid g = x.get_grid();
+      s.resize(m);
+      
+      cpuvec<REAL> lqaux;
+      cpuvec<REAL> work;
+      lq_internals(x, lqaux, work);
+      
+      fml::mpi_utils::tri2zero('U', false, g, m, m, x.data_ptr(), x.desc_ptr());
+      
+      int info = 0;
+      
+      REAL tmp;
+      fml::scalapack::gesvd('N', 'N', m, m, x.data_ptr(), x.desc_ptr(),
+        s.data_ptr(), NULL, NULL, NULL, NULL, &tmp, -1, &info);
+      int lwork = (int) tmp;
+      if (lwork > work.size())
+        work.resize(lwork);
+      
+      fml::scalapack::gesvd('N', 'N', m, m, x.data_ptr(), x.desc_ptr(),
+        s.data_ptr(), NULL, NULL, NULL, NULL, work.data_ptr(), lwork, &info);
+      fml::linalgutils::check_info(info, "gesvd");
+    }
+  }
+  
+  /**
+    @brief Computes the singular value decomposition by first reducing the
+    rectangular matrix to a square matrix using an orthogonal factorization. If
+    the matrix is square, we skip the orthogonal factorization.
+    
+    @details If the matrix has more rows than columns, the operation works by
+    computing a QR and then taking the SVD of the R matrix. The left singular
+    vectors are Q times the left singular vectors from R's SVD, and the singular
+    value and the right singular vectors are those from R's SVD. Likewise, if
+    the matrix has more columns than rows, w take the LQ and then the SVD of
+    the L matrix. The left singular vectors are Q times the right singular
+    vectors from L's SVD, and the singular value and the left singular vectors
+    are those from L's SVD.
     
     @param[inout] x Input data matrix. Values are overwritten.
     @param[out] s Vector of singular values.
     @param[out] u Matrix of left singular vectors.
     @param[out] vt Matrix of (transposed) right singular vectors.
     
-    @impl Uses `linalg::qr()` and `linalg::svd()`, and if computing the
-    left/right singular vectors, `linalg::qr_R()` and `linalg::qr_Q()`.
+    @impl Uses `linalg::qr()` or `linalg::lq()` (whichever is cheaper) to reduce
+    the matrix to a square matrix, and then calls `linalg::svd()`. If computing
+    the vectors, `linalg::qr_Q()` and `linalg::qr_R()` or `linalg::lq_L()` and
+    `linalg::lq_Q()` are called.
     
     @allocs If the any outputs are inappropriately sized, they will
     automatically be re-allocated. Additionally, some temporary work storage
@@ -54,67 +184,29 @@ namespace linalg
     @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
-  void tssvd(mpimat<REAL> &x, cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
+  void qrsvd(mpimat<REAL> &x, cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
   {
     err::check_grid(x, u);
     err::check_grid(x, vt);
     
-    const len_t m = x.nrows();
-    const len_t n = x.ncols();
-    if (m <= n)
-      throw std::runtime_error("'x' must have more rows than cols");
-    
-    const grid g = x.get_grid();
-    
-    cpuvec<REAL> qraux(n);
-    cpuvec<REAL> work(m);
-    qr_internals(false, x, qraux, work);
-    
-    mpimat<REAL> R(g, n, n, x.bf_rows(), x.bf_cols());
-    qr_R(x, R);
-    
-    mpimat<REAL> u_R(g, n, n, x.bf_rows(), x.bf_cols());
-    svd(R, s, u_R, vt);
-    
-    u.resize(m, n);
-    u.fill_eye();
-    
-    qr_Q(x, qraux, u, work);
-    
-    matmult(false, false, (REAL)1.0, u, u_R, x);
-    copy::mpi2mpi(x, u);
+    if (x.is_square())
+      svd(x, s, u, vt);
+    else if (x.nrows() > x.ncols())
+      tssvd(x, s, u, vt);
+    else
+      sfsvd(x, s, u, vt);
   }
   
   /// \overload
   template <typename REAL>
-  void tssvd(mpimat<REAL> &x, cpuvec<REAL> &s)
+  void qrsvd(mpimat<REAL> &x, cpuvec<REAL> &s)
   {
-    const len_t m = x.nrows();
-    const len_t n = x.ncols();
-    if (m <= n)
-      throw std::runtime_error("'x' must have more rows than cols");
-    
-    const grid g = x.get_grid();
-    s.resize(n);
-    
-    cpuvec<REAL> qraux(n);
-    cpuvec<REAL> work(m);
-    qr_internals(false, x, qraux, work);
-    
-    fml::mpi_utils::tri2zero('L', false, g, n, n, x.data_ptr(), x.desc_ptr());
-    
-    int info = 0;
-    
-    REAL tmp;
-    fml::scalapack::gesvd('N', 'N', n, n, x.data_ptr(), x.desc_ptr(),
-      s.data_ptr(), NULL, NULL, NULL, NULL, &tmp, -1, &info);
-    int lwork = (int) tmp;
-    if (lwork > work.size())
-      work.resize(lwork);
-    
-    fml::scalapack::gesvd('N', 'N', n, n, x.data_ptr(), x.desc_ptr(),
-      s.data_ptr(), NULL, NULL, NULL, NULL, work.data_ptr(), lwork, &info);
-    fml::linalgutils::check_info(info, "gesvd");
+    if (x.is_square())
+      svd(x, s);
+    else if (x.nrows() > x.ncols())
+      tssvd(x, s);
+    else
+      sfsvd(x, s);
   }
   
   
@@ -178,23 +270,28 @@ namespace linalg
     for (len_t i=0; i<s.size(); i++)
       s_d[i] = sqrt(fabs(s_d[i]));
     
+    len_t m_local, n_local;
     REAL *ev_d;
     if (m >= n)
+    {
+      m_local = vt.nrows_local();
+      n_local = vt.ncols_local();
       ev_d = vt.data_ptr();
+    }
     else
+    {
+      m_local = cp.nrows_local();
+      n_local = cp.ncols_local();
       ev_d = cp.data_ptr();
+    }
     
-    const len_t m_local = x.nrows_local();
-    const len_t n_local = x.ncols_local();
-    const len_t mb = x.bf_rows();
-    const len_t nb = x.bf_cols();
     for (len_t j=0; j<n_local; j++)
     {
       #pragma omp for simd
       for (len_t i=0; i<m_local; i++)
       {
-        const int gi = fml::bcutils::l2g(i, mb, g.nprow(), g.myrow());
-        const int gj = fml::bcutils::l2g(j, nb, g.npcol(), g.mycol());
+        const int gi = fml::bcutils::l2g(i, x.bf_rows(), g.nprow(), g.myrow());
+        const int gj = fml::bcutils::l2g(j, x.bf_cols(), g.npcol(), g.mycol());
         
         if (gi < minmn && gj < minmn)
           ev_d[i + m_local*j] /= s_d[gj];
