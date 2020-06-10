@@ -75,7 +75,7 @@ Here's a simple example computing the SVD with some data held on a single CPU:
 
 ```C++
 #include <fml/cpu.hh>
-
+using namespace fml;
 
 int main()
 {
@@ -120,7 +120,7 @@ The API is largely the same if we change the object storage, but we have to chan
 
 ```C++
 #include <fml/mpi.hh>
-
+using namespace fml;
 
 int main()
 {
