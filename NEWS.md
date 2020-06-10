@@ -8,6 +8,12 @@ New:
       - `#include <fml/gpu.hh>` includes all standard headers in `src/fml/gpu`.
       - etc.
   * Added `fml::card_sp_t` typedef for `std::shared_ptr<fml::card>` in `card.hh`.
+  * Added min/max methods for cpuvec and gpuvec.
+  * Added to linalg namespace for cpumat, gpumat, and mpimat:
+      - norm_1()
+      - norm_I()
+      - norm_F()
+      - norm_M()
 
 API Changes:
   * All headers are now contained in the `fml/` tree.
@@ -22,9 +28,11 @@ API Changes:
       - `cpuhelpers::cpu2cpu()` becomes `fml::copy::cpu2cpu()`
       - `gpuhelpers::cpu2gpu()` becomes `fml::copy::cpu2gpu()`
       - etc.
+  * Rename linalg::tssvd() to linalg::qrsvd(), and added LQ case when m<n.
+  * Added support for m<n case (via a transpose) of gpumat linalg::svd().
 
 Bug Fixes:
-  * 
+  * Fixed an indexing bug in mpimat linalg::cpsvd() when m>n.
 
 Documentation: None
 
