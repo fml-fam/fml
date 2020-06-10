@@ -19,11 +19,11 @@ TEMPLATE_TEST_CASE("svd - values - ts", "[linalg]", float, double)
   
   fml::cpumat<TestType> x(m, n);
   
-  SECTION("sfsvd")
+  SECTION("qrsvd")
   {
     x.fill_diag(v);
     fml::cpuvec<TestType> s_ts;
-    fml::linalg::tssvd(x, s_ts);
+    fml::linalg::qrsvd(x, s_ts);
     s_ts.rev();
     REQUIRE( v == s_ts );
   }
@@ -54,9 +54,9 @@ TEMPLATE_TEST_CASE("svd - ts", "[linalg]", float, double)
   fml::cpuvec<TestType> s;
   fml::cpumat<TestType> u, vt;
   
-  SECTION("tssvd")
+  SECTION("qrsvd")
   {
-    fml::linalg::tssvd(x, s, u, vt);
+    fml::linalg::qrsvd(x, s, u, vt);
     
     REQUIRE( fltcmp::eq(s.get(0), 3) );
     REQUIRE( fltcmp::eq(s.get(1), sqrt(5)) );
@@ -98,11 +98,11 @@ TEMPLATE_TEST_CASE("svd - values - sf", "[linalg]", float, double)
   
   fml::cpumat<TestType> x(m, n);
   
-  SECTION("sfsvd")
+  SECTION("qrsvd")
   {
     x.fill_diag(v);
     fml::cpuvec<TestType> s_ts;
-    fml::linalg::sfsvd(x, s_ts);
+    fml::linalg::qrsvd(x, s_ts);
     s_ts.rev();
     REQUIRE( v == s_ts );
   }
@@ -133,9 +133,9 @@ TEMPLATE_TEST_CASE("svd - sf", "[linalg]", float, double)
   fml::cpuvec<TestType> s;
   fml::cpumat<TestType> u, vt;
   
-  SECTION("sfsvd")
+  SECTION("qrsvd")
   {
-    fml::linalg::sfsvd(x, s, u, vt);
+    fml::linalg::qrsvd(x, s, u, vt);
     
     REQUIRE( fltcmp::eq(s.get(0), 3) );
     REQUIRE( fltcmp::eq(s.get(1), sqrt(5)) );

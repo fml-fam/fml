@@ -27,102 +27,137 @@ namespace fml
 /// @brief Linear algebra functions.
 namespace linalg
 {
-  /**
-    @brief Computes the singular value decomposition for tall/skinny data.
-    The number of rows must be greater than the number of columns. If the number
-    of rows is not significantly larger than the number of columns, this may not
-    be more efficient than simply calling `linalg::svd()`.
-    
-    @details The operation works by computing a QR and then taking the SVD of
-    the R matrix. The left singular vectors are Q times the left singular
-    vectors from R's SVD, and the singular value and the right singular vectors
-    are those from R's SVD.
-    
-    @param[inout] x Input data matrix. Values are overwritten.
-    @param[out] s Vector of singular values.
-    @param[out] u Matrix of left singular vectors.
-    @param[out] vt Matrix of (transposed) right singular vectors.
-    
-    @impl Uses `linalg::qr()` and `linalg::svd()`, and if computing the
-    left/right singular vectors, `linalg::qr_R()` and `linalg::qr_Q()`.
-    
-    @allocs If the any outputs are inappropriately sized, they will
-    automatically be re-allocated. Additionally, some temporary work storage
-    is needed.
-    
-    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
-    exception will be thrown.
-    
-    @tparam REAL should be 'float' or 'double'.
-   */
-  template <typename REAL>
-  void tssvd(cpumat<REAL> &x, cpuvec<REAL> &s, cpumat<REAL> &u, cpumat<REAL> &vt)
+  namespace
   {
-    const len_t m = x.nrows();
-    const len_t n = x.ncols();
-    if (m <= n)
-      throw std::runtime_error("'x' must have more rows than cols");
+    template <typename REAL>
+    void tssvd(cpumat<REAL> &x, cpuvec<REAL> &s, cpumat<REAL> &u, cpumat<REAL> &vt)
+    {
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      if (m <= n)
+        throw std::runtime_error("'x' must have more rows than cols");
+      
+      cpuvec<REAL> qraux(n);
+      cpuvec<REAL> work(m);
+      qr_internals(false, x, qraux, work);
+      
+      cpumat<REAL> R(n, n);
+      qr_R(x, R);
+      
+      cpumat<REAL> u_R(n, n);
+      svd(R, s, u_R, vt);
+      
+      u.resize(m, n);
+      u.fill_eye();
+      
+      qr_Q(x, qraux, u, work);
+      
+      matmult(false, false, (REAL)1.0, u, u_R, x);
+      copy::cpu2cpu(x, u);
+    }
     
-    cpuvec<REAL> qraux(n);
-    cpuvec<REAL> work(m);
-    qr_internals(false, x, qraux, work);
+    template <typename REAL>
+    void tssvd(cpumat<REAL> &x, cpuvec<REAL> &s)
+    {
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      if (m <= n)
+        throw std::runtime_error("'x' must have more rows than cols");
+      
+      s.resize(n);
+      
+      cpuvec<REAL> qraux(n);
+      cpuvec<REAL> work(m);
+      qr_internals(false, x, qraux, work);
+      
+      fml::cpu_utils::tri2zero('L', false, n, n, x.data_ptr(), m);
+      
+      int info = 0;
+      cpuvec<int> iwork(8*n);
+      
+      REAL tmp;
+      fml::lapack::gesdd('N', n, n, x.data_ptr(), m, s.data_ptr(), NULL, m, NULL,
+        1, &tmp, -1, iwork.data_ptr(), &info);
+      int lwork = (int) tmp;
+      if (lwork > work.size())
+        work.resize(lwork);
+      
+      fml::lapack::gesdd('N', n, n, x.data_ptr(), m, s.data_ptr(), NULL, m, NULL,
+        1, work.data_ptr(), lwork, iwork.data_ptr(), &info);
+      fml::linalgutils::check_info(info, "gesdd");
+    }
     
-    cpumat<REAL> R(n, n);
-    qr_R(x, R);
     
-    cpumat<REAL> u_R(n, n);
-    svd(R, s, u_R, vt);
     
-    u.resize(m, n);
-    u.fill_eye();
+    template <typename REAL>
+    void sfsvd(cpumat<REAL> &x, cpuvec<REAL> &s, cpumat<REAL> &u, cpumat<REAL> &vt)
+    {
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      if (m >= n)
+        throw std::runtime_error("'x' must have more cols than rows");
+      
+      cpuvec<REAL> lqaux;
+      cpuvec<REAL> work;
+      lq_internals(x, lqaux, work);
+      
+      cpumat<REAL> L(m, m);
+      lq_L(x, L);
+      
+      cpumat<REAL> vt_L(m, m);
+      svd(L, s, u, vt_L);
+      
+      vt.resize(n, m);
+      vt.fill_eye();
+      
+      lq_Q(x, lqaux, vt, work);
+      
+      matmult(false, false, (REAL)1.0, vt_L, vt, x);
+      copy::cpu2cpu(x, vt);
+    }
     
-    qr_Q(x, qraux, u, work);
-    
-    matmult(false, false, (REAL)1.0, u, u_R, x);
-    copy::cpu2cpu(x, u);
+    template <typename REAL>
+    void sfsvd(cpumat<REAL> &x, cpuvec<REAL> &s)
+    {
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      if (m >= n)
+        throw std::runtime_error("'x' must have more cols than rows");
+      
+      s.resize(m);
+      
+      cpuvec<REAL> lqaux;
+      cpuvec<REAL> work;
+      lq_internals(x, lqaux, work);
+      
+      fml::cpu_utils::tri2zero('U', false, m, m, x.data_ptr(), m);
+      
+      int info = 0;
+      cpuvec<int> iwork(8*n);
+      
+      REAL tmp;
+      fml::lapack::gesdd('N', m, m, x.data_ptr(), m, s.data_ptr(), NULL, m, NULL,
+        1, &tmp, -1, iwork.data_ptr(), &info);
+      int lwork = (int) tmp;
+      if (lwork > work.size())
+        work.resize(lwork);
+      
+      fml::lapack::gesdd('N', m, m, x.data_ptr(), m, s.data_ptr(), NULL, m, NULL,
+        1, work.data_ptr(), lwork, iwork.data_ptr(), &info);
+      fml::linalgutils::check_info(info, "gesdd");
+    }
   }
   
-  /// \overload
-  template <typename REAL>
-  void tssvd(cpumat<REAL> &x, cpuvec<REAL> &s)
-  {
-    const len_t m = x.nrows();
-    const len_t n = x.ncols();
-    if (m <= n)
-      throw std::runtime_error("'x' must have more rows than cols");
-    
-    s.resize(n);
-    
-    cpuvec<REAL> qraux(n);
-    cpuvec<REAL> work(m);
-    qr_internals(false, x, qraux, work);
-    
-    fml::cpu_utils::tri2zero('L', false, n, n, x.data_ptr(), m);
-    
-    int info = 0;
-    cpuvec<int> iwork(8*n);
-    
-    REAL tmp;
-    fml::lapack::gesdd('N', n, n, x.data_ptr(), m, s.data_ptr(), NULL, m, NULL,
-      1, &tmp, -1, iwork.data_ptr(), &info);
-    int lwork = (int) tmp;
-    if (lwork > work.size())
-      work.resize(lwork);
-    
-    fml::lapack::gesdd('N', n, n, x.data_ptr(), m, s.data_ptr(), NULL, m, NULL,
-      1, work.data_ptr(), lwork, iwork.data_ptr(), &info);
-    fml::linalgutils::check_info(info, "gesdd");
-  }
-  
-  
-  
   /**
-    @brief Computes the singular value decomposition for short/fat data.
-    The number of columns must be greater than the number of rows. If the number
-    of columns is not significantly larger than the number of rows, this may not
-    be more efficient than simply calling `linalg::svd()`.
+    @brief Computes the singular value decomposition by first reducing the
+    rectangular matrix to a square matrix using an orthogonal factorization. If
+    the matrix is square, we skip the orthogonal factorization.
     
-    @details The operation works by computing an LQ and then taking the SVD of
+    @details If the matrix has more rows than columns, the operation works by
+    computing a QR and then taking the SVD of the R matrix. The left singular
+    vectors are Q times the left singular vectors from R's SVD, and the singular
+    value and the right singular vectors are those from R's SVD. Likewise, if
+    the matrix has more columns than rows, w take the LQ and then the SVD of
     the L matrix. The left singular vectors are Q times the right singular
     vectors from L's SVD, and the singular value and the left singular vectors
     are those from L's SVD.
@@ -132,8 +167,10 @@ namespace linalg
     @param[out] u Matrix of left singular vectors.
     @param[out] vt Matrix of (transposed) right singular vectors.
     
-    @impl Uses `linalg::lq()` and `linalg::svd()`, and if computing the
-    left/right singular vectors, `linalg::lq_L()` and `linalg::lq_Q()`.
+    @impl Uses `linalg::qr()` or `linalg::lq()` (whichever is cheaper) to reduce
+    the matrix to a square matrix, and then calls `linalg::svd()`. If computing
+    the vectors, `linalg::qr_Q()` and `linalg::qr_R()` or `linalg::lq_L()` and
+    `linalg::lq_Q()` are called.
     
     @allocs If the any outputs are inappropriately sized, they will
     automatically be re-allocated. Additionally, some temporary work storage
@@ -145,62 +182,26 @@ namespace linalg
     @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
-  void sfsvd(cpumat<REAL> &x, cpuvec<REAL> &s, cpumat<REAL> &u, cpumat<REAL> &vt)
+  void qrsvd(cpumat<REAL> &x, cpuvec<REAL> &s, cpumat<REAL> &u, cpumat<REAL> &vt)
   {
-    const len_t m = x.nrows();
-    const len_t n = x.ncols();
-    if (m >= n)
-      throw std::runtime_error("'x' must have more cols than rows");
-    
-    cpuvec<REAL> lqaux;
-    cpuvec<REAL> work;
-    lq_internals(x, lqaux, work);
-    
-    cpumat<REAL> L(m, m);
-    lq_L(x, L);
-    
-    cpumat<REAL> vt_L(m, m);
-    svd(L, s, u, vt_L);
-    
-    vt.resize(n, m);
-    vt.fill_eye();
-    
-    lq_Q(x, lqaux, vt, work);
-    
-    matmult(false, false, (REAL)1.0, vt_L, vt, x);
-    copy::cpu2cpu(x, vt);
+    if (x.is_square())
+      svd(x, s, u, vt);
+    else if (x.nrows() > x.ncols())
+      tssvd(x, s, u, vt);
+    else
+      sfsvd(x, s, u, vt);
   }
   
   /// \overload
   template <typename REAL>
-  void sfsvd(cpumat<REAL> &x, cpuvec<REAL> &s)
+  void qrsvd(cpumat<REAL> &x, cpuvec<REAL> &s)
   {
-    const len_t m = x.nrows();
-    const len_t n = x.ncols();
-    if (m >= n)
-      throw std::runtime_error("'x' must have more cols than rows");
-    
-    s.resize(m);
-    
-    cpuvec<REAL> lqaux;
-    cpuvec<REAL> work;
-    lq_internals(x, lqaux, work);
-    
-    fml::cpu_utils::tri2zero('U', false, m, m, x.data_ptr(), m);
-    
-    int info = 0;
-    cpuvec<int> iwork(8*n);
-    
-    REAL tmp;
-    fml::lapack::gesdd('N', m, m, x.data_ptr(), m, s.data_ptr(), NULL, m, NULL,
-      1, &tmp, -1, iwork.data_ptr(), &info);
-    int lwork = (int) tmp;
-    if (lwork > work.size())
-      work.resize(lwork);
-    
-    fml::lapack::gesdd('N', m, m, x.data_ptr(), m, s.data_ptr(), NULL, m, NULL,
-      1, work.data_ptr(), lwork, iwork.data_ptr(), &info);
-    fml::linalgutils::check_info(info, "gesdd");
+    if (x.is_square())
+      svd(x, s);
+    else if (x.nrows() > x.ncols())
+      tssvd(x, s);
+    else
+      sfsvd(x, s);
   }
   
   
