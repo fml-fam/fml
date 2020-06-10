@@ -161,7 +161,8 @@ namespace linalg
     @param[out] u Matrix of left singular vectors.
     @param[out] vt Matrix of (transposed) right singnular vectors.
     
-    @impl Uses the cuSOLVER function `cusolverDnXgesvd()`.
+    @impl Uses the cuSOLVER function `cusolverDnXgesvd()`. Since cuSOLVER only
+    supports the m>=n case, if m<n we operate on a transpose.
     
     @allocs If the any outputs are inappropriately sized, they will
     automatically be re-allocated. Additionally, some temporary work storage
@@ -190,8 +191,19 @@ namespace linalg
     err::check_card(x, u);
     err::check_card(x, vt);
     
-    int info = svd_internals(1, 1, x, s, u, vt);
-    fml::linalgutils::check_info(info, "gesvd");
+    if (x.nrows() >= x.ncols())
+    {
+      int info = svd_internals(1, 1, x, s, u, vt);
+      fml::linalgutils::check_info(info, "gesvd");
+    }
+    else
+    {
+      auto tx = xpose(x);
+      gpumat<REAL> v(x.get_card());
+      int info = svd_internals(1, 1, tx, s, v, u);
+      xpose(v, vt);
+      fml::linalgutils::check_info(info, "gesvd");
+    }
   }
   
   
