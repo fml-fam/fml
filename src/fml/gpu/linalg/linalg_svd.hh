@@ -28,24 +28,127 @@ namespace fml
 {
 namespace linalg
 {
-  /**
-    @brief Computes the singular value decomposition for tall/skinny data.
-    The number of rows must be greater than the number of columns. If the number
-    of rows is not significantly larger than the number of columns, this may not
-    be more efficient than simply calling `linalg::svd()`.
+  namespace
+  {
+    template <typename REAL>
+    void tssvd(gpumat<REAL> &x, gpuvec<REAL> &s, gpumat<REAL> &u, gpumat<REAL> &vt)
+    {
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      if (m <= n)
+        throw std::runtime_error("'x' must have more rows than cols");
+      
+      auto c = x.get_card();
+      
+      gpuvec<REAL> qraux(c);
+      gpuvec<REAL> work(c);
+      qr_internals(false, x, qraux, work);
+      
+      gpumat<REAL> R(c, n, n);
+      qr_R(x, R);
+      
+      gpumat<REAL> u_R(c, n, n);
+      int info = svd_internals(1, 1, R, s, u_R, vt);
+      fml::linalgutils::check_info(info, "gesvd");
+      
+      u.resize(m, n);
+      qr_Q(x, qraux, u, work);
+      
+      matmult(false, false, (REAL)1.0, u, u_R, x);
+      copy::gpu2gpu(x, u);
+    }
     
-    @details The operation works by computing a QR and then taking the SVD of
-    the R matrix. The left singular vectors are Q times the left singular
-    vectors from R's SVD, and the singular value and the right singular vectors
-    are those from R's SVD.
+    template <typename REAL>
+    void tssvd(gpumat<REAL> &x, gpuvec<REAL> &s)
+    {
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      if (m <= n)
+        throw std::runtime_error("'x' must have more rows than cols");
+      
+      auto c = x.get_card();
+      s.resize(n);
+      
+      gpuvec<REAL> qraux(c);
+      gpuvec<REAL> work(c);
+      qr_internals(false, x, qraux, work);
+      
+      fml::gpu_utils::tri2zero('L', false, n, n, x.data_ptr(), m);
+      
+      int lwork;
+      gpulapack_status_t check = gpulapack::gesvd_buflen(c->lapack_handle(), n, n,
+        x.data_ptr(), &lwork);
+      gpulapack::err::check_ret(check, "gesvd_bufferSize");
+      
+      if (lwork > work.size())
+        work.resize(lwork);
+      if (m-1 > qraux.size())
+        qraux.resize(m-1);
+      
+      int info = 0;
+      gpuscalar<int> info_device(c, info);
+      
+      check = gpulapack::gesvd(c->lapack_handle(), 'N', 'N', n, n, x.data_ptr(),
+        m, s.data_ptr(), NULL, m, NULL, 1, work.data_ptr(), lwork,
+        qraux.data_ptr(), info_device.data_ptr());
+      
+      info_device.get_val(&info);
+      gpulapack::err::check_ret(check, "gesvd");
+      fml::linalgutils::check_info(info, "gesvd");
+    }
+    
+    
+    
+    template <typename REAL>
+    void sfsvd(gpumat<REAL> &x, gpuvec<REAL> &s, gpumat<REAL> &u, gpumat<REAL> &vt)
+    {
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      if (m >= n)
+        throw std::runtime_error("'x' must have more cols than rows");
+      
+      gpumat<REAL> tx = xpose(x);
+      gpumat<REAL> v(x.get_card());
+      tssvd(tx, s, v, u);
+      xpose(v, vt);
+    }
+    
+    template <typename REAL>
+    void sfsvd(gpumat<REAL> &x, gpuvec<REAL> &s)
+    {
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      if (m >= n)
+        throw std::runtime_error("'x' must have more cols than rows");
+      
+      auto tx = xpose(x);
+      tssvd(tx, s);
+    }
+  }
+  
+  /**
+    @brief Computes the singular value decomposition by first reducing the
+    rectangular matrix to a square matrix using an orthogonal factorization. If
+    the matrix is square, we skip the orthogonal factorization.
+    
+    @details If the matrix has more rows than columns, the operation works by
+    computing a QR and then taking the SVD of the R matrix. The left singular
+    vectors are Q times the left singular vectors from R's SVD, and the singular
+    value and the right singular vectors are those from R's SVD. Likewise, if
+    the matrix has more columns than rows, w take the LQ and then the SVD of
+    the L matrix. The left singular vectors are Q times the right singular
+    vectors from L's SVD, and the singular value and the left singular vectors
+    are those from L's SVD.
     
     @param[inout] x Input data matrix. Values are overwritten.
     @param[out] s Vector of singular values.
     @param[out] u Matrix of left singular vectors.
     @param[out] vt Matrix of (transposed) right singular vectors.
     
-    @impl Uses `linalg::qr()` and `linalg::svd()`, and if computing the
-    left/right singular vectors, `linalg::qr_R()` and `linalg::qr_Q()`.
+    @impl Uses `linalg::qr()` to reduce the matrix to a square matrix, and then
+    calls `linalg::svd()`. If computing the vectors, `linalg::qr_Q()` and
+    `linalg::qr_R()`. Since cuSOLVER only offers QR, if m<n we operate on a
+    transpose.
     
     @allocs If the any outputs are inappropriately sized, they will
     automatically be re-allocated. Additionally, some temporary work storage
@@ -57,79 +160,33 @@ namespace linalg
     @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
-  void tssvd(gpumat<REAL> &x, gpuvec<REAL> &s, gpumat<REAL> &u, gpumat<REAL> &vt)
+  void qrsvd(gpumat<REAL> &x, gpuvec<REAL> &s, gpumat<REAL> &u, gpumat<REAL> &vt)
   {
     err::check_card(x, s);
     err::check_card(x, u);
     err::check_card(x, vt);
     
-    const len_t m = x.nrows();
-    const len_t n = x.ncols();
-    if (m <= n)
-      throw std::runtime_error("'x' must have more rows than cols");
-    
-    auto c = x.get_card();
-    
-    gpuvec<REAL> qraux(c);
-    gpuvec<REAL> work(c);
-    qr_internals(false, x, qraux, work);
-    
-    gpumat<REAL> R(c, n, n);
-    qr_R(x, R);
-    
-    gpumat<REAL> u_R(c, n, n);
-    int info = svd_internals(1, 1, R, s, u_R, vt);
-    fml::linalgutils::check_info(info, "gesvd");
-    
-    u.resize(m, n);
-    qr_Q(x, qraux, u, work);
-    
-    matmult(false, false, (REAL)1.0, u, u_R, x);
-    copy::gpu2gpu(x, u);
+    if (x.is_square())
+      svd(x, s, u, vt);
+    else if (x.nrows() > x.ncols())
+      tssvd(x, s, u, vt);
+    else
+      sfsvd(x, s, u, vt);
   }
   
   /// \overload
   template <typename REAL>
-  void tssvd(gpumat<REAL> &x, gpuvec<REAL> &s)
+  void qrsvd(gpumat<REAL> &x, gpuvec<REAL> &s)
   {
     err::check_card(x, s);
     
-    const len_t m = x.nrows();
-    const len_t n = x.ncols();
-    if (m <= n)
-      throw std::runtime_error("'x' must have more rows than cols");
-    
-    auto c = x.get_card();
-    s.resize(n);
-    
-    gpuvec<REAL> qraux(c);
-    gpuvec<REAL> work(c);
-    qr_internals(false, x, qraux, work);
-    
-    fml::gpu_utils::tri2zero('L', false, n, n, x.data_ptr(), m);
-    
-    int lwork;
-    gpulapack_status_t check = gpulapack::gesvd_buflen(c->lapack_handle(), n, n,
-      x.data_ptr(), &lwork);
-    gpulapack::err::check_ret(check, "gesvd_bufferSize");
-    
-    if (lwork > work.size())
-      work.resize(lwork);
-    if (m-1 > qraux.size())
-      qraux.resize(m-1);
-    
-    int info = 0;
-    gpuscalar<int> info_device(c, info);
-    
-    check = gpulapack::gesvd(c->lapack_handle(), 'N', 'N', n, n, x.data_ptr(),
-      m, s.data_ptr(), NULL, m, NULL, 1, work.data_ptr(), lwork,
-      qraux.data_ptr(), info_device.data_ptr());
-    
-    info_device.get_val(&info);
-    gpulapack::err::check_ret(check, "gesvd");
-    fml::linalgutils::check_info(info, "gesvd");
+    if (x.is_square())
+      svd(x, s);
+    else if (x.nrows() > x.ncols())
+      tssvd(x, s);
+    else
+      sfsvd(x, s);
   }
-  
   
   
   /**
