@@ -78,10 +78,9 @@ namespace dimops
     s.fill_zero();
     REAL *s_d = s.data_ptr();
     
-    #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE)
     for (len_t j=0; j<n; j++)
     {
-      #pragma omp simd
+      #pragma omp for simd
       for (len_t i=0; i<m; i++)
         s_d[i] += x_d[i + m*j];
     }
