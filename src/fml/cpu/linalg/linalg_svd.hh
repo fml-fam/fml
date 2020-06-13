@@ -268,9 +268,10 @@ namespace linalg
     else
       ev_d = cp.data_ptr();
     
-    #pragma omp for simd
+    #pragma omp parallel for if(minmn*minmn > fml::omp::OMP_MIN_SIZE)
     for (len_t j=0; j<minmn; j++)
     {
+      #pragma omp simd
       for (len_t i=0; i<minmn; i++)
         ev_d[i + minmn*j] /= s_d[j];
     }

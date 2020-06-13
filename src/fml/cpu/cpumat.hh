@@ -730,6 +730,7 @@ void fml::cpumat<REAL>::get_row(const len_t i, cpuvec<REAL> &v) const
   v.resize(this->n);
   REAL *v_d = v.data_ptr();
   
+  #pragma omp parallel for simd if(this->n > fml::omp::OMP_MIN_SIZE)
   for (len_t j=0; j<this->n; j++)
     v_d[j] = this->data[i + this->m*j];
 }
@@ -758,6 +759,7 @@ void fml::cpumat<REAL>::get_col(const len_t j, cpuvec<REAL> &v) const
   v.resize(this->m);
   REAL *v_d = v.data_ptr();
   
+  #pragma omp parallel for if(this->m > fml::omp::OMP_MIN_SIZE)
   for (len_t i=0; i<this->m; i++)
     v_d[i] = this->data[i + this->m*j];
 }

@@ -43,9 +43,12 @@ namespace linalg
     
     REAL norm = 0;
     
+    #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE) reduction(max:norm)
     for (len_t j=0; j<n; j++)
     {
       REAL tmp = 0;
+      
+      #pragma omp simd reduction(+:tmp)
       for (len_t i=0; i<m; i++)
         tmp += fabs(x_d[i + m*j]);
       
@@ -147,6 +150,7 @@ namespace linalg
     
     REAL norm = 0;
     
+    #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE) reduction(max:norm)
     for (len_t j=0; j<n; j++)
     {
       for (len_t i=0; i<m; i++)
@@ -341,6 +345,8 @@ namespace linalg
     
     REAL max = s_d[0];
     REAL min = s_d[0];
+    
+    #pragma omp parallel for if(s.size() > fml::omp::OMP_MIN_SIZE) reduction(max:max) reduction(min:min)
     for (len_t i=1; i<s.size(); i++)
     {
       if (s_d[i] > max)

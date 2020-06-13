@@ -293,7 +293,7 @@ namespace linalg
     const REAL *x_d = x.data_ptr();
     REAL *tx_d = tx.data_ptr();
     
-    #pragma omp parallel for shared(tx) schedule(dynamic, 1) if(m*n>fml::omp::OMP_MIN_SIZE)
+    #pragma omp parallel for shared(tx) schedule(dynamic, 1) if(m*n > fml::omp::OMP_MIN_SIZE)
     for (int j=0; j<n; j+=blocksize)
     {
       for (int i=0; i<m; i+=blocksize)
