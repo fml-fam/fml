@@ -509,7 +509,7 @@ void fml::cpumat<REAL>::diag(cpuvec<REAL> &v)
   v.resize(minmn);
   REAL *v_ptr = v.data_ptr();
   
-  #pragma omp for simd
+  #pragma omp parallel for simd if(minmn > fml::omp::OMP_MIN_SIZE)
   for (len_t i=0; i<minmn; i++)
     v_ptr[i] = this->data[i + this->m*i];
 }
@@ -537,7 +537,7 @@ void fml::cpumat<REAL>::antidiag(cpuvec<REAL> &v)
   v.resize(minmn);
   REAL *v_ptr = v.data_ptr();
   
-  #pragma omp for simd
+  #pragma omp parallel for simd if(minmn > fml::omp::OMP_MIN_SIZE)
   for (len_t i=0; i<minmn; i++)
     v_ptr[i] = this->data[(this->m-1-i) + this->m*i];
 }

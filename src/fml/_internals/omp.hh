@@ -11,6 +11,7 @@ namespace fml
 {
   namespace omp
   {
+    // const int OMP_MIN_SIZE = 1; // for testing
     const int OMP_MIN_SIZE = 2500;
   }
 }

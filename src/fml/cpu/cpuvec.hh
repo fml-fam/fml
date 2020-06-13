@@ -387,7 +387,7 @@ T fml::cpuvec<T>::sum()
 {
   T s = 0;
   
-  #pragma omp for simd
+  #pragma omp parallel for simd if(this->_size > fml::omp::OMP_MIN_SIZE) reduction(+:s)
   for (len_t i=0; i<this->_size; i++)
     s += this->data[i];
   
@@ -402,7 +402,7 @@ T fml::cpuvec<T>::max()
 {
   T mx = this->data[0];
   
-  #pragma omp simd reduction(max:mx)
+  #pragma omp parallel for simd if(this->_size > fml::omp::OMP_MIN_SIZE) reduction(max:mx)
   for (len_t i=1; i<this->_size; i++)
   {
     if (mx < this->data[i])
@@ -420,7 +420,7 @@ T fml::cpuvec<T>::min()
 {
   T mn = this->data[0];
   
-  #pragma omp simd reduction(min:mn)
+  #pragma omp parallel for simd if(this->_size > fml::omp::OMP_MIN_SIZE) reduction(min:mn)
   for (len_t i=1; i<this->_size; i++)
   {
     if (mn < this->data[i])

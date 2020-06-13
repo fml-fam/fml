@@ -9,6 +9,8 @@
 
 #include <cmath>
 
+#include "../_internals/omp.hh"
+
 #include "cpumat.hh"
 #include "cpuvec.hh"
 
@@ -76,9 +78,10 @@ namespace dimops
     s.fill_zero();
     REAL *s_d = s.data_ptr();
     
+    #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE)
     for (len_t j=0; j<n; j++)
     {
-      #pragma omp for simd
+      #pragma omp simd
       for (len_t i=0; i<m; i++)
         s_d[i] += x_d[i + m*j];
     }
@@ -129,6 +132,7 @@ namespace dimops
     s.fill_zero();
     REAL *s_d = s.data_ptr();
     
+    #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE)
     for (len_t j=0; j<n; j++)
       internals::col_sum(j, m, x_d, s_d[j]);
   }
@@ -154,6 +158,7 @@ namespace dimops
     s.fill_zero();
     REAL *s_d = s.data_ptr();
     
+    #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE)
     for (len_t j=0; j<n; j++)
       internals::col_mean(j, m, x_d, s_d[j]);
   }
@@ -169,12 +174,13 @@ namespace dimops
       const len_t m = x.nrows();
       const len_t n = x.ncols();
       
+      #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE)
       for (len_t j=0; j<n; j++)
       {
         REAL mean = 0;
         internals::col_mean(j, m, x_d, mean);
         
-        #pragma omp for simd
+        #pragma omp simd
         for (len_t i=0; i<m; i++)
           x_d[i + m*j] -= mean;
       }
@@ -187,13 +193,14 @@ namespace dimops
       const len_t m = x.nrows();
       const len_t n = x.ncols();
       
+      #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE)
       for (len_t j=0; j<n; j++)
       {
         REAL mean = 0;
         REAL var = 0;
         internals::col_mean_and_var(j, m, x_d, mean, var);
         
-        #pragma omp for simd
+        #pragma omp simd
         for (len_t i=0; i<m; i++)
           x_d[i + m*j] /= var;
       }
@@ -206,13 +213,14 @@ namespace dimops
       const len_t m = x.nrows();
       const len_t n = x.ncols();
       
+      #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE)
       for (len_t j=0; j<n; j++)
       {
         REAL mean = 0;
         REAL var = 0;
         internals::col_mean_and_var(j, m, x_d, mean, var);
         
-        #pragma omp for simd
+        #pragma omp simd
         for (len_t i=0; i<m; i++)
           x_d[i + m*j] = (x_d[i + m*j] - mean) / var;
       }
