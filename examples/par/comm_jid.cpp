@@ -9,12 +9,12 @@ int main()
   c.barrier();
   
   auto jid = c.jid(7);
-  for (int i=0; i<c.size(); i++)
+  for (int rank=0; rank<c.size(); rank++)
   {
-    if (c.rank() == i)
+    if (c.rank() == rank)
     {
       printf("rank %d: ", c.rank());
-      for (int i=0; i<jid.size(); i++)
+      for (size_t i=0; i<jid.size(); i++)
         printf("%d ", jid[i]);
       
       printf("\n");
