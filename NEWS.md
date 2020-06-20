@@ -1,6 +1,6 @@
 # NEWS
 
-## Release 0.3-0 (//):
+## Release 0.3-0 (6/20/2020):
 
 New:
   * Added singular backend headers.
@@ -14,6 +14,7 @@ New:
       - norm_I()
       - norm_F()
       - norm_M()
+  * More OpenMP usage in CPU and MPI backends.
 
 API Changes:
   * All headers are now contained in the `fml/` tree.
@@ -34,7 +35,8 @@ API Changes:
 Bug Fixes:
   * Fixed an indexing bug in mpimat linalg::cpsvd() when m>n.
 
-Documentation: None
+Documentation:
+  * Fixed some formatting issues in generated documentation.
 
 
 
