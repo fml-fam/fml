@@ -1,28 +1,23 @@
-MPICXX = mpicxx
-CXXFLAGS = -I../../src
-OMPFLAGS = -fopenmp 
-MPI_LDFLAGS = -lscalapack-openmpi
-
-WARNFLAGS = -Wall -pedantic -Wextra
+-include ../make.inc
 
 
 all: clean convert det matmult mpimat svd
 
 
 convert:
-	$(MPICXX) $(CXXFLAGS) $(WARNFLAGS) $(OMPFLAGS) convert.cpp -o convert $(MPI_LDFLAGS)
+	$(MPICXX) $(CPPFLAGS) $(CXXFLAGS) $(WARNFLAGS) convert.cpp -o convert $(MPI_LDFLAGS)
 
 det:
-	$(MPICXX) $(CXXFLAGS) $(WARNFLAGS) $(OMPFLAGS) det.cpp -o det $(MPI_LDFLAGS)
+	$(MPICXX) $(CPPFLAGS) $(CXXFLAGS) $(WARNFLAGS) det.cpp -o det $(MPI_LDFLAGS)
 
 matmult:
-	$(MPICXX) $(CXXFLAGS) $(WARNFLAGS) $(OMPFLAGS) matmult.cpp -o matmult $(MPI_LDFLAGS)
+	$(MPICXX) $(CPPFLAGS) $(CXXFLAGS) $(WARNFLAGS) matmult.cpp -o matmult $(MPI_LDFLAGS)
 
 mpimat:
-	$(MPICXX) $(CXXFLAGS) $(WARNFLAGS) $(OMPFLAGS) mpimat.cpp -o mpimat $(MPI_LDFLAGS)
+	$(MPICXX) $(CPPFLAGS) $(CXXFLAGS) $(WARNFLAGS) mpimat.cpp -o mpimat $(MPI_LDFLAGS)
 
 svd:
-	$(MPICXX) $(CXXFLAGS) $(WARNFLAGS) $(OMPFLAGS) svd.cpp -o svd $(MPI_LDFLAGS)
+	$(MPICXX) $(CPPFLAGS) $(CXXFLAGS) $(WARNFLAGS) svd.cpp -o svd $(MPI_LDFLAGS)
 
 
 clean:

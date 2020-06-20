@@ -1,23 +1,19 @@
-CXX = g++
-CXXFLAGS = -I../../src -O2
-LDFLAGS = -fopenmp -llapack -lblas
-
-WARNFLAGS = -Wall -pedantic -Wextra
+-include ../make.inc
 
 
 all: clean cpumat det matmult svd
 
 cpumat:
-	$(CXX) $(CXXFLAGS) $(WARNFLAGS) cpumat.cpp -o cpumat $(LDFLAGS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(WARNFLAGS) cpumat.cpp -o cpumat $(CPU_LDFLAGS)
 
 det:
-	$(CXX) $(CXXFLAGS) $(WARNFLAGS) det.cpp -o det $(LDFLAGS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(WARNFLAGS) det.cpp -o det $(CPU_LDFLAGS)
 
 matmult:
-	$(CXX) $(CXXFLAGS) $(WARNFLAGS) matmult.cpp -o matmult $(LDFLAGS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(WARNFLAGS) matmult.cpp -o matmult $(CPU_LDFLAGS)
 
 svd:
-	$(CXX) $(CXXFLAGS) $(WARNFLAGS) svd.cpp -o svd $(LDFLAGS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(WARNFLAGS) svd.cpp -o svd $(CPU_LDFLAGS)
 
 clean:
 	rm -rf cpumat det matmult svd
