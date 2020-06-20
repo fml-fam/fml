@@ -95,7 +95,52 @@ $(document).ready(function(){initNavTree('md_fml__n_e_w_s.html',''); initResizab
 <div class="title">NEWS </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1>Release 0.2-1 (5/28/20):</h1>
+<div class="textblock"><h1>Release 0.3-0 (6/20/2020):</h1>
+<p>New:</p><ul>
+<li>Added singular backend headers.<ul>
+<li><code>#include &lt;<a class="el" href="cpu_8hh_source.html">fml/cpu.hh</a>&gt;</code> includes all standard headers in <code>src/fml/cpu</code>.</li>
+<li><code>#include &lt;<a class="el" href="gpu_8hh_source.html">fml/gpu.hh</a>&gt;</code> includes all standard headers in <code>src/fml/gpu</code>.</li>
+<li>etc.</li>
+</ul>
+</li>
+<li>Added <code>fml::card_sp_t</code> typedef for <code>std::shared_ptr&lt;<a class="el" href="classfml_1_1card.html" title="GPU data and methods.">fml::card</a>&gt;</code> in <code><a class="el" href="card_8hh_source.html">card.hh</a></code>.</li>
+<li>Added min/max methods for cpuvec and gpuvec.</li>
+<li>Added to linalg namespace for cpumat, gpumat, and mpimat:<ul>
+<li>norm_1()</li>
+<li>norm_I()</li>
+<li>norm_F()</li>
+<li>norm_M()</li>
+</ul>
+</li>
+<li>More OpenMP usage in CPU and MPI backends.</li>
+</ul>
+<p>API Changes:</p><ul>
+<li>All headers are now contained in the <code>fml/</code> tree.<ul>
+<li><code>src/cpu/cpumat.hh</code> becomes <code><a class="el" href="cpumat_8hh_source.html">src/fml/cpu/cpumat.hh</a></code></li>
+<li><code>src/gpu/gpumat.hh</code> becomes <code><a class="el" href="gpumat_8hh_source.html">src/fml/gpu/gpumat.hh</a></code></li>
+<li>etc.</li>
+</ul>
+</li>
+<li>All classes and namespaces are now in the fml namespace.<ul>
+<li><code>cpumat&lt;float&gt;</code> becomes <code><a class="el" href="classfml_1_1cpumat.html" title="Matrix class for data held on a single CPU.">fml::cpumat</a>&lt;float&gt;</code></li>
+<li><code>linalg::svd()</code> becomes <code><a class="el" href="namespacefml_1_1linalg.html#add583703d1c77a9f7236effb9b568f23" title="Computes the singular value decomposition.">fml::linalg::svd()</a></code></li>
+<li>etc.</li>
+</ul>
+</li>
+<li>All Xhelpers namespaces are renamed to the singular copy namespace.<ul>
+<li><code>cpuhelpers::cpu2cpu()</code> becomes <code><a class="el" href="namespacefml_1_1copy.html#a952f50c47e004ada672044ed71fd63bc" title="Copy data from a CPU object to another.">fml::copy::cpu2cpu()</a></code></li>
+<li><code>gpuhelpers::cpu2gpu()</code> becomes <code><a class="el" href="namespacefml_1_1copy.html#ac43248aed3d843655cda70031a8c949c" title="Copy data from a CPU object to a GPU object.">fml::copy::cpu2gpu()</a></code></li>
+<li>etc.</li>
+</ul>
+</li>
+<li>Rename linalg::tssvd() to linalg::qrsvd(), and added LQ case when m&lt;n.</li>
+<li>Added support for m&lt;n case (via a transpose) of gpumat linalg::svd().</li>
+</ul>
+<p>Bug Fixes:</p><ul>
+<li>Fixed an indexing bug in mpimat linalg::cpsvd() when m&gt;n.</li>
+</ul>
+<p>Documentation: None</p>
+<h1>Release 0.2-1 (5/28/20):</h1>
 <p>New: None</p>
 <p>API Changes: None</p>
 <p>Bug Fixes:</p><ul>
@@ -138,14 +183,14 @@ $(document).ready(function(){initNavTree('md_fml__n_e_w_s.html',''); initResizab
 </li>
 </ul>
 <p>API Changes:</p><ul>
-<li>Added default argument to <a class="el" href="namespacegpuhelpers.html#aece351a47841d9e5b2efd7acc2909a65" title="Initialize a new card.">gpuhelpers::new_card()</a></li>
+<li>Added default argument to gpuhelpers::new_card()</li>
 </ul>
 <p>Bug Fixes:</p><ul>
 <li>Fixed major resize bug in mpimat not updating descriptor arrays.</li>
 <li>Changed matrix object <code>==</code> tests to use <code>arraytools::fltcmp::eq()</code> instead of <code>==</code> on fundamental types.</li>
 <li>Changed seed setter behavior in mpimat rng functions: local seed is now computed as seed + myrow + nprow*mycol.</li>
-<li>Fixed several memory issues in gpumat <a class="el" href="namespacelinalg.html#aff9f4d0b000f21e016aed2bd326e1a12" title="Computes the singular value decomposition.">linalg::svd()</a>.</li>
-<li>Fixed an internal logic error in gpumat <a class="el" href="namespacelinalg.html#aff9f4d0b000f21e016aed2bd326e1a12" title="Computes the singular value decomposition.">linalg::svd()</a>.</li>
+<li>Fixed several memory issues in gpumat linalg::svd().</li>
+<li>Fixed an internal logic error in gpumat linalg::svd().</li>
 </ul>
 <p>Documentation:</p><ul>
 <li>Minor corrections; no major changes.</li>
@@ -155,7 +200,7 @@ $(document).ready(function(){initNavTree('md_fml__n_e_w_s.html',''); initResizab
 <li>Created cpumat and cpuvec classes</li>
 <li>Created gpumat and gpuvec classes</li>
 <li>Created mpimat class</li>
-<li>Created <a class="el" href="classparmat__cpu.html">parmat_cpu</a> and <a class="el" href="classparmat__gpu.html">parmat_gpu</a> classes</li>
+<li>Created parmat_cpu and parmat_gpu classes</li>
 <li>Created linalg namespace</li>
 <li>Added to linalg namespace for cpumat, gpumat, and mpimat:<ul>
 <li>add()</li>

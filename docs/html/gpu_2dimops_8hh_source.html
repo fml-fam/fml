@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>fml: fml/src/gpu/dimops.hh Source File</title>
+<title>fml: fml/src/fml/gpu/dimops.hh Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -111,217 +111,218 @@ $(document).ready(function(){initNavTree('gpu_2dimops_8hh_source.html',''); init
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;linalg.hh&quot;</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacedimops.html">dimops</a></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;{</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;  <span class="keyword">namespace </span>internals</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  {</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    __global__ <span class="keywordtype">void</span> kernel_sweep_add(<span class="keyword">const</span> len_t m, <span class="keyword">const</span> len_t n,</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;      REAL *x, <span class="keyword">const</span> REAL *s, <span class="keyword">const</span> REAL sgn)</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    {</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;      <span class="keywordtype">int</span> i = blockDim.x*blockIdx.x + threadIdx.x;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;      <span class="keywordtype">int</span> j = blockDim.y*blockIdx.y + threadIdx.y;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;      </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;      <span class="keywordflow">if</span> (i &lt; m &amp;&amp; j &lt; n)</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        x[i + m*j] += sgn * s[j];</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    }</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> sweep_add(<a class="code" href="classgpumat.html">gpumat&lt;REAL&gt;</a> &amp;x, <span class="keyword">const</span> <a class="code" href="classgpuvec.html">gpuvec&lt;REAL&gt;</a> &amp;s)</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;      kernel_sweep_add&lt;&lt;&lt;x.get_griddim(), x.get_blockdim()&gt;&gt;&gt;(x.<a class="code" href="classunimat.html#ad4b4b6f0d9de498f8ba27afb237601ba">nrows</a>(),</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        x.<a class="code" href="classunimat.html#abb62a12023f61a32c5503e00a9c028db">ncols</a>(), x.<a class="code" href="classunimat.html#a5226d0eb31559f3e98aee8f31a933919">data_ptr</a>(), s.<a class="code" href="classunivec.html#a3c5e22fb9e90d47aad1c59c60070a797">data_ptr</a>(), (REAL) 1.0);</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    }</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> sweep_sub(<a class="code" href="classgpumat.html">gpumat&lt;REAL&gt;</a> &amp;x, <span class="keyword">const</span> <a class="code" href="classgpuvec.html">gpuvec&lt;REAL&gt;</a> &amp;s)</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    {</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;      kernel_sweep_add&lt;&lt;&lt;x.get_griddim(), x.get_blockdim()&gt;&gt;&gt;(x.<a class="code" href="classunimat.html#ad4b4b6f0d9de498f8ba27afb237601ba">nrows</a>(),</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        x.<a class="code" href="classunimat.html#abb62a12023f61a32c5503e00a9c028db">ncols</a>(), x.<a class="code" href="classunimat.html#a5226d0eb31559f3e98aee8f31a933919">data_ptr</a>(), s.<a class="code" href="classunivec.html#a3c5e22fb9e90d47aad1c59c60070a797">data_ptr</a>(), (REAL) -1.0);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    }</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    __global__ <span class="keywordtype">void</span> kernel_sweep_mul(<span class="keyword">const</span> len_t m, <span class="keyword">const</span> len_t n,</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;      REAL *x, <span class="keyword">const</span> REAL *s)</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    {</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;      <span class="keywordtype">int</span> i = blockDim.x*blockIdx.x + threadIdx.x;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;      <span class="keywordtype">int</span> j = blockDim.y*blockIdx.y + threadIdx.y;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;      </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;      <span class="keywordflow">if</span> (i &lt; m &amp;&amp; j &lt; n)</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        x[i + m*j] *= s[j];</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    }</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> sweep_mul(<a class="code" href="classgpumat.html">gpumat&lt;REAL&gt;</a> &amp;x, <span class="keyword">const</span> <a class="code" href="classgpuvec.html">gpuvec&lt;REAL&gt;</a> &amp;s)</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    {</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;      kernel_sweep_mul&lt;&lt;&lt;x.get_griddim(), x.get_blockdim()&gt;&gt;&gt;(x.<a class="code" href="classunimat.html#ad4b4b6f0d9de498f8ba27afb237601ba">nrows</a>(),</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        x.<a class="code" href="classunimat.html#abb62a12023f61a32c5503e00a9c028db">ncols</a>(), x.<a class="code" href="classunimat.html#a5226d0eb31559f3e98aee8f31a933919">data_ptr</a>(), s.<a class="code" href="classunivec.html#a3c5e22fb9e90d47aad1c59c60070a797">data_ptr</a>());</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    }</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    __global__ <span class="keywordtype">void</span> kernel_sweep_div(<span class="keyword">const</span> len_t m, <span class="keyword">const</span> len_t n,</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;      REAL *x, <span class="keyword">const</span> REAL *s)</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    {</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;      <span class="keywordtype">int</span> i = blockDim.x*blockIdx.x + threadIdx.x;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;      <span class="keywordtype">int</span> j = blockDim.y*blockIdx.y + threadIdx.y;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;      </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      <span class="keywordflow">if</span> (i &lt; m &amp;&amp; j &lt; n)</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        x[i + m*j] /= s[j];</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    }</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> sweep_div(<a class="code" href="classgpumat.html">gpumat&lt;REAL&gt;</a> &amp;x, <span class="keyword">const</span> <a class="code" href="classgpuvec.html">gpuvec&lt;REAL&gt;</a> &amp;s)</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    {</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;      kernel_sweep_div&lt;&lt;&lt;x.get_griddim(), x.get_blockdim()&gt;&gt;&gt;(x.<a class="code" href="classunimat.html#ad4b4b6f0d9de498f8ba27afb237601ba">nrows</a>(),</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        x.<a class="code" href="classunimat.html#abb62a12023f61a32c5503e00a9c028db">ncols</a>(), x.<a class="code" href="classunimat.html#a5226d0eb31559f3e98aee8f31a933919">data_ptr</a>(), s.<a class="code" href="classunivec.html#a3c5e22fb9e90d47aad1c59c60070a797">data_ptr</a>());</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    }</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacefml.html">fml</a></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;{</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">namespace </span>dimops</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;{</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;  <span class="keyword">namespace </span>internals</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    __global__ <span class="keywordtype">void</span> kernel_sweep_add(<span class="keyword">const</span> len_t m, <span class="keyword">const</span> len_t n,</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;      REAL *x, <span class="keyword">const</span> REAL *s, <span class="keyword">const</span> REAL sgn)</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    {</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;      <span class="keywordtype">int</span> i = blockDim.x*blockIdx.x + threadIdx.x;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;      <span class="keywordtype">int</span> j = blockDim.y*blockIdx.y + threadIdx.y;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;      </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;      <span class="keywordflow">if</span> (i &lt; m &amp;&amp; j &lt; n)</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        x[i + m*j] += sgn * s[j];</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    }</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> sweep_add(gpumat&lt;REAL&gt; &amp;x, <span class="keyword">const</span> gpuvec&lt;REAL&gt; &amp;s)</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;      kernel_sweep_add&lt;&lt;&lt;x.get_griddim(), x.get_blockdim()&gt;&gt;&gt;(x.nrows(),</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        x.ncols(), x.data_ptr(), s.data_ptr(), (REAL) 1.0);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    }</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> sweep_sub(gpumat&lt;REAL&gt; &amp;x, <span class="keyword">const</span> gpuvec&lt;REAL&gt; &amp;s)</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    {</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;      kernel_sweep_add&lt;&lt;&lt;x.get_griddim(), x.get_blockdim()&gt;&gt;&gt;(x.nrows(),</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        x.ncols(), x.data_ptr(), s.data_ptr(), (REAL) -1.0);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    }</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    __global__ <span class="keywordtype">void</span> kernel_sweep_mul(<span class="keyword">const</span> len_t m, <span class="keyword">const</span> len_t n,</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;      REAL *x, <span class="keyword">const</span> REAL *s)</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    {</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;      <span class="keywordtype">int</span> i = blockDim.x*blockIdx.x + threadIdx.x;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;      <span class="keywordtype">int</span> j = blockDim.y*blockIdx.y + threadIdx.y;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;      </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;      <span class="keywordflow">if</span> (i &lt; m &amp;&amp; j &lt; n)</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        x[i + m*j] *= s[j];</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    }</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> sweep_mul(gpumat&lt;REAL&gt; &amp;x, <span class="keyword">const</span> gpuvec&lt;REAL&gt; &amp;s)</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;      kernel_sweep_mul&lt;&lt;&lt;x.get_griddim(), x.get_blockdim()&gt;&gt;&gt;(x.nrows(),</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        x.ncols(), x.data_ptr(), s.data_ptr());</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    }</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    __global__ <span class="keywordtype">void</span> kernel_sweep_div(<span class="keyword">const</span> len_t m, <span class="keyword">const</span> len_t n,</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;      REAL *x, <span class="keyword">const</span> REAL *s)</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    {</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;      <span class="keywordtype">int</span> i = blockDim.x*blockIdx.x + threadIdx.x;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      <span class="keywordtype">int</span> j = blockDim.y*blockIdx.y + threadIdx.y;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;      </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;      <span class="keywordflow">if</span> (i &lt; m &amp;&amp; j &lt; n)</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        x[i + m*j] /= s[j];</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    }</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> sweep_div(gpumat&lt;REAL&gt; &amp;x, <span class="keyword">const</span> gpuvec&lt;REAL&gt; &amp;s)</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    {</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;      kernel_sweep_div&lt;&lt;&lt;x.get_griddim(), x.get_blockdim()&gt;&gt;&gt;(x.nrows(),</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        x.ncols(), x.data_ptr(), s.data_ptr());</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    }</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    __global__ <span class="keywordtype">void</span> kernel_colsdevs(<span class="keyword">const</span> len_t m, <span class="keyword">const</span> len_t n,</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;      <span class="keyword">const</span> REAL *x, <span class="keyword">const</span> REAL *means, REAL *sdevs)</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    {</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;      <span class="keywordtype">int</span> i = blockDim.x*blockIdx.x + threadIdx.x;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;      <span class="keywordtype">int</span> j = blockDim.y*blockIdx.y + threadIdx.y;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;      </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      <span class="keywordflow">if</span> (i &lt; m &amp;&amp; j &lt; n)</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;      {</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        REAL tmp = (x[i + m*j] - means[j]) * (x[i + m*j] - means[j]) / (m-1);</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        atomicAdd(sdevs+j, tmp);</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;      }</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    }</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> colsdevs(<span class="keyword">const</span> <a class="code" href="classgpumat.html">gpumat&lt;REAL&gt;</a> &amp;x,</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;      <span class="keyword">const</span> <a class="code" href="classgpuvec.html">gpuvec&lt;REAL&gt;</a> &amp;means, <a class="code" href="classgpuvec.html">gpuvec&lt;REAL&gt;</a> &amp;sdevs)</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    {</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;      sdevs.<a class="code" href="classgpuvec.html#ae78098e9912b9ccef9875d1df187488e">fill_zero</a>();</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;      kernel_colsdevs&lt;&lt;&lt;x.get_griddim(), x.get_blockdim()&gt;&gt;&gt;(x.<a class="code" href="classunimat.html#ad4b4b6f0d9de498f8ba27afb237601ba">nrows</a>(),</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        x.<a class="code" href="classunimat.html#abb62a12023f61a32c5503e00a9c028db">ncols</a>(), x.<a class="code" href="classunimat.html#a5226d0eb31559f3e98aee8f31a933919">data_ptr</a>(), means.<a class="code" href="classunivec.html#a3c5e22fb9e90d47aad1c59c60070a797">data_ptr</a>(), sdevs.<a class="code" href="classunivec.html#a3c5e22fb9e90d47aad1c59c60070a797">data_ptr</a>());</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;      fml::kernelfuns::kernel_root_abs&lt;&lt;&lt;sdevs.get_griddim(),</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        sdevs.get_blockdim()&gt;&gt;&gt;(sdevs.<a class="code" href="classunivec.html#ad82521cd25490091e0e8947bdff8b8c5">size</a>(), sdevs.<a class="code" href="classunivec.html#a3c5e22fb9e90d47aad1c59c60070a797">data_ptr</a>());</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    }</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;  }</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;  </div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;  </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    __global__ <span class="keywordtype">void</span> kernel_colsdevs(<span class="keyword">const</span> len_t m, <span class="keyword">const</span> len_t n,</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;      <span class="keyword">const</span> REAL *x, <span class="keyword">const</span> REAL *means, REAL *sdevs)</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    {</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;      <span class="keywordtype">int</span> i = blockDim.x*blockIdx.x + threadIdx.x;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      <span class="keywordtype">int</span> j = blockDim.y*blockIdx.y + threadIdx.y;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;      </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;      <span class="keywordflow">if</span> (i &lt; m &amp;&amp; j &lt; n)</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;      {</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        REAL tmp = (x[i + m*j] - means[j]) * (x[i + m*j] - means[j]) / (m-1);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        atomicAdd(sdevs+j, tmp);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;      }</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    }</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> colsdevs(<span class="keyword">const</span> gpumat&lt;REAL&gt; &amp;x,</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;      <span class="keyword">const</span> gpuvec&lt;REAL&gt; &amp;means, gpuvec&lt;REAL&gt; &amp;sdevs)</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    {</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;      sdevs.fill_zero();</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;      kernel_colsdevs&lt;&lt;&lt;x.get_griddim(), x.get_blockdim()&gt;&gt;&gt;(x.nrows(),</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        x.ncols(), x.data_ptr(), means.data_ptr(), sdevs.data_ptr());</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;      fml::kernelfuns::kernel_root_abs&lt;&lt;&lt;sdevs.get_griddim(),</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        sdevs.get_blockdim()&gt;&gt;&gt;(sdevs.size(), sdevs.data_ptr());</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    }</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;  }</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;  </div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
-<div class="line"><a name="l00130"></a><span class="lineno"><a class="line" href="namespacedimops.html#afb1ec4a9669f44fd5c3fee932c2fc0a1">  130</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="namespacedimops.html#a2402d4de2f050b90328c9acc2cf7555f">rowsums</a>(<span class="keyword">const</span> <a class="code" href="classgpumat.html">gpumat&lt;REAL&gt;</a> &amp;x, <a class="code" href="classgpuvec.html">gpuvec&lt;REAL&gt;</a> &amp;s)</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;  {</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    linalg::err::check_card(x, s);</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="keyword">const</span> len_t m = x.<a class="code" href="classunimat.html#ad4b4b6f0d9de498f8ba27afb237601ba">nrows</a>();</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    <span class="keyword">const</span> len_t n = x.<a class="code" href="classunimat.html#abb62a12023f61a32c5503e00a9c028db">ncols</a>();</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    </div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    s.<a class="code" href="classgpuvec.html#a7b1e9b4191048aa58f522957eadd9649">resize</a>(m);</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    s.<a class="code" href="classgpuvec.html#ae78098e9912b9ccef9875d1df187488e">fill_zero</a>();</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    <a class="code" href="classgpumat.html">gpumat&lt;REAL&gt;</a> s_mat(s.get_card(), s.<a class="code" href="classunivec.html#a3c5e22fb9e90d47aad1c59c60070a797">data_ptr</a>(), m, 1, <span class="keyword">false</span>);</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    </div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    <a class="code" href="classgpumat.html">gpumat&lt;REAL&gt;</a> ones(s.get_card(), n, 1);</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    ones.<a class="code" href="classgpumat.html#aaedb40624722fa214a887aeb399a3596">fill_val</a>(1);</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    </div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    <a class="code" href="namespacelinalg.html#a46be4663a5995ebc6438b880a2a2a36c">linalg::matmult</a>(<span class="keyword">false</span>, <span class="keyword">false</span>, (REAL) 1.0, x, ones, s_mat);</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;  }</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;  </div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;  </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;  </div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;  </div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
+<div class="line"><a name="l00132"></a><span class="lineno"><a class="line" href="namespacefml_1_1dimops.html#aa1fb75418241085eca5699881d3c7498">  132</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="namespacefml_1_1dimops.html#a788531afd61c157075147318e1f30d9b">rowsums</a>(<span class="keyword">const</span> <a class="code" href="classfml_1_1gpumat.html">gpumat&lt;REAL&gt;</a> &amp;x, <a class="code" href="classfml_1_1gpuvec.html">gpuvec&lt;REAL&gt;</a> &amp;s)</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;  {</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    linalg::err::check_card(x, s);</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    <span class="keyword">const</span> len_t m = x.<a class="code" href="classfml_1_1unimat.html#a5b70212a4383826986be87aad3b8908e">nrows</a>();</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    <span class="keyword">const</span> len_t n = x.<a class="code" href="classfml_1_1unimat.html#a6184e02405d68317c536b81e4a512bf4">ncols</a>();</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    s.<a class="code" href="classfml_1_1gpuvec.html#a5ae34e52ff8226163a3a17ce4770ec8a">resize</a>(m);</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    s.<a class="code" href="classfml_1_1gpuvec.html#ac4d02e14735a68d50f6b356fda00cf33">fill_zero</a>();</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    <a class="code" href="classfml_1_1gpumat.html">gpumat&lt;REAL&gt;</a> s_mat(s.get_card(), s.<a class="code" href="classfml_1_1univec.html#a06ed07d905cb60c4bfb93d660870227b">data_ptr</a>(), m, 1, <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    </div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <a class="code" href="classfml_1_1gpumat.html">gpumat&lt;REAL&gt;</a> ones(s.get_card(), n, 1);</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    ones.<a class="code" href="classfml_1_1gpumat.html#aac22277c6972c24a5b76f88acdea25a6">fill_val</a>(1);</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    </div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    <a class="code" href="namespacefml_1_1linalg.html#ae950e30bfc9dfb4973c32e458777095d">linalg::matmult</a>(<span class="keyword">false</span>, <span class="keyword">false</span>, (REAL) 1.0, x, ones, s_mat);</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;  }</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;  </div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
-<div class="line"><a name="l00165"></a><span class="lineno"><a class="line" href="namespacedimops.html#a98efd67291ca827490032ac9e1a35a3f">  165</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="namespacedimops.html#ac9fe6088d57dc9756750e0d524f0b34e">rowmeans</a>(<span class="keyword">const</span> <a class="code" href="classgpumat.html">gpumat&lt;REAL&gt;</a> &amp;x, <a class="code" href="classgpuvec.html">gpuvec&lt;REAL&gt;</a> &amp;s)</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;  {</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    <a class="code" href="namespacedimops.html#a2402d4de2f050b90328c9acc2cf7555f">rowsums</a>(x, s);</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    s.<a class="code" href="classgpuvec.html#a88b187e69fe20a0dd2e357d8b48e90b2">scale</a>((REAL) 1.0/x.<a class="code" href="classunimat.html#abb62a12023f61a32c5503e00a9c028db">ncols</a>());</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;  }</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;  </div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;  </div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;  </div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;  </div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
+<div class="line"><a name="l00167"></a><span class="lineno"><a class="line" href="namespacefml_1_1dimops.html#a13b5587ccb3ee1d243709b7a11808991">  167</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="namespacefml_1_1dimops.html#a035da11808b2e70df53c01dc00dce24e">rowmeans</a>(<span class="keyword">const</span> <a class="code" href="classfml_1_1gpumat.html">gpumat&lt;REAL&gt;</a> &amp;x, <a class="code" href="classfml_1_1gpuvec.html">gpuvec&lt;REAL&gt;</a> &amp;s)</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;  {</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    <a class="code" href="namespacefml_1_1dimops.html#a788531afd61c157075147318e1f30d9b">rowsums</a>(x, s);</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    s.<a class="code" href="classfml_1_1gpuvec.html#ac57ec2eac1757200e711a5342578c45f">scale</a>((REAL) 1.0/x.<a class="code" href="classfml_1_1unimat.html#a6184e02405d68317c536b81e4a512bf4">ncols</a>());</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;  }</div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;  </div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
-<div class="line"><a name="l00190"></a><span class="lineno"><a class="line" href="namespacedimops.html#a80adbd232ee7e58c978be8835c32bad0">  190</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="namespacedimops.html#a995ed5d64e0f43e4eaa16f51fcbb8d1b">colsums</a>(<span class="keyword">const</span> <a class="code" href="classgpumat.html">gpumat&lt;REAL&gt;</a> &amp;x, <a class="code" href="classgpuvec.html">gpuvec&lt;REAL&gt;</a> &amp;s)</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;  {</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    linalg::err::check_card(x, s);</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    <span class="keyword">const</span> len_t m = x.<a class="code" href="classunimat.html#ad4b4b6f0d9de498f8ba27afb237601ba">nrows</a>();</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    <span class="keyword">const</span> len_t n = x.<a class="code" href="classunimat.html#abb62a12023f61a32c5503e00a9c028db">ncols</a>();</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    </div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    s.<a class="code" href="classgpuvec.html#a7b1e9b4191048aa58f522957eadd9649">resize</a>(n);</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    s.<a class="code" href="classgpuvec.html#ae78098e9912b9ccef9875d1df187488e">fill_zero</a>();</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    <a class="code" href="classgpumat.html">gpumat&lt;REAL&gt;</a> s_mat(s.get_card(), s.<a class="code" href="classunivec.html#a3c5e22fb9e90d47aad1c59c60070a797">data_ptr</a>(), 1, n, <span class="keyword">false</span>);</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    </div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    <a class="code" href="classgpumat.html">gpumat&lt;REAL&gt;</a> ones(s.get_card(), 1, m);</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    ones.<a class="code" href="classgpumat.html#aaedb40624722fa214a887aeb399a3596">fill_val</a>(1);</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    </div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    <a class="code" href="namespacelinalg.html#a46be4663a5995ebc6438b880a2a2a36c">linalg::matmult</a>(<span class="keyword">false</span>, <span class="keyword">false</span>, (REAL) 1.0, ones, x, s_mat);</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;  }</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;  </div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;  </div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;  </div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;  </div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
+<div class="line"><a name="l00192"></a><span class="lineno"><a class="line" href="namespacefml_1_1dimops.html#ab15e437bfb828d46800c17f8495c3325">  192</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="namespacefml_1_1dimops.html#a5559327841ca5d21c93d7fe4f055f8ae">colsums</a>(<span class="keyword">const</span> <a class="code" href="classfml_1_1gpumat.html">gpumat&lt;REAL&gt;</a> &amp;x, <a class="code" href="classfml_1_1gpuvec.html">gpuvec&lt;REAL&gt;</a> &amp;s)</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;  {</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    linalg::err::check_card(x, s);</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    <span class="keyword">const</span> len_t m = x.<a class="code" href="classfml_1_1unimat.html#a5b70212a4383826986be87aad3b8908e">nrows</a>();</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    <span class="keyword">const</span> len_t n = x.<a class="code" href="classfml_1_1unimat.html#a6184e02405d68317c536b81e4a512bf4">ncols</a>();</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    </div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    s.<a class="code" href="classfml_1_1gpuvec.html#a5ae34e52ff8226163a3a17ce4770ec8a">resize</a>(n);</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    s.<a class="code" href="classfml_1_1gpuvec.html#ac4d02e14735a68d50f6b356fda00cf33">fill_zero</a>();</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    <a class="code" href="classfml_1_1gpumat.html">gpumat&lt;REAL&gt;</a> s_mat(s.get_card(), s.<a class="code" href="classfml_1_1univec.html#a06ed07d905cb60c4bfb93d660870227b">data_ptr</a>(), 1, n, <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    </div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    <a class="code" href="classfml_1_1gpumat.html">gpumat&lt;REAL&gt;</a> ones(s.get_card(), 1, m);</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    ones.<a class="code" href="classfml_1_1gpumat.html#aac22277c6972c24a5b76f88acdea25a6">fill_val</a>(1);</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    </div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    <a class="code" href="namespacefml_1_1linalg.html#ae950e30bfc9dfb4973c32e458777095d">linalg::matmult</a>(<span class="keyword">false</span>, <span class="keyword">false</span>, (REAL) 1.0, ones, x, s_mat);</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;  }</div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;  </div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
-<div class="line"><a name="l00225"></a><span class="lineno"><a class="line" href="namespacedimops.html#a86820a1c5c18aaabdd2673ad28874066">  225</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="namespacedimops.html#ae2b2aa51ddf48c65ca364f8273844111">colmeans</a>(<span class="keyword">const</span> <a class="code" href="classgpumat.html">gpumat&lt;REAL&gt;</a> &amp;x, <a class="code" href="classgpuvec.html">gpuvec&lt;REAL&gt;</a> &amp;s)</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;  {</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <a class="code" href="namespacedimops.html#a995ed5d64e0f43e4eaa16f51fcbb8d1b">colsums</a>(x, s);</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    s.<a class="code" href="classgpuvec.html#a88b187e69fe20a0dd2e357d8b48e90b2">scale</a>((REAL) 1.0/x.<a class="code" href="classunimat.html#ad4b4b6f0d9de498f8ba27afb237601ba">nrows</a>());</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;  }</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;  </div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;  </div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;  </div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;  </div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
+<div class="line"><a name="l00227"></a><span class="lineno"><a class="line" href="namespacefml_1_1dimops.html#a037ff50b4426c2574daeb93e537767f9">  227</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="namespacefml_1_1dimops.html#a6a9770f271181c76e1f5ccf344bff628">colmeans</a>(<span class="keyword">const</span> <a class="code" href="classfml_1_1gpumat.html">gpumat&lt;REAL&gt;</a> &amp;x, <a class="code" href="classfml_1_1gpuvec.html">gpuvec&lt;REAL&gt;</a> &amp;s)</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;  {</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    <a class="code" href="namespacefml_1_1dimops.html#a5559327841ca5d21c93d7fe4f055f8ae">colsums</a>(x, s);</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    s.<a class="code" href="classfml_1_1gpuvec.html#ac57ec2eac1757200e711a5342578c45f">scale</a>((REAL) 1.0/x.<a class="code" href="classfml_1_1unimat.html#a5b70212a4383826986be87aad3b8908e">nrows</a>());</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;  }</div>
 <div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;  </div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
-<div class="line"><a name="l00248"></a><span class="lineno"><a class="line" href="namespacedimops.html#ac6105ce99b266b2d528923bf7483fc6c">  248</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="namespacedimops.html#aaca9657ba8eeb811d89a7961d76ce296">scale</a>(<span class="keyword">const</span> <span class="keywordtype">bool</span> rm_mean, <span class="keyword">const</span> <span class="keywordtype">bool</span> rm_sd, <a class="code" href="classgpumat.html">gpumat&lt;REAL&gt;</a> &amp;x)</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;  {</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    <span class="keyword">const</span> len_t n = x.<a class="code" href="classunimat.html#abb62a12023f61a32c5503e00a9c028db">ncols</a>();</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    </div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    <span class="keywordflow">if</span> (rm_mean &amp;&amp; rm_sd)</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    {</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;      <a class="code" href="classgpuvec.html">gpuvec&lt;REAL&gt;</a> means(x.get_card(), n);</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;      <a class="code" href="classgpuvec.html">gpuvec&lt;REAL&gt;</a> sdevs(x.get_card(), n);</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;      <a class="code" href="namespacedimops.html#ae2b2aa51ddf48c65ca364f8273844111">colmeans</a>(x, means);</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;      internals::colsdevs(x, means, sdevs);</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;      </div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;      internals::sweep_sub(x, means);</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;      internals::sweep_div(x, sdevs);</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    }</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (rm_mean)</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    {</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;      <a class="code" href="classgpuvec.html">gpuvec&lt;REAL&gt;</a> means(x.get_card());</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;      <a class="code" href="namespacedimops.html#ae2b2aa51ddf48c65ca364f8273844111">colmeans</a>(x, means);</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;      </div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;      internals::sweep_sub(x, means);</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    }</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (rm_sd)</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    {</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;      <a class="code" href="classgpuvec.html">gpuvec&lt;REAL&gt;</a> means(x.get_card());</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;      <a class="code" href="classgpuvec.html">gpuvec&lt;REAL&gt;</a> sdevs(x.get_card(), n);</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;      <a class="code" href="namespacedimops.html#ae2b2aa51ddf48c65ca364f8273844111">colmeans</a>(x, means);</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;      internals::colsdevs(x, means, sdevs);</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;      </div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;      internals::sweep_div(x, sdevs);</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    }</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;  }</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;}</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160; </div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160; </div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;  </div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;  </div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
+<div class="line"><a name="l00250"></a><span class="lineno"><a class="line" href="namespacefml_1_1dimops.html#af36434dcb5448727fefe4e9929e747a1">  250</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="namespacefml_1_1dimops.html#a1de537269cc6365e97db971b2407419e">scale</a>(<span class="keyword">const</span> <span class="keywordtype">bool</span> rm_mean, <span class="keyword">const</span> <span class="keywordtype">bool</span> rm_sd, <a class="code" href="classfml_1_1gpumat.html">gpumat&lt;REAL&gt;</a> &amp;x)</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;  {</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    <span class="keyword">const</span> len_t n = x.<a class="code" href="classfml_1_1unimat.html#a6184e02405d68317c536b81e4a512bf4">ncols</a>();</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    </div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <span class="keywordflow">if</span> (rm_mean &amp;&amp; rm_sd)</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    {</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;      <a class="code" href="classfml_1_1gpuvec.html">gpuvec&lt;REAL&gt;</a> means(x.get_card(), n);</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;      <a class="code" href="classfml_1_1gpuvec.html">gpuvec&lt;REAL&gt;</a> sdevs(x.get_card(), n);</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;      <a class="code" href="namespacefml_1_1dimops.html#a6a9770f271181c76e1f5ccf344bff628">colmeans</a>(x, means);</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;      internals::colsdevs(x, means, sdevs);</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;      </div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;      internals::sweep_sub(x, means);</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;      internals::sweep_div(x, sdevs);</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    }</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (rm_mean)</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    {</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;      <a class="code" href="classfml_1_1gpuvec.html">gpuvec&lt;REAL&gt;</a> means(x.get_card());</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;      <a class="code" href="namespacefml_1_1dimops.html#a6a9770f271181c76e1f5ccf344bff628">colmeans</a>(x, means);</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;      </div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;      internals::sweep_sub(x, means);</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    }</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (rm_sd)</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    {</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;      <a class="code" href="classfml_1_1gpuvec.html">gpuvec&lt;REAL&gt;</a> means(x.get_card());</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;      <a class="code" href="classfml_1_1gpuvec.html">gpuvec&lt;REAL&gt;</a> sdevs(x.get_card(), n);</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;      <a class="code" href="namespacefml_1_1dimops.html#a6a9770f271181c76e1f5ccf344bff628">colmeans</a>(x, means);</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;      internals::colsdevs(x, means, sdevs);</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;      </div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;      internals::sweep_div(x, sdevs);</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    }</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;  }</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;}</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;}</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160; </div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160; </div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aclassunimat_html_a5226d0eb31559f3e98aee8f31a933919"><div class="ttname"><a href="classunimat.html#a5226d0eb31559f3e98aee8f31a933919">unimat::data_ptr</a></div><div class="ttdeci">REAL * data_ptr()</div><div class="ttdoc">Pointer to the internal array.</div><div class="ttdef"><b>Definition:</b> unimat.hh:35</div></div>
-<div class="ttc" id="aclassgpumat_html"><div class="ttname"><a href="classgpumat.html">gpumat</a></div><div class="ttdoc">Matrix class for data held on a single GPU.</div><div class="ttdef"><b>Definition:</b> gpumat.hh:33</div></div>
-<div class="ttc" id="aclassunivec_html_a3c5e22fb9e90d47aad1c59c60070a797"><div class="ttname"><a href="classunivec.html#a3c5e22fb9e90d47aad1c59c60070a797">univec::data_ptr</a></div><div class="ttdeci">T * data_ptr()</div><div class="ttdoc">Pointer to the internal array.</div><div class="ttdef"><b>Definition:</b> univec.hh:26</div></div>
-<div class="ttc" id="anamespacedimops_html_ae2b2aa51ddf48c65ca364f8273844111"><div class="ttname"><a href="namespacedimops.html#ae2b2aa51ddf48c65ca364f8273844111">dimops::colmeans</a></div><div class="ttdeci">void colmeans(const cpumat&lt; REAL &gt; &amp;x, cpuvec&lt; REAL &gt; &amp;s)</div><div class="ttdoc">Compute the column means.</div><div class="ttdef"><b>Definition:</b> dimops.hh:145</div></div>
-<div class="ttc" id="aclassgpuvec_html_a7b1e9b4191048aa58f522957eadd9649"><div class="ttname"><a href="classgpuvec.html#a7b1e9b4191048aa58f522957eadd9649">gpuvec::resize</a></div><div class="ttdeci">void resize(len_t size)</div><div class="ttdoc">Resize the internal object storage.</div><div class="ttdef"><b>Definition:</b> gpuvec.hh:217</div></div>
-<div class="ttc" id="anamespacedimops_html_aaca9657ba8eeb811d89a7961d76ce296"><div class="ttname"><a href="namespacedimops.html#aaca9657ba8eeb811d89a7961d76ce296">dimops::scale</a></div><div class="ttdeci">void scale(const bool rm_mean, const bool rm_sd, cpumat&lt; REAL &gt; &amp;x)</div><div class="ttdoc">Remove the mean and/or the sd from a matrix.</div><div class="ttdef"><b>Definition:</b> dimops.hh:232</div></div>
-<div class="ttc" id="aclassgpuvec_html_ae78098e9912b9ccef9875d1df187488e"><div class="ttname"><a href="classgpuvec.html#ae78098e9912b9ccef9875d1df187488e">gpuvec::fill_zero</a></div><div class="ttdeci">void fill_zero()</div><div class="ttdoc">Set all values to zero.</div><div class="ttdef"><b>Definition:</b> gpuvec.hh:379</div></div>
-<div class="ttc" id="anamespacedimops_html"><div class="ttname"><a href="namespacedimops.html">dimops</a></div><div class="ttdoc">Row/column operations.</div><div class="ttdef"><b>Definition:</b> dimops.hh:17</div></div>
-<div class="ttc" id="aclassgpuvec_html"><div class="ttname"><a href="classgpuvec.html">gpuvec</a></div><div class="ttdoc">Vector class for data held on a single GPU.</div><div class="ttdef"><b>Definition:</b> gpuvec.hh:30</div></div>
-<div class="ttc" id="anamespacedimops_html_ac9fe6088d57dc9756750e0d524f0b34e"><div class="ttname"><a href="namespacedimops.html#ac9fe6088d57dc9756750e0d524f0b34e">dimops::rowmeans</a></div><div class="ttdeci">void rowmeans(const cpumat&lt; REAL &gt; &amp;x, cpuvec&lt; REAL &gt; &amp;s)</div><div class="ttdoc">Compute the row means.</div><div class="ttdef"><b>Definition:</b> dimops.hh:96</div></div>
-<div class="ttc" id="aclassunimat_html_ad4b4b6f0d9de498f8ba27afb237601ba"><div class="ttname"><a href="classunimat.html#ad4b4b6f0d9de498f8ba27afb237601ba">unimat::nrows</a></div><div class="ttdeci">len_t nrows() const</div><div class="ttdoc">Number of rows.</div><div class="ttdef"><b>Definition:</b> unimat.hh:31</div></div>
-<div class="ttc" id="aclassunivec_html_ad82521cd25490091e0e8947bdff8b8c5"><div class="ttname"><a href="classunivec.html#ad82521cd25490091e0e8947bdff8b8c5">univec::size</a></div><div class="ttdeci">len_t size() const</div><div class="ttdoc">Number of elements in the vector.</div><div class="ttdef"><b>Definition:</b> univec.hh:24</div></div>
-<div class="ttc" id="anamespacedimops_html_a995ed5d64e0f43e4eaa16f51fcbb8d1b"><div class="ttname"><a href="namespacedimops.html#a995ed5d64e0f43e4eaa16f51fcbb8d1b">dimops::colsums</a></div><div class="ttdeci">void colsums(const cpumat&lt; REAL &gt; &amp;x, cpuvec&lt; REAL &gt; &amp;s)</div><div class="ttdoc">Compute the column sums.</div><div class="ttdef"><b>Definition:</b> dimops.hh:120</div></div>
-<div class="ttc" id="aclassunimat_html_abb62a12023f61a32c5503e00a9c028db"><div class="ttname"><a href="classunimat.html#abb62a12023f61a32c5503e00a9c028db">unimat::ncols</a></div><div class="ttdeci">len_t ncols() const</div><div class="ttdoc">Number of columns.</div><div class="ttdef"><b>Definition:</b> unimat.hh:33</div></div>
-<div class="ttc" id="aclassgpuvec_html_a88b187e69fe20a0dd2e357d8b48e90b2"><div class="ttname"><a href="classgpuvec.html#a88b187e69fe20a0dd2e357d8b48e90b2">gpuvec::scale</a></div><div class="ttdeci">void scale(const T s)</div><div class="ttdoc">Multiply all values by the input value.</div><div class="ttdef"><b>Definition:</b> gpuvec.hh:421</div></div>
-<div class="ttc" id="aclassgpumat_html_aaedb40624722fa214a887aeb399a3596"><div class="ttname"><a href="classgpumat.html#aaedb40624722fa214a887aeb399a3596">gpumat::fill_val</a></div><div class="ttdeci">void fill_val(const REAL v)</div><div class="ttdoc">Set all values to input value.</div><div class="ttdef"><b>Definition:</b> gpumat.hh:400</div></div>
-<div class="ttc" id="anamespacedimops_html_a2402d4de2f050b90328c9acc2cf7555f"><div class="ttname"><a href="namespacedimops.html#a2402d4de2f050b90328c9acc2cf7555f">dimops::rowsums</a></div><div class="ttdeci">void rowsums(const cpumat&lt; REAL &gt; &amp;x, cpuvec&lt; REAL &gt; &amp;s)</div><div class="ttdoc">Compute the row sums.</div><div class="ttdef"><b>Definition:</b> dimops.hh:67</div></div>
-<div class="ttc" id="anamespacelinalg_html_a46be4663a5995ebc6438b880a2a2a36c"><div class="ttname"><a href="namespacelinalg.html#a46be4663a5995ebc6438b880a2a2a36c">linalg::matmult</a></div><div class="ttdeci">cpumat&lt; REAL &gt; matmult(const bool transx, const bool transy, const REAL alpha, const cpumat&lt; REAL &gt; &amp;x, const cpumat&lt; REAL &gt; &amp;y)</div><div class="ttdoc">Returns alpha*op(x)*op(y) where op(A) is A or A^T.</div><div class="ttdef"><b>Definition:</b> linalg.hh:127</div></div>
+<div class="ttc" id="anamespacefml_1_1linalg_html_ae950e30bfc9dfb4973c32e458777095d"><div class="ttname"><a href="namespacefml_1_1linalg.html#ae950e30bfc9dfb4973c32e458777095d">fml::linalg::matmult</a></div><div class="ttdeci">cpumat&lt; REAL &gt; matmult(const bool transx, const bool transy, const REAL alpha, const cpumat&lt; REAL &gt; &amp;x, const cpumat&lt; REAL &gt; &amp;y)</div><div class="ttdoc">Returns alpha*op(x)*op(y) where op(A) is A or A^T.</div><div class="ttdef"><b>Definition:</b> linalg_blas.hh:126</div></div>
+<div class="ttc" id="aclassfml_1_1gpumat_html_aac22277c6972c24a5b76f88acdea25a6"><div class="ttname"><a href="classfml_1_1gpumat.html#aac22277c6972c24a5b76f88acdea25a6">fml::gpumat::fill_val</a></div><div class="ttdeci">void fill_val(const REAL v)</div><div class="ttdoc">Set all values to input value.</div><div class="ttdef"><b>Definition:</b> gpumat.hh:403</div></div>
+<div class="ttc" id="aclassfml_1_1univec_html_a06ed07d905cb60c4bfb93d660870227b"><div class="ttname"><a href="classfml_1_1univec.html#a06ed07d905cb60c4bfb93d660870227b">fml::univec::data_ptr</a></div><div class="ttdeci">T * data_ptr()</div><div class="ttdoc">Pointer to the internal array.</div><div class="ttdef"><b>Definition:</b> univec.hh:28</div></div>
+<div class="ttc" id="aclassfml_1_1gpuvec_html"><div class="ttname"><a href="classfml_1_1gpuvec.html">fml::gpuvec</a></div><div class="ttdoc">Vector class for data held on a single GPU.</div><div class="ttdef"><b>Definition:</b> gpuvec.hh:32</div></div>
+<div class="ttc" id="aclassfml_1_1gpuvec_html_ac4d02e14735a68d50f6b356fda00cf33"><div class="ttname"><a href="classfml_1_1gpuvec.html#ac4d02e14735a68d50f6b356fda00cf33">fml::gpuvec::fill_zero</a></div><div class="ttdeci">void fill_zero()</div><div class="ttdoc">Set all values to zero.</div><div class="ttdef"><b>Definition:</b> gpuvec.hh:385</div></div>
+<div class="ttc" id="aclassfml_1_1gpuvec_html_a5ae34e52ff8226163a3a17ce4770ec8a"><div class="ttname"><a href="classfml_1_1gpuvec.html#a5ae34e52ff8226163a3a17ce4770ec8a">fml::gpuvec::resize</a></div><div class="ttdeci">void resize(len_t size)</div><div class="ttdoc">Resize the internal object storage.</div><div class="ttdef"><b>Definition:</b> gpuvec.hh:223</div></div>
+<div class="ttc" id="aclassfml_1_1unimat_html_a5b70212a4383826986be87aad3b8908e"><div class="ttname"><a href="classfml_1_1unimat.html#a5b70212a4383826986be87aad3b8908e">fml::unimat::nrows</a></div><div class="ttdeci">len_t nrows() const</div><div class="ttdoc">Number of rows.</div><div class="ttdef"><b>Definition:</b> unimat.hh:36</div></div>
+<div class="ttc" id="anamespacefml_1_1dimops_html_a1de537269cc6365e97db971b2407419e"><div class="ttname"><a href="namespacefml_1_1dimops.html#a1de537269cc6365e97db971b2407419e">fml::dimops::scale</a></div><div class="ttdeci">void scale(const bool rm_mean, const bool rm_sd, cpumat&lt; REAL &gt; &amp;x)</div><div class="ttdoc">Remove the mean and/or the sd from a matrix.</div><div class="ttdef"><b>Definition:</b> dimops.hh:241</div></div>
+<div class="ttc" id="aclassfml_1_1unimat_html_a6184e02405d68317c536b81e4a512bf4"><div class="ttname"><a href="classfml_1_1unimat.html#a6184e02405d68317c536b81e4a512bf4">fml::unimat::ncols</a></div><div class="ttdeci">len_t ncols() const</div><div class="ttdoc">Number of columns.</div><div class="ttdef"><b>Definition:</b> unimat.hh:38</div></div>
+<div class="ttc" id="aclassfml_1_1gpuvec_html_ac57ec2eac1757200e711a5342578c45f"><div class="ttname"><a href="classfml_1_1gpuvec.html#ac57ec2eac1757200e711a5342578c45f">fml::gpuvec::scale</a></div><div class="ttdeci">void scale(const T s)</div><div class="ttdoc">Multiply all values by the input value.</div><div class="ttdef"><b>Definition:</b> gpuvec.hh:427</div></div>
+<div class="ttc" id="anamespacefml_html"><div class="ttname"><a href="namespacefml.html">fml</a></div><div class="ttdoc">Core namespace.</div><div class="ttdef"><b>Definition:</b> linalgutils.hh:15</div></div>
+<div class="ttc" id="anamespacefml_1_1dimops_html_a788531afd61c157075147318e1f30d9b"><div class="ttname"><a href="namespacefml_1_1dimops.html#a788531afd61c157075147318e1f30d9b">fml::dimops::rowsums</a></div><div class="ttdeci">void rowsums(const cpumat&lt; REAL &gt; &amp;x, cpuvec&lt; REAL &gt; &amp;s)</div><div class="ttdoc">Compute the row sums.</div><div class="ttdef"><b>Definition:</b> dimops.hh:71</div></div>
+<div class="ttc" id="aclassfml_1_1gpumat_html"><div class="ttname"><a href="classfml_1_1gpumat.html">fml::gpumat</a></div><div class="ttdoc">Matrix class for data held on a single GPU.</div><div class="ttdef"><b>Definition:</b> gpumat.hh:35</div></div>
+<div class="ttc" id="anamespacefml_1_1dimops_html_a5559327841ca5d21c93d7fe4f055f8ae"><div class="ttname"><a href="namespacefml_1_1dimops.html#a5559327841ca5d21c93d7fe4f055f8ae">fml::dimops::colsums</a></div><div class="ttdeci">void colsums(const cpumat&lt; REAL &gt; &amp;x, cpuvec&lt; REAL &gt; &amp;s)</div><div class="ttdoc">Compute the column sums.</div><div class="ttdef"><b>Definition:</b> dimops.hh:124</div></div>
+<div class="ttc" id="anamespacefml_1_1dimops_html_a6a9770f271181c76e1f5ccf344bff628"><div class="ttname"><a href="namespacefml_1_1dimops.html#a6a9770f271181c76e1f5ccf344bff628">fml::dimops::colmeans</a></div><div class="ttdeci">void colmeans(const cpumat&lt; REAL &gt; &amp;x, cpuvec&lt; REAL &gt; &amp;s)</div><div class="ttdoc">Compute the column means.</div><div class="ttdef"><b>Definition:</b> dimops.hh:150</div></div>
+<div class="ttc" id="anamespacefml_1_1dimops_html_a035da11808b2e70df53c01dc00dce24e"><div class="ttname"><a href="namespacefml_1_1dimops.html#a035da11808b2e70df53c01dc00dce24e">fml::dimops::rowmeans</a></div><div class="ttdeci">void rowmeans(const cpumat&lt; REAL &gt; &amp;x, cpuvec&lt; REAL &gt; &amp;s)</div><div class="ttdoc">Compute the row means.</div><div class="ttdef"><b>Definition:</b> dimops.hh:100</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_1e49b44d5a2294f906abe1aae3252cfa.html">fml</a></li><li class="navelem"><a class="el" href="dir_1f30b71997bdf0514039bce9d915d1f3.html">src</a></li><li class="navelem"><a class="el" href="dir_76506a69d2b491eb99861555ca255708.html">gpu</a></li><li class="navelem"><b>dimops.hh</b></li>
+    <li class="navelem"><a class="el" href="dir_1e49b44d5a2294f906abe1aae3252cfa.html">fml</a></li><li class="navelem"><a class="el" href="dir_1f30b71997bdf0514039bce9d915d1f3.html">src</a></li><li class="navelem"><a class="el" href="dir_2718b15a9d2f62accd312b73d9d4c03a.html">fml</a></li><li class="navelem"><a class="el" href="dir_214a9d15febfcc8edabc0e4c01b208d8.html">gpu</a></li><li class="navelem"><b>dimops.hh</b></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>

@@ -1,23 +1,23 @@
 var hierarchy =
 [
-    [ "card", "classcard.html", null ],
-    [ "comm", "classcomm.html", null ],
-    [ "gpuscalar< T >", "classgpuscalar.html", null ],
-    [ "grid", "classgrid.html", null ],
-    [ "parmat< MAT, VEC, REAL >", "classparmat.html", null ],
-    [ "parmat< cpumat< REAL >, cpuvec< REAL >, REAL >", "classparmat.html", [
-      [ "parmat_cpu< REAL >", "classparmat__cpu.html", null ]
+    [ "fml::card", "classfml_1_1card.html", null ],
+    [ "fml::comm", "classfml_1_1comm.html", null ],
+    [ "fml::gpuscalar< T >", "classfml_1_1gpuscalar.html", null ],
+    [ "fml::grid", "classfml_1_1grid.html", null ],
+    [ "fml::parmat< MAT, VEC, REAL >", "classfml_1_1parmat.html", null ],
+    [ "fml::parmat< cpumat< REAL >, cpuvec< REAL >, REAL >", "classfml_1_1parmat.html", [
+      [ "fml::parmat_cpu< REAL >", "classfml_1_1parmat__cpu.html", null ]
     ] ],
-    [ "parmat< gpumat< REAL >, gpuvec< REAL >, REAL >", "classparmat.html", [
-      [ "parmat_gpu< REAL >", "classparmat__gpu.html", null ]
+    [ "fml::parmat< gpumat< REAL >, gpuvec< REAL >, REAL >", "classfml_1_1parmat.html", [
+      [ "fml::parmat_gpu< REAL >", "classfml_1_1parmat__gpu.html", null ]
     ] ],
-    [ "unimat< REAL >", "classunimat.html", [
-      [ "cpumat< REAL >", "classcpumat.html", null ],
-      [ "gpumat< REAL >", "classgpumat.html", null ],
-      [ "mpimat< REAL >", "classmpimat.html", null ]
+    [ "fml::unimat< REAL >", "classfml_1_1unimat.html", [
+      [ "fml::cpumat< REAL >", "classfml_1_1cpumat.html", null ],
+      [ "fml::gpumat< REAL >", "classfml_1_1gpumat.html", null ],
+      [ "fml::mpimat< REAL >", "classfml_1_1mpimat.html", null ]
     ] ],
-    [ "univec< T >", "classunivec.html", [
-      [ "cpuvec< T >", "classcpuvec.html", null ],
-      [ "gpuvec< T >", "classgpuvec.html", null ]
+    [ "fml::univec< T >", "classfml_1_1univec.html", [
+      [ "fml::cpuvec< T >", "classfml_1_1cpuvec.html", null ],
+      [ "fml::gpuvec< T >", "classfml_1_1gpuvec.html", null ]
     ] ]
 ];

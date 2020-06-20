@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>fml: fml/src/gpu/internals/launcher.hh Source File</title>
+<title>fml: fml/src/fml/gpu/internals/launcher.hh Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -107,7 +107,7 @@ $(document).ready(function(){initNavTree('launcher_8hh_source.html',''); initRes
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;../../_internals/types.hh&quot;</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span>fml</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacefml.html">fml</a></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;{</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;  <span class="keyword">namespace </span>kernel_launcher</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;  {</div>
@@ -139,14 +139,14 @@ $(document).ready(function(){initNavTree('launcher_8hh_source.html',''); initRes
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    </div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">static</span> <span class="keyword">inline</span> dim3 dim_grid(len_t len)</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    {</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;      dim3 <a class="code" href="classgrid.html">grid</a>(grid_len(len));</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;      <span class="keywordflow">return</span> <a class="code" href="classgrid.html">grid</a>;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;      dim3 grid(grid_len(len));</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;      <span class="keywordflow">return</span> grid;</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    }</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    </div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">static</span> <span class="keyword">inline</span> dim3 dim_grid(len_t m, len_t n)</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    {</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;      dim3 <a class="code" href="classgrid.html">grid</a>(grid_len(m), grid_len(n));</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;      <span class="keywordflow">return</span> <a class="code" href="classgrid.html">grid</a>;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;      dim3 grid(grid_len(m), grid_len(n));</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;      <span class="keywordflow">return</span> grid;</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    }</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;  }</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;}</div>
@@ -155,11 +155,11 @@ $(document).ready(function(){initNavTree('launcher_8hh_source.html',''); initRes
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aclassgrid_html"><div class="ttname"><a href="classgrid.html">grid</a></div><div class="ttdoc">2-dimensional MPI process grid.</div><div class="ttdef"><b>Definition:</b> grid.hh:64</div></div>
+<div class="ttc" id="anamespacefml_html"><div class="ttname"><a href="namespacefml.html">fml</a></div><div class="ttdoc">Core namespace.</div><div class="ttdef"><b>Definition:</b> linalgutils.hh:15</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_1e49b44d5a2294f906abe1aae3252cfa.html">fml</a></li><li class="navelem"><a class="el" href="dir_1f30b71997bdf0514039bce9d915d1f3.html">src</a></li><li class="navelem"><a class="el" href="dir_76506a69d2b491eb99861555ca255708.html">gpu</a></li><li class="navelem"><a class="el" href="dir_948c26a78a2bcc3539bc5c16ed742a83.html">internals</a></li><li class="navelem"><b>launcher.hh</b></li>
+    <li class="navelem"><a class="el" href="dir_1e49b44d5a2294f906abe1aae3252cfa.html">fml</a></li><li class="navelem"><a class="el" href="dir_1f30b71997bdf0514039bce9d915d1f3.html">src</a></li><li class="navelem"><a class="el" href="dir_2718b15a9d2f62accd312b73d9d4c03a.html">fml</a></li><li class="navelem"><a class="el" href="dir_214a9d15febfcc8edabc0e4c01b208d8.html">gpu</a></li><li class="navelem"><a class="el" href="dir_20943f19a636ea1cb86b663224439662.html">internals</a></li><li class="navelem"><b>launcher.hh</b></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
