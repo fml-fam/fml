@@ -4,9 +4,6 @@
 MPICXX = mpicxx
 OMPI_CXX = $(CXX)
 
-CPPFLAGS = -I../../src
-WARNFLAGS = -Wall -pedantic -Wextra
-
 
 all: mpimat
 

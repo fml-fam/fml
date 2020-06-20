@@ -4,7 +4,6 @@
 NVCC = nvcc
 NVCCFLAGS = -arch=sm_61
 
-CPPFLAGS = -I../../src
 WARNFLAGS = -Wall -Wextra
 
 
@@ -14,7 +13,7 @@ SRCS = $(wildcard *.cu)
 OBJS = $(SRCS:.cu=.o)
 
 %.o: %.cu 
-	$(NVCC) $(NVCCFLAGS) -Xcompiler "$(CXXFLAGS) $(CPPFLAGS) $(WARNFLAGS) $(OMPFLAGS)" -c $< -o $@
+	$(NVCC) $(NVCCFLAGS) -Xcompiler "$(CPPFLAGS) $(WARNFLAGS) $(OMPFLAGS)" -c $< -o $@
 
 gpumat: $(OBJS)
 	$(NVCC) $(OBJS) -o gpumat $(GPU_LDFLAGS) -Xcompiler "$(OMPFLAGS)"

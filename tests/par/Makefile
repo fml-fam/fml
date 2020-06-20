@@ -4,9 +4,6 @@
 MPICXX = mpicxx
 OMPI_CXX = $(CXX)
 
-CPPFLAGS = -I../../src
-WARNFLAGS = -Wall -pedantic -Wextra
-
 
 all: parmat
 
@@ -21,6 +18,9 @@ parmat: $(OBJS)
 
 miniclean:
 	( ls *.o | grep -v test-main | xargs rm -f )
+
+run: parmat
+	( mpirun -np 2 ./parmat )
 
 clean:
 	rm -rf *.o parmat

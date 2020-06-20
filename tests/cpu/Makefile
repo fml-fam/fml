@@ -1,9 +1,6 @@
 -include ../make.inc
 -include ../common.inc
 
-CPPFLAGS = -I../../src
-WARNFLAGS = -Wall -pedantic -Wextra
-
 
 all: cpumat
 
