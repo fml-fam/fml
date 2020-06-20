@@ -779,6 +779,7 @@ void fml::mpimat<REAL>::diag(fml::cpuvec<REAL> &v)
   v.fill_zero();
   REAL *v_ptr = v.data_ptr();
   
+  #pragma omp parallel for if(minmn > fml::omp::OMP_MIN_SIZE)
   for (len_t gi=0; gi<minmn; gi++)
   {
     const len_local_t i = fml::bcutils::g2l(gi, this->mb, this->g.nprow());
@@ -821,6 +822,7 @@ void fml::mpimat<REAL>::antidiag(fml::cpuvec<REAL> &v)
   v.fill_zero();
   REAL *v_ptr = v.data_ptr();
   
+  #pragma omp parallel for if(minmn > fml::omp::OMP_MIN_SIZE)
   for (len_t gi=0; gi<minmn; gi++)
   {
     const len_local_t i = fml::bcutils::g2l(this->m-1-gi, this->mb, this->g.nprow());
@@ -1213,6 +1215,7 @@ void fml::mpimat<REAL>::get_row(const len_t i, fml::cpuvec<REAL> &v) const
   v.fill_zero();
   REAL *v_ptr = v.data_ptr();
   
+  #pragma omp parallel for if(this->n > fml::omp::OMP_MIN_SIZE)
   for (len_t j=0; j<this->n; j++)
   {
     const len_local_t i_local = fml::bcutils::g2l(i, this->mb, this->g.nprow());
@@ -1258,6 +1261,7 @@ void fml::mpimat<REAL>::get_col(const len_t j, fml::cpuvec<REAL> &v) const
   v.fill_zero();
   REAL *v_ptr = v.data_ptr();
   
+  #pragma omp parallel for if(this->m > fml::omp::OMP_MIN_SIZE)
   for (len_t i=0; i<this->m; i++)
   {
     const len_local_t i_local = fml::bcutils::g2l(i, this->mb, this->g.nprow());

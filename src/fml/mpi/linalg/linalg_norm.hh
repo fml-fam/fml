@@ -45,6 +45,7 @@ namespace linalg
     macs.fill_zero();
     REAL *macs_d = macs.data_ptr();
     
+    #pragma omp parallel for if(m_local*n_local > fml::omp::OMP_MIN_SIZE)
     for (len_t j=0; j<n_local; j++)
     {
       for (len_t i=0; i<m_local; i++)

@@ -44,7 +44,6 @@ namespace dimops
     
     for (len_t j=0; j<n_local; j++)
     {
-      #pragma omp for simd
       for (len_t i=0; i<m_local; i++)
       {
         const len_t gi = fml::bcutils::l2g(i, mb, g.nprow(), g.myrow());
@@ -97,6 +96,7 @@ namespace dimops
     s.fill_zero();
     REAL *s_d = s.data_ptr();
     
+    #pragma omp parallel for if(m_local*n_local > fml::omp::OMP_MIN_SIZE)
     for (len_t j=0; j<n_local; j++)
     {
       const len_t gj = fml::bcutils::l2g(j, nb, g.npcol(), g.mycol());
@@ -218,7 +218,7 @@ namespace dimops
         REAL var;
         col_var(g, j, m, m_local, x_d, mean, work, var);
         
-        #pragma omp for simd
+        #pragma omp simd
         for (len_t i=0; i<m_local; i++)
           x_d[i + m_local*j] = (x_d[i + m_local*j] - mean) / sqrt(var);
       }

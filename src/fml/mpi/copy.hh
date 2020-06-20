@@ -69,6 +69,7 @@ namespace copy
     
     if (m_local > 0 && n_local > 0)
     {
+      #pragma omp parallel for if(m_local*n_local > fml::omp::OMP_MIN_SIZE)
       for (len_local_t j=0; j<n_local; j++)
       {
         const int gj = fml::bcutils::l2g(j, mpi.bf_cols(), g.npcol(), g.mycol());
@@ -249,6 +250,7 @@ namespace copy
     
     if (m_local > 0 && n_local > 0)
     {
+      #pragma omp parallel for if(m_local*n_local > fml::omp::OMP_MIN_SIZE)
       for (len_local_t j=0; j<n_local; j++)
       {
         const int gj = fml::bcutils::l2g(j, mpi.bf_cols(), g.npcol(), g.mycol());
