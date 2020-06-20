@@ -62,10 +62,10 @@ EXTRA_PACKAGES         =
 # Project related configuration options
 #---------------------------------------------------------------------------
 
-ALIASES += impl="\par Implementation Details\n"
-ALIASES += comm="\par Communication Details\n"
-ALIASES += except="\par Exceptions\n"
-ALIASES += allocs="\par Memory Allocations\n"
+ALIASES += impl="<b>Implementation Details</b>\n"
+ALIASES += comm="<b>Communication Details</b>\n"
+ALIASES += except="<b>Exceptions</b>\n"
+ALIASES += allocs="<b>Memory Allocations</b>\n"
 
 # The STRIP_FROM_INC_PATH tag can be used to strip a user-defined part of the
 # path mentioned in the documentation of a class, which tells the reader which
