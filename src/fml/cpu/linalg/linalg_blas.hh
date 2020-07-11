@@ -27,6 +27,9 @@ namespace linalg
     @brief Computes the dot product of two vectors, i.e. the sum of the product
     of the elements.
     
+    @details NOTE: if the vectors are of different length, the dot product will
+    use only the indices of the smaller-sized vector.
+    
     @param[in] x,y Vectors.
     
     @return The dot product.
@@ -36,7 +39,7 @@ namespace linalg
   template <typename REAL>
   REAL dot(const cpuvec<REAL> &x, const cpuvec<REAL> &y)
   {
-    const len_t n = x.size();
+    const len_t n = std::min(x.size(), y.size());
     const REAL *x_d = x.data_ptr();
     const REAL *y_d = y.data_ptr();
     
