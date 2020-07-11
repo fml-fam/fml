@@ -8,6 +8,34 @@
 using namespace arraytools;
 
 
+TEMPLATE_TEST_CASE("vector dot", "[linalg]", float, double)
+{
+  TestType d;
+  len_t n = 5;
+  
+  fml::cpuvec<TestType> x(n);
+  fml::cpuvec<TestType> y(n);
+  x.fill_linspace(1, n);
+  y.fill_linspace(n, 1);
+  
+  d = fml::linalg::dot(x, y);
+  REQUIRE( fltcmp::eq(d, 35) );
+  
+  d = fml::linalg::dot(x);
+  REQUIRE( fltcmp::eq(d, 55) );
+  
+  d = fml::linalg::dot(y);
+  REQUIRE( fltcmp::eq(d, 55) );
+  
+  y.resize(10);
+  y.fill_linspace(10, 1);
+  
+  d = fml::linalg::dot(x, y);
+  REQUIRE( fltcmp::eq(d, 110) );
+}
+
+
+
 TEMPLATE_TEST_CASE("matrix addition", "[linalg]", float, double)
 {
   len_t n = 2;

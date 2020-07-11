@@ -9,6 +9,34 @@ using namespace arraytools;
 extern fml::card_sp_t c;
 
 
+TEMPLATE_TEST_CASE("vector dot", "[linalg]", float, double)
+{
+  TestType d;
+  len_t n = 5;
+  
+  fml::gpuvec<TestType> x(c, n);
+  fml::gpuvec<TestType> y(c, n);
+  x.fill_linspace(1, n);
+  y.fill_linspace(n, 1);
+  
+  d = fml::linalg::dot(x, y);
+  REQUIRE( fltcmp::eq(d, 35) );
+  
+  d = fml::linalg::dot(x);
+  REQUIRE( fltcmp::eq(d, 55) );
+  
+  d = fml::linalg::dot(y);
+  REQUIRE( fltcmp::eq(d, 55) );
+  
+  y.resize(10);
+  y.fill_linspace(10, 1);
+  
+  d = fml::linalg::dot(x, y);
+  REQUIRE( fltcmp::eq(d, 110) );
+}
+
+
+
 TEMPLATE_TEST_CASE("matrix addition", "[linalg]", float, double)
 {
   len_t n = 2;
