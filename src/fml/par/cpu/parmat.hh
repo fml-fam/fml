@@ -25,6 +25,11 @@ namespace fml
     public:
       parmat_cpu(comm &mpi_comm, const len_global_t nrows, const len_t ncols);
       
+      void print(uint8_t ndigits=4, bool add_final_blank=true);
+      
+      // void resize(len_global_t nrows, len_t ncols);
+      // void inherit(cpumat<REAL> &data_);
+      
       void fill_linspace(const REAL start, const REAL stop);
       void fill_eye();
       void fill_diag(const cpuvec<REAL> &d);
@@ -45,6 +50,69 @@ fml::parmat_cpu<REAL>::parmat_cpu(fml::comm &mpi_comm, const len_global_t nrows,
   this->m_global = (len_global_t) nrows_local;
   this->r.allreduce(1, &(this->m_global));
   this->num_preceding_rows();
+}
+
+
+
+// template <typename REAL>
+// void fml::parmat_cpu<REAL>::resize(len_global_t nrows, len_t ncols)
+// {
+// 
+// }
+// 
+// 
+// 
+// template <typename REAL>
+// void fml::parmat_cpu<REAL>::inherit(cpumat<REAL> &data_, bool free_on_destruct)
+// {
+// 
+// }
+
+
+
+template <typename REAL>
+void fml::parmat_cpu<REAL>::print(uint8_t ndigits, bool add_final_blank)
+{
+  len_t n = this->data.ncols();
+  cpuvec<REAL> pv(n);
+  
+  int myrank = this->r.rank();
+  if (myrank == 0)
+    this->data.print(ndigits, false);
+  
+  for (int rank=1; rank<this->r.size(); rank++)
+  {
+    if (rank == myrank)
+    {
+      len_t m = this->data.nrows();
+      this->r.send(1, &m, 0);
+      
+      for (int i=0; i<m; i++)
+      {
+        this->data.get_row(i, pv);
+        this->r.send(n, pv.data_ptr(), 0);
+      }
+    }
+    else if (myrank == 0)
+    {
+      len_t m;
+      this->r.recv(1, &m, rank);
+      
+      for (int i=0; i<m; i++)
+      {
+        this->r.recv(n, pv.data_ptr(), rank);
+        pv.print(ndigits, false);
+      }
+    }
+  
+    this->r.barrier();
+  }
+  
+  if (add_final_blank)
+  {
+    this->r.printf(0, "\n");
+    this->r.barrier();
+  }
 }
 
 

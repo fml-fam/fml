@@ -96,53 +96,6 @@ fml::parmat<MAT, VEC, REAL>::parmat(fml::comm &mpi_comm, MAT &data_)
 
 
 template <class MAT, class VEC, typename REAL>
-void fml::parmat<MAT, VEC, REAL>::print(uint8_t ndigits, bool add_final_blank)
-{
-  len_t n = data.ncols();
-  VEC pv(n);
-  
-  int myrank = r.rank();
-  if (myrank == 0)
-    data.print(ndigits, false);
-  
-  for (int rank=1; rank<r.size(); rank++)
-  {
-    if (rank == myrank)
-    {
-      len_t m = data.nrows();
-      r.send(1, &m, 0);
-      
-      for (int i=0; i<m; i++)
-      {
-        data.get_row(i, pv);
-        r.send(n, pv.data_ptr(), 0);
-      }
-    }
-    else if (myrank == 0)
-    {
-      len_t m;
-      r.recv(1, &m, rank);
-      
-      for (int i=0; i<m; i++)
-      {
-        r.recv(n, pv.data_ptr(), rank);
-        pv.print(ndigits, false);
-      }
-    }
-  
-    r.barrier();
-  }
-  
-  if (add_final_blank)
-  {
-    r.printf(0, "\n");
-    r.barrier();
-  }
-}
-
-
-
-template <class MAT, class VEC, typename REAL>
 void fml::parmat<MAT, VEC, REAL>::info()
 {
   r.printf(0, "# parmat");
