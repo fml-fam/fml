@@ -44,6 +44,7 @@ namespace fml
       
       void resize(len_t nrows, len_t ncols);
       void inherit(REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
+      void inherit(cpumat<REAL> &data);
       cpumat<REAL> dupe() const;
       
       void print(uint8_t ndigits=4, bool add_final_blank=true) const;
@@ -259,6 +260,21 @@ void fml::cpumat<REAL>::inherit(REAL *data, len_t nrows, len_t ncols, bool free_
   this->data = data;
   
   this->free_data = free_on_destruct;
+}
+
+
+
+/// \overload
+template <typename REAL>
+void fml::cpumat<REAL>::inherit(cpumat<REAL> &data_)
+{
+  this->free();
+  
+  this->m = data_.nrows();
+  this->n = data_.ncols();
+  this->data = data_.data_ptr();
+  
+  this->free_data = false;
 }
 
 
