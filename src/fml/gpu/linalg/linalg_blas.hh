@@ -176,14 +176,7 @@ namespace linalg
     if (n != ret.nrows() || n != ret.ncols())
       ret.resize(n, n);
     
-    ret.fill_zero();
-    
-    auto cbh = x.get_card()->blas_handle();
-    gpublas_operation_t trans = GPUBLAS_OP_T;
-    gpublas_fillmode_t uplo = GPUBLAS_FILL_L;
-    
-    gpublas_status_t check = gpublas::syrk(cbh, uplo, trans, n, m, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), n);
-    gpublas::err::check_ret(check, "syrk");
+    matmult(true, false, alpha, x, x, ret);
   }
   
   /// \overload
@@ -228,14 +221,7 @@ namespace linalg
     if (m != ret.nrows() || m != ret.ncols())
       ret.resize(m, m);
     
-    ret.fill_zero();
-    
-    auto cbh = x.get_card()->blas_handle();
-    gpublas_operation_t trans = GPUBLAS_OP_N;
-    gpublas_fillmode_t uplo = GPUBLAS_FILL_L;
-    
-    gpublas_status_t check = gpublas::syrk(cbh, uplo, trans, m, n, alpha, x.data_ptr(), m, (REAL)0.0, ret.data_ptr(), m);
-    gpublas::err::check_ret(check, "syrk");
+    matmult(false, true, alpha, x, x, ret);
   }
   
   /// \overload
