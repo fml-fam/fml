@@ -35,6 +35,7 @@ namespace fml
   class gpumat : public fml::unimat<REAL>
   {
     public:
+      gpumat();
       gpumat(std::shared_ptr<card> gpu);
       gpumat(std::shared_ptr<card> gpu, len_t nrows, len_t ncols);
       gpumat(std::shared_ptr<card> gpu, REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
@@ -103,6 +104,15 @@ namespace fml
 // -----------------------------------------------------------------------------
 
 // constructors/destructor
+
+template <typename REAL>
+fml::gpumat<REAL>::gpumat()
+{
+  this->c=NULL;
+  this->m=0;
+  this->n=0;
+  this->data=NULL;
+}
 
 /**
   @brief Construct matrix object with no internal allocated storage.
