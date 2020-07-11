@@ -356,7 +356,7 @@ inline void fml::card::mem_gpu2gpu(void *dst, const void *src, const size_t len)
 
 
 /**
-  @brief Copy device (GPU) data to other device (GPU) memory.
+  @brief Synchronize device.
   
   @details Blocks further GPU execution until the device completes all
   previously executed kernels.
