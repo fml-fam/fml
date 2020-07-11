@@ -23,6 +23,44 @@ namespace fml
 namespace linalg
 {
   /**
+    @brief Computes the dot product of two vectors, i.e. the sum of the product
+    of the elements.
+    
+    @details NOTE: if the vectors are of different length, the dot product will
+    use only the indices of the smaller-sized vector.
+    
+    @param[in] x,y Vectors.
+    
+    @return The dot product.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  REAL dot(const gpuvec<REAL> &x, const gpuvec<REAL> &y)
+  {
+    err::check_card(x, y);
+    const len_t n = std::min(x.size(), y.size());
+    
+    REAL d;
+    gpuscalar<REAL> d_device(x.get_card());
+    gpublas_status_t check = fml::gpublas::dot(x.get_card()->blas_handle(),
+      n, x.data_ptr(), 1, y.data_ptr(), 1, d_device.data_ptr());
+    
+    gpublas::err::check_ret(check, "dot");
+    d_device.get_val(&d);
+    
+    return d;
+  }
+  
+  template <typename REAL>
+  REAL dot(const gpuvec<REAL> &x)
+  {
+    return dot(x, x);
+  }
+  
+  
+  
+  /**
     @brief Returns alpha*op(x) + beta*op(y) where op(A) is A or A^T
     
     @param[in] transx Should x^T be used?
