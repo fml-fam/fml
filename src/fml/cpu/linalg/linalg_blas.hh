@@ -24,6 +24,39 @@ namespace fml
 namespace linalg
 {
   /**
+    @brief Computes the dot product of two vectors, i.e. the sum of the product
+    of the elements.
+    
+    @param[in] x,y Vectors.
+    
+    @return The dot product.
+    
+    @tparam REAL should be 'float' or 'double' ('int' is also ok).
+   */
+  template <typename REAL>
+  REAL dot(const cpuvec<REAL> &x, const cpuvec<REAL> &y)
+  {
+    const len_t n = x.size();
+    const REAL *x_d = x.data_ptr();
+    const REAL *y_d = y.data_ptr();
+    
+    REAL d = 0;
+    #pragma omp simd reduction(+:d)
+    for (len_t i=0; i<n; i++)
+      d += x_d[i] * y_d[i];
+    
+    return d;
+  }
+  
+  template <typename REAL>
+  REAL dot(const cpuvec<REAL> &x)
+  {
+    return dot(x, x);
+  }
+  
+  
+  
+  /**
     @brief Returns alpha*op(x) + beta*op(y) where op(A) is A or A^T
     
     @param[in] transx Should x^T be used?
