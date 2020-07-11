@@ -24,7 +24,7 @@ namespace fml
   {
     public:
       parmat(){};
-      parmat(comm &mpi_comm, MAT &_data);
+      parmat(comm &mpi_comm, MAT &data_);
       
       void print(uint8_t ndigits=4, bool add_final_blank=true);
       void info();
@@ -62,6 +62,7 @@ namespace fml
       len_global_t nrows() const {return m_global;};
       len_local_t nrows_local() const {return data.nrows();};
       len_local_t ncols() const {return data.ncols();};
+      len_global_t nrows_before() const {return nb4;};
       comm get_comm() const {return r;};
       const MAT& data_obj() const {return data;};
       MAT& data_obj() {return data;};
@@ -82,10 +83,10 @@ namespace fml
 
 
 template <class MAT, class VEC, typename REAL>
-fml::parmat<MAT, VEC, REAL>::parmat(fml::comm &mpi_comm, MAT &_data)
+fml::parmat<MAT, VEC, REAL>::parmat(fml::comm &mpi_comm, MAT &data_)
 {
   r = mpi_comm;
-  data = _data;
+  data = data_;
   
   m_global = (len_global_t) data.nrows();
   r.allreduce(1, &(m_global));
