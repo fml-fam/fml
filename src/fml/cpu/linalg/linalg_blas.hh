@@ -140,40 +140,6 @@ namespace linalg
   
   
   /**
-    @brief Returns alpha*op(x)*op(y) where op(A) is A or A^T
-    
-    @param[in] transx Should x^T be used?
-    @param[in] transy Should y^T be used?
-    @param[in] alpha Scalar.
-    @param[in] x Left multiplicand.
-    @param[in] y Right multiplicand.
-    
-    @except If x and y are inappropriately sized for a matrix product, the
-    method will throw a 'runtime_error' exception.
-    
-    @impl Uses the BLAS function `Xgemm()`.
-    
-    @tparam REAL should be 'float' or 'double'.
-   */
-  template <typename REAL>
-  cpumat<REAL> matmult(const bool transx, const bool transy, const REAL alpha, const cpumat<REAL> &x, const cpumat<REAL> &y)
-  {
-    len_t m, n, k;
-    const len_t mx = x.nrows();
-    const len_t my = y.nrows();
-    
-    fml::linalgutils::matmult_params(transx, transy, mx, x.ncols(), my, y.ncols(), &m, &n, &k);
-    cpumat<REAL> ret(m, n);
-    
-    const char ctransx = transx ? 'T' : 'N';
-    const char ctransy = transy ? 'T' : 'N';
-    
-    fml::blas::gemm(ctransx, ctransy, m, n, k, alpha, x.data_ptr(), mx, y.data_ptr(), my, (REAL)0, ret.data_ptr(), m);
-    
-    return ret;
-  }
-  
-  /**
     @brief Computes ret = alpha*op(x)*op(y) where op(A) is A or A^T
     
     @param[in] transx Should x^T be used?
@@ -191,13 +157,15 @@ namespace linalg
     @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
-  void matmult(const bool transx, const bool transy, const REAL alpha, const cpumat<REAL> &x, const cpumat<REAL> &y, cpumat<REAL> &ret)
+  void matmult(const bool transx, const bool transy, const REAL alpha,
+    const cpumat<REAL> &x, const cpumat<REAL> &y, cpumat<REAL> &ret)
   {
     len_t m, n, k;
     const len_t mx = x.nrows();
     const len_t my = y.nrows();
     
-    fml::linalgutils::matmult_params(transx, transy, mx, x.ncols(), my, y.ncols(), &m, &n, &k);
+    fml::linalgutils::matmult_params(transx, transy, mx, x.ncols(), my,
+      y.ncols(), &m, &n, &k);
     
     if (m != ret.nrows() || n != ret.ncols())
       ret.resize(m, n);
@@ -208,6 +176,100 @@ namespace linalg
     fml::blas::gemm(ctransx, ctransy, m, n, k, alpha,
       x.data_ptr(), mx, y.data_ptr(), my,
       (REAL)0, ret.data_ptr(), m);
+  }
+  
+  /// \overload
+  template <typename REAL>
+  cpumat<REAL> matmult(const bool transx, const bool transy, const REAL alpha,
+    const cpumat<REAL> &x, const cpumat<REAL> &y)
+  {
+    len_t m, n, k;
+    const len_t mx = x.nrows();
+    const len_t my = y.nrows();
+    
+    fml::linalgutils::matmult_params(transx, transy, mx, x.ncols(), my,
+      y.ncols(), &m, &n, &k);
+      
+    cpumat<REAL> ret(m, n);
+    matmult(transx, transy, alpha, x, y, ret);
+    
+    return ret;
+  }
+  
+  /// \overload
+  template <typename REAL>
+  void matmult(const bool transx, const bool transy, const REAL alpha,
+    const cpumat<REAL> &x, const cpuvec<REAL> &y, cpuvec<REAL> &ret)
+  {
+    len_t m, n, k;
+    const len_t mx = x.nrows();
+    const len_t my = y.size();
+    
+    fml::linalgutils::matmult_params(transx, transy, mx, x.ncols(), my,
+      1, &m, &n, &k);
+    
+    const char ctransx = transx ? 'T' : 'N';
+    const char ctransy = transy ? 'T' : 'N';
+    
+    fml::blas::gemm(ctransx, ctransy, m, n, k, alpha,
+      x.data_ptr(), mx, y.data_ptr(), my,
+      (REAL)0, ret.data_ptr(), m);
+  }
+  
+  /// \overload
+  template <typename REAL>
+  cpuvec<REAL> matmult(const bool transx, const bool transy, const REAL alpha,
+    const cpumat<REAL> &x, const cpuvec<REAL> &y)
+  {
+    len_t m, n, k;
+    const len_t mx = x.nrows();
+    const len_t my = y.size();
+    
+    fml::linalgutils::matmult_params(transx, transy, mx, x.ncols(), my,
+      1, &m, &n, &k);
+    
+    cpuvec<REAL> ret(m);
+    matmult(transx, transy, alpha, x, y, ret);
+    
+    return ret;
+  }
+  
+  /// \overload
+  template <typename REAL>
+  void matmult(const bool transx, const bool transy, const REAL alpha,
+    const cpuvec<REAL> &x, const cpumat<REAL> &y, cpuvec<REAL> &ret)
+  {
+    len_t m, n, k;
+    const len_t mx = x.size();
+    const len_t my = y.nrows();
+    
+    fml::linalgutils::matmult_params(transx, transy, mx, 1, my,
+      y.ncols(), &m, &n, &k);
+    
+    const char ctransx = transx ? 'T' : 'N';
+    const char ctransy = transy ? 'T' : 'N';
+    
+    fml::blas::gemm(ctransx, ctransy, m, n, k, alpha,
+      x.data_ptr(), mx, y.data_ptr(), my,
+      (REAL)0, ret.data_ptr(), m);
+  }
+  
+  /// \overload
+  template <typename REAL>
+  cpuvec<REAL> matmult(const bool transx, const bool transy, const REAL alpha,
+    const cpuvec<REAL> &x, const cpumat<REAL> &y)
+  {
+    len_t m, n, k;
+    const len_t mx = x.size();
+    const len_t my = y.nrows();
+    
+    fml::linalgutils::matmult_params(transx, transy, mx, 1, my,
+      y.ncols(), &m, &n, &k);
+    
+    cpuvec<REAL> ret(m);
+    matmult(transx, transy, alpha, x, y, ret);
+    
+    return ret;
   }
   
   
