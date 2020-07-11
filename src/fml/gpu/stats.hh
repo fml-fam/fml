@@ -37,8 +37,7 @@ namespace stats
   template <typename REAL>
   void pca(const bool rm_mean, const bool rm_sd, gpumat<REAL> &x, gpuvec<REAL> &sdev, gpumat<REAL> &rot)
   {
-    linalg::err::check_card(x, sdev);
-    linalg::err::check_card(x, rot);
+    linalg::err::check_card(x, sdev, rot);
     
     dimops::scale(rm_mean, rm_sd, x);
     

@@ -187,9 +187,7 @@ namespace linalg
   template <typename REAL>
   void svd(gpumat<REAL> &x, gpuvec<REAL> &s, gpumat<REAL> &u, gpumat<REAL> &vt)
   {
-    err::check_card(x, s);
-    err::check_card(x, u);
-    err::check_card(x, vt);
+    err::check_card(x, s, u, vt);
     
     if (x.nrows() >= x.ncols())
     {
@@ -291,8 +289,7 @@ namespace linalg
   template <typename REAL>
   void eigen_sym(gpumat<REAL> &x, gpuvec<REAL> &values, gpumat<REAL> &vectors)
   {
-    err::check_card(x, values);
-    err::check_card(x, vectors);
+    err::check_card(x, values, values);
     
     int info = eig_sym_internals(false, x, values, vectors);
     fml::linalgutils::check_info(info, "syevd");
@@ -505,9 +502,7 @@ namespace linalg
   void qr_Q(const gpumat<REAL> &QR, const gpuvec<REAL> &qraux, gpumat<REAL> &Q,
     gpuvec<REAL> &work)
   {
-    err::check_card(QR, qraux);
-    err::check_card(QR, Q);
-    err::check_card(QR, work);
+    err::check_card(QR, qraux, Q, work);
     
     const len_t m = QR.nrows();
     const len_t n = QR.ncols();
@@ -663,9 +658,7 @@ namespace linalg
   void lq_Q(const gpumat<REAL> &LQ, const gpuvec<REAL> &lqaux, gpumat<REAL> &Q,
     gpuvec<REAL> &work)
   {
-    err::check_card(LQ, lqaux);
-    err::check_card(LQ, Q);
-    err::check_card(LQ, work);
+    err::check_card(LQ, lqaux, Q, work);
     
     gpumat<REAL> QR(LQ.get_card());
     xpose(LQ, QR);

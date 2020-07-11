@@ -79,8 +79,7 @@ namespace linalg
   template <typename REAL>
   void add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const gpumat<REAL> &x, const gpumat<REAL> &y, gpumat<REAL> &ret)
   {
-    err::check_card(x, y);
-    err::check_card(x, ret);
+    err::check_card(x, y, ret);
     
     len_t m, n;
     fml::linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
@@ -168,8 +167,7 @@ namespace linalg
   template <typename REAL>
   void matmult(const bool transx, const bool transy, const REAL alpha, const gpumat<REAL> &x, const gpumat<REAL> &y, gpumat<REAL> &ret)
   {
-    err::check_card(x, y);
-    err::check_card(x, ret);
+    err::check_card(x, y, ret);
     
     int m, n, k;
     fml::linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);

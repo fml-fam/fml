@@ -21,11 +21,21 @@ namespace linalg
 {
   namespace err
   {
+    template <class T>
+    void check_card(const T &a){}
+    
     template <class T, class S>
     void check_card(const T &a, const S &b)
     {
       if (a.get_card()->get_id() != b.get_card()->get_id())
         throw std::runtime_error("gpumat/gpuvex objects must be allocated on the same gpu");
+    }
+    
+    template <class T, class S, typename... VAT>
+    void check_card(const T &a, const S &b, VAT&&... vax)
+    {
+      check_card(a, b);
+      check_card(a, vax ...);
     }
   }
 }

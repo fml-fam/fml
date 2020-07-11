@@ -162,9 +162,7 @@ namespace linalg
   template <typename REAL>
   void qrsvd(gpumat<REAL> &x, gpuvec<REAL> &s, gpumat<REAL> &u, gpumat<REAL> &vt)
   {
-    err::check_card(x, s);
-    err::check_card(x, u);
-    err::check_card(x, vt);
+    err::check_card(x, s, u, vt);
     
     if (x.is_square())
       svd(x, s, u, vt);
@@ -217,9 +215,7 @@ namespace linalg
   template <typename REAL>
   void cpsvd(const gpumat<REAL> &x, gpuvec<REAL> &s, gpumat<REAL> &u, gpumat<REAL> &vt)
   {
-    err::check_card(x, s);
-    err::check_card(x, u);
-    err::check_card(x, vt);
+    err::check_card(x, s, u, vt);
     
     const len_t m = x.nrows();
     const len_t n = x.ncols();
