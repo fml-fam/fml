@@ -74,10 +74,13 @@ namespace linalg
     @tparam REAL should be 'float' or 'double'.
    */
   template <typename REAL>
-  void add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const cpumat<REAL> &x, const cpumat<REAL> &y, cpumat<REAL> &ret)
+  void add(const bool transx, const bool transy, const REAL alpha,
+    const REAL beta, const cpumat<REAL> &x, const cpumat<REAL> &y,
+    cpumat<REAL> &ret)
   {
     len_t m, n;
-    fml::linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
+    fml::linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(),
+      y.nrows(), y.ncols(), &m, &n);
     
     if (ret.nrows() != m || ret.ncols() != n)
       ret.resize(m, n);
@@ -130,10 +133,12 @@ namespace linalg
   
   /// \overload
   template <typename REAL>
-  cpumat<REAL> add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const cpumat<REAL> &x, const cpumat<REAL> &y)
+  cpumat<REAL> add(const bool transx, const bool transy, const REAL alpha,
+    const REAL beta, const cpumat<REAL> &x, const cpumat<REAL> &y)
   {
     len_t m, n;
-    fml::linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
+    fml::linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(),
+      y.nrows(), y.ncols(), &m, &n);
     
     cpumat<REAL> ret(m, n);
     add(transx, transy, alpha, beta, x, y, ret);
@@ -186,14 +191,7 @@ namespace linalg
   cpumat<REAL> matmult(const bool transx, const bool transy, const REAL alpha,
     const cpumat<REAL> &x, const cpumat<REAL> &y)
   {
-    len_t m, n, k;
-    const len_t mx = x.nrows();
-    const len_t my = y.nrows();
-    
-    fml::linalgutils::matmult_params(transx, transy, mx, x.ncols(), my,
-      y.ncols(), &m, &n, &k);
-      
-    cpumat<REAL> ret(m, n);
+    cpumat<REAL> ret;
     matmult(transx, transy, alpha, x, y, ret);
     
     return ret;
@@ -211,6 +209,10 @@ namespace linalg
     fml::linalgutils::matmult_params(transx, transy, mx, x.ncols(), my,
       1, &m, &n, &k);
     
+    int len = std::max(m, n);
+    if (len != ret.size())
+      ret.resize(len);
+      
     const char ctransx = transx ? 'T' : 'N';
     const char ctransy = transy ? 'T' : 'N';
     
@@ -224,14 +226,7 @@ namespace linalg
   cpuvec<REAL> matmult(const bool transx, const bool transy, const REAL alpha,
     const cpumat<REAL> &x, const cpuvec<REAL> &y)
   {
-    len_t m, n, k;
-    const len_t mx = x.nrows();
-    const len_t my = y.size();
-    
-    fml::linalgutils::matmult_params(transx, transy, mx, x.ncols(), my,
-      1, &m, &n, &k);
-    
-    cpuvec<REAL> ret(m);
+    cpuvec<REAL> ret;
     matmult(transx, transy, alpha, x, y, ret);
     
     return ret;
@@ -249,6 +244,10 @@ namespace linalg
     fml::linalgutils::matmult_params(transx, transy, mx, 1, my,
       y.ncols(), &m, &n, &k);
     
+    int len = std::max(m, n);
+    if (len != ret.size())
+      ret.resize(len);
+    
     const char ctransx = transx ? 'T' : 'N';
     const char ctransy = transy ? 'T' : 'N';
     
@@ -262,14 +261,7 @@ namespace linalg
   cpuvec<REAL> matmult(const bool transx, const bool transy, const REAL alpha,
     const cpuvec<REAL> &x, const cpumat<REAL> &y)
   {
-    len_t m, n, k;
-    const len_t mx = x.size();
-    const len_t my = y.nrows();
-    
-    fml::linalgutils::matmult_params(transx, transy, mx, 1, my,
-      y.ncols(), &m, &n, &k);
-    
-    cpuvec<REAL> ret(m);
+    cpuvec<REAL> ret;
     matmult(transx, transy, alpha, x, y, ret);
     
     return ret;
