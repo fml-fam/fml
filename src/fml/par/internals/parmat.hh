@@ -25,6 +25,7 @@ namespace fml
     public:
       parmat(){};
       parmat(comm &mpi_comm, MAT &data_);
+      parmat(parmat<MAT, VEC, REAL> &&x);
       
       void print(uint8_t ndigits=4, bool add_final_blank=true);
       void info();
@@ -57,7 +58,7 @@ namespace fml
 
       bool operator==(const parmat<MAT, VEC, REAL> &x) const;
       bool operator!=(const parmat<MAT, VEC, REAL> &x) const;
-      // parmat<MAT, VEC, REAL>& operator=(const parmat<MAT, VEC, REAL> &x);
+      parmat<MAT, VEC, REAL>& operator=(const parmat<MAT, VEC, REAL> &x);
       
       len_global_t nrows() const {return m_global;};
       len_local_t nrows_local() const {return data.nrows();};
@@ -91,6 +92,17 @@ fml::parmat<MAT, VEC, REAL>::parmat(fml::comm &mpi_comm, MAT &data_)
   m_global = (len_global_t) data.nrows();
   r.allreduce(1, &(m_global));
   num_preceding_rows();
+}
+
+
+
+template <class MAT, class VEC, typename REAL>
+fml::parmat<MAT, VEC, REAL>::parmat(fml::parmat<MAT, VEC, REAL> &&x)
+{
+  this->data = x.data_obj();
+  this->m_global = x.nrows();
+  this->r = x.get_comm();
+  this->nb4 = x.nrows_before();
 }
 
 
@@ -259,6 +271,16 @@ bool fml::parmat<MAT, VEC, REAL>::operator!=(const fml::parmat<MAT, VEC, REAL> &
   return !(*this == x);
 }
 
+
+
+template <class MAT, class VEC, typename REAL>
+fml::parmat<MAT, VEC, REAL>& fml::parmat<MAT, VEC, REAL>::operator=(const fml::parmat<MAT, VEC, REAL> &x)
+{
+  this->data = x.data_obj();
+  this->m_global = x.nrows();
+  this->r = x.get_comm();
+  this->nb4 = x.nrows_before();
+}
 
 
 // -----------------------------------------------------------------------------
