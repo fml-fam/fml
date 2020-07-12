@@ -39,6 +39,7 @@ namespace fml
       cpumat();
       cpumat(len_t nrows, len_t ncols);
       cpumat(REAL *data, len_t nrows, len_t ncols, bool free_on_destruct=false);
+      cpumat(cpumat &&x);
       cpumat(const cpumat &x);
       ~cpumat();
       
@@ -78,7 +79,12 @@ namespace fml
       
       bool operator==(const cpumat<REAL> &x) const;
       bool operator!=(const cpumat<REAL> &x) const;
+      cpumat<REAL>& operator=(cpumat<REAL> &x);
       cpumat<REAL>& operator=(const cpumat<REAL> &x);
+    
+    protected:
+      bool free_on_destruct() const {return this->free_data;};
+      void dont_free_on_destruct() {this->free_data=false;};
     
     private:
       void free();
@@ -173,13 +179,29 @@ fml::cpumat<REAL>::cpumat(REAL *data_, len_t nrows, len_t ncols, bool free_on_de
 
 
 template <typename REAL>
-fml::cpumat<REAL>::cpumat(const cpumat<REAL> &x)
+fml::cpumat<REAL>::cpumat(cpumat<REAL> &&x)
 {
   this->m = x.nrows();
   this->n = x.ncols();
   this->data = x.data_ptr();
   
-  this->free_data = false;
+  this->free_data = x.free_on_destruct();
+  x.dont_free_on_destruct();
+}
+
+
+
+template <typename REAL>
+fml::cpumat<REAL>::cpumat(const cpumat<REAL> &x)
+{
+  this->m = x.nrows();
+  this->n = x.ncols();
+  this->data.resize(this->m, this->n);
+  
+  size_t len = (size_t) this->m * this->n * sizeof(REAL);
+  std::memcpy(this->data, x.data_ptr(), len);
+  
+  this->free_data = true;
 }
 
 
@@ -834,6 +856,20 @@ bool fml::cpumat<REAL>::operator!=(const fml::cpumat<REAL> &x) const
   @param[in] x Setter value.
  */
 template <typename REAL>
+fml::cpumat<REAL>& fml::cpumat<REAL>::operator=(fml::cpumat<REAL> &x)
+{
+  this->m = x.nrows();
+  this->n = x.ncols();
+  this->data = x.data_ptr();
+  
+  this->free_data = x.free_on_destruct();
+  x.dont_free_on_destruct();
+  
+  return *this;
+}
+
+/// \overload
+template <typename REAL>
 fml::cpumat<REAL>& fml::cpumat<REAL>::operator=(const fml::cpumat<REAL> &x)
 {
   this->m = x.nrows();
@@ -841,6 +877,7 @@ fml::cpumat<REAL>& fml::cpumat<REAL>::operator=(const fml::cpumat<REAL> &x)
   this->data = x.data_ptr();
   
   this->free_data = false;
+  
   return *this;
 }
 

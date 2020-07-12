@@ -34,6 +34,7 @@ namespace fml
       cpuvec();
       cpuvec(len_t size);
       cpuvec(T *data, len_t size, bool free_on_destruct=false);
+      cpuvec(cpuvec &&x);
       cpuvec(const cpuvec &x);
       ~cpuvec();
       
@@ -60,8 +61,13 @@ namespace fml
       
       bool operator==(const cpuvec<T> &x) const;
       bool operator!=(const cpuvec<T> &x) const;
+      cpuvec<T>& operator=(cpuvec<T> &x);
       cpuvec<T>& operator=(const cpuvec<T> &x);
     
+    protected:
+      bool free_on_destruct() const {return this->free_data;};
+      void dont_free_on_destruct() {this->free_data=false;};
+  
     private:
       void free();
       void check_params(len_t size);
@@ -151,12 +157,27 @@ fml::cpuvec<T>::cpuvec(T *data_, len_t size, bool free_on_destruct)
 
 
 template <typename T>
-fml::cpuvec<T>::cpuvec(const cpuvec<T> &x)
+fml::cpuvec<T>::cpuvec(cpuvec<T> &&x)
 {
   this->_size = x.size();
   this->data = x.data_ptr();
   
-  this->free_data = false;
+  this->free_data = x.free_on_destruct();
+  x.dont_free_on_destruct();
+}
+
+
+
+template <typename T>
+fml::cpuvec<T>::cpuvec(const cpuvec<T> &x)
+{
+  this->_size = x.size();
+  this->data.resize(this->_size);
+  
+  size_t len = (size_t) this->_size * sizeof(T);
+  std::memcpy(this->data, x.data_ptr(), len);
+  
+  this->free_data = true;
 }
 
 
@@ -516,12 +537,25 @@ bool fml::cpuvec<T>::operator!=(const fml::cpuvec<T> &x) const
   @param[in] x Setter value.
  */
 template <typename T>
+fml::cpuvec<T>& fml::cpuvec<T>::operator=(fml::cpuvec<T> &x)
+{
+  this->_size = x.size();
+  this->data = x.data_ptr();
+
+  this->free_data = x.free_on_destruct();
+  x.dont_free_on_destruct();
+  
+  return *this;
+}
+
+template <typename T>
 fml::cpuvec<T>& fml::cpuvec<T>::operator=(const fml::cpuvec<T> &x)
 {
   this->_size = x.size();
   this->data = x.data_ptr();
-  
+
   this->free_data = false;
+  
   return *this;
 }
 
