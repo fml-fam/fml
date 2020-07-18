@@ -142,9 +142,12 @@ namespace linalg
   {
     err::check_card(x, y, ret);
     
+    const len_t mx = x.nrows();
+    const len_t my = y.nrows();
+    
     int m, n, k;
-    fml::linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(),
-      y.nrows(), y.ncols(), &m, &n, &k);
+    fml::linalgutils::matmult_params(transx, transy, mx, x.ncols(),
+      my, y.ncols(), &m, &n, &k);
     
     if (m != ret.nrows() || n != ret.ncols())
       ret.resize(m, n);
@@ -153,8 +156,8 @@ namespace linalg
     gpublas_operation_t cbtransy = transy ? GPUBLAS_OP_T : GPUBLAS_OP_N;
     
     gpublas_status_t check = gpublas::gemm(x.get_card()->blas_handle(),
-      cbtransx, cbtransy, m, n, k, alpha, x.data_ptr(), x.nrows(), y.data_ptr(),
-      y.nrows(), (REAL)0, ret.data_ptr(), m);
+      cbtransx, cbtransy, m, n, k, alpha, x.data_ptr(), mx, y.data_ptr(),
+      my, (REAL)0, ret.data_ptr(), m);
     gpublas::err::check_ret(check, "gemm");
   }
   
@@ -172,13 +175,16 @@ namespace linalg
   /// \overload
   template <typename REAL>
   void matmult(const bool transx, const bool transy, const REAL alpha,
-    const gpumat<REAL> &x, const gpuvec<REAL> &y, gpuvec<REAL> ret)
+    const gpumat<REAL> &x, const gpuvec<REAL> &y, gpuvec<REAL> &ret)
   {
     err::check_card(x, y, ret);
     
+    const len_t mx = x.nrows();
+    const len_t my = y.size();
+    
     int m, n, k;
-    fml::linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(),
-      y.size(), 1, &m, &n, &k);
+    fml::linalgutils::matmult_params(transx, transy, mx, x.ncols(),
+      my, 1, &m, &n, &k);
     auto c = x.get_card();
     int len = std::max(m, n);
     if (len != ret.size())
@@ -188,11 +194,9 @@ namespace linalg
     gpublas_operation_t cbtransy = transy ? GPUBLAS_OP_T : GPUBLAS_OP_N;
     
     gpublas_status_t check = gpublas::gemm(c->blas_handle(), cbtransx, cbtransy,
-      m, n, k, alpha, x.data_ptr(), x.nrows(), y.data_ptr(), y.nrows(), (REAL)0,
+      m, n, k, alpha, x.data_ptr(), mx, y.data_ptr(), my, (REAL)0,
       ret.data_ptr(), m);
     gpublas::err::check_ret(check, "gemm");
-    
-    return ret;
   }
   
   /// \overload
@@ -209,13 +213,16 @@ namespace linalg
   /// \overload
   template <typename REAL>
   void matmult(const bool transx, const bool transy, const REAL alpha,
-    const gpuvec<REAL> &x, const gpumat<REAL> &y, gpuvec<REAL> ret)
+    const gpuvec<REAL> &x, const gpumat<REAL> &y, gpuvec<REAL> &ret)
   {
     err::check_card(x, y, ret);
     
+    const len_t mx = x.size();
+    const len_t my = y.nrows();
+    
     int m, n, k;
-    fml::linalgutils::matmult_params(transx, transy, x.size(), 1,
-      y.nrows(), y.ncols(), &m, &n, &k);
+    fml::linalgutils::matmult_params(transx, transy, mx, 1,
+      my, y.ncols(), &m, &n, &k);
     auto c = x.get_card();
     int len = std::max(m, n);
     if (len != ret.size())
@@ -225,11 +232,9 @@ namespace linalg
     gpublas_operation_t cbtransy = transy ? GPUBLAS_OP_T : GPUBLAS_OP_N;
     
     gpublas_status_t check = gpublas::gemm(c->blas_handle(), cbtransx, cbtransy,
-      m, n, k, alpha, x.data_ptr(), x.nrows(), y.data_ptr(), y.nrows(), (REAL)0,
+      m, n, k, alpha, x.data_ptr(), mx, y.data_ptr(), my, (REAL)0,
       ret.data_ptr(), m);
     gpublas::err::check_ret(check, "gemm");
-    
-    return ret;
   }
   
   /// \overload
