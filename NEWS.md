@@ -1,5 +1,25 @@
 # NEWS
 
+## Release 0.3-1 (//):
+
+
+New:
+  * Added linalg::dot()
+  * Added get_device_count() and get_device_num()
+
+API Changes:
+  * linalg::matmult() can now accept mixed matrix/vector arguments.
+
+Bug Fixes:
+  * Changed gpumat crossprod() and tcrossprod() to use Xgemm() instead of
+    Xsyrk() for better run-time performance.
+
+Documentation:
+  * Fixed card.synch() documentation.
+
+
+
+
 ## Release 0.3-0 (6/20/2020):
 
 New:
