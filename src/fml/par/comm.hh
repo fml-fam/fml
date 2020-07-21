@@ -62,14 +62,20 @@ namespace fml
       MPI_Comm get_comm() const {return _comm;};
       /// Calling process rank (0-based index) in the MPI communicator.
       int rank() const {return _rank;};
-      /// Total number of ranks in the MPI communicator.
+      /// Total number of ranks in the MPI communicator. The same across all ranks.
       int size() const {return _size;};
+      /// Calling process rank (0-based index) in within the node.
+      int localrank() const {return _localrank;};
+      /// Total number of ranks within the node. Can vary across nodes.
+      int localsize() const {return _localsize;};
       ///@}
     
     protected:
       MPI_Comm _comm;
       int _rank;
       int _size;
+      int _localrank;
+      int _localsize;
     
     private:
       void init();
@@ -423,8 +429,16 @@ inline void fml::comm::set_metadata()
   
   ret = MPI_Comm_rank(_comm, &_rank);
   check_ret(ret);
-  
   ret = MPI_Comm_size(_comm, &_size);
+  check_ret(ret);
+  
+  MPI_Comm localcomm;
+  ret = MPI_Comm_split_type(_comm, MPI_COMM_TYPE_SHARED, 0, MPI_INFO_NULL, &localcomm);
+  check_ret(ret);
+  
+  ret = MPI_Comm_rank(localcomm, &_localrank);
+  check_ret(ret);
+  ret = MPI_Comm_size(localcomm, &_localsize);
   check_ret(ret);
 }
 
