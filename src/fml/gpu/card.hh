@@ -15,6 +15,21 @@
 
 namespace fml
 {
+  /// Return number of GPU devices.
+  inline int get_device_count()
+  {
+    int ngpus;
+    auto ret = fml::gpuprims::get_device_count(&ngpus);
+    if (ret != GPU_SUCCESS)
+    {
+      std::string s = fml::gpuprims::gpu_error_string(ret);
+      throw std::runtime_error(s);
+    }
+    
+    return ngpus;
+  }
+  
+  
   /**
     @brief GPU data and methods.
     
