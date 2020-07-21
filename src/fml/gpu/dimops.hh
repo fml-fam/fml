@@ -136,13 +136,11 @@ namespace dimops
     const len_t n = x.ncols();
     
     s.resize(m);
-    s.fill_zero();
-    gpumat<REAL> s_mat(s.get_card(), s.data_ptr(), m, 1, false);
     
-    gpumat<REAL> ones(s.get_card(), n, 1);
+    gpuvec<REAL> ones(s.get_card(), n);
     ones.fill_val(1);
     
-    linalg::matmult(false, false, (REAL) 1.0, x, ones, s_mat);
+    linalg::matmult(false, false, (REAL) 1.0, x, ones, s);
   }
   
   
@@ -196,13 +194,11 @@ namespace dimops
     const len_t n = x.ncols();
     
     s.resize(n);
-    s.fill_zero();
-    gpumat<REAL> s_mat(s.get_card(), s.data_ptr(), 1, n, false);
     
-    gpumat<REAL> ones(s.get_card(), 1, m);
+    gpuvec<REAL> ones(s.get_card(), m);
     ones.fill_val(1);
     
-    linalg::matmult(false, false, (REAL) 1.0, ones, x, s_mat);
+    linalg::matmult(true, false, (REAL) 1.0, ones, x, s);
   }
   
   
