@@ -23,6 +23,7 @@ namespace fml
     using parmat<cpumat<REAL>, cpuvec<REAL>, REAL>::parmat;
     
     public:
+      parmat_cpu(comm &mpi_comm);
       parmat_cpu(comm &mpi_comm, const len_global_t nrows, const len_t ncols);
       
       void print(uint8_t ndigits=4, bool add_final_blank=true);
@@ -34,6 +35,16 @@ namespace fml
       void fill_eye();
       void fill_diag(const cpuvec<REAL> &d);
   };
+}
+
+
+
+template <typename REAL>
+fml::parmat_cpu<REAL>::parmat_cpu(fml::comm &mpi_comm)
+{
+  this->r = mpi_comm;
+  this->m_global = 0;
+  this->nb4 = 0;
 }
 
 
