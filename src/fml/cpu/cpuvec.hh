@@ -49,6 +49,8 @@ namespace fml
       void fill_val(const T v);
       void fill_linspace(const T start, const T stop);
       
+      void subset(const len_t start, const len_t stop, const bool interior=true);
+      
       void scale(const T s);
       void rev();
       
@@ -366,6 +368,35 @@ inline void fml::cpuvec<int>::fill_linspace(const int start, const int stop)
     for (len_t i=0; i<this->_size; i++)
       this->data[i] = (int) roundf(v*((float) i) + start);
   }
+}
+
+
+
+template <typename REAL>
+void fml::cpuvec<REAL>::subset(const len_t start, const len_t stop, const bool interior)
+{
+  len_t size_new = interior ? stop-start : this->_size - (stop-start);
+  size_t len = size_new * sizeof(REAL);
+  REAL *data_new = (REAL*) malloc(len);
+  if (data_new == NULL)
+    throw std::bad_alloc();
+  
+  if (interior)
+    std::memcpy(data_new, this->data + start, len);
+  else
+  {
+    len_t n = std::max(start-1, 0);
+    std::memcpy(data_new, this->data, n*sizeof(REAL));
+    if (stop < this->_size)
+    {
+      n = this->_size-stop;
+      std::memcpy(data_new, this->data + stop, n*sizeof(REAL));
+    }
+  }
+  
+  std::free(this->data);
+  this->data = data_new;
+  this->_size = size_new;
 }
 
 
