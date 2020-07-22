@@ -81,6 +81,40 @@ namespace fml
       
       return __longlong_as_double(old);
     }
+    
+    
+    
+    static __device__ float atomicMul(float *address, float val) 
+    {
+      int *address_int = (int*) address;
+      int old = *address_int;
+      int assumed;
+      
+      do
+      {
+        assumed = old;
+        old = atomicCAS(address_int, assumed,
+          __float_as_int(val * __float_as_int(assumed));
+      } while (old != assumed);
+      
+      return __int_as_float(old);
+    }
+    
+    static __device__ double atomicMul(double *address, double val) 
+    {
+      unsigned long long *address_int = (unsigned long long*) address;
+      unsigned long long old = *address_int;
+      unsigned long long assumed;
+      
+      do
+      {
+        assumed = old;
+        old = atomicCAS(address_int, assumed,
+          __double_as_longlong(val * __double_as_longlong(assumed));
+      } while (old != assumed);
+      
+      return __int_as_float(old);
+    }
   }
 }
 
