@@ -9,6 +9,7 @@
 
 #include "internals/parmat.hh"
 #include "cpu/parmat.hh"
+#include "cpu/copy.hh"
 #include "cpu/linalg.hh"
 
 
