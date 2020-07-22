@@ -27,6 +27,8 @@ namespace fml
       parmat(comm &mpi_comm, MAT &data_);
       parmat(parmat<MAT, VEC, REAL> &&x);
       
+      void resize(len_global_t nrows, len_t ncols);
+      
       void print(uint8_t ndigits=4, bool add_final_blank=true);
       void info();
       
@@ -103,6 +105,18 @@ fml::parmat<MAT, VEC, REAL>::parmat(fml::parmat<MAT, VEC, REAL> &&x)
   this->m_global = x.nrows();
   this->r = x.get_comm();
   this->nb4 = x.nrows_before();
+}
+
+
+
+template <class MAT, class VEC, typename REAL>
+void fml::parmat<MAT, VEC, REAL>::resize(len_global_t nrows, len_t ncols)
+{
+  this->m_global = nrows;
+  len_t m_local = this->get_local_dim();
+  
+  this->data.resize(m_local, ncols);
+  num_preceding_rows();
 }
 
 
