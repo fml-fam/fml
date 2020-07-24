@@ -16,6 +16,11 @@ namespace fml
   namespace gpuprims
   {
     // device management
+    inline cudaError_t get_device_count(int *ngpus)
+    {
+      return cudaGetDeviceCount(ngpus);
+    }
+    
     inline cudaError_t gpu_set_device(int device)
     {
       return cudaSetDevice(device);
