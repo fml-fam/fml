@@ -39,14 +39,18 @@ namespace linalg
   REAL dot(const gpuvec<REAL> &x, const gpuvec<REAL> &y)
   {
     err::check_card(x, y);
-    const len_t n = std::min(x.size(), y.size());
+    const len_t len = std::min(x.size(), y.size());
+    
+    len_t m, n, k;
+    fml::linalgutils::matmult_params(true, false, len, 1, len, 1, &m, &n, &k);
     
     REAL d;
     gpuscalar<REAL> d_device(x.get_card());
-    gpublas_status_t check = fml::gpublas::dot(x.get_card()->blas_handle(),
-      n, x.data_ptr(), 1, y.data_ptr(), 1, d_device.data_ptr());
+    gpublas_status_t check = gpublas::gemm(x.get_card()->blas_handle(),
+      GPUBLAS_OP_T, GPUBLAS_OP_N, m, n, k, (REAL)1, x.data_ptr(), len,
+      y.data_ptr(), len, (REAL)0, d_device.data_ptr(), 1);
+    gpublas::err::check_ret(check, "gemm");
     
-    gpublas::err::check_ret(check, "dot");
     d_device.get_val(&d);
     
     return d;
