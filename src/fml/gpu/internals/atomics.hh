@@ -94,7 +94,7 @@ namespace fml
       {
         assumed = old;
         old = atomicCAS(address_int, assumed,
-          __float_as_int(val * __float_as_int(assumed));
+          __float_as_int(val * __float_as_int(assumed)));
       } while (old != assumed);
       
       return __int_as_float(old);
@@ -110,7 +110,7 @@ namespace fml
       {
         assumed = old;
         old = atomicCAS(address_int, assumed,
-          __double_as_longlong(val * __double_as_longlong(assumed));
+          __double_as_longlong(val * __double_as_longlong(assumed)));
       } while (old != assumed);
       
       return __int_as_float(old);
