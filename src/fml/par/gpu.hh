@@ -9,6 +9,7 @@
 
 #include "internals/parmat.hh"
 #include "gpu/parmat.hh"
+#include "cpu/copy.hh"
 
 
 namespace fml
