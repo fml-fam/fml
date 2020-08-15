@@ -29,8 +29,8 @@ namespace fml
   inline int get_device_num(const comm &c)
   {
     int ngpus = get_device_count();
-    if (c.localsize() > ngpus)
-      throw std::runtime_error("parmat_gpu can not be used with more MPI ranks than GPUs per node");
+    // if (c.localsize() > ngpus)
+    //   throw std::runtime_error("parmat_gpu can not be used with more MPI ranks than GPUs per node");
     
     return c.rank() % ngpus;
   }
