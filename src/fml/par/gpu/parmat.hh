@@ -114,7 +114,7 @@ void fml::parmat_gpu<REAL>::fill_linspace(const REAL start, const REAL stop)
     // TODO
     // kernelfuns::kernel_fill_linspace<<<dim_grid, dim_block>>>(start, stop, this->m, this->n, this->data);
     
-    this->c->check();
+    this->data.c->check();
   }
 }
 
