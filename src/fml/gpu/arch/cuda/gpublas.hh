@@ -54,6 +54,34 @@ namespace gpublas
   
   
   
+  inline cublasStatus_t Iamax(cublasHandle_t handle, int n, const float *x,
+    int incx, int *result)
+  {
+    return cublasIsamax(handle, n, x, incx, result);
+  }
+  
+  inline cublasStatus_t Iamax(cublasHandle_t handle, int n, const double *x,
+    int incx, int *result)
+  {
+    return cublasIdamax(handle, n, x, incx, result);
+  }
+  
+  
+  
+  inline cublasStatus_t Iamin(cublasHandle_t handle, int n, const float *x,
+    int incx, int *result)
+  {
+    return cublasIsamin(handle, n, x, incx, result);
+  }
+  
+  inline cublasStatus_t Iamin(cublasHandle_t handle, int n, const double *x,
+    int incx, int *result)
+  {
+    return cublasIdamin(handle, n, x, incx, result);
+  }
+  
+  
+  
   inline cublasStatus_t dot(cublasHandle_t handle, int n, const float *x,
     int incx, const float *y, int incy, float *result)
   {
