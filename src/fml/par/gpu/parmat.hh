@@ -22,7 +22,7 @@ namespace fml
     using parmat<gpumat<REAL>, gpuvec<REAL>, REAL>::parmat;
     
     public:
-      parmat_gpu(comm &mpi_comm, card_sp_t gpu_card,
+      parmat_gpu(comm mpi_comm, card_sp_t gpu_card,
         const len_global_t nrows, const len_t ncols);
       
       void print(uint8_t ndigits=4, bool add_final_blank=true);
@@ -36,7 +36,7 @@ namespace fml
 
 
 template <typename REAL>
-fml::parmat_gpu<REAL>::parmat_gpu(fml::comm &mpi_comm, fml::card_sp_t gpu_card,
+fml::parmat_gpu<REAL>::parmat_gpu(fml::comm mpi_comm, fml::card_sp_t gpu_card,
   const len_global_t nrows, const len_t ncols)
 {
   this->r = mpi_comm;

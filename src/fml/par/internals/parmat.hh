@@ -24,7 +24,7 @@ namespace fml
   {
     public:
       parmat(){};
-      parmat(comm &mpi_comm, MAT &data_);
+      parmat(comm mpi_comm, MAT &data_);
       parmat(parmat<MAT, VEC, REAL> &&x);
       
       void resize(len_global_t nrows, len_t ncols);
@@ -86,7 +86,7 @@ namespace fml
 
 
 template <class MAT, class VEC, typename REAL>
-fml::parmat<MAT, VEC, REAL>::parmat(fml::comm &mpi_comm, MAT &data_)
+fml::parmat<MAT, VEC, REAL>::parmat(fml::comm mpi_comm, MAT &data_)
 {
   r = mpi_comm;
   data = data_;
