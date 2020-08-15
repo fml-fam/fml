@@ -174,6 +174,20 @@ namespace fml
     
     
     
+    inline void orgqr(const int m, const int n, const int k, float *A,
+      const int lda, const float *tau, float *work, const int ldwork, int *info)
+    {
+      sorgqr_(&m, &n, &k, A, &lda, tau, work, &ldwork, info);
+    }
+    
+    inline void orgqr(const int m, const int n, const int k, double *A,
+      const int lda, const double *tau, double *work, const int ldwork, int *info)
+    {
+      dorgqr_(&m, &n, &k, A, &lda, tau, work, &ldwork, info);
+    }
+    
+    
+    
     inline void gelqf(const int m, const int n, float *x, const int lda,
       float *tau, float *work, const int lwork, int *info)
     {

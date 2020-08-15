@@ -445,11 +445,15 @@ namespace linalg
       work.resize(lwork);
     
     Q.resize(m, minmn);
-    Q.fill_eye();
+    // Q.fill_eye();
     
-    fml::lapack::ormqr('L', 'N', m, minmn, m, QR.data_ptr(), m, qraux.data_ptr(),
-      Q.data_ptr(), m, work.data_ptr(), lwork, &info);
+    // fml::lapack::ormqr('L', 'N', m, minmn, m, QR.data_ptr(), m, qraux.data_ptr(),
+    //   Q.data_ptr(), m, work.data_ptr(), lwork, &info);
+    // fml::linalgutils::check_info(info, "ormqr");
+    fml::lapack::orgqr(m, minmn, minmn, QR.data_ptr(), m, qraux.data_ptr(),
+      work.data_ptr(), lwork, &info);
     fml::linalgutils::check_info(info, "ormqr");
+    copy::cpu2cpu(QR, Q);
   }
   
   /**
