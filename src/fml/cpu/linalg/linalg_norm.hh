@@ -17,12 +17,12 @@
 #include "../cpuvec.hh"
 
 #include "lapack.hh"
-#include "linalg_factorizations.hh"
+#include "linalg_qr.hh"
+#include "linalg_svd.hh"
 
 
 namespace fml
 {
-/// @brief Linear algebra functions.
 namespace linalg
 {
   /**

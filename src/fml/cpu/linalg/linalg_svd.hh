@@ -13,20 +13,100 @@
 #include "../../_internals/linalgutils.hh"
 #include "../../_internals/omp.hh"
 
-#include "../internals/cpu_utils.hh"
-
 #include "../copy.hh"
 #include "../cpumat.hh"
 #include "../cpuvec.hh"
 
-#include "linalg_factorizations.hh"
-
 
 namespace fml
 {
-/// @brief Linear algebra functions.
 namespace linalg
 {
+  namespace
+  {
+    template <typename REAL>
+    int svd_internals(const int nu, const int nv, cpumat<REAL> &x, cpuvec<REAL> &s,
+      cpumat<REAL> &u, cpumat<REAL> &vt)
+    {
+      int info = 0;
+      char jobz;
+      int ldvt;
+      
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      const len_t minmn = std::min(m, n);
+      
+      s.resize(minmn);
+      
+      if (nu == 0 && nv == 0)
+      {
+        jobz = 'N';
+        ldvt = 1; // value is irrelevant, but must exist!
+      }
+      else if (nu <= minmn && nv <= minmn)
+      {
+        jobz = 'S';
+        ldvt = minmn;
+        
+        u.resize(m, minmn);
+        vt.resize(minmn, n);
+      }
+      else
+      {
+        jobz = 'A';
+        ldvt = n;
+      }
+      
+      cpuvec<int> iwork(8*minmn);
+      
+      REAL tmp;
+      fml::lapack::gesdd(jobz, m, n, x.data_ptr(), m, s.data_ptr(), u.data_ptr(), m, vt.data_ptr(), ldvt, &tmp, -1, iwork.data_ptr(), &info);
+      int lwork = (int) tmp;
+      cpuvec<REAL> work(lwork);
+      
+      fml::lapack::gesdd(jobz, m, n, x.data_ptr(), m, s.data_ptr(), u.data_ptr(), m, vt.data_ptr(), ldvt, work.data_ptr(), lwork, iwork.data_ptr(), &info);
+      
+      return info;
+    }
+  }
+  
+  /**
+    @brief Computes the singular value decomposition.
+    
+    @param[inout] x Input data matrix. Values are overwritten.
+    @param[out] s Vector of singular values.
+    @param[out] u Matrix of left singular vectors.
+    @param[out] vt Matrix of (transposed) right singular vectors.
+    
+    @impl Uses the LAPACK function `Xgesvd()`.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void svd(cpumat<REAL> &x, cpuvec<REAL> &s)
+  {
+    cpumat<REAL> ignored;
+    int info = svd_internals(0, 0, x, s, ignored, ignored);
+    fml::linalgutils::check_info(info, "gesdd");
+  }
+  
+  /// \overload
+  template <typename REAL>
+  void svd(cpumat<REAL> &x, cpuvec<REAL> &s, cpumat<REAL> &u, cpumat<REAL> &vt)
+  {
+    int info = svd_internals(1, 1, x, s, u, vt);
+    fml::linalgutils::check_info(info, "gesdd");
+  }
+  
+  
+  
   namespace
   {
     template <typename REAL>
