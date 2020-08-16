@@ -207,6 +207,14 @@ extern void dtrcon_(const char *norm, const char *uplo, const char *diag,
   double *work, double *work2, int *info);
 
 
+
+extern void strtri_(const char *uplo, const char *diag, const int *n,
+  float *A, const int *lda, int *info);
+
+extern void dtrtri_(const char *uplo, const char *diag, const int *n,
+  double *A, const int *lda, int *info);
+
+
 #ifdef __cplusplus
 }
 #endif

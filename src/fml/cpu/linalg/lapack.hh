@@ -277,6 +277,20 @@ namespace fml
     {
       dtrcon_(&norm, &uplo, &diag, &n, A, &lda, rcond, work, work2, info);
     }
+    
+    
+    
+    inline void trtri(const char uplo, const char diag, const int n,
+      float *A, const int lda, int *info)
+    {
+      strtri_(&uplo, &diag, &n, A, &lda, info);
+    }
+    
+    inline void trtri(const char uplo, const char diag, const int n,
+      double *A, const int lda, int *info)
+    {
+      dtrtri_(&uplo, &diag, &n, A, &lda, info);
+    }
   }
 }
 

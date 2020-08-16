@@ -286,6 +286,37 @@ namespace linalg
   
   
   
+  /**
+    @brief Compute the matrix inverse of a triangular matrix.
+    
+    @details The input is replaced by its inverse.
+    
+    @param[in] upper Should the upper triangle be used? Otherwise the lower
+    triangle will be used.
+    @param[in] unit_diag Is the input matrix unit diagonal?
+    @param[inout] x Input data matrix. Should be square.
+    
+    @impl Uses the LAPACK functions `Xtrtri()`.
+    
+    @except If the matrix is non-square, a `runtime_error` exception is thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void trinv(const bool upper, const bool unit_diag, cpumat<REAL> &x)
+  {
+    if (!x.is_square())
+      throw std::runtime_error("'x' must be a square matrix");
+    
+    int info;
+    char uplo = (upper ? 'U' : 'L');
+    char diag = (unit_diag ? 'U' : 'N');
+    fml::lapack::trtri(uplo, diag, x.nrows(), x.data_ptr(), x.nrows(), &info);
+    fml::linalgutils::check_info(info, "trtri");
+  }
+  
+  
+  
   namespace
   {
     template <typename REAL>
