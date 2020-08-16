@@ -237,6 +237,14 @@ extern void pdtrcon_(const char *norm, const char *uplo, const char *diag,
   const int *liwork, int *info);
 
 
+
+extern void pstrtri_(const char *uplo, const char *diag, const int *n,
+  float *A, const int *ia, const int *ja, const int *desca, int *info);
+
+extern void pdtrtri_(const char *uplo, const char *diag, const int *n,
+  double *A, const int *ia, const int *ja, const int *desca, int *info);
+
+
 #ifdef __cplusplus
 }
 #endif

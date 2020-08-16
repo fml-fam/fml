@@ -283,6 +283,22 @@ namespace fml
       pdtrcon_(&norm, &uplo, &diag, &n, A, &ij, &ij, desca, rcond, work, &lwork,
         iwork, &liwork, info);
     }
+    
+    
+    
+    inline void trtri(const char uplo, const char diag, const int n, float *A,
+      const int *desca, int *info)
+    {
+      int ij = 1;
+      pstrtri_(&uplo, &diag, &n, A, &ij, &ij, desca, info);
+    }
+    
+    inline void trtri(const char uplo, const char diag, const int n, double *A,
+      const int *desca, int *info)
+    {
+      int ij = 1;
+      pdtrtri_(&uplo, &diag, &n, A, &ij, &ij, desca, info);
+    }
   }
 }
 
