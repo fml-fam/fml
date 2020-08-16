@@ -100,7 +100,7 @@ namespace linalg
     @param[out] Q The Q matrix.
     @param[out] work Workspace array. Will be resized as necessary.
     
-    @impl Uses the cuSOLVER function `cusolverDnXormqr()`.
+    @impl Uses the cuSOLVER function `cusolverDnXorgqr()`.
     
     @allocs If the any outputs are inappropriately sized, they will
     automatically be re-allocated. Additionally, some temporary work storage

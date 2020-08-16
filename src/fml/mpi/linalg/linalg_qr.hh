@@ -112,7 +112,7 @@ namespace linalg
     @param[out] Q The Q matrix.
     @param[out] work Workspace array. Will be resized as necessary.
     
-    @impl Uses the ScaLAPACK function `pXormqr()`.
+    @impl Uses the ScaLAPACK function `pXormgr()`.
     
     @allocs If the any outputs are inappropriately sized, they will
     automatically be re-allocated. Additionally, some temporary work storage
@@ -293,7 +293,7 @@ namespace linalg
     @param[out] Q The Q matrix.
     @param[out] work Workspace array. Will be resized as necessary.
     
-    @impl Uses the ScaLAPACK function `pXormlq()`.
+    @impl Uses the ScaLAPACK function `pXorglq()`.
     
     @allocs If the any outputs are inappropriately sized, they will
     automatically be re-allocated. Additionally, some temporary work storage

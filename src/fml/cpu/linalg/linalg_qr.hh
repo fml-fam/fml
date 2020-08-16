@@ -105,7 +105,7 @@ namespace linalg
     @param[out] Q The Q matrix.
     @param[out] work Workspace array. Will be resized as necessary.
     
-    @impl Uses the LAPACK function `Xormqr()`.
+    @impl Uses the LAPACK function `Xorgqr()`.
     
     @allocs If the any outputs are inappropriately sized, they will
     automatically be re-allocated. Additionally, some temporary work storage
@@ -264,7 +264,7 @@ namespace linalg
     @param[out] Q The Q matrix.
     @param[out] work Workspace array. Will be resized as necessary.
     
-    @impl Uses the LAPACK function `Xormlq()`.
+    @impl Uses the LAPACK function `Xorglq()`.
     
     @allocs If the any outputs are inappropriately sized, they will
     automatically be re-allocated. Additionally, some temporary work storage
