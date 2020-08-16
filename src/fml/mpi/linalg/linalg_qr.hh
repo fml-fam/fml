@@ -137,21 +137,23 @@ namespace linalg
     const int *descQR = QR.desc_ptr();
     
     Q.resize(m, minmn);
-    Q.fill_eye();
     const int *descQ = Q.desc_ptr();
     
     int info = 0;
     REAL tmp;
-    fml::scalapack::ormqr('L', 'N', m, minmn, minmn, NULL, descQR,
-      NULL, NULL, descQ, &tmp, -1, &info);
+    fml::scalapack::orgqr(m, minmn, minmn, NULL, descQR, NULL,
+      &tmp, -1, &info);
     
     int lwork = (int) tmp;
     if (lwork > work.size())
       work.resize(lwork);
     
-    fml::scalapack::ormqr('L', 'N', m, minmn, minmn, QR.data_ptr(), descQR,
-      qraux.data_ptr(), Q.data_ptr(), descQ, work.data_ptr(), lwork, &info);
-    fml::linalgutils::check_info(info, "ormqr");
+    fml::scalapack::lacpy('A', m, minmn, QR.data_ptr(), descQR, Q.data_ptr(),
+      descQ);
+    
+    fml::scalapack::orgqr(m, minmn, minmn, Q.data_ptr(), descQR,
+      qraux.data_ptr(), work.data_ptr(), lwork, &info);
+    fml::linalgutils::check_info(info, "orgqr");
   }
   
   /**
@@ -316,21 +318,23 @@ namespace linalg
     const int *descLQ = LQ.desc_ptr();
     
     Q.resize(minmn, n);
-    Q.fill_eye();
     const int *descQ = Q.desc_ptr();
     
     int info = 0;
     REAL tmp;
-    fml::scalapack::ormlq('R', 'N', minmn, n, minmn, NULL, descLQ,
-      NULL, NULL, descQ, &tmp, -1, &info);
+    fml::scalapack::orglq(minmn, n, minmn, NULL, descLQ, NULL,
+      &tmp, -1, &info);
     
     int lwork = (int) tmp;
     if (lwork > work.size())
       work.resize(lwork);
     
-    fml::scalapack::ormlq('R', 'N', minmn, n, minmn, LQ.data_ptr(), descLQ,
-      lqaux.data_ptr(), Q.data_ptr(), descQ, work.data_ptr(), lwork, &info);
-    fml::linalgutils::check_info(info, "ormlq");
+    fml::scalapack::lacpy('A', minmn, n, LQ.data_ptr(), descLQ, Q.data_ptr(),
+      descQ);
+    
+    fml::scalapack::orglq(minmn, n, minmn, Q.data_ptr(), descQ,
+      lqaux.data_ptr(), work.data_ptr(), lwork, &info);
+    fml::linalgutils::check_info(info, "orglq");
   }
 }
 }

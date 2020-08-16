@@ -174,6 +174,38 @@ namespace fml
     
     
     
+    inline void orgqr(const int m, const int n, const int k, float *a,
+      const int *desca, float *tau, float *work, const int lwork, int *info)
+    {
+      int ij = 1;
+      psorgqr_(&m, &n, &k, a, &ij, &ij, desca, tau, work, &lwork, info);
+    }
+    
+    inline void orgqr(const int m, const int n, const int k, double *a,
+      const int *desca, double *tau, double *work, const int lwork, int *info)
+    {
+      int ij = 1;
+      pdorgqr_(&m, &n, &k, a, &ij, &ij, desca, tau, work, &lwork, info);
+    }
+    
+    
+    
+    inline void orglq(const int m, const int n, const int k, float *a,
+      const int *desca, float *tau, float *work, const int lwork, int *info)
+    {
+      int ij = 1;
+      psorglq_(&m, &n, &k, a, &ij, &ij, desca, tau, work, &lwork, info);
+    }
+    
+    inline void orglq(const int m, const int n, const int k, double *a,
+      const int *desca, double *tau, double *work, const int lwork, int *info)
+    {
+      int ij = 1;
+      pdorglq_(&m, &n, &k, a, &ij, &ij, desca, tau, work, &lwork, info);
+    }
+    
+    
+    
     inline void gelqf(const int m, const int n, float *a, const int *desca,
       float *tau, float *work, const int lwork, int *info)
     {

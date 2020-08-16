@@ -172,6 +172,26 @@ extern void pdormqr_(const char *side, const char *trans, const int *m,
 
 
 
+extern void psorgqr_(const int *m, const int *n, const int *k,
+  float *restrict a, const int *ia, const int *ja, const int *desca,
+  float *restrict tau, float *restrict work, const int *lwork, int *info);
+
+extern void pdorgqr_(const int *m, const int *n, const int *k,
+  double *restrict a, const int *ia, const int *ja, const int *desca,
+  double *restrict tau, double *restrict work, const int *lwork, int *info);
+
+
+
+extern void psorglq_(const int *m, const int *n, const int *k,
+  float *restrict a, const int *ia, const int *ja, const int *desca,
+  float *restrict tau, float *restrict work, const int *lwork, int *info);
+
+extern void pdorglq_(const int *m, const int *n, const int *k,
+  double *restrict a, const int *ia, const int *ja, const int *desca,
+  double *restrict tau, double *restrict work, const int *lwork, int *info);
+
+
+
 extern void psgelqf_(const int *m, const int *n, float *restrict a,
   const int *ia, const int *ja, const int *desca, float *restrict tau,
   float *restrict work, const int *lwork, int *info);
