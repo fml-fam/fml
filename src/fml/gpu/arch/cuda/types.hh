@@ -26,6 +26,7 @@ typedef cublasStatus_t gpublas_status_t;
 typedef cublasHandle_t gpublas_handle_t;
 typedef cublasOperation_t gpublas_operation_t;
 typedef cublasFillMode_t gpublas_fillmode_t;
+typedef cublasDiagType_t gpublas_diagtype_t;
 #define GPUBLAS_OP_T CUBLAS_OP_T
 #define GPUBLAS_OP_N CUBLAS_OP_N
 #define GPUBLAS_FILL_L CUBLAS_FILL_MODE_LOWER

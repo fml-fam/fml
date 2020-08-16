@@ -348,6 +348,48 @@ namespace linalg
   
   
   
+  /**
+    @brief Compute the matrix inverse of a triangular matrix.
+    
+    @details The input is replaced by its inverse.
+    
+    @param[in] upper Should the upper triangle be used? Otherwise the lower
+    triangle will be used.
+    @param[in] unit_diag Is the input matrix unit diagonal?
+    @param[inout] x Input data matrix. Should be square.
+    
+    @impl Uses the cuBLAS functions `cublasXtrsm()`.
+    
+    @allocs The inverse is computed in a copy.
+    
+    @except If the matrix is non-square, a `runtime_error` exception is thrown.
+    If an allocation fails, a `bad_alloc` exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void trinv(const bool upper, const bool unit_diag, gpumat<REAL> &x)
+  {
+    if (!x.is_square())
+      throw std::runtime_error("'x' must be a square matrix");
+    
+    const len_t n = x.nrows();
+    gpumat<REAL> inv(x.get_card(), n, n);
+    inv.fill_eye();
+    
+    gpublas_fillmode_t uplo = (upper ? GPUBLAS_FILL_U : GPUBLAS_FILL_L);
+    gpublas_diagtype_t diag = (unit_diag ? GPUBLAS_DIAG_UNIT : GPUBLAS_DIAG_NON_UNIT);
+    
+    gpublas_status_t check =  gpublas::trsm(x.get_card()->blas_handle(),
+      GPUBLAS_SIDE_LEFT, uplo, GPUBLAS_OP_N, diag, n, n, x.data_ptr(), n,
+      inv.data_ptr(), n);
+      
+    gpublas::err::check_ret(check, "trsm");
+    copy::gpu2gpu(inv, x);
+  }
+  
+  
+  
   namespace
   {
     template <typename REAL>
