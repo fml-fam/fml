@@ -138,7 +138,7 @@ namespace linalg
     
     fml::lapack::orgqr(m, minmn, minmn, Q.data_ptr(), m, qraux.data_ptr(),
       work.data_ptr(), lwork, &info);
-    fml::linalgutils::check_info(info, "ormqr");
+    fml::linalgutils::check_info(info, "orgqr");
   }
   
   /**
@@ -285,19 +285,19 @@ namespace linalg
     
     int info = 0;
     REAL tmp;
-    fml::lapack::ormlq('R', 'N', minmn, n, minmn, LQ.data_ptr(), m, NULL,
-      NULL, minmn, &tmp, -1, &info);
+    fml::lapack::orglq(minmn, n, minmn, LQ.data_ptr(), m, NULL,
+      &tmp, -1, &info);
     
     int lwork = (int) tmp;
     if (lwork > work.size())
       work.resize(lwork);
     
     Q.resize(minmn, n);
-    Q.fill_eye();
+    fml::lapack::lacpy('A', minmn, n, LQ.data_ptr(), m, Q.data_ptr(), minmn);
     
-    fml::lapack::ormlq('R', 'N', minmn, n, minmn, LQ.data_ptr(), m, lqaux.data_ptr(),
-      Q.data_ptr(), minmn, work.data_ptr(), lwork, &info);
-    fml::linalgutils::check_info(info, "ormlq");
+    fml::lapack::orglq(minmn, n, minmn, Q.data_ptr(), minmn, lqaux.data_ptr(),
+      work.data_ptr(), lwork, &info);
+    fml::linalgutils::check_info(info, "orglq");
   }
 }
 }

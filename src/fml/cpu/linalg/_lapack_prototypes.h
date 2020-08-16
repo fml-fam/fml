@@ -148,6 +148,14 @@ extern void dorgqr_(const int *m, const int *n, const int *k, double *A,
 
 
 
+extern void sorglq_(const int *m, const int *n, const int *k, float *A,
+  const int *lda, const float *tau, float *work, const int *ldwork, int *info);
+
+extern void dorglq_(const int *m, const int *n, const int *k, double *A,
+  const int *lda, const double *tau, double *work, const int *ldwork, int *info);
+
+
+
 extern void sgelqf_(const int *const m, const int *const n,
   float *const restrict A, const int *const lda, float *const restrict tau,
   float *const restrict work, const int *const restrict lwork,
