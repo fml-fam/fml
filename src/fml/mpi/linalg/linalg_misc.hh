@@ -13,7 +13,8 @@
 
 #include "../mpimat.hh"
 
-#include "linalg_factorizations.hh"
+#include "linalg_qr.hh"
+#include "linalg_svd.hh"
 
 
 namespace fml

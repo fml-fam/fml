@@ -18,7 +18,7 @@
 #include "../copy.hh"
 #include "../mpimat.hh"
 
-#include "linalg_factorizations.hh"
+#include "linalg_qr.hh"
 
 
 namespace fml
@@ -27,6 +27,90 @@ namespace linalg
 {
   namespace
   {
+    namespace
+    {
+      template <typename REAL>
+      int svd_internals(const int nu, const int nv, mpimat<REAL> &x, cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
+      {
+        int info = 0;
+        char jobu, jobvt;
+        
+        const len_t m = x.nrows();
+        const len_t n = x.ncols();
+        const len_t minmn = std::min(m, n);
+        
+        s.resize(minmn);
+        
+        if (nu == 0 && nv == 0)
+        {
+          jobu = 'N';
+          jobvt = 'N';
+        }
+        else // if (nu <= minmn && nv <= minmn)
+        {
+          jobu = 'V';
+          jobvt = 'V';
+          
+          const int mb = x.bf_rows();
+          const int nb = x.bf_cols();
+          
+          u.resize(m, minmn, mb, nb);
+          vt.resize(minmn, n, mb, nb);
+        }
+        
+        REAL tmp;
+        fml::scalapack::gesvd(jobu, jobvt, m, n, x.data_ptr(), x.desc_ptr(), s.data_ptr(), u.data_ptr(), u.desc_ptr(), vt.data_ptr(), vt.desc_ptr(), &tmp, -1, &info);
+        int lwork = (int) tmp;
+        cpuvec<REAL> work(lwork);
+        
+        fml::scalapack::gesvd(jobu, jobvt, m, n, x.data_ptr(), x.desc_ptr(), s.data_ptr(), u.data_ptr(), u.desc_ptr(), vt.data_ptr(), vt.desc_ptr(), work.data_ptr(), lwork, &info);
+        
+        return info;
+      }
+    }
+    
+    /**
+      @brief Computes the singular value decomposition.
+      
+      @param[inout] x Input data matrix. Values are overwritten.
+      @param[out] s Vector of singular values.
+      @param[out] u Matrix of left singular vectors.
+      @param[out] vt Matrix of (transposed) right singnular vectors.
+      
+      @impl Uses the ScaLAPACK function `pXgesvd()`.
+      
+      @allocs If the any outputs are inappropriately sized, they will
+      automatically be re-allocated. Additionally, some temporary work storage
+      is needed.
+      
+      @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+      exception will be thrown.
+      
+      @comm The method will communicate across all processes in the BLACS grid.
+      
+      @tparam REAL should be 'float' or 'double'.
+     */
+    template <typename REAL>
+    void svd(mpimat<REAL> &x, cpuvec<REAL> &s)
+    {
+      mpimat<REAL> ignored(x.get_grid());
+      int info = svd_internals(0, 0, x, s, ignored, ignored);
+      fml::linalgutils::check_info(info, "gesvd");
+    }
+    
+    /// \overload
+    template <typename REAL>
+    void svd(mpimat<REAL> &x, cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
+    {
+      err::check_grid(x, u);
+      err::check_grid(x, vt);
+      
+      int info = svd_internals(1, 1, x, s, u, vt);
+      fml::linalgutils::check_info(info, "gesvd");
+    }
+    
+    
+    
     template <typename REAL>
     void tssvd(mpimat<REAL> &x, cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
     {
