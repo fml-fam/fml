@@ -20,7 +20,7 @@
 #include "../gpuvec.hh"
 
 #include "linalg_err.hh"
-#include "linalg_factorizations.hh"
+#include "linalg_lu.hh"
 
 
 namespace fml

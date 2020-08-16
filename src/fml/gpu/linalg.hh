@@ -8,9 +8,14 @@
 
 
 #include "linalg/linalg_blas.hh"
-#include "linalg/linalg_factorizations.hh"
+#include "linalg/linalg_chol.hh"
+#include "linalg/linalg_eigen.hh"
+#include "linalg/linalg_invert.hh"
+#include "linalg/linalg_lu.hh"
 #include "linalg/linalg_misc.hh"
 #include "linalg/linalg_norm.hh"
+#include "linalg/linalg_qr.hh"
+#include "linalg/linalg_solve.hh"
 #include "linalg/linalg_svd.hh"
 
 

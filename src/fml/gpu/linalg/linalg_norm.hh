@@ -18,6 +18,7 @@
 
 #include "../gpumat.hh"
 
+#include "linalg_qr.hh"
 #include "linalg_svd.hh"
 
 

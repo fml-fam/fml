@@ -21,13 +21,114 @@
 #include "../gpumat.hh"
 #include "../gpuvec.hh"
 
-#include "linalg_factorizations.hh"
-
 
 namespace fml
 {
 namespace linalg
 {
+  namespace
+  {
+    template <typename REAL>
+    int svd_internals(const int nu, const int nv, gpumat<REAL> &x, gpuvec<REAL> &s, gpumat<REAL> &u, gpumat<REAL> &vt)
+    {
+      auto c = x.get_card();
+      
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      const len_t minmn = std::min(m, n);
+      
+      s.resize(minmn);
+      
+      signed char jobu, jobvt;
+      if (nu == 0 && nv == 0)
+      {
+        jobu = 'N';
+        jobvt = 'N';
+      }
+      else //if (nu <= minmn && nv <= minmn)
+      {
+        jobu = 'S';
+        jobvt = 'S';
+        
+        u.resize(m, minmn);
+        vt.resize(minmn, n);
+      }
+      
+      int lwork;
+      gpulapack_status_t check = gpulapack::gesvd_buflen(c->lapack_handle(), m, n,
+        x.data_ptr(), &lwork);
+      gpulapack::err::check_ret(check, "gesvd_bufferSize");
+      
+      gpuvec<REAL> work(c, lwork);
+      gpuvec<REAL> rwork(c, minmn-1);
+      
+      int info = 0;
+      gpuscalar<int> info_device(c, info);
+      
+      check = gpulapack::gesvd(c->lapack_handle(), jobu, jobvt, m, n, x.data_ptr(),
+        m, s.data_ptr(), u.data_ptr(), m, vt.data_ptr(), minmn, work.data_ptr(),
+        lwork, rwork.data_ptr(), info_device.data_ptr());
+      
+      info_device.get_val(&info);
+      gpulapack::err::check_ret(check, "gesvd");
+      
+      return info;
+    }
+  }
+  
+  /**
+    @brief Computes the singular value decomposition.
+    
+    @param[inout] x Input data matrix. Values are overwritten.
+    @param[out] s Vector of singular values.
+    @param[out] u Matrix of left singular vectors.
+    @param[out] vt Matrix of (transposed) right singnular vectors.
+    
+    @impl Uses the cuSOLVER function `cusolverDnXgesvd()`. Since cuSOLVER only
+    supports the m>=n case, if m<n we operate on a transpose.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be '__half', 'float', or 'double'.
+   */
+  template <typename REAL>
+  void svd(gpumat<REAL> &x, gpuvec<REAL> &s)
+  {
+    err::check_card(x, s);
+    
+    gpumat<REAL> ignored(x.get_card());
+    int info = svd_internals(0, 0, x, s, ignored, ignored);
+    fml::linalgutils::check_info(info, "gesvd");
+  }
+  
+  /// \overload
+  template <typename REAL>
+  void svd(gpumat<REAL> &x, gpuvec<REAL> &s, gpumat<REAL> &u, gpumat<REAL> &vt)
+  {
+    err::check_card(x, s, u, vt);
+    
+    if (x.nrows() >= x.ncols())
+    {
+      int info = svd_internals(1, 1, x, s, u, vt);
+      fml::linalgutils::check_info(info, "gesvd");
+    }
+    else
+    {
+      auto tx = xpose(x);
+      gpumat<REAL> v(x.get_card());
+      int info = svd_internals(1, 1, tx, s, v, u);
+      xpose(v, vt);
+      fml::linalgutils::check_info(info, "gesvd");
+    }
+  }
+  
+  
+  
   namespace
   {
     template <typename REAL>
