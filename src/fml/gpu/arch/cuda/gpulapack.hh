@@ -247,6 +247,34 @@ namespace gpulapack
   
   
   
+  inline cusolverStatus_t orgqr_buflen(cusolverDnHandle_t handle, int m,
+    int n, int k, const float *A, int lda, const float *tau, int *lwork)
+  {
+    return cusolverDnSorgqr_bufferSize(handle, m, n, k, A, lda, tau, lwork);
+  }
+  
+  inline cusolverStatus_t orgqr_buflen(cusolverDnHandle_t handle, int m,
+    int n, int k, const double *A, int lda, const double *tau, int *lwork)
+  {
+    return cusolverDnDorgqr_bufferSize(handle, m, n, k, A, lda, tau, lwork);
+  }
+  
+  inline cusolverStatus_t orgqr(cusolverDnHandle_t handle, int m,
+    int n, int k, float *A, int lda, const float *tau, float *work, int lwork,
+    int *info)
+  {
+    return cusolverDnSorgqr(handle, m, n, k, A, lda, tau, work, lwork, info);
+  }
+  
+  inline cusolverStatus_t orgqr(cusolverDnHandle_t handle, int m,
+    int n, int k, double *A, int lda, const double *tau, double *work, int lwork,
+    int *info)
+  {
+    return cusolverDnDorgqr(handle, m, n, k, A, lda, tau, work, lwork, info);
+  }
+  
+  
+  
   inline cusolverStatus_t potrf_buflen(cusolverDnHandle_t handle,
     cublasFillMode_t uplo, int n, float *A, int lda, int *lwork)
   {

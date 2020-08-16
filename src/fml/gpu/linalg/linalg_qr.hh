@@ -124,22 +124,22 @@ namespace linalg
     auto c = QR.get_card();
     
     int lwork;
-    gpulapack_status_t check = gpulapack::ormqr_buflen(c->lapack_handle(),
-      GPUBLAS_SIDE_LEFT, GPUBLAS_OP_N, m, minmn, minmn, QR.data_ptr(), m,
-      qraux.data_ptr(), Q.data_ptr(), m, &lwork);
+    gpulapack_status_t check = gpulapack::orgqr_buflen(c->lapack_handle(),
+      m, minmn, minmn, QR.data_ptr(), m, qraux.data_ptr(), &lwork);
     
     if (lwork > work.size())
       work.resize(lwork);
     
     Q.resize(m, minmn);
-    Q.fill_eye();
     
     int info = 0;
     gpuscalar<int> info_device(c, info);
     
-    check = gpulapack::ormqr(c->lapack_handle(), GPUBLAS_SIDE_LEFT,
-      GPUBLAS_OP_N, m, minmn, minmn, QR.data_ptr(), m, qraux.data_ptr(),
-      Q.data_ptr(), m, work.data_ptr(), lwork, info_device.data_ptr());
+    
+    fml::gpu_utils::lacpy('A', m, minmn, QR.data_ptr(), m, Q.data_ptr(), m);
+    
+    check = gpulapack::orgqr(c->lapack_handle(), m, minmn, minmn, Q.data_ptr(),
+      m, qraux.data_ptr(), work.data_ptr(), lwork, info_device.data_ptr());
     
     info_device.get_val(&info);
     gpulapack::err::check_ret(check, "ormqr");
