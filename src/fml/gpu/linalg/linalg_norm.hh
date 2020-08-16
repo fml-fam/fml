@@ -292,7 +292,7 @@ namespace linalg
           (REAL)1, R.data_ptr(), n, x.data_ptr(), m);
         gpublas::err::check_ret(check, "trsm");
         
-        gpu_utils::lacpy(GPUBLAS_FILL_U, n, n, x.data_ptr(), m, R.data_ptr(), n);
+        gpu_utils::lacpy('U', n, n, x.data_ptr(), m, R.data_ptr(), n);
         
         if (norm == '1')
           ret *= norm_1(R);
@@ -317,7 +317,7 @@ namespace linalg
           (REAL)1, L.data_ptr(), m, x.data_ptr(), m);
         gpublas::err::check_ret(check, "trsm");
         
-        gpu_utils::lacpy(GPUBLAS_FILL_L, m, m, x.data_ptr(), m, L.data_ptr(), m);
+        gpu_utils::lacpy('L', m, m, x.data_ptr(), m, L.data_ptr(), m);
         
         if (norm == '1')
           ret *= norm_1(L);

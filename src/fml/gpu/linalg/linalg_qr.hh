@@ -174,7 +174,7 @@ namespace linalg
     
     R.resize(minmn, n);
     R.fill_zero();
-    fml::gpu_utils::lacpy(GPUBLAS_FILL_U, m, n, QR.data_ptr(), m, R.data_ptr(), minmn);
+    fml::gpu_utils::lacpy('U', m, n, QR.data_ptr(), m, R.data_ptr(), minmn);
   }
   
   
@@ -244,7 +244,7 @@ namespace linalg
     
     L.resize(m, minmn);
     L.fill_zero();
-    fml::gpu_utils::lacpy(GPUBLAS_FILL_L, m, n, LQ.data_ptr(), m, L.data_ptr(), m);
+    fml::gpu_utils::lacpy('L', m, n, LQ.data_ptr(), m, L.data_ptr(), m);
   }
   
   /**

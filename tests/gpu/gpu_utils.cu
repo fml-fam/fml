@@ -20,7 +20,7 @@ TEMPLATE_TEST_CASE("lacpy", "[gpu_utils]", float, double)
   
   x.fill_linspace(1, m*n);
   test.fill_zero();
-  fml::gpu_utils::lacpy(GPUBLAS_FILL_U, m, n, x.data_ptr(), m, test.data_ptr(), m);
+  fml::gpu_utils::lacpy('U', m, n, x.data_ptr(), m, test.data_ptr(), m);
   truth.fill_linspace(1, m*n);
   truth.set(1, 0, 0);
   truth.set(2, 0, 0);
@@ -28,7 +28,7 @@ TEMPLATE_TEST_CASE("lacpy", "[gpu_utils]", float, double)
   REQUIRE( test == truth );
   
   test.fill_zero();
-  fml::gpu_utils::lacpy(GPUBLAS_FILL_L, n, n, x.data_ptr(), m, test.data_ptr(), m);
+  fml::gpu_utils::lacpy('L', n, n, x.data_ptr(), m, test.data_ptr(), m);
   truth.fill_linspace(1, m*n);
   truth.set(0, 1, 0);
   truth.set(2, 0, 0);
@@ -36,7 +36,7 @@ TEMPLATE_TEST_CASE("lacpy", "[gpu_utils]", float, double)
   REQUIRE( test == truth );
   
   test.fill_zero();
-  fml::gpu_utils::lacpy(GPUBLAS_FILL_L, m, n, x.data_ptr(), m, test.data_ptr(), m);
+  fml::gpu_utils::lacpy('L', m, n, x.data_ptr(), m, test.data_ptr(), m);
   truth.fill_linspace(1, m*n);
   truth.set(0, 1, 0);
   REQUIRE( test == truth );

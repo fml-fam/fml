@@ -20,20 +20,20 @@ namespace fml
     namespace internals
     {
       template <typename REAL>
-      __global__ void kernel_lacpy(const gpublas_fillmode_t uplo, const len_t m,
+      __global__ void kernel_lacpy(const char uplo, const len_t m,
         const len_t n, const REAL *A, const len_t lda, REAL *B, const len_t ldb)
       {
         len_t i = blockDim.x*blockIdx.x + threadIdx.x;
         len_t j = blockDim.y*blockIdx.y + threadIdx.y;
         
-        if ((i < m && j < n) && ((uplo == GPUBLAS_FILL_U && i <= j) || (uplo == GPUBLAS_FILL_L && i >= j)))
+        if ((i < m && j < n) && ((uplo == 'A') || (uplo == 'U' && i <= j) || (uplo == 'L' && i >= j)))
             B[i + ldb*j] = A[i + lda*j];
       }
     }
     
     template <typename REAL>
-    void lacpy(const gpublas_fillmode_t uplo, const len_t m, const len_t n,
-      const REAL *A, const len_t lda, REAL *B, const len_t ldb)
+    void lacpy(const char uplo, const len_t m, const len_t n, const REAL *A,
+      const len_t lda, REAL *B, const len_t ldb)
     {
       auto dim_block = fml::kernel_launcher::dim_block2();
       auto dim_grid = fml::kernel_launcher::dim_grid(m, n);
