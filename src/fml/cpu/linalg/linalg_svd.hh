@@ -18,6 +18,7 @@
 #include "../cpuvec.hh"
 
 #include "linalg_blas.hh"
+#include "linalg_eigen.hh"
 #include "linalg_qr.hh"
 
 
