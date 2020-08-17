@@ -212,18 +212,6 @@ namespace linalg
   
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   namespace
   {
     template <typename REAL>

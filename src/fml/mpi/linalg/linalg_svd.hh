@@ -414,6 +414,124 @@ namespace linalg
     for (len_t i=0; i<s.size(); i++)
       s_d[i] = sqrt(fabs(s_d[i]));
   }
+  
+  
+  
+  namespace
+  {
+    template <typename REAL>
+    void rsvd_A(const uint32_t seed, const int k, const int q, mpimat<REAL> &x,
+      mpimat<REAL> &QY)
+    {
+      const len_t m = x.nrows();
+      const len_t n = x.ncols();
+      
+      const int mb = x.bf_rows();
+      const int nb = x.bf_cols();
+      
+      auto g = x.get_grid();
+      
+      mpimat<REAL> omega(g, n, 2*k, mb, nb);
+      omega.fill_runif(seed);
+      
+      mpimat<REAL> Y(g, m, 2*k, mb, nb);
+      mpimat<REAL> Z(g, n, 2*k, mb, nb);
+      mpimat<REAL> QZ(g, n, 2*k, mb, nb);
+      
+      cpuvec<REAL> qraux;
+      cpuvec<REAL> work;
+      
+      mpimat<REAL> B(g, 2*k, n, mb, nb);
+      
+      // Stage A
+      matmult(false, false, (REAL)1.0, x, omega, Y);
+      qr_internals(false, Y, qraux, work);
+      qr_Q(Y, qraux, QY, work);
+      
+      for (int i=0; i<q; i++)
+      {
+        matmult(true, false, (REAL)1.0, x, QY, Z);
+        qr_internals(false, Z, qraux, work);
+        qr_Q(Z, qraux, QZ, work);
+        
+        matmult(false, false, (REAL)1.0, x, QZ, Y);
+        qr_internals(false, Y, qraux, work);
+        qr_Q(Y, qraux, QY, work);
+      }
+    }
+  }
+  
+  /**
+    @brief Computes the truncated singular value decomposition using the
+    normal projections method of Halko et al. This method is only an
+    approximation.
+    
+    @param[inout] x Input data matrix.
+    @param[out] s Vector of singular values.
+    @param[out] u Matrix of left singular vectors.
+    @param[out] vt Matrix of (transposed) right singular vectors.
+    
+    @impl Uses a series of QR's and matrix multiplications.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void rsvd(const uint32_t seed, const int k, const int q, mpimat<REAL> &x,
+    cpuvec<REAL> &s)
+  {
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
+    
+    mpimat<REAL> QY(x.get_grid(), m, 2*k, x.bf_rows(), x.bf_cols());
+    mpimat<REAL> B(x.get_grid(), 2*k, n, x.bf_rows(), x.bf_cols());
+    
+    // Stage A
+    rsvd_A(seed, k, q, x, QY);
+    
+    // Stage B
+    matmult(true, false, (REAL)1.0, QY, x, B);
+    
+    cpumat<REAL> uB;
+    svd(B, s);
+    
+    s.resize(k);
+  }
+  
+  /// \overload
+  template <typename REAL>
+  void rsvd(const uint32_t seed, const int k, const int q, mpimat<REAL> &x,
+    cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
+  {
+    err::check_grid(x, u);
+    err::check_grid(x, vt);
+    
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
+    
+    cpumat<REAL> QY(m, 2*k);
+    cpumat<REAL> B(2*k, n);
+    
+    // Stage A
+    rsvd_A(seed, k, q, x, QY);
+    
+    // Stage B
+    matmult(true, false, (REAL)1.0, QY, x, B);
+    
+    cpumat<REAL> uB;
+    svd(B, s, uB, vt);
+    
+    s.resize(k);
+    
+    matmult(false, false, (REAL)1.0, QY, uB, u);
+    u.resize(u.nrows(), k);
+  }
 }
 }
 

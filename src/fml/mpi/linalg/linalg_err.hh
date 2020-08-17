@@ -18,11 +18,21 @@ namespace linalg
 {
   namespace err
   {
-    template <typename REAL>
-    void check_grid(const mpimat<REAL> &a, const mpimat<REAL> &b)
+    template <class T>
+    void check_grid(const T &a){}
+    
+    template <class T, class S>
+    void check_grid(const T &a, const S &b)
     {
       if (a.get_grid().ictxt() != b.get_grid().ictxt())
         throw std::runtime_error("mpimat objects must be distributed on the same process grid");
+    }
+    
+    template <class T, class S, typename... VAT>
+    void check_grid(const T &a, const S &b, VAT&&... vax)
+    {
+      check_grid(a, b);
+      check_grid(a, vax ...);
     }
   }
 }

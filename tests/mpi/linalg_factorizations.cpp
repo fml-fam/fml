@@ -48,6 +48,27 @@ TEMPLATE_TEST_CASE("svd", "[linalg]", float, double)
 
 
 
+TEMPLATE_TEST_CASE("rsvd", "[linalg]", float, double)
+{
+  len_t m = 3;
+  len_t n = 2;
+  
+  fml::cpuvec<TestType> v(n);
+  v.set(0, 2);
+  v.set(1, 5);
+  
+  fml::mpimat<TestType> x(g, m, n, 1, 1);
+  
+  x.fill_diag(v);
+  fml::cpuvec<TestType> s;
+  fml::linalg::rsvd(1234L, 1, 2, x, s);
+  
+  REQUIRE( s.size() == 1 );
+  REQUIRE( fltcmp::eq(s.get(0), 5) );
+}
+
+
+
 TEMPLATE_TEST_CASE("eigen", "[linalg]", float, double)
 {
   len_t n = 2;
