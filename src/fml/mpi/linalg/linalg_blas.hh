@@ -42,8 +42,7 @@ namespace linalg
   template <typename REAL>
   void add(const bool transx, const bool transy, const REAL alpha, const REAL beta, const mpimat<REAL> &x, const mpimat<REAL> &y, mpimat<REAL> &ret)
   {
-    err::check_grid(x, y);
-    err::check_grid(x, ret);
+    err::check_grid(x, y, ret);
     
     len_t m, n;
     fml::linalgutils::matadd_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n);
@@ -138,8 +137,7 @@ namespace linalg
   template <typename REAL>
   void matmult(const bool transx, const bool transy, const REAL alpha, const mpimat<REAL> &x, const mpimat<REAL> &y, mpimat<REAL> &ret)
   {
-    err::check_grid(x, y);
-    err::check_grid(x, ret);
+    err::check_grid(x, y, ret);
     
     len_t m, n, k;
     fml::linalgutils::matmult_params(transx, transy, x.nrows(), x.ncols(), y.nrows(), y.ncols(), &m, &n, &k);

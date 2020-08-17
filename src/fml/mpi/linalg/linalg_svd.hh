@@ -102,8 +102,7 @@ namespace linalg
     template <typename REAL>
     void svd(mpimat<REAL> &x, cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
     {
-      err::check_grid(x, u);
-      err::check_grid(x, vt);
+      err::check_grid(x, u, vt);
       
       int info = svd_internals(1, 1, x, s, u, vt);
       fml::linalgutils::check_info(info, "gesvd");
@@ -270,8 +269,7 @@ namespace linalg
   template <typename REAL>
   void qrsvd(mpimat<REAL> &x, cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
   {
-    err::check_grid(x, u);
-    err::check_grid(x, vt);
+    err::check_grid(x, u, vt);
     
     if (x.is_square())
       svd(x, s, u, vt);
@@ -323,8 +321,7 @@ namespace linalg
   template <typename REAL>
   void cpsvd(const mpimat<REAL> &x, cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
   {
-    err::check_grid(x, u);
-    err::check_grid(x, vt);
+    err::check_grid(x, u, vt);
     
     const len_t m = x.nrows();
     const len_t n = x.ncols();
@@ -509,8 +506,7 @@ namespace linalg
   void rsvd(const uint32_t seed, const int k, const int q, mpimat<REAL> &x,
     cpuvec<REAL> &s, mpimat<REAL> &u, mpimat<REAL> &vt)
   {
-    err::check_grid(x, u);
-    err::check_grid(x, vt);
+    err::check_grid(x, u, vt);
     
     const len_t m = x.nrows();
     const len_t n = x.ncols();
