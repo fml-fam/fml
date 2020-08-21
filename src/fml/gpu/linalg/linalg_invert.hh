@@ -112,8 +112,8 @@ namespace linalg
     gpublas_diagtype_t diag = (unit_diag ? GPUBLAS_DIAG_UNIT : GPUBLAS_DIAG_NON_UNIT);
     
     gpublas_status_t check =  gpublas::trsm(x.get_card()->blas_handle(),
-      GPUBLAS_SIDE_LEFT, uplo, GPUBLAS_OP_N, diag, n, n, x.data_ptr(), n,
-      inv.data_ptr(), n);
+      GPUBLAS_SIDE_LEFT, uplo, GPUBLAS_OP_N, diag, n, n, (REAL)1, x.data_ptr(),
+      n, inv.data_ptr(), n);
       
     gpublas::err::check_ret(check, "trsm");
     copy::gpu2gpu(inv, x);
