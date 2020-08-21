@@ -112,6 +112,7 @@ fml::gpumat<REAL>::gpumat()
   this->m=0;
   this->n=0;
   this->data=NULL;
+  this->free_data = false;
 }
 
 /**
