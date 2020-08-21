@@ -22,8 +22,8 @@ namespace fml
     using parmat<gpumat<REAL>, gpuvec<REAL>, REAL>::parmat;
     
     public:
-      parmat_gpu(comm mpi_comm, card_sp_t gpu_card,
-        const len_global_t nrows, const len_t ncols);
+      parmat_gpu(comm mpi_comm, card_sp_t gpu_card, const len_global_t nrows, const len_t ncols);
+      parmat_gpu(comm mpi_comm, card_sp_t gpu_card, const len_global_t nrows, const len_t ncols, const len_global_t nb4_);
       
       void print(uint8_t ndigits=4, bool add_final_blank=true);
       
@@ -45,9 +45,22 @@ fml::parmat_gpu<REAL>::parmat_gpu(fml::comm mpi_comm, fml::card_sp_t gpu_card,
   len_t nrows_local = this->get_local_dim();
   this->data.resize(gpu_card, nrows_local, ncols);
   
-  this->m_global = (len_global_t) nrows_local;
-  this->r.allreduce(1, &(this->m_global));
   this->num_preceding_rows();
+}
+
+
+
+template <typename REAL>
+fml::parmat_gpu<REAL>::parmat_gpu(fml::comm mpi_comm, fml::card_sp_t gpu_card,
+  const len_global_t nrows, const len_t ncols, const len_global_t nb4_)
+{
+  this->r = mpi_comm;
+  
+  this->m_global = nrows;
+  len_t nrows_local = this->get_local_dim();
+  this->data.resize(gpu_card, nrows_local, ncols);
+  
+  this->nb4 = nb4_;
 }
 
 

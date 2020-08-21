@@ -25,6 +25,7 @@ namespace fml
     public:
       parmat_cpu(comm mpi_comm);
       parmat_cpu(comm mpi_comm, const len_global_t nrows, const len_t ncols);
+      parmat_cpu(comm mpi_comm, const len_global_t nrows, const len_t ncols, const len_global_t nb4_);
       
       void print(uint8_t ndigits=4, bool add_final_blank=true);
       
@@ -58,9 +59,21 @@ fml::parmat_cpu<REAL>::parmat_cpu(fml::comm mpi_comm, const len_global_t nrows, 
   len_t nrows_local = this->get_local_dim();
   this->data.resize(nrows_local, ncols);
   
-  this->m_global = (len_global_t) nrows_local;
-  this->r.allreduce(1, &(this->m_global));
   this->num_preceding_rows();
+}
+
+
+
+template <typename REAL>
+fml::parmat_cpu<REAL>::parmat_cpu(fml::comm mpi_comm, const len_global_t nrows, const len_t ncols, const len_global_t nb4_)
+{
+  this->r = mpi_comm;
+  
+  this->m_global = nrows;
+  len_t nrows_local = this->get_local_dim();
+  this->data.resize(nrows_local, ncols);
+  
+  this->nb4 = nb4_;
 }
 
 
