@@ -14,6 +14,7 @@
 #include "../arch/arch.hh"
 
 #include "../internals/gpuscalar.hh"
+#include "../internals/gpu_utils.hh"
 
 #include "../copy.hh"
 #include "../gpumat.hh"
@@ -57,7 +58,7 @@ namespace linalg
     gpuvec<int> p(c);
     int info;
     lu(x, p, info);
-    fml::linalgutils::check_info(info, "getrf");
+    linalgutils::check_info(info, "getrf");
     
     // Invert
     const len_t n = x.nrows();
@@ -117,6 +118,9 @@ namespace linalg
       
     gpublas::err::check_ret(check, "trsm");
     copy::gpu2gpu(inv, x);
+    
+    char cuplo = (upper ? 'L' : 'U');
+    gpu_utils::tri2zero(cuplo, false, n, n, x.data_ptr(), n);
   }
 }
 }

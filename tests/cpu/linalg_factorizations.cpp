@@ -103,6 +103,23 @@ TEMPLATE_TEST_CASE("invert", "[linalg]", float, double)
 
 
 
+TEMPLATE_TEST_CASE("trinv", "[linalg]", float, double)
+{
+  len_t n = 2;
+  
+  fml::cpumat<TestType> x(n, n);
+  x.fill_linspace(1, n*n);
+  
+  fml::linalg::trinv(true, false, x);
+  
+  REQUIRE( fltcmp::eq(x.get(0, 0), 1) );
+  REQUIRE( fltcmp::eq(x.get(1, 0), 0) );
+  REQUIRE( fltcmp::eq(x.get(0, 1), -0.75) );
+  REQUIRE( fltcmp::eq(x.get(1, 1), 0.25) );
+}
+
+
+
 TEMPLATE_TEST_CASE("solve", "[linalg]", float, double)
 {
   len_t n = 2;

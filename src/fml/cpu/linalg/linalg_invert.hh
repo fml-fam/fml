@@ -13,6 +13,8 @@
 #include "../../_internals/linalgutils.hh"
 #include "../../_internals/omp.hh"
 
+#include "../internals/cpu_utils.hh"
+
 #include "../cpumat.hh"
 #include "../cpuvec.hh"
 
@@ -51,16 +53,16 @@ namespace linalg
     cpuvec<int> p;
     int info;
     lu(x, p, info);
-    fml::linalgutils::check_info(info, "getrf");
+    linalgutils::check_info(info, "getrf");
     
     // Invert
     REAL tmp;
-    fml::lapack::getri(n, x.data_ptr(), n, p.data_ptr(), &tmp, -1, &info);
+    lapack::getri(n, x.data_ptr(), n, p.data_ptr(), &tmp, -1, &info);
     int lwork = (int) tmp;
     cpuvec<REAL> work(lwork);
     
-    fml::lapack::getri(n, x.data_ptr(), n, p.data_ptr(), work.data_ptr(), lwork, &info);
-    fml::linalgutils::check_info(info, "getri");
+    lapack::getri(n, x.data_ptr(), n, p.data_ptr(), work.data_ptr(), lwork, &info);
+    linalgutils::check_info(info, "getri");
   }
   
   
@@ -87,11 +89,16 @@ namespace linalg
     if (!x.is_square())
       throw std::runtime_error("'x' must be a square matrix");
     
+    const len_t n = x.nrows();
+    
     int info;
     char uplo = (upper ? 'U' : 'L');
     char diag = (unit_diag ? 'U' : 'N');
-    fml::lapack::trtri(uplo, diag, x.nrows(), x.data_ptr(), x.nrows(), &info);
-    fml::linalgutils::check_info(info, "trtri");
+    lapack::trtri(uplo, diag, x.nrows(), x.data_ptr(), n, &info);
+    linalgutils::check_info(info, "trtri");
+    
+    uplo = (uplo == 'U' ? 'L' : 'U');
+    cpu_utils::tri2zero(uplo, false, n, n, x.data_ptr(), n);
   }
 }
 }
