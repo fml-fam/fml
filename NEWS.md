@@ -1,11 +1,13 @@
 # NEWS
 
-## Release 0.3-1 (//):
-
+## Release 0.4-0 (8/23/2020):
 
 New:
   * Added linalg::dot()
-  * Added get_device_count() and get_device_num()
+  * Added linalg::trinv()
+  * Added linalg::rsvd()
+  * Added par utils get_device_count() and get_device_num()
+  * Many parmat changes (still experimental).
 
 API Changes:
   * linalg::matmult() can now accept mixed matrix/vector arguments.
@@ -14,8 +16,14 @@ Bug Fixes:
   * Changed gpumat crossprod() and tcrossprod() to use Xgemm() instead of
     Xsyrk() for better run-time performance.
 
+Internal Changes of Note:
+  * Internal linalg headers have been re-organized. This has no effect if
+  you use the `linalg.hh` headers or the main type headers (`cpu.hh`, `gpu.hh`, `mpi.hh`).
+  * Switched linalg::qr_Q() and linalg::lq_Q() to use `Xorgqr()`/`Xorglq()` except in gpumat lq_Q().
+  * Changed `uplo` type in gpu_utils::lacpy() to char.
+
 Documentation:
-  * Fixed card.synch() documentation.
+  * Fixed card synch() method documentation.
 
 
 
