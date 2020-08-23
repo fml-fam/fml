@@ -1,5 +1,26 @@
 # NEWS
 
+## Release 0.5-0 (//):
+
+New:
+  * 
+
+API Changes:
+  * 
+
+Bug Fixes:
+  * 
+
+Internal Changes of Note:
+  * 
+
+Documentation:
+  * 
+
+
+
+
+
 ## Release 0.4-0 (8/23/2020):
 
 New:
@@ -24,6 +45,7 @@ Internal Changes of Note:
 
 Documentation:
   * Fixed card synch() method documentation.
+
 
 
 

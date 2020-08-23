@@ -1,6 +1,6 @@
 # fml
 
-* **Version:** 0.4-0
+* **Version:** 0.5-0
 * **Status:** [![Build Status](https://travis-ci.org/fml-fam/fml.png)](https://travis-ci.org/fml-fam/fml)
 * **License:** [BSL-1.0](http://opensource.org/licenses/BSL-1.0)
 * **Project home**: https://github.com/fml-fam/fml
