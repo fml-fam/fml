@@ -142,7 +142,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ac4f478a51ee6b17be59149b160d31431"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy device (GPU) data to other device (GPU) memory.  <a href="classfml_1_1card.html#ac4f478a51ee6b17be59149b160d31431">More...</a><br /></td></tr>
 <tr class="separator:ac4f478a51ee6b17be59149b160d31431"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af25645746f32effe1b4817bfd21c0a01"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1card.html#af25645746f32effe1b4817bfd21c0a01">synch</a> ()</td></tr>
-<tr class="memdesc:af25645746f32effe1b4817bfd21c0a01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy device (GPU) data to other device (GPU) memory.  <a href="classfml_1_1card.html#af25645746f32effe1b4817bfd21c0a01">More...</a><br /></td></tr>
+<tr class="memdesc:af25645746f32effe1b4817bfd21c0a01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Synchronize device.  <a href="classfml_1_1card.html#af25645746f32effe1b4817bfd21c0a01">More...</a><br /></td></tr>
 <tr class="separator:af25645746f32effe1b4817bfd21c0a01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab956f359d66aa26e593d3af38c27c1fb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1card.html#ab956f359d66aa26e593d3af38c27c1fb">check</a> ()</td></tr>
 <tr class="memdesc:ab956f359d66aa26e593d3af38c27c1fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check for (and throw if found) a CUDA error.  <a href="classfml_1_1card.html#ab956f359d66aa26e593d3af38c27c1fb">More...</a><br /></td></tr>
@@ -676,7 +676,7 @@ gpulapack_handle_t&#160;</td><td class="memItemRight" valign="bottom"><b>_lapack
 </table>
 </div><div class="memdoc">
 
-<p>Copy device (GPU) data to other device (GPU) memory. </p>
+<p>Synchronize device. </p>
 <p>Blocks further GPU execution until the device completes all previously executed kernels.</p>
 <p><b>Implementation Details</b><br  />
  Wrapper around GPU synchronize, e.g. <code>cudaDeviceSynchronize()</code>.</p>

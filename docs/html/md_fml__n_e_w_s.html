@@ -95,7 +95,29 @@ $(document).ready(function(){initNavTree('md_fml__n_e_w_s.html',''); initResizab
 <div class="title">NEWS </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1>Release 0.3-0 (6/20/2020):</h1>
+<div class="textblock"><h1>Release 0.4-0 (8/23/2020):</h1>
+<p>New:</p><ul>
+<li>Added linalg::dot()</li>
+<li>Added linalg::trinv()</li>
+<li>Added linalg::rsvd()</li>
+<li>Added par utils get_device_count() and get_device_num()</li>
+<li>Many parmat changes (still experimental).</li>
+</ul>
+<p>API Changes:</p><ul>
+<li>linalg::matmult() can now accept mixed matrix/vector arguments.</li>
+</ul>
+<p>Bug Fixes:</p><ul>
+<li>Changed gpumat crossprod() and tcrossprod() to use Xgemm() instead of Xsyrk() for better run-time performance.</li>
+</ul>
+<p>Internal Changes of Note:</p><ul>
+<li>Internal linalg headers have been re-organized. This has no effect if you use the <code>linalg.hh</code> headers or the main type headers (<code>cpu.hh</code>, <code>gpu.hh</code>, <code><a class="el" href="mpi_8hh_source.html">mpi.hh</a></code>).</li>
+<li>Switched linalg::qr_Q() and linalg::lq_Q() to use <code>Xorgqr()</code>/<code>Xorglq()</code> except in gpumat lq_Q().</li>
+<li>Changed <code>uplo</code> type in gpu_utils::lacpy() to char.</li>
+</ul>
+<p>Documentation:</p><ul>
+<li>Fixed card synch() method documentation.</li>
+</ul>
+<h1>Release 0.3-0 (6/20/2020):</h1>
 <p>New:</p><ul>
 <li>Added singular backend headers.<ul>
 <li><code>#include &lt;<a class="el" href="cpu_8hh_source.html">fml/cpu.hh</a>&gt;</code> includes all standard headers in <code>src/fml/cpu</code>.</li>
@@ -139,7 +161,9 @@ $(document).ready(function(){initNavTree('md_fml__n_e_w_s.html',''); initResizab
 <p>Bug Fixes:</p><ul>
 <li>Fixed an indexing bug in mpimat linalg::cpsvd() when m&gt;n.</li>
 </ul>
-<p>Documentation: None</p>
+<p>Documentation:</p><ul>
+<li>Fixed some formatting issues in generated documentation.</li>
+</ul>
 <h1>Release 0.2-1 (5/28/20):</h1>
 <p>New: None</p>
 <p>API Changes: None</p>

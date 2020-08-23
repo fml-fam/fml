@@ -188,13 +188,57 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ab87f2e5ac0ffa7e8330d5635ddaa8f1f"><td class="memItemLeft" align="right" valign="top"><a id="ab87f2e5ac0ffa7e8330d5635ddaa8f1f"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacefml.html#ab87f2e5ac0ffa7e8330d5635ddaa8f1f">get_device_count</a> ()</td></tr>
+<tr class="memdesc:ab87f2e5ac0ffa7e8330d5635ddaa8f1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return number of GPU devices. <br /></td></tr>
+<tr class="separator:ab87f2e5ac0ffa7e8330d5635ddaa8f1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa803b57497416a84d50caa7be4654de"><td class="memItemLeft" align="right" valign="top">card_sp_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacefml.html#afa803b57497416a84d50caa7be4654de">new_card</a> (int id=0)</td></tr>
 <tr class="memdesc:afa803b57497416a84d50caa7be4654de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize a new card.  <a href="namespacefml.html#afa803b57497416a84d50caa7be4654de">More...</a><br /></td></tr>
 <tr class="separator:afa803b57497416a84d50caa7be4654de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a498690c2aa0b7d3c395564b4bb0079"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacefml.html#a1a498690c2aa0b7d3c395564b4bb0079">get_device_num</a> (const <a class="el" href="classfml_1_1comm.html">comm</a> &amp;c)</td></tr>
+<tr class="memdesc:a1a498690c2aa0b7d3c395564b4bb0079"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the device number of the GPU to use with the calling MPI process.  <a href="namespacefml.html#a1a498690c2aa0b7d3c395564b4bb0079">More...</a><br /></td></tr>
+<tr class="separator:a1a498690c2aa0b7d3c395564b4bb0079"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Core namespace. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
+<a id="a1a498690c2aa0b7d3c395564b4bb0079"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a498690c2aa0b7d3c395564b4bb0079">&#9670;&nbsp;</a></span>get_device_num()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int fml::get_device_num </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classfml_1_1comm.html">comm</a> &amp;&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the device number of the GPU to use with the calling MPI process. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">c</td><td>A communicator object. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The ordinal device number for the calling MPI process to use in, e.g. <code><a class="el" href="namespacefml.html#afa803b57497416a84d50caa7be4654de" title="Initialize a new card.">fml::new_card()</a></code>.</dd></dl>
+<p><b>Exceptions</b><br  />
+ If there are more MPI ranks within any node than there are GPUS, the function will throw a 'runtime_error' exception. </p>
+
+</div>
+</div>
 <a id="afa803b57497416a84d50caa7be4654de"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afa803b57497416a84d50caa7be4654de">&#9670;&nbsp;</a></span>new_card()</h2>
 

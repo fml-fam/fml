@@ -1,5 +1,6 @@
 var classfml_1_1gpumat =
 [
+    [ "gpumat", "classfml_1_1gpumat.html#a5269cb0d4a79f3ba2fdf4bb5dffeea8c", null ],
     [ "gpumat", "classfml_1_1gpumat.html#a04dde85e7183ab4281f6300ebc8ca35e", null ],
     [ "gpumat", "classfml_1_1gpumat.html#a9776b90a782ea1eedd01809b15712d18", null ],
     [ "gpumat", "classfml_1_1gpumat.html#ad7ae7f560f915f304bc42dd2d90474ea", null ],

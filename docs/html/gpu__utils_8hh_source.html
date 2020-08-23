@@ -117,20 +117,20 @@ $(document).ready(function(){initNavTree('gpu__utils_8hh_source.html',''); initR
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keyword">namespace </span>internals</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    {</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;      <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;      __global__ <span class="keywordtype">void</span> kernel_lacpy(<span class="keyword">const</span> gpublas_fillmode_t uplo, <span class="keyword">const</span> len_t m,</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;      __global__ <span class="keywordtype">void</span> kernel_lacpy(<span class="keyword">const</span> <span class="keywordtype">char</span> uplo, <span class="keyword">const</span> len_t m,</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="keyword">const</span> len_t n, <span class="keyword">const</span> REAL *A, <span class="keyword">const</span> len_t lda, REAL *B, <span class="keyword">const</span> len_t ldb)</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;      {</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        len_t i = blockDim.x*blockIdx.x + threadIdx.x;</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        len_t j = blockDim.y*blockIdx.y + threadIdx.y;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keywordflow">if</span> ((i &lt; m &amp;&amp; j &lt; n) &amp;&amp; ((uplo == GPUBLAS_FILL_U &amp;&amp; i &lt;= j) || (uplo == GPUBLAS_FILL_L &amp;&amp; i &gt;= j)))</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keywordflow">if</span> ((i &lt; m &amp;&amp; j &lt; n) &amp;&amp; ((uplo == <span class="charliteral">&#39;A&#39;</span>) || (uplo == <span class="charliteral">&#39;U&#39;</span> &amp;&amp; i &lt;= j) || (uplo == <span class="charliteral">&#39;L&#39;</span> &amp;&amp; i &gt;= j)))</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;            B[i + ldb*j] = A[i + lda*j];</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;      }</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    }</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    </div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordtype">void</span> lacpy(<span class="keyword">const</span> gpublas_fillmode_t uplo, <span class="keyword">const</span> len_t m, <span class="keyword">const</span> len_t n,</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;      <span class="keyword">const</span> REAL *A, <span class="keyword">const</span> len_t lda, REAL *B, <span class="keyword">const</span> len_t ldb)</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keywordtype">void</span> lacpy(<span class="keyword">const</span> <span class="keywordtype">char</span> uplo, <span class="keyword">const</span> len_t m, <span class="keyword">const</span> len_t n, <span class="keyword">const</span> REAL *A,</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;      <span class="keyword">const</span> len_t lda, REAL *B, <span class="keyword">const</span> len_t ldb)</div>
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    {</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;      <span class="keyword">auto</span> dim_block = fml::kernel_launcher::dim_block2();</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;      <span class="keyword">auto</span> dim_grid = fml::kernel_launcher::dim_grid(m, n);</div>

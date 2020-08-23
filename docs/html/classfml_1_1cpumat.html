@@ -93,6 +93,7 @@ $(document).ready(function(){initNavTree('classfml_1_1cpumat.html',''); initResi
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="classfml_1_1cpumat-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">fml::cpumat&lt; REAL &gt; Class Template Reference</div>  </div>
@@ -124,6 +125,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac536cbf5354bb1ab16865b09790f7e15"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1cpumat.html#ac536cbf5354bb1ab16865b09790f7e15">cpumat</a> (REAL *data, len_t <a class="el" href="classfml_1_1unimat.html#a5b70212a4383826986be87aad3b8908e">nrows</a>, len_t <a class="el" href="classfml_1_1unimat.html#a6184e02405d68317c536b81e4a512bf4">ncols</a>, bool free_on_destruct=false)</td></tr>
 <tr class="memdesc:ac536cbf5354bb1ab16865b09790f7e15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct matrix object with inherited data. Essentially the same as using the minimal constructor and immediately calling the <code><a class="el" href="classfml_1_1cpumat.html#a3335dc81a02a28d5c29d5a964d7e1a54" title="Set the internal object storage to the specified array.">inherit()</a></code> method.  <a href="classfml_1_1cpumat.html#ac536cbf5354bb1ab16865b09790f7e15">More...</a><br /></td></tr>
 <tr class="separator:ac536cbf5354bb1ab16865b09790f7e15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fa9df37787e25ea2ef9c445a83150d2"><td class="memItemLeft" align="right" valign="top"><a id="a9fa9df37787e25ea2ef9c445a83150d2"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>cpumat</b> (<a class="el" href="classfml_1_1cpumat.html">cpumat</a> &amp;&amp;x)</td></tr>
+<tr class="separator:a9fa9df37787e25ea2ef9c445a83150d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d1a0a34e1fd80bca54c230fc087922d"><td class="memItemLeft" align="right" valign="top"><a id="a1d1a0a34e1fd80bca54c230fc087922d"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>cpumat</b> (const <a class="el" href="classfml_1_1cpumat.html">cpumat</a> &amp;x)</td></tr>
 <tr class="separator:a1d1a0a34e1fd80bca54c230fc087922d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -133,6 +137,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3335dc81a02a28d5c29d5a964d7e1a54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1cpumat.html#a3335dc81a02a28d5c29d5a964d7e1a54">inherit</a> (REAL *data, len_t <a class="el" href="classfml_1_1unimat.html#a5b70212a4383826986be87aad3b8908e">nrows</a>, len_t <a class="el" href="classfml_1_1unimat.html#a6184e02405d68317c536b81e4a512bf4">ncols</a>, bool free_on_destruct=false)</td></tr>
 <tr class="memdesc:a3335dc81a02a28d5c29d5a964d7e1a54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the internal object storage to the specified array.  <a href="classfml_1_1cpumat.html#a3335dc81a02a28d5c29d5a964d7e1a54">More...</a><br /></td></tr>
 <tr class="separator:a3335dc81a02a28d5c29d5a964d7e1a54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5be5191e72381860ddbfedfc7580db4"><td class="memItemLeft" align="right" valign="top"><a id="ae5be5191e72381860ddbfedfc7580db4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1cpumat.html#ae5be5191e72381860ddbfedfc7580db4">inherit</a> (<a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;data)</td></tr>
+<tr class="memdesc:ae5be5191e72381860ddbfedfc7580db4"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:ae5be5191e72381860ddbfedfc7580db4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f2e3a2f4a3a5ec3ff4af4c303e30249"><td class="memItemLeft" align="right" valign="top"><a id="a2f2e3a2f4a3a5ec3ff4af4c303e30249"></a>
 <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1cpumat.html#a2f2e3a2f4a3a5ec3ff4af4c303e30249">dupe</a> () const</td></tr>
 <tr class="memdesc:a2f2e3a2f4a3a5ec3ff4af4c303e30249"><td class="mdescLeft">&#160;</td><td class="mdescRight">Duplicate the object in a deep copy. <br /></td></tr>
@@ -224,8 +232,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:a488f5f9d4d70da7e107a13b3017f9ca0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1cpumat.html#a488f5f9d4d70da7e107a13b3017f9ca0">operator!=</a> (const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x) const</td></tr>
 <tr class="memdesc:a488f5f9d4d70da7e107a13b3017f9ca0"><td class="mdescLeft">&#160;</td><td class="mdescRight">See if the two objects are not the same. Uses same internal logic as the <code>==</code> method.  <a href="classfml_1_1cpumat.html#a488f5f9d4d70da7e107a13b3017f9ca0">More...</a><br /></td></tr>
 <tr class="separator:a488f5f9d4d70da7e107a13b3017f9ca0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c8de1702dbd28a75ea10ac10fb4f9f4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1cpumat.html#a5c8de1702dbd28a75ea10ac10fb4f9f4">operator=</a> (const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="memdesc:a5c8de1702dbd28a75ea10ac10fb4f9f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operator that sets the LHS to a shallow copy of the input. Desctruction of the LHS object will not result in the internal array storage being freed.  <a href="classfml_1_1cpumat.html#a5c8de1702dbd28a75ea10ac10fb4f9f4">More...</a><br /></td></tr>
+<tr class="memitem:a12887b66ab784ca6d26b52a967091eff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1cpumat.html#a12887b66ab784ca6d26b52a967091eff">operator=</a> (<a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:a12887b66ab784ca6d26b52a967091eff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operator that sets the LHS to a shallow copy of the input. Desctruction of the LHS object will not result in the internal array storage being freed.  <a href="classfml_1_1cpumat.html#a12887b66ab784ca6d26b52a967091eff">More...</a><br /></td></tr>
+<tr class="separator:a12887b66ab784ca6d26b52a967091eff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c8de1702dbd28a75ea10ac10fb4f9f4"><td class="memItemLeft" align="right" valign="top"><a id="a5c8de1702dbd28a75ea10ac10fb4f9f4"></a>
+<a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1cpumat.html#a5c8de1702dbd28a75ea10ac10fb4f9f4">operator=</a> (const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:a5c8de1702dbd28a75ea10ac10fb4f9f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
 <tr class="separator:a5c8de1702dbd28a75ea10ac10fb4f9f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92f5b2ba056530b5fca5f0f25dacb7b2"><td class="memItemLeft" align="right" valign="top"><a id="a92f5b2ba056530b5fca5f0f25dacb7b2"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>fill_linspace</b> (const int start, const int stop)</td></tr>
@@ -251,8 +263,14 @@ REAL *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 REAL *&#160;</td><td class="memItemRight" valign="bottom"><b>data_ptr</b> () const</td></tr>
 <tr class="separator:ae453388ec85006b432addc857a7376b8 inherit pub_methods_classfml_1_1unimat"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:ad6a5eda5ca0b28299c1e7cc0b08e6cae"><td class="memItemLeft" align="right" valign="top"><a id="ad6a5eda5ca0b28299c1e7cc0b08e6cae"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>free_on_destruct</b> () const</td></tr>
+<tr class="separator:ad6a5eda5ca0b28299c1e7cc0b08e6cae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a453f3fb619b099fba80b6dc2025e5152"><td class="memItemLeft" align="right" valign="top"><a id="a453f3fb619b099fba80b6dc2025e5152"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>dont_free_on_destruct</b> ()</td></tr>
+<tr class="separator:a453f3fb619b099fba80b6dc2025e5152"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classfml_1_1unimat"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classfml_1_1unimat')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classfml_1_1unimat.html">fml::unimat&lt; REAL &gt;</a></td></tr>
 <tr class="memitem:a36e47630447174d37eca514f6db1d15d inherit pro_methods_classfml_1_1unimat"><td class="memItemLeft" align="right" valign="top"><a id="a36e47630447174d37eca514f6db1d15d"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>should_free</b> () const</td></tr>
@@ -269,6 +287,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>printval</b> (const R
 <tr class="memitem:a6691e20c10b9b9c2705bdce6ef3cdeeb inherit pro_methods_classfml_1_1unimat"><td class="memItemLeft" align="right" valign="top"><a id="a6691e20c10b9b9c2705bdce6ef3cdeeb"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>printval</b> (const int val, uint8_t ndigits) const</td></tr>
 <tr class="separator:a6691e20c10b9b9c2705bdce6ef3cdeeb inherit pro_methods_classfml_1_1unimat"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_attribs_classfml_1_1unimat"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classfml_1_1unimat')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classfml_1_1unimat.html">fml::unimat&lt; REAL &gt;</a></td></tr>
 <tr class="memitem:a5231e4efcaf932db382cde7506025825 inherit pro_attribs_classfml_1_1unimat"><td class="memItemLeft" align="right" valign="top"><a id="a5231e4efcaf932db382cde7506025825"></a>
 len_t&#160;</td><td class="memItemRight" valign="bottom"><b>m</b></td></tr>
@@ -897,8 +918,8 @@ template&lt;typename REAL &gt; </div>
 
 </div>
 </div>
-<a id="a5c8de1702dbd28a75ea10ac10fb4f9f4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5c8de1702dbd28a75ea10ac10fb4f9f4">&#9670;&nbsp;</a></span>operator=()</h2>
+<a id="a12887b66ab784ca6d26b52a967091eff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12887b66ab784ca6d26b52a967091eff">&#9670;&nbsp;</a></span>operator=()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -908,7 +929,7 @@ template&lt;typename REAL &gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classfml_1_1cpumat.html">fml::cpumat</a>&lt; REAL &gt; &amp; <a class="el" href="classfml_1_1cpumat.html">fml::cpumat</a>&lt; REAL &gt;::operator= </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classfml_1_1cpumat.html">fml::cpumat</a>&lt; REAL &gt; &amp;&#160;</td>
           <td class="paramname"><em>x</em></td><td>)</td>
           <td></td>
         </tr>

@@ -110,9 +110,15 @@ Inheritance diagram for fml::parmat_gpu&lt; REAL &gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:afc50cfa88baa07cf16de2ec412776dd8"><td class="memItemLeft" align="right" valign="top"><a id="afc50cfa88baa07cf16de2ec412776dd8"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>parmat_gpu</b> (<a class="el" href="classfml_1_1comm.html">comm</a> &amp;mpi_comm, const len_global_t nrows, const len_t ncols)</td></tr>
-<tr class="separator:afc50cfa88baa07cf16de2ec412776dd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2877093d66a1e7e8350ba5174ecf758"><td class="memItemLeft" align="right" valign="top"><a id="ab2877093d66a1e7e8350ba5174ecf758"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>parmat_gpu</b> (<a class="el" href="classfml_1_1comm.html">comm</a> mpi_comm, card_sp_t gpu_card, const len_global_t nrows, const len_t ncols)</td></tr>
+<tr class="separator:ab2877093d66a1e7e8350ba5174ecf758"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a481b434eda5607dbb42b0de02635f2be"><td class="memItemLeft" align="right" valign="top"><a id="a481b434eda5607dbb42b0de02635f2be"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>parmat_gpu</b> (<a class="el" href="classfml_1_1comm.html">comm</a> mpi_comm, card_sp_t gpu_card, const len_global_t nrows, const len_t ncols, const len_global_t nb4_)</td></tr>
+<tr class="separator:a481b434eda5607dbb42b0de02635f2be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad890dead73a698376aa9a62f694168f1"><td class="memItemLeft" align="right" valign="top"><a id="ad890dead73a698376aa9a62f694168f1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>print</b> (uint8_t ndigits=4, bool add_final_blank=true)</td></tr>
+<tr class="separator:ad890dead73a698376aa9a62f694168f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3a2c11195150406be4442f5e9247c5b"><td class="memItemLeft" align="right" valign="top"><a id="ac3a2c11195150406be4442f5e9247c5b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>fill_linspace</b> (const REAL start, const REAL stop)</td></tr>
 <tr class="separator:ac3a2c11195150406be4442f5e9247c5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,9 +129,15 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>fill_eye</b> ()</td><
 void&#160;</td><td class="memItemRight" valign="bottom"><b>fill_diag</b> (const <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;d)</td></tr>
 <tr class="separator:ae2da7b253aff6be45fcc5c1f8854d381"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classfml_1_1parmat"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classfml_1_1parmat')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classfml_1_1parmat.html">fml::parmat&lt; gpumat&lt; REAL &gt;, gpuvec&lt; REAL &gt;, REAL &gt;</a></td></tr>
-<tr class="memitem:ad1eef64455051e470aa59b472f712bb0 inherit pub_methods_classfml_1_1parmat"><td class="memItemLeft" align="right" valign="top"><a id="ad1eef64455051e470aa59b472f712bb0"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>parmat</b> (<a class="el" href="classfml_1_1comm.html">comm</a> &amp;mpi_comm, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;_data)</td></tr>
-<tr class="separator:ad1eef64455051e470aa59b472f712bb0 inherit pub_methods_classfml_1_1parmat"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac592fb058839e4376a32cce3084446c9 inherit pub_methods_classfml_1_1parmat"><td class="memItemLeft" align="right" valign="top"><a id="ac592fb058839e4376a32cce3084446c9"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>parmat</b> (<a class="el" href="classfml_1_1comm.html">comm</a> mpi_comm, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;data_)</td></tr>
+<tr class="separator:ac592fb058839e4376a32cce3084446c9 inherit pub_methods_classfml_1_1parmat"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96ec02450b2d38da9b272029d7eaf895 inherit pub_methods_classfml_1_1parmat"><td class="memItemLeft" align="right" valign="top"><a id="a96ec02450b2d38da9b272029d7eaf895"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>parmat</b> (<a class="el" href="classfml_1_1parmat.html">parmat</a>&lt; <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt;, <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt;, REAL &gt; &amp;&amp;x)</td></tr>
+<tr class="separator:a96ec02450b2d38da9b272029d7eaf895 inherit pub_methods_classfml_1_1parmat"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e79f191cbd1bc99ba58ab4916420861 inherit pub_methods_classfml_1_1parmat"><td class="memItemLeft" align="right" valign="top"><a id="a4e79f191cbd1bc99ba58ab4916420861"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>resize</b> (len_global_t nrows, len_t ncols)</td></tr>
+<tr class="separator:a4e79f191cbd1bc99ba58ab4916420861 inherit pub_methods_classfml_1_1parmat"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7872703ed50bddda447f2c98669479d9 inherit pub_methods_classfml_1_1parmat"><td class="memItemLeft" align="right" valign="top"><a id="a7872703ed50bddda447f2c98669479d9"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>print</b> (uint8_t ndigits=4, bool add_final_blank=true)</td></tr>
 <tr class="separator:a7872703ed50bddda447f2c98669479d9 inherit pub_methods_classfml_1_1parmat"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -189,6 +201,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const
 <tr class="memitem:ac339d7d92ceac5d5f8799156608b16c8 inherit pub_methods_classfml_1_1parmat"><td class="memItemLeft" align="right" valign="top"><a id="ac339d7d92ceac5d5f8799156608b16c8"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="classfml_1_1parmat.html">parmat</a>&lt; <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt;, <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt;, REAL &gt; &amp;x) const</td></tr>
 <tr class="separator:ac339d7d92ceac5d5f8799156608b16c8 inherit pub_methods_classfml_1_1parmat"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63faf782a6a6673bb45ca44e2299e987 inherit pub_methods_classfml_1_1parmat"><td class="memItemLeft" align="right" valign="top"><a id="a63faf782a6a6673bb45ca44e2299e987"></a>
+<a class="el" href="classfml_1_1parmat.html">parmat</a>&lt; <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt;, <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt;, REAL &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classfml_1_1parmat.html">parmat</a>&lt; <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt;, <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt;, REAL &gt; &amp;x)</td></tr>
+<tr class="separator:a63faf782a6a6673bb45ca44e2299e987 inherit pub_methods_classfml_1_1parmat"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a492b87a3808d95006112c8d2a61d81c8 inherit pub_methods_classfml_1_1parmat"><td class="memItemLeft" align="right" valign="top"><a id="a492b87a3808d95006112c8d2a61d81c8"></a>
 len_global_t&#160;</td><td class="memItemRight" valign="bottom"><b>nrows</b> () const</td></tr>
 <tr class="separator:a492b87a3808d95006112c8d2a61d81c8 inherit pub_methods_classfml_1_1parmat"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -198,6 +213,9 @@ len_local_t&#160;</td><td class="memItemRight" valign="bottom"><b>nrows_local</b
 <tr class="memitem:abcea8aba99833a20c0224cf6c45e7a3b inherit pub_methods_classfml_1_1parmat"><td class="memItemLeft" align="right" valign="top"><a id="abcea8aba99833a20c0224cf6c45e7a3b"></a>
 len_local_t&#160;</td><td class="memItemRight" valign="bottom"><b>ncols</b> () const</td></tr>
 <tr class="separator:abcea8aba99833a20c0224cf6c45e7a3b inherit pub_methods_classfml_1_1parmat"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06fc4abcd0b1b0f7467354ba1e254284 inherit pub_methods_classfml_1_1parmat"><td class="memItemLeft" align="right" valign="top"><a id="a06fc4abcd0b1b0f7467354ba1e254284"></a>
+len_global_t&#160;</td><td class="memItemRight" valign="bottom"><b>nrows_before</b> () const</td></tr>
+<tr class="separator:a06fc4abcd0b1b0f7467354ba1e254284 inherit pub_methods_classfml_1_1parmat"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aace2bae6ca6c60f4c715e865c3c24f5f inherit pub_methods_classfml_1_1parmat"><td class="memItemLeft" align="right" valign="top"><a id="aace2bae6ca6c60f4c715e865c3c24f5f"></a>
 <a class="el" href="classfml_1_1comm.html">comm</a>&#160;</td><td class="memItemRight" valign="bottom"><b>get_comm</b> () const</td></tr>
 <tr class="separator:aace2bae6ca6c60f4c715e865c3c24f5f inherit pub_methods_classfml_1_1parmat"><td class="memSeparator" colspan="2">&#160;</td></tr>

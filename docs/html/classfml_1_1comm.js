@@ -12,6 +12,8 @@ var classfml_1_1comm =
     [ "irecv", "classfml_1_1comm.html#a3c2372d0249b436f8192f5ea21d65f08", null ],
     [ "isend", "classfml_1_1comm.html#adf4917a0ea03e378961defc5cba1b8e0", null ],
     [ "jid", "classfml_1_1comm.html#a80faab0334a415c212ce765a5809f32e", null ],
+    [ "localrank", "classfml_1_1comm.html#aa2899d70f47870cd90ad8aa48320dbd2", null ],
+    [ "localsize", "classfml_1_1comm.html#abb853509e269787dcfe74b4ea63fbe23", null ],
     [ "printf", "classfml_1_1comm.html#af568a33b186292460389fea9e3b1306d", null ],
     [ "rank", "classfml_1_1comm.html#af10d01cc6a965e30828f93aefe0962cf", null ],
     [ "rank0", "classfml_1_1comm.html#afdcccd5bc6fedc9cccf906e7051eadee", null ],
@@ -22,6 +24,8 @@ var classfml_1_1comm =
     [ "size", "classfml_1_1comm.html#ae5d685e8fff4653b17ce412a6c8e340a", null ],
     [ "split", "classfml_1_1comm.html#a4671808115901a3b3ead122315d2c1a1", null ],
     [ "_comm", "classfml_1_1comm.html#a75232d95da5cb9399dd7a20a59bbdf09", null ],
+    [ "_localrank", "classfml_1_1comm.html#aa8aba4b42ce24e2123e2d92393e759fb", null ],
+    [ "_localsize", "classfml_1_1comm.html#a2ae36aa60d7e5574a1a8f805c07779b7", null ],
     [ "_rank", "classfml_1_1comm.html#a9c67e50a5899d7f462b6633f410933b1", null ],
     [ "_size", "classfml_1_1comm.html#a242194e427f8ae5ec63225b7d2eb5526", null ]
 ];

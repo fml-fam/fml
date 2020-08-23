@@ -195,22 +195,22 @@ template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:a22fff133a9931cccc4067e53a4be230f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1copy.html#a22fff133a9931cccc4067e53a4be230f">mpi2mpi</a> (const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL_IN &gt; &amp;mpi_in, <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL_OUT &gt; &amp;mpi_out)</td></tr>
 <tr class="memdesc:a22fff133a9931cccc4067e53a4be230f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data from an MPI object to another.  <a href="namespacefml_1_1copy.html#a22fff133a9931cccc4067e53a4be230f">More...</a><br /></td></tr>
 <tr class="separator:a22fff133a9931cccc4067e53a4be230f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3432791ab53ef0ff64f8718fe03e23c4"><td class="memTemplParams" colspan="2"><a id="a3432791ab53ef0ff64f8718fe03e23c4"></a>
-template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a3432791ab53ef0ff64f8718fe03e23c4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>par2cpu</b> (<a class="el" href="classfml_1_1parmat.html">parmat</a>&lt; REAL &gt; &amp;par, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;cpu)</td></tr>
-<tr class="separator:a3432791ab53ef0ff64f8718fe03e23c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a849a29ec8d73774e704b5d68ae034025"><td class="memTemplParams" colspan="2"><a id="a849a29ec8d73774e704b5d68ae034025"></a>
-template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a849a29ec8d73774e704b5d68ae034025"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>par2cpu</b> (<a class="el" href="classfml_1_1parmat.html">parmat</a>&lt; REAL &gt; &amp;par)</td></tr>
-<tr class="separator:a849a29ec8d73774e704b5d68ae034025"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7437852bf552614bbee64ac9a6b264b3"><td class="memTemplParams" colspan="2"><a id="a7437852bf552614bbee64ac9a6b264b3"></a>
-template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a7437852bf552614bbee64ac9a6b264b3"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>cpu2par</b> (<a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;cpu, <a class="el" href="classfml_1_1parmat.html">parmat</a>&lt; REAL &gt; &amp;mpi)</td></tr>
-<tr class="separator:a7437852bf552614bbee64ac9a6b264b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a52c283e17b8947cedb0c3e7e2bfca8c4"><td class="memTemplParams" colspan="2"><a id="a52c283e17b8947cedb0c3e7e2bfca8c4"></a>
-template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a52c283e17b8947cedb0c3e7e2bfca8c4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>cpu2mpi</b> (<a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;cpu, <a class="el" href="classfml_1_1grid.html">grid</a> g, int bf_rows=16, int bf_cols=16)</td></tr>
-<tr class="separator:a52c283e17b8947cedb0c3e7e2bfca8c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9107c7a7af721807ab2189620528d186"><td class="memTemplParams" colspan="2">template&lt;typename REAL_IN , typename REAL_OUT &gt; </td></tr>
+<tr class="memitem:a9107c7a7af721807ab2189620528d186"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1copy.html#a9107c7a7af721807ab2189620528d186">par2cpu</a> (const <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL_IN &gt; &amp;par, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL_OUT &gt; &amp;cpu)</td></tr>
+<tr class="memdesc:a9107c7a7af721807ab2189620528d186"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data from an PAR object to a CPU object.  <a href="namespacefml_1_1copy.html#a9107c7a7af721807ab2189620528d186">More...</a><br /></td></tr>
+<tr class="separator:a9107c7a7af721807ab2189620528d186"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac800daa02ea0f19677c14427e4d4ab66"><td class="memTemplParams" colspan="2">template&lt;typename REAL_IN , typename REAL_OUT &gt; </td></tr>
+<tr class="memitem:ac800daa02ea0f19677c14427e4d4ab66"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1copy.html#ac800daa02ea0f19677c14427e4d4ab66">cpu2par</a> (const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL_IN &gt; &amp;cpu, <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL_OUT &gt; &amp;par)</td></tr>
+<tr class="memdesc:ac800daa02ea0f19677c14427e4d4ab66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data from an CPU object to a PAR object.  <a href="namespacefml_1_1copy.html#ac800daa02ea0f19677c14427e4d4ab66">More...</a><br /></td></tr>
+<tr class="separator:ac800daa02ea0f19677c14427e4d4ab66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac83eded9e094e889268ce201a4a1e1db"><td class="memTemplParams" colspan="2">template&lt;typename REAL_IN , typename REAL_OUT &gt; </td></tr>
+<tr class="memitem:ac83eded9e094e889268ce201a4a1e1db"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1copy.html#ac83eded9e094e889268ce201a4a1e1db">par2par</a> (const <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL_IN &gt; &amp;par_in, <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL_OUT &gt; &amp;par_out)</td></tr>
+<tr class="memdesc:ac83eded9e094e889268ce201a4a1e1db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data from a PAR object to another.  <a href="namespacefml_1_1copy.html#ac83eded9e094e889268ce201a4a1e1db">More...</a><br /></td></tr>
+<tr class="separator:ac83eded9e094e889268ce201a4a1e1db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9afc7686fe8660f52ab17ac4b6fdadb9"><td class="memTemplParams" colspan="2">template&lt;typename REAL_IN , typename REAL_OUT &gt; </td></tr>
+<tr class="memitem:a9afc7686fe8660f52ab17ac4b6fdadb9"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1copy.html#a9afc7686fe8660f52ab17ac4b6fdadb9">par2par</a> (const <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL_IN &gt; &amp;par_in, <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL_OUT &gt; &amp;par_out)</td></tr>
+<tr class="memdesc:a9afc7686fe8660f52ab17ac4b6fdadb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy data from a PAR object to another.  <a href="namespacefml_1_1copy.html#a9afc7686fe8660f52ab17ac4b6fdadb9">More...</a><br /></td></tr>
+<tr class="separator:a9afc7686fe8660f52ab17ac4b6fdadb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Copiers. </p>
@@ -357,6 +357,56 @@ template&lt;typename REAL_IN , typename REAL_OUT &gt; </div>
  If a reallocation is triggered and fails, a <code>bad_alloc</code> exception will be thrown.</p>
 <p><b>Communication Details</b><br  />
  The method has no communication.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">REAL_IN,REAL_OUT</td><td>Should be <code>float</code> or <code>double</code>. They do not have to be the same type. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ac800daa02ea0f19677c14427e4d4ab66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac800daa02ea0f19677c14427e4d4ab66">&#9670;&nbsp;</a></span>cpu2par()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL_IN , typename REAL_OUT &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void fml::copy::cpu2par </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL_IN &gt; &amp;&#160;</td>
+          <td class="paramname"><em>cpu</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL_OUT &gt; &amp;&#160;</td>
+          <td class="paramname"><em>par</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy data from an CPU object to a PAR object. </p>
+<p>Every process should have a copy of the data on input.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">par</td><td>Input data. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">cpu</td><td>Output.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p><b>Memory Allocations</b><br  />
+ If the output dimensions do not match those of the input, the internal data will automatically be re-allocated.</p>
+<p><b>Exceptions</b><br  />
+ If a reallocation is triggered and fails, a <code>bad_alloc</code> exception will be thrown.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">REAL_IN,REAL_OUT</td><td>Should be <code>float</code> or <code>double</code>. They do not have to be the same type. </td></tr>
@@ -615,6 +665,156 @@ template&lt;typename REAL_IN , typename REAL_OUT &gt; </div>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">mpi_in</td><td>Input data. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">mpi_out</td><td>Output. Dimensions should match those of the input data. If not, the matrix will automatically be resized.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p><b>Memory Allocations</b><br  />
+ If the output dimensions do not match those of the input, the internal data will automatically be re-allocated.</p>
+<p><b>Exceptions</b><br  />
+ If a reallocation is triggered and fails, a <code>bad_alloc</code> exception will be thrown.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">REAL_IN,REAL_OUT</td><td>Should be <code>float</code> or <code>double</code>. They do not have to be the same type. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9107c7a7af721807ab2189620528d186"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9107c7a7af721807ab2189620528d186">&#9670;&nbsp;</a></span>par2cpu()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL_IN , typename REAL_OUT &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void fml::copy::par2cpu </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL_IN &gt; &amp;&#160;</td>
+          <td class="paramname"><em>par</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL_OUT &gt; &amp;&#160;</td>
+          <td class="paramname"><em>cpu</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy data from an PAR object to a CPU object. </p>
+<p>Every process receives a copy of the data. The number of rows of the input should fit in the storage of a <code>len_t</code>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">par</td><td>Input data. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">cpu</td><td>Output.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p><b>Memory Allocations</b><br  />
+ If the output dimensions do not match those of the input, the internal data will automatically be re-allocated.</p>
+<p><b>Exceptions</b><br  />
+ If a reallocation is triggered and fails, a <code>bad_alloc</code> exception will be thrown.</p>
+<p><b>Communication Details</b><br  />
+ The method will communicate across all processes in the communicator.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">REAL_IN,REAL_OUT</td><td>Should be <code>float</code> or <code>double</code>. They do not have to be the same type. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ac83eded9e094e889268ce201a4a1e1db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac83eded9e094e889268ce201a4a1e1db">&#9670;&nbsp;</a></span>par2par() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL_IN , typename REAL_OUT &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void fml::copy::par2par </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL_IN &gt; &amp;&#160;</td>
+          <td class="paramname"><em>par_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL_OUT &gt; &amp;&#160;</td>
+          <td class="paramname"><em>par_out</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy data from a PAR object to another. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">par_in</td><td>Input data. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">par_out</td><td>Output.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p><b>Memory Allocations</b><br  />
+ If the output dimensions do not match those of the input, the internal data will automatically be re-allocated.</p>
+<p><b>Exceptions</b><br  />
+ If a reallocation is triggered and fails, a <code>bad_alloc</code> exception will be thrown.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">REAL_IN,REAL_OUT</td><td>Should be <code>float</code> or <code>double</code>. They do not have to be the same type. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a9afc7686fe8660f52ab17ac4b6fdadb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9afc7686fe8660f52ab17ac4b6fdadb9">&#9670;&nbsp;</a></span>par2par() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL_IN , typename REAL_OUT &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void fml::copy::par2par </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL_IN &gt; &amp;&#160;</td>
+          <td class="paramname"><em>par_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL_OUT &gt; &amp;&#160;</td>
+          <td class="paramname"><em>par_out</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy data from a PAR object to another. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">par_in</td><td>Input data. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">par_out</td><td>Output.</td></tr>
   </table>
   </dd>
 </dl>

@@ -186,8 +186,16 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 <tr class="separator:af10d01cc6a965e30828f93aefe0962cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5d685e8fff4653b17ce412a6c8e340a"><td class="memItemLeft" align="right" valign="top"><a id="ae5d685e8fff4653b17ce412a6c8e340a"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1comm.html#ae5d685e8fff4653b17ce412a6c8e340a">size</a> () const</td></tr>
-<tr class="memdesc:ae5d685e8fff4653b17ce412a6c8e340a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Total number of ranks in the MPI communicator. <br /></td></tr>
+<tr class="memdesc:ae5d685e8fff4653b17ce412a6c8e340a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Total number of ranks in the MPI communicator. The same across all ranks. <br /></td></tr>
 <tr class="separator:ae5d685e8fff4653b17ce412a6c8e340a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2899d70f47870cd90ad8aa48320dbd2"><td class="memItemLeft" align="right" valign="top"><a id="aa2899d70f47870cd90ad8aa48320dbd2"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1comm.html#aa2899d70f47870cd90ad8aa48320dbd2">localrank</a> () const</td></tr>
+<tr class="memdesc:aa2899d70f47870cd90ad8aa48320dbd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calling process rank (0-based index) in within the node. <br /></td></tr>
+<tr class="separator:aa2899d70f47870cd90ad8aa48320dbd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb853509e269787dcfe74b4ea63fbe23"><td class="memItemLeft" align="right" valign="top"><a id="abb853509e269787dcfe74b4ea63fbe23"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1comm.html#abb853509e269787dcfe74b4ea63fbe23">localsize</a> () const</td></tr>
+<tr class="memdesc:abb853509e269787dcfe74b4ea63fbe23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Total number of ranks within the node. Can vary across nodes. <br /></td></tr>
+<tr class="separator:abb853509e269787dcfe74b4ea63fbe23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -200,6 +208,12 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>_rank</b></td></tr>
 <tr class="memitem:a242194e427f8ae5ec63225b7d2eb5526"><td class="memItemLeft" align="right" valign="top"><a id="a242194e427f8ae5ec63225b7d2eb5526"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>_size</b></td></tr>
 <tr class="separator:a242194e427f8ae5ec63225b7d2eb5526"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8aba4b42ce24e2123e2d92393e759fb"><td class="memItemLeft" align="right" valign="top"><a id="aa8aba4b42ce24e2123e2d92393e759fb"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>_localrank</b></td></tr>
+<tr class="separator:aa8aba4b42ce24e2123e2d92393e759fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ae36aa60d7e5574a1a8f805c07779b7"><td class="memItemLeft" align="right" valign="top"><a id="a2ae36aa60d7e5574a1a8f805c07779b7"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>_localsize</b></td></tr>
+<tr class="separator:a2ae36aa60d7e5574a1a8f805c07779b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>MPI communicator data and helpers. </p>

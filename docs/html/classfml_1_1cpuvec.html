@@ -93,6 +93,7 @@ $(document).ready(function(){initNavTree('classfml_1_1cpuvec.html',''); initResi
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="classfml_1_1cpuvec-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">fml::cpuvec&lt; T &gt; Class Template Reference</div>  </div>
@@ -124,6 +125,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4480ee9b3fdcec51d4fd9b48c83414a6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1cpuvec.html#a4480ee9b3fdcec51d4fd9b48c83414a6">cpuvec</a> (T *data, len_t <a class="el" href="classfml_1_1univec.html#a3d4d73b72cb5ee88d23ddc9b08feae3c">size</a>, bool free_on_destruct=false)</td></tr>
 <tr class="memdesc:a4480ee9b3fdcec51d4fd9b48c83414a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct vector object with inherited data. Essentially the same as using the minimal constructor and immediately calling the <code><a class="el" href="classfml_1_1cpuvec.html#ad71710c987ec87f9945dc485ac7f3e8a" title="Set the internal object storage to the specified array.">inherit()</a></code> method.  <a href="classfml_1_1cpuvec.html#a4480ee9b3fdcec51d4fd9b48c83414a6">More...</a><br /></td></tr>
 <tr class="separator:a4480ee9b3fdcec51d4fd9b48c83414a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f4cfb13e840532b00282379f47a8854"><td class="memItemLeft" align="right" valign="top"><a id="a8f4cfb13e840532b00282379f47a8854"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>cpuvec</b> (<a class="el" href="classfml_1_1cpuvec.html">cpuvec</a> &amp;&amp;x)</td></tr>
+<tr class="separator:a8f4cfb13e840532b00282379f47a8854"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12b187a1ee666b0dbda7a4d979f8fa4e"><td class="memItemLeft" align="right" valign="top"><a id="a12b187a1ee666b0dbda7a4d979f8fa4e"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>cpuvec</b> (const <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a> &amp;x)</td></tr>
 <tr class="separator:a12b187a1ee666b0dbda7a4d979f8fa4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -154,6 +158,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:add43f458496ef11669251a16bd21e3c7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1cpuvec.html#add43f458496ef11669251a16bd21e3c7">fill_linspace</a> (const T start, const T stop)</td></tr>
 <tr class="memdesc:add43f458496ef11669251a16bd21e3c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set values to linearly spaced numbers.  <a href="classfml_1_1cpuvec.html#add43f458496ef11669251a16bd21e3c7">More...</a><br /></td></tr>
 <tr class="separator:add43f458496ef11669251a16bd21e3c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d2311961daebdd7731000d3c2de15cb"><td class="memItemLeft" align="right" valign="top"><a id="a3d2311961daebdd7731000d3c2de15cb"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>subset</b> (const len_t start, const len_t stop, const bool interior=true)</td></tr>
+<tr class="separator:a3d2311961daebdd7731000d3c2de15cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36acbd37a113642dfa6087377eb522d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1cpuvec.html#a36acbd37a113642dfa6087377eb522d2">scale</a> (const T s)</td></tr>
 <tr class="memdesc:a36acbd37a113642dfa6087377eb522d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiply all values by the input value.  <a href="classfml_1_1cpuvec.html#a36acbd37a113642dfa6087377eb522d2">More...</a><br /></td></tr>
 <tr class="separator:a36acbd37a113642dfa6087377eb522d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -185,8 +192,11 @@ T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfm
 <tr class="memitem:a574c70d9ba83e4ea72d3981dfe67dcff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1cpuvec.html#a574c70d9ba83e4ea72d3981dfe67dcff">operator!=</a> (const <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; T &gt; &amp;x) const</td></tr>
 <tr class="memdesc:a574c70d9ba83e4ea72d3981dfe67dcff"><td class="mdescLeft">&#160;</td><td class="mdescRight">See if the two objects are not the same. Uses same internal logic as the <code>==</code> method.  <a href="classfml_1_1cpuvec.html#a574c70d9ba83e4ea72d3981dfe67dcff">More...</a><br /></td></tr>
 <tr class="separator:a574c70d9ba83e4ea72d3981dfe67dcff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7d7cbe3bb638c1884c699181846323b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1cpuvec.html#ac7d7cbe3bb638c1884c699181846323b">operator=</a> (const <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; T &gt; &amp;x)</td></tr>
-<tr class="memdesc:ac7d7cbe3bb638c1884c699181846323b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operator that sets the LHS to a shallow copy of the input. Desctruction of the LHS object will not result in the internal array storage being freed.  <a href="classfml_1_1cpuvec.html#ac7d7cbe3bb638c1884c699181846323b">More...</a><br /></td></tr>
+<tr class="memitem:af0d44a3f82f9655d64403b3c9ef0490e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1cpuvec.html#af0d44a3f82f9655d64403b3c9ef0490e">operator=</a> (<a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; T &gt; &amp;x)</td></tr>
+<tr class="memdesc:af0d44a3f82f9655d64403b3c9ef0490e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Operator that sets the LHS to a shallow copy of the input. Desctruction of the LHS object will not result in the internal array storage being freed.  <a href="classfml_1_1cpuvec.html#af0d44a3f82f9655d64403b3c9ef0490e">More...</a><br /></td></tr>
+<tr class="separator:af0d44a3f82f9655d64403b3c9ef0490e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7d7cbe3bb638c1884c699181846323b"><td class="memItemLeft" align="right" valign="top"><a id="ac7d7cbe3bb638c1884c699181846323b"></a>
+<a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; T &gt; &amp;x)</td></tr>
 <tr class="separator:ac7d7cbe3bb638c1884c699181846323b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a301deb0dac956b2c4a0d56189437aa1e"><td class="memItemLeft" align="right" valign="top"><a id="a301deb0dac956b2c4a0d56189437aa1e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>fill_linspace</b> (const int start, const int stop)</td></tr>
@@ -204,8 +214,14 @@ T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 T *&#160;</td><td class="memItemRight" valign="bottom"><b>data_ptr</b> () const</td></tr>
 <tr class="separator:aeea6eaffede1121f507639df62032d66 inherit pub_methods_classfml_1_1univec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a1059d997492c41b0ea954246f861c394"><td class="memItemLeft" align="right" valign="top"><a id="a1059d997492c41b0ea954246f861c394"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>free_on_destruct</b> () const</td></tr>
+<tr class="separator:a1059d997492c41b0ea954246f861c394"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadcfc45e35f5155a283bf4c5745d97b6"><td class="memItemLeft" align="right" valign="top"><a id="aadcfc45e35f5155a283bf4c5745d97b6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>dont_free_on_destruct</b> ()</td></tr>
+<tr class="separator:aadcfc45e35f5155a283bf4c5745d97b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classfml_1_1univec"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classfml_1_1univec')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classfml_1_1univec.html">fml::univec&lt; T &gt;</a></td></tr>
 <tr class="memitem:a56b48e2d1910653f4c2801ab8389bedf inherit pro_methods_classfml_1_1univec"><td class="memItemLeft" align="right" valign="top"><a id="a56b48e2d1910653f4c2801ab8389bedf"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>should_free</b> () const</td></tr>
@@ -219,6 +235,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>printval</b> (const T
 <tr class="memitem:aa0e48ecd3d885de5e1ddd1722cd714ac inherit pro_methods_classfml_1_1univec"><td class="memItemLeft" align="right" valign="top"><a id="aa0e48ecd3d885de5e1ddd1722cd714ac"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>printval</b> (const int val, uint8_t ndigits) const</td></tr>
 <tr class="separator:aa0e48ecd3d885de5e1ddd1722cd714ac inherit pro_methods_classfml_1_1univec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_attribs_classfml_1_1univec"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classfml_1_1univec')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classfml_1_1univec.html">fml::univec&lt; T &gt;</a></td></tr>
 <tr class="memitem:ab88a5e0c55999bf94fbed3d3f3443346 inherit pro_attribs_classfml_1_1univec"><td class="memItemLeft" align="right" valign="top"><a id="ab88a5e0c55999bf94fbed3d3f3443346"></a>
 len_t&#160;</td><td class="memItemRight" valign="bottom"><b>_size</b></td></tr>
@@ -513,8 +532,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="ac7d7cbe3bb638c1884c699181846323b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac7d7cbe3bb638c1884c699181846323b">&#9670;&nbsp;</a></span>operator=()</h2>
+<a id="af0d44a3f82f9655d64403b3c9ef0490e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0d44a3f82f9655d64403b3c9ef0490e">&#9670;&nbsp;</a></span>operator=()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -524,7 +543,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classfml_1_1cpuvec.html">fml::cpuvec</a>&lt; T &gt; &amp; <a class="el" href="classfml_1_1cpuvec.html">fml::cpuvec</a>&lt; T &gt;::operator= </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; T &gt; &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="classfml_1_1cpuvec.html">fml::cpuvec</a>&lt; T &gt; &amp;&#160;</td>
           <td class="paramname"><em>x</em></td><td>)</td>
           <td></td>
         </tr>
