@@ -54,6 +54,13 @@ namespace gpublas
   
   
   
+  inline cublasStatus_t set_math_mode(cublasHandle_t handle, cublasMath_t mode)
+  {
+    return cublasSetMathMode(handle, mode);
+  }
+  
+  
+  
   inline cublasStatus_t Iamax(cublasHandle_t handle, int n, const float *x,
     int incx, int *result)
   {

@@ -3,7 +3,7 @@
 ## Release 0.5-0 (//):
 
 New:
-  * 
+  * Added set_math_mode() method for card objects.
 
 API Changes:
   * 

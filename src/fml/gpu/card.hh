@@ -62,6 +62,8 @@ namespace fml
       void synch();
       void check();
       
+      void set_math_mode(gpublas_mathmode_t mode);
+      
       ///@{
       /// The ordinal number corresponding to the GPU device.
       int get_id() {return _id;};
@@ -400,6 +402,32 @@ inline void fml::card::check()
 {
   err = fml::gpuprims::gpu_last_error();
   check_gpu_error();
+}
+
+
+
+
+/**
+  @brief Manually set the GPU BLAS math mode (as supported by hardware).
+  
+  @details Not all options are supported by all hardware/driver versions. If the
+  function is not explicitly called, the device will use the default behavior;
+  the vendor may vary this behavior over time.
+  
+  @param[in] mode Should be one of:
+    * `GPUBLAS_MATH_DEFAULT` - the default mode of the device
+    * `GPUBLAS_MATH_ACCELERATE` - use acceleration (e.g. tensorcores) in single
+      precision routines
+    * `GPUBLAS_MATH_PEDANTIC` - uses only the prescribed precision
+  
+  @impl Wrapper around GPU error lookup, e.g. `cublasSetMathMode()`.
+  
+  @except If a CUDA error is detected, this throws a 'runtime_error' exception.
+*/
+inline void fml::card::set_math_mode(gpublas_mathmode_t mode)
+{
+  gpublas_status_t check = gpublas::set_math_mode(_blas_handle, mode);
+  gpublas::err::get_cublas_error_msg(check);
 }
 
 
