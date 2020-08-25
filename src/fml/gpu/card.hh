@@ -227,10 +227,13 @@ inline void fml::card::info() const
   double mem_used, mem_total;
   fml::nvml::device::get_memory_info(device, &mem_used, &mem_total);
   
+  std::string math_mode = gpublas::get_math_mode_string(_blas_handle);
+  
   printf("## GPU %d ", _id);
   printf("(%s) ", name.c_str());
   printf("%.0f/%.0f MB ", mem_used/1024/1024, mem_total/1024/1024);
-  printf("- CUDA %d.%d", version_major, version_minor);
+  printf("- CUDA %d.%d ", version_major, version_minor);
+  printf("(math mode: %s)", math_mode.c_str());
   printf("\n\n");
 #else // FML_USE_HIP
   printf("## GPU %d ", _id);

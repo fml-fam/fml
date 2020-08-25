@@ -59,6 +59,37 @@ namespace gpublas
     return cublasSetMathMode(handle, mode);
   }
   
+  inline cublasStatus_t get_math_mode(cublasHandle_t handle, cublasMath_t *mode)
+  {
+    return cublasGetMathMode(handle, mode);
+  }
+  
+  inline std::string get_math_mode_string(cublasHandle_t handle)
+  {
+    cublasMath_t mode;
+    cublasStatus_t check = get_math_mode(handle, &mode);
+    err::check_ret(check, "cublasGetMathMode");
+    
+    std::string ret;
+    if (mode == CUBLAS_DEFAULT_MATH)
+      ret = "default";
+  #if __CUDACC_VER_MAJOR__ >= 11
+    else if (mode == CUBLAS_PEDANTIC_MATH)
+      ret = "pedantic";
+    else if (mode == CUBLAS_TF32_TENSOR_OP_MATH)
+      ret = "TF32 tensor op";
+    else if (mode == CUBLAS_MATH_DISALLOW_REDUCED_PRECISION_REDUCTION)
+      ret = "disallow reduced precision";
+  #else
+    else if (mode == CUBLAS_TENSOR_OP_MATH)
+      ret = "tensor op";
+  #endif
+    else
+      throw std::runtime_error("unable to determine cuBLAS math mode");
+    
+    return ret;
+  }
+  
   
   
   inline cublasStatus_t Iamax(cublasHandle_t handle, int n, const float *x,
