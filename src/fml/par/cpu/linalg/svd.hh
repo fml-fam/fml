@@ -164,6 +164,113 @@ namespace linalg
     linalg::matmult(false, false, (REAL)1, x_cpy, R, x.data_obj());
     linalg::matmult(false, false, (REAL)1, x.data_obj(), u_R, u.data_obj());
   }
+  
+  
+  
+  namespace internals
+  {
+    template <typename REAL>
+    void rsvd_A(const uint32_t seed, const int k, const int q,
+      parmat_cpu<REAL> &x, parmat_cpu<REAL> &QY)
+    {
+      const len_global_t m = x.nrows();
+      const len_t n = x.ncols();
+      if (m < (len_global_t)n)
+        throw std::runtime_error("must have m>n");
+      if (k > n)
+        throw std::runtime_error("must have k<n");
+      
+      parmat_cpu<REAL> Y(x.get_comm(), m, 2*k, x.nrows_before());
+      parmat_cpu<REAL> Y_tmp(x.get_comm(), m, 2*k, x.nrows_before());
+      cpumat<REAL> Z(n, 2*k);
+      cpumat<REAL> QZ(n, 2*k);
+      
+      cpumat<REAL> R(2*k, 2*k);
+      cpumat<REAL> R_local;
+      cpuvec<REAL> qraux;
+      cpuvec<REAL> work;
+      
+      cpumat<REAL> omega(n, 2*k);
+      omega.fill_runif(seed);
+      
+      // Stage A
+      matmult(x, omega, Y);
+      qr_Q(Y, Y_tmp, R, R_local, qraux, QY);
+      
+      for (int i=0; i<q; i++)
+      {
+        matmult(x, QY, Z);
+        linalg::qr_internals(false, Z, qraux, work);
+        linalg::qr_Q(Z, qraux, QZ, work);
+        
+        matmult(x, QZ, Y);
+        qr_Q(Y, Y_tmp, R, R_local, qraux, QY);
+      }
+    }
+  }
+  
+  /**
+    @brief Computes the truncated singular value decomposition using the
+    normal projections method of Halko et al. This method is only an
+    approximation.
+    
+    @param[inout] x Input data matrix.
+    @param[out] s Vector of singular values.
+    @param[out] u Matrix of left singular vectors.
+    @param[out] vt Matrix of (transposed) right singular vectors.
+    
+    @impl Uses a series of QR's using the TSQR implementation, and matrix
+    multiplications.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void rsvd(const uint32_t seed, const int k, const int q,
+    parmat_cpu<REAL> &x, cpuvec<REAL> &s)
+  {
+    parmat_cpu<REAL> QY(x.get_comm(), x.nrows(), 2*k, x.nrows_before());
+    cpumat<REAL> B(2*k, x.ncols());
+    
+    // stage A
+    internals::rsvd_A(seed, k, q, x, QY);
+    
+    // Stage B
+    matmult(QY, x, B);
+    
+    linalg::svd(B, s);
+    s.resize(k);
+  }
+  
+  /// \overload
+  template <typename REAL>
+  void rsvd(const uint32_t seed, const int k, const int q,
+    parmat_cpu<REAL> &x, cpuvec<REAL> &s, parmat_cpu<REAL> &u,
+    cpumat<REAL> &vt)
+  {
+    parmat_cpu<REAL> QY(x.get_comm(), x.nrows(), 2*k, x.nrows_before());
+    cpumat<REAL> B(2*k, x.ncols());
+    
+    // stage A
+    internals::rsvd_A(seed, k, q, x, QY);
+    
+    // Stage B
+    matmult(QY, x, B);
+    
+    cpumat<REAL> uB;
+    linalg::svd(B, s, uB, vt);
+    
+    s.resize(k);
+    
+    matmult(QY, uB, u);
+    // u.resize(u.nrows(), k);
+  }
 }
 }
 
