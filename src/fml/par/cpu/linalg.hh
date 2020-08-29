@@ -7,9 +7,9 @@
 #pragma once
 
 
-#include "parmat.hh"
-
 #include "linalg/blas.hh"
+#include "linalg/qr.hh"
+#include "linalg/svd.hh"
 
 
 #endif
