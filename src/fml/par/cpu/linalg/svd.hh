@@ -91,6 +91,79 @@ namespace linalg
     fml::linalg::matmult(false, false, (REAL)1.0, x.data_obj(), vt, u);
     fml::linalg::xpose(cp, vt);
   }
+  
+  
+  
+  /**
+    @brief Computes the singular value decomposition by first reducing the
+    rectangular matrix to a square matrix using an orthogonal factorization. If
+    the matrix is square, we skip the orthogonal factorization.
+    
+    @details If the matrix has more rows than columns, the operation works by
+    computing a QR and then taking the SVD of the R matrix. The left singular
+    vectors are Q times the left singular vectors from R's SVD, and the singular
+    value and the right singular vectors are those from R's SVD. Likewise, if
+    the matrix has more columns than rows, w take the LQ and then the SVD of
+    the L matrix. The left singular vectors are Q times the right singular
+    vectors from L's SVD, and the singular value and the left singular vectors
+    are those from L's SVD.
+    
+    @param[inout] x Input data matrix. Values are overwritten.
+    @param[out] s Vector of singular values.
+    @param[out] u Matrix of left singular vectors.
+    @param[out] vt Matrix of (transposed) right singular vectors.
+    
+    @impl Uses the TSQR implementation to reduce the matrix to a square matrix,
+    and then calls `linalg::svd()`. If computing the vectors, `linalg::trinv()`
+    and a series of matrix multiplications are used.
+    
+    @allocs If the any outputs are inappropriately sized, they will
+    automatically be re-allocated. Additionally, some temporary work storage
+    is needed.
+    
+    @except If a (re-)allocation is triggered and fails, a `bad_alloc`
+    exception will be thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  void tssvd(parmat_cpu<REAL> &x, cpuvec<REAL> &s)
+  {
+    cpumat<REAL> R;
+    qr_R(mpi::REDUCE_TO_ALL, x, R);
+    svd(R, s);
+  }
+  
+  /// \overload
+  template <typename REAL>
+  void tssvd(parmat_cpu<REAL> &x, cpuvec<REAL> &s, parmat_cpu<REAL> &u,
+    cpumat<REAL> &vt)
+  {
+    const len_t n = x.ncols();
+    if (x.nrows() < (len_global_t)n)
+      throw std::runtime_error("impossible dimensions");
+    
+    cpumat<REAL> x_cpy = x.data_obj().dupe();
+    
+    cpumat<REAL> R_local;
+    cpuvec<REAL> qraux;
+    qr(false, x.data_obj(), qraux);
+    qr_R(x.data_obj(), R_local);
+    
+    cpumat<REAL> R(n, n);
+    tsqr::qr_allreduce(mpi::REDUCE_TO_ALL, n, n, R_local.data_ptr(),
+      R.data_ptr(), x.get_comm().get_comm());
+    
+    copy::cpu2cpu(R, R_local);
+    cpumat<REAL> u_R;
+    linalg::svd(R_local, s, u_R, vt);
+    
+    // u = Q*u_R = x*R^{-1}*u_R
+    u.resize(x.nrows(), x.ncols());
+    linalg::trinv(true, false, R);
+    linalg::matmult(false, false, (REAL)1, x_cpy, R, x.data_obj());
+    linalg::matmult(false, false, (REAL)1, x.data_obj(), u_R, u.data_obj());
+  }
 }
 }
 
