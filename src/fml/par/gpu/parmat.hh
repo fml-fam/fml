@@ -30,6 +30,8 @@ namespace fml
       void fill_linspace(const REAL start, const REAL stop);
       void fill_eye();
       void fill_diag(const gpuvec<REAL> &d);
+      
+      card_sp_t get_card() const {return this->data.get_card();};
   };
 }
 
