@@ -32,19 +32,28 @@ namespace fml
     
     
     
-    void contig_type(const int count, const float *x, MPI_Datatype *newtype)
+    static inline void contig_type(const int count, const float *x,
+      MPI_Datatype *newtype)
     {
       (void)x;
-      // int ret = 
-      MPI_Type_contiguous(count, MPI_FLOAT, newtype);
-      MPI_Type_commit(newtype);
+      int ret;
+      
+      ret = MPI_Type_contiguous(count, MPI_FLOAT, newtype);
+      check_MPI_ret(ret);
+      ret = MPI_Type_commit(newtype);
+      check_MPI_ret(ret);
     }
     
-    void contig_type(const int count, const double *x, MPI_Datatype *newtype)
+    static inline void contig_type(const int count, const double *x,
+      MPI_Datatype *newtype)
     {
       (void)x;
-      MPI_Type_contiguous(count, MPI_DOUBLE, newtype);
-      MPI_Type_commit(newtype);
+      int ret;
+      
+      ret = MPI_Type_contiguous(count, MPI_DOUBLE, newtype);
+      check_MPI_ret(ret);
+      ret = MPI_Type_commit(newtype);
+      check_MPI_ret(ret);
     }
   }
 }
