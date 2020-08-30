@@ -186,9 +186,26 @@ And here we see:
 
 
 
-## API Stability
+## Header and API Stability
+
+tldr: 
+
+* Use the super headers (or read the long explanation)
+    * CPU - `fml/cpu.hh`
+    * GPU - `fml/gpu.hh`
+    * MPI - `fml/mpi.hh`
+    * PAR still evolving
+* Existing API's are largely stable. Most changes will be additions rather than modifications.
 
 The project is young and things are still mostly evolving. The current status is:
+
+### Headers
+
+There are currently "super headers" for CPU (`fml/cpu.hh`), GPU (`fml/gpu.hh`), and MPI (`fml/mpi.hh`) backends. These include all relevant sub-headers. These are "frozen" in the sense that they will not move and will always include everything. However, as more namespaces are added, those too will be included in the super headers. The headers one folder level deep (e.g. those in `fml/cpu`) are similarly frozen, although more may be added over time. Headers two folder levels
+
+Internals are evolving and subject to change at basically any time. Notable changes will be mentioned in the changelog. 
+
+### API
 
 * **Frozen**: Existing APIs will not be developed further.
     - none
@@ -203,7 +220,7 @@ The project is young and things are still mostly evolving. The current status is
 * **Experimental**: Nothing is remotely finalized.
     - parmat - all functions and methods
 
-Internals are evolving and subject to change at basically any time.
+Internals are evolving and subject to change at basically any time. Notable changes will be mentioned in the changelog.
 
 
 
