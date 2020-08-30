@@ -23,16 +23,16 @@ namespace tsqr
 {
   namespace internals
   {
-    bool badinfo;
-    int _m, _n, minmn, mtb;
-    int lwork;
+    inline bool badinfo;
+    inline int _m, _n, minmn, mtb;
+    inline int lwork;
     
     template <typename REAL>
-    REAL *tallboy;
+    inline REAL *tallboy;
     template <typename REAL>
-    REAL *work;
+    inline REAL *work;
     template <typename REAL>
-    REAL *qraux;
+    inline REAL *qraux;
     
     
     

@@ -21,6 +21,7 @@ namespace tsqr
 {
   namespace internals
   {
+    // TODO mark inline when cuda gets C++17 support
     fml::card_sp_t c;
     cusolverStatus_t check;
     dim3 griddim, blockdim;
