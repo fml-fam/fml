@@ -497,7 +497,6 @@ namespace linalg
     // Stage B
     matmult(true, false, (REAL)1.0, QY, x, B);
     
-    cpumat<REAL> uB;
     svd(B, s);
     
     s.resize(k);
@@ -513,8 +512,8 @@ namespace linalg
     const len_t m = x.nrows();
     const len_t n = x.ncols();
     
-    cpumat<REAL> QY(m, 2*k);
-    cpumat<REAL> B(2*k, n);
+    mpimat<REAL> QY(x.get_grid(), m, 2*k, x.bf_rows(), x.bf_cols());
+    mpimat<REAL> B(x.get_grid(), 2*k, n, x.bf_rows(), x.bf_cols());
     
     // Stage A
     rsvd_A(seed, k, q, x, QY);
@@ -522,7 +521,7 @@ namespace linalg
     // Stage B
     matmult(true, false, (REAL)1.0, QY, x, B);
     
-    cpumat<REAL> uB;
+    mpimat<REAL> uB(x.get_grid());
     svd(B, s, uB, vt);
     
     s.resize(k);
