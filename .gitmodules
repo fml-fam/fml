@@ -1,6 +1,3 @@
-[submodule "src/_internals/arraytools"]
-	path = src/_internals/arraytools
-	url = https://github.com/wrathematics/arraytools
 [submodule "src/fml/_internals/arraytools"]
 	path = src/fml/_internals/arraytools
 	url = https://github.com/wrathematics/arraytools.git
