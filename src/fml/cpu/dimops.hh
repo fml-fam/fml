@@ -164,6 +164,126 @@ namespace dimops
   
   
   
+  enum sweep_op
+  {
+    /**
+      TODO
+    */
+    SWEEP_ADD, SWEEP_SUB, SWEEP_MUL, SWEEP_DIV
+  };
+  
+  template <typename REAL>
+  static inline void rowsweep(cpumat<REAL> &x, const cpuvec<REAL> &s, const sweep_op op)
+  {
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
+    
+    if (s.size() != m)
+      throw std::runtime_error("non-conformal arguments");
+    
+    REAL *x_d = x.data_ptr();
+    const REAL *s_d = s.data_ptr();
+    
+    if (op == SWEEP_ADD)
+    {
+      #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE)
+      for (len_t j=0; j<n; j++)
+      {
+        #pragma omp simd
+        for (len_t i=0; i<m; i++)
+          x_d[i + m*j] += s_d[i];
+      }
+    }
+    else if (op == SWEEP_SUB)
+    {
+      #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE)
+      for (len_t j=0; j<n; j++)
+      {
+        #pragma omp simd
+        for (len_t i=0; i<m; i++)
+          x_d[i + m*j] -= s_d[i];
+      }
+    }
+    else if (op == SWEEP_MUL)
+    {
+      #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE)
+      for (len_t j=0; j<n; j++)
+      {
+        #pragma omp simd
+        for (len_t i=0; i<m; i++)
+          x_d[i + m*j] *= s_d[i];
+      }
+    }
+    else if (op == SWEEP_DIV)
+    {
+      #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE)
+      for (len_t j=0; j<n; j++)
+      {
+        #pragma omp simd
+        for (len_t i=0; i<m; i++)
+          x_d[i + m*j] /= s_d[i];
+      }
+    }
+  }
+  
+  
+  
+  template <typename REAL>
+  static inline void colsweep(cpumat<REAL> &x, const cpuvec<REAL> &s, const sweep_op op)
+  {
+    const len_t m = x.nrows();
+    const len_t n = x.ncols();
+    
+    if (s.size() != n)
+      throw std::runtime_error("non-conformal arguments");
+    
+    REAL *x_d = x.data_ptr();
+    const REAL *s_d = s.data_ptr();
+    
+    if (op == SWEEP_ADD)
+    {
+      #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE)
+      for (len_t j=0; j<n; j++)
+      {
+        #pragma omp simd
+        for (len_t i=0; i<m; i++)
+          x_d[i + m*j] += s_d[j];
+      }
+    }
+    else if (op == SWEEP_SUB)
+    {
+      #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE)
+      for (len_t j=0; j<n; j++)
+      {
+        #pragma omp simd
+        for (len_t i=0; i<m; i++)
+          x_d[i + m*j] -= s_d[j];
+      }
+    }
+    else if (op == SWEEP_MUL)
+    {
+      #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE)
+      for (len_t j=0; j<n; j++)
+      {
+        #pragma omp simd
+        for (len_t i=0; i<m; i++)
+          x_d[i + m*j] *= s_d[j];
+      }
+    }
+    else if (op == SWEEP_DIV)
+    {
+      #pragma omp parallel for if(m*n > fml::omp::OMP_MIN_SIZE)
+      for (len_t j=0; j<n; j++)
+      {
+        #pragma omp simd
+        for (len_t i=0; i<m; i++)
+          x_d[i + m*j] /= s_d[j];
+      }
+    }
+  }
+  
+  
+  
   namespace internals
   {
     template <typename REAL>
