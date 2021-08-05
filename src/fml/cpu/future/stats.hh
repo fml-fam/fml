@@ -183,14 +183,14 @@ namespace stats
     
     while (!conv && iter<maxiter)
     {
-      cpuhelpers::cpu2cpu(M, L);
+      copy::cpu2cpu(M, L);
       if (iter > 0)
         ambpc(L, S, Y);
       
       sv_thresh(L, 1/mu, s, u, vt);
       
       // S = M - L + Y
-      cpuhelpers::cpu2cpu(M, S);
+      copy::cpu2cpu(M, S);
       ambpc(S, L, Y);
       
       sv_thresh(S, lambda/mu, s, u, vt);
