@@ -165,6 +165,17 @@ namespace dimops
   
   
   
+  /**
+    @brief Sweep a vector through a matrix arithmetically.
+    
+    @details The function takes a matrix and row-wise applies the vector to the
+    entries of that matrix according to the requested arithmetic operation.
+    
+    @except If x and s are inappropriately sized for the operation, the function
+    will throw a 'runtime_error' exception.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   static inline void rowsweep(cpumat<REAL> &x, const cpuvec<REAL> &s, const sweep_op op)
   {
@@ -221,6 +232,17 @@ namespace dimops
   
   
   
+  /**
+    @brief Sweep a vector through a matrix arithmetically.
+    
+    @details The function takes a matrix and col-wise applies the vector to the
+    entries of that matrix according to the requested arithmetic operation.
+    
+    @except If x and s are inappropriately sized for the operation, the function
+    will throw a 'runtime_error' exception.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
   template <typename REAL>
   static inline void colsweep(cpumat<REAL> &x, const cpuvec<REAL> &s, const sweep_op op)
   {
