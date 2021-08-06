@@ -9,6 +9,7 @@
 
 #include <cmath>
 
+#include "../_internals/dimops.hh"
 #include "../_internals/omp.hh"
 
 #include "cpumat.hh"
@@ -163,14 +164,6 @@ namespace dimops
   }
   
   
-  
-  enum sweep_op
-  {
-    /**
-      TODO
-    */
-    SWEEP_ADD, SWEEP_SUB, SWEEP_MUL, SWEEP_DIV
-  };
   
   template <typename REAL>
   static inline void rowsweep(cpumat<REAL> &x, const cpuvec<REAL> &s, const sweep_op op)
