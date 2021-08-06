@@ -9,7 +9,11 @@
 
 #include <cmath>
 
+#include "../_internals/dimops.hh"
+
 #include "../cpu/internals/vecops.hh"
+#include "../cpu/cpuvec.hh"
+
 #include "internals/bcutils.hh"
 #include "mpimat.hh"
 
@@ -121,6 +125,146 @@ namespace dimops
   {
     colsums(x, s);
     fml::vecops::cpu::sweep_mul((REAL) 1.0/x.nrows(), x.ncols(), s.data_ptr());
+  }
+  
+  
+  
+  /**
+    @brief Sweep a vector through a matrix arithmetically.
+    
+    @details The function takes a matrix and row-wise applies the vector to the
+    entries of that matrix according to the requested arithmetic operation.
+    
+    @comm The method has no communication.
+    
+    @except If x and s are inappropriately sized for the operation, the function
+    will throw a 'runtime_error' exception.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  static inline void rowsweep(mpimat<REAL> &x, const cpuvec<REAL> &s, const sweep_op op)
+  {
+    if (s.size() != x.nrows())
+      throw std::runtime_error("non-conformal arguments");
+    
+    const len_t m_local = x.nrows_local();
+    const len_t n_local = x.ncols_local();
+    REAL *x_d = x.data_ptr();
+    const REAL *s_d = s.data_ptr();
+    
+    const auto g = x.get_grid();
+    
+    if (op == SWEEP_ADD)
+    {
+      #pragma omp parallel for if(m_local*n_local > fml::omp::OMP_MIN_SIZE)
+      for (len_t j=0; j<n_local; j++)
+      {
+        #pragma omp simd
+        for (len_t i=0; i<m_local; i++)
+          x_d[i + m_local*j] += s_d[bcutils::l2g(i, x.bf_rows(), g.nprow(), g.myrow())];
+      }
+    }
+    else if (op == SWEEP_SUB)
+    {
+      #pragma omp parallel for if(m_local*n_local > fml::omp::OMP_MIN_SIZE)
+      for (len_t j=0; j<n_local; j++)
+      {
+        #pragma omp simd
+        for (len_t i=0; i<m_local; i++)
+          x_d[i + m_local*j] -= s_d[bcutils::l2g(i, x.bf_rows(), g.nprow(), g.myrow())];
+      }
+    }
+    else if (op == SWEEP_MUL)
+    {
+      #pragma omp parallel for if(m_local*n_local > fml::omp::OMP_MIN_SIZE)
+      for (len_t j=0; j<n_local; j++)
+      {
+        #pragma omp simd
+        for (len_t i=0; i<m_local; i++)
+          x_d[i + m_local*j] *= s_d[bcutils::l2g(i, x.bf_rows(), g.nprow(), g.myrow())];
+      }
+    }
+    else if (op == SWEEP_DIV)
+    {
+      #pragma omp parallel for if(m_local*n_local > fml::omp::OMP_MIN_SIZE)
+      for (len_t j=0; j<n_local; j++)
+      {
+        #pragma omp simd
+        for (len_t i=0; i<m_local; i++)
+          x_d[i + m_local*j] /= s_d[bcutils::l2g(i, x.bf_rows(), g.nprow(), g.myrow())];
+      }
+    }
+  }
+  
+  
+  
+  /**
+    @brief Sweep a vector through a matrix arithmetically.
+    
+    @details The function takes a matrix and col-wise applies the vector to the
+    entries of that matrix according to the requested arithmetic operation.
+    
+    @comm The method has no communication.
+    
+    @except If x and s are inappropriately sized for the operation, the function
+    will throw a 'runtime_error' exception.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  static inline void colsweep(mpimat<REAL> &x, const cpuvec<REAL> &s, const sweep_op op)
+  {
+    if (s.size() != x.ncols())
+      throw std::runtime_error("non-conformal arguments");
+    
+    const len_t m_local = x.nrows_local();
+    const len_t n_local = x.ncols_local();
+    REAL *x_d = x.data_ptr();
+    const REAL *s_d = s.data_ptr();
+    
+    const auto g = x.get_grid();
+    
+    if (op == SWEEP_ADD)
+    {
+      #pragma omp parallel for if(m_local*n_local > fml::omp::OMP_MIN_SIZE)
+      for (len_t j=0; j<n_local; j++)
+      {
+        #pragma omp simd
+        for (len_t i=0; i<m_local; i++)
+          x_d[i + m_local*j] += s_d[bcutils::l2g(j, x.bf_cols(), g.npcol(), g.mycol())];
+      }
+    }
+    else if (op == SWEEP_SUB)
+    {
+      #pragma omp parallel for if(m_local*n_local > fml::omp::OMP_MIN_SIZE)
+      for (len_t j=0; j<n_local; j++)
+      {
+        #pragma omp simd
+        for (len_t i=0; i<m_local; i++)
+          x_d[i + m_local*j] -= s_d[bcutils::l2g(j, x.bf_cols(), g.npcol(), g.mycol())];
+      }
+    }
+    else if (op == SWEEP_MUL)
+    {
+      #pragma omp parallel for if(m_local*n_local > fml::omp::OMP_MIN_SIZE)
+      for (len_t j=0; j<n_local; j++)
+      {
+        #pragma omp simd
+        for (len_t i=0; i<m_local; i++)
+          x_d[i + m_local*j] *= s_d[bcutils::l2g(j, x.bf_cols(), g.npcol(), g.mycol())];
+      }
+    }
+    else if (op == SWEEP_DIV)
+    {
+      #pragma omp parallel for if(m_local*n_local > fml::omp::OMP_MIN_SIZE)
+      for (len_t j=0; j<n_local; j++)
+      {
+        #pragma omp simd
+        for (len_t i=0; i<m_local; i++)
+          x_d[i + m_local*j] /= s_d[bcutils::l2g(j, x.bf_cols(), g.npcol(), g.mycol())];
+      }
+    }
   }
   
   
