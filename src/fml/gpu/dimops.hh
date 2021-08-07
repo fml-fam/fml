@@ -7,6 +7,8 @@
 #pragma once
 
 
+#include "../_internals/dimops.hh"
+
 #include "internals/kernelfuns.hh"
 
 #include "gpumat.hh"
@@ -224,6 +226,100 @@ namespace dimops
   {
     colsums(x, s);
     s.scale((REAL) 1.0/x.nrows());
+  }
+  
+  
+  
+  namespace internals
+  {
+    template <typename REAL>
+    __global__ void kernel_rowsweep(const len_t m, const len_t n,
+      REAL *x, const REAL *s, const sweep_op op)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      int j = blockDim.y*blockIdx.y + threadIdx.y;
+      
+      if (i < m && j < n)
+      {
+        if (op == dimops::SWEEP_ADD)
+          x[i + m*j] += s[i];
+        else if (op == dimops::SWEEP_SUB)
+          x[i + m*j] -= s[i];
+        else if (op == dimops::SWEEP_MUL)
+          x[i + m*j] *= s[i];
+        else if (op == dimops::SWEEP_DIV)
+          x[i + m*j] /= s[i];
+      }
+    }
+  }
+  
+  /**
+    @brief Sweep a vector through a matrix arithmetically.
+    
+    @details The function takes a matrix and row-wise applies the vector to the
+    entries of that matrix according to the requested arithmetic operation.
+    
+    @except If x and s are inappropriately sized for the operation, the function
+    will throw a 'runtime_error' exception.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  static inline void rowsweep(gpumat<REAL> &x, const gpuvec<REAL> &s,
+    const sweep_op op)
+  {
+    if (s.size() != x.nrows())
+      throw std::runtime_error("non-conformal arguments");
+    
+    internals::kernel_rowsweep<<<x.get_griddim(), x.get_blockdim()>>>(x.nrows(),
+      x.ncols(), x.data_ptr(), s.data_ptr(), op);
+  }
+  
+  
+  
+  namespace internals
+  {
+    template <typename REAL>
+    __global__ void kernel_colsweep(const len_t m, const len_t n,
+      REAL *x, const REAL *s, const sweep_op op)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      int j = blockDim.y*blockIdx.y + threadIdx.y;
+      
+      if (i < m && j < n)
+      {
+        if (op == dimops::SWEEP_ADD)
+          x[i + m*j] += s[j];
+        else if (op == dimops::SWEEP_SUB)
+          x[i + m*j] -= s[j];
+        else if (op == dimops::SWEEP_MUL)
+          x[i + m*j] *= s[j];
+        else if (op == dimops::SWEEP_DIV)
+          x[i + m*j] /= s[j];
+      }
+    }
+  }
+  
+  /**
+    @brief Sweep a vector through a matrix arithmetically.
+    
+    @details The function takes a matrix and col-wise applies the vector to the
+    entries of that matrix according to the requested arithmetic operation.
+    
+    @except If x and s are inappropriately sized for the operation, the function
+    will throw a 'runtime_error' exception.
+    
+    @tparam REAL should be 'float' or 'double'.
+   */
+  template <typename REAL>
+  static inline void colsweep(gpumat<REAL> &x, const gpuvec<REAL> &s,
+    const sweep_op op)
+  {
+    if (s.size() != x.ncols())
+      throw std::runtime_error("non-conformal arguments");
+    
+    internals::kernel_colsweep<<<x.get_griddim(), x.get_blockdim()>>>(x.nrows(),
+      x.ncols(), x.data_ptr(), s.data_ptr(), op);
   }
   
   
