@@ -1,21 +1,23 @@
 # NEWS
 
-## Release 0.5-0 (//):
+## Release 0.4-1 (//):
 
 New:
-  * Added set_math_mode() method for card objects.
+  * Added set_math_mode() method for card objects
+  * Added pow() method for cpuvec and gpuvec objects
+  * Added dimops::rowsweep() and dimops::colsweep()
 
 API Changes:
   * 
 
 Bug Fixes:
-  * 
+  * Fixed linalg::rsvd() issues with mpimat.
 
 Internal Changes of Note:
-  * 
+  * None
 
 Documentation:
-  * 
+  * None
 
 
 
