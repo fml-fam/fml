@@ -52,6 +52,7 @@ namespace fml
       void subset(const len_t start, const len_t stop, const bool interior=true);
       
       void scale(const T s);
+      void pow(const T p);
       void rev();
       
       T sum();
@@ -412,6 +413,21 @@ void fml::cpuvec<T>::scale(const T s)
   #pragma omp parallel for simd if(this->_size > fml::omp::OMP_MIN_SIZE)
   for (len_t i=0; i<this->_size; i++)
     this->data[i] *= s;
+}
+
+
+
+/**
+  @brief Raise every value of the vector to the given power.
+  
+  @param[in] p Power.
+ */
+template <typename T>
+void fml::cpuvec<T>::pow(const T p)
+{
+  #pragma omp parallel for simd if(this->_size > fml::omp::OMP_MIN_SIZE)
+  for (len_t i=0; i<this->_size; i++)
+    this->data[i] = std::pow(this->data[i], p);
 }
 
 
