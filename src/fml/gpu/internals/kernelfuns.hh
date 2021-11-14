@@ -177,6 +177,18 @@ namespace fml
     
     
     template <typename REAL>
+    __global__ void kernel_pow(const REAL p, const len_t m, const len_t n, REAL *data)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      int j = blockDim.y*blockIdx.y + threadIdx.y;
+      
+      if (i < m && j < n)
+        data[i + m*j] = pow(data[i + m*j], p);
+    }
+    
+    
+    
+    template <typename REAL>
     __global__ void kernel_sum(const len_t len, const REAL *data, REAL *s)
     {
       int i = blockDim.x*blockIdx.x + threadIdx.x;

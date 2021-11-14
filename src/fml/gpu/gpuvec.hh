@@ -52,6 +52,7 @@ namespace fml
       void fill_linspace(const T start, const T stop);
       
       void scale(const T s);
+      void pow(const T p);
       void rev();
       
       T sum() const;
@@ -427,6 +428,20 @@ template <typename T>
 void fml::gpuvec<T>::scale(const T s)
 {
   fml::kernelfuns::kernel_scale<<<dim_grid, dim_block>>>(s, this->_size, 1, this->data);
+  this->c->check();
+}
+
+
+
+/**
+  @brief Raise every value of the vector to the given power.
+  
+  @param[in] p Power.
+ */
+template <typename T>
+void fml::gpuvec<T>::pow(const T p)
+{
+  fml::kernelfuns::kernel_pow<<<dim_grid, dim_block>>>(p, this->_size, 1, this->data);
   this->c->check();
 }
 
