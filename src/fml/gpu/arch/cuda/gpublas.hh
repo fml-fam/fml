@@ -134,6 +134,20 @@ namespace gpublas
   
   
   
+  inline cublasStatus_t axpy(cublasHandle_t handle, int n, const float *alpha,
+    const float *x, int incx, float *y, int incy)
+  {
+    return cublasSaxpy(handle, n, alpha, x, incx, y, incy);
+  }
+  
+  inline cublasStatus_t axpy(cublasHandle_t handle, int n, const double *alpha,
+    const double *x, int incx, double *y, int incy)
+  {
+    return cublasDaxpy(handle, n, alpha, x, incx, y, incy);
+  }
+  
+  
+  
   inline cublasStatus_t gemm(cublasHandle_t handle, cublasOperation_t transa,
     cublasOperation_t transb, int m, int n, int k, const __half alpha,
     const __half *A, int lda, const __half *B, int ldb, const __half beta,
