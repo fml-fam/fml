@@ -147,6 +147,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab956f359d66aa26e593d3af38c27c1fb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1card.html#ab956f359d66aa26e593d3af38c27c1fb">check</a> ()</td></tr>
 <tr class="memdesc:ab956f359d66aa26e593d3af38c27c1fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check for (and throw if found) a CUDA error.  <a href="classfml_1_1card.html#ab956f359d66aa26e593d3af38c27c1fb">More...</a><br /></td></tr>
 <tr class="separator:ab956f359d66aa26e593d3af38c27c1fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed20affb7d0029aac3067aa831f069a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1card.html#aed20affb7d0029aac3067aa831f069a7">set_math_mode</a> (gpublas_mathmode_t mode)</td></tr>
+<tr class="memdesc:aed20affb7d0029aac3067aa831f069a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manually set the GPU BLAS math mode (as supported by hardware).  <a href="classfml_1_1card.html#aed20affb7d0029aac3067aa831f069a7">More...</a><br /></td></tr>
+<tr class="separator:aed20affb7d0029aac3067aa831f069a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:abe08602e867bee9426d313d5923c03ea"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1card.html#abe08602e867bee9426d313d5923c03ea">get_id</a> ()</td></tr>
 <tr class="separator:abe08602e867bee9426d313d5923c03ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -650,6 +653,45 @@ gpulapack_handle_t&#160;</td><td class="memItemRight" valign="bottom"><b>_lapack
 </dl>
 <p><b>Exceptions</b><br  />
  If the GPU can not be initialized, or if the allocation of one of the handles fails, the method will throw a 'runtime_error' exception. </p>
+
+</div>
+</div>
+<a id="aed20affb7d0029aac3067aa831f069a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed20affb7d0029aac3067aa831f069a7">&#9670;&nbsp;</a></span>set_math_mode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fml::card::set_math_mode </td>
+          <td>(</td>
+          <td class="paramtype">gpublas_mathmode_t&#160;</td>
+          <td class="paramname"><em>mode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Manually set the GPU BLAS math mode (as supported by hardware). </p>
+<p>Not all options are supported by all hardware/driver versions. If the function is not explicitly called, the device will use the default behavior; the vendor may vary this behavior over time.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">mode</td><td>Should be one of: <code>GPUBLAS_MATH_DEFAULT</code> - the default mode of the device <code>GPUBLAS_MATH_ACCELERATE</code> - use acceleration (e.g. tensorcores) in single precision routines <code>GPUBLAS_MATH_PEDANTIC</code> - uses only the prescribed precision</td></tr>
+  </table>
+  </dd>
+</dl>
+<p><b>Implementation Details</b><br  />
+ Wrapper around GPU error lookup, e.g. <code>cublasSetMathMode()</code>.</p>
+<p><b>Exceptions</b><br  />
+ If a CUDA error is detected, this throws a 'runtime_error' exception. </p>
 
 </div>
 </div>

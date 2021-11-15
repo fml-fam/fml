@@ -96,7 +96,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><ul>
-<li><b>Version:</b> 0.4-0</li>
+<li><b>Version:</b> 0.5-0</li>
 <li><b>Status:</b> <a href="https://travis-ci.org/fml-fam/fml"><img src="https://travis-ci.org/fml-fam/fml.png" alt="Build Status" class="inline"/></a></li>
 <li><b>License:</b> <a href="http://opensource.org/licenses/BSL-1.0">BSL-1.0</a></li>
 <li><b>Project home</b>: <a href="https://github.com/fml-fam/fml">https://github.com/fml-fam/fml</a></li>
@@ -240,8 +240,23 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <ul>
 <li>R bindings: <a href="https://github.com/fml-fam/fmlr">fmlr</a></li>
 </ul>
-<h1>API Stability</h1>
+<h1>Header and API Stability</h1>
+<p>tldr:</p>
+<ul>
+<li>Use the super headers (or read the long explanation)<ul>
+<li>CPU - <code><a class="el" href="cpu_8hh_source.html">fml/cpu.hh</a></code></li>
+<li>GPU - <code><a class="el" href="gpu_8hh_source.html">fml/gpu.hh</a></code></li>
+<li>MPI - <code><a class="el" href="mpi_8hh_source.html">fml/mpi.hh</a></code></li>
+<li>PAR still evolving</li>
+</ul>
+</li>
+<li>Existing API's are largely stable. Most changes will be additions rather than modifications.</li>
+</ul>
 <p>The project is young and things are still mostly evolving. The current status is:</p>
+<h2>Headers</h2>
+<p>There are currently "super headers" for CPU (<code><a class="el" href="cpu_8hh_source.html">fml/cpu.hh</a></code>), GPU (<code><a class="el" href="gpu_8hh_source.html">fml/gpu.hh</a></code>), and MPI (<code><a class="el" href="mpi_8hh_source.html">fml/mpi.hh</a></code>) backends. These include all relevant sub-headers. These are "frozen" in the sense that they will not move and will always include everything. However, as more namespaces are added, those too will be included in the super headers. The headers one folder level deep (e.g. those in <code>fml/cpu</code>) are similarly frozen, although more may be added over time. Headers two folder levels</p>
+<p>Internals are evolving and subject to change at basically any time. Notable changes will be mentioned in the changelog.</p>
+<h2>API</h2>
 <ul>
 <li><b>Frozen</b>: Existing APIs will not be developed further.<ul>
 <li>none</li>
@@ -266,7 +281,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </ul>
 </li>
 </ul>
-<p>Internals are evolving and subject to change at basically any time.</p>
+<p>Internals are evolving and subject to change at basically any time. Notable changes will be mentioned in the changelog.</p>
 <h1>Philosophy and Similar Projects</h1>
 <p>Some similar C/C++ projects worth mentioning:</p>
 <ul>

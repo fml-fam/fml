@@ -120,6 +120,15 @@ template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:ab9957370bb61b0952dee6802a900b398"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#ab9957370bb61b0952dee6802a900b398">add</a> (const bool transx, const bool transy, const REAL alpha, const REAL beta, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;y)</td></tr>
 <tr class="memdesc:ab9957370bb61b0952dee6802a900b398"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
 <tr class="separator:ab9957370bb61b0952dee6802a900b398"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3141aa91a43cbbc2d3ff3a5d9d7b28ea"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a3141aa91a43cbbc2d3ff3a5d9d7b28ea"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a3141aa91a43cbbc2d3ff3a5d9d7b28ea">prod</a> (const bool transx, const bool transy, const REAL alpha, const REAL beta, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;y, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;ret)</td></tr>
+<tr class="memdesc:a3141aa91a43cbbc2d3ff3a5d9d7b28ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns element-wise alpha*op(x) * beta*op(y) where op(A) is A or A^T.  <a href="namespacefml_1_1linalg.html#a3141aa91a43cbbc2d3ff3a5d9d7b28ea">More...</a><br /></td></tr>
+<tr class="separator:a3141aa91a43cbbc2d3ff3a5d9d7b28ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff20ca8a13b44ffc42db009a2edd4c9f"><td class="memTemplParams" colspan="2"><a id="aff20ca8a13b44ffc42db009a2edd4c9f"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:aff20ca8a13b44ffc42db009a2edd4c9f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#aff20ca8a13b44ffc42db009a2edd4c9f">prod</a> (const bool transx, const bool transy, const REAL alpha, const REAL beta, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;y)</td></tr>
+<tr class="memdesc:aff20ca8a13b44ffc42db009a2edd4c9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:aff20ca8a13b44ffc42db009a2edd4c9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a550d8e6383cfa7f4e000d35c7f834bc4"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:a550d8e6383cfa7f4e000d35c7f834bc4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a550d8e6383cfa7f4e000d35c7f834bc4">matmult</a> (const bool transx, const bool transy, const REAL alpha, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;y, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;ret)</td></tr>
 <tr class="memdesc:a550d8e6383cfa7f4e000d35c7f834bc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes ret = alpha*op(x)*op(y) where op(A) is A or A^T.  <a href="namespacefml_1_1linalg.html#a550d8e6383cfa7f4e000d35c7f834bc4">More...</a><br /></td></tr>
@@ -695,26 +704,134 @@ template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:a932548eb84d824e46657d4736390bd43"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a932548eb84d824e46657d4736390bd43">rsvd</a> (const uint32_t seed, const int k, const int q, <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;s, <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;u, <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;vt)</td></tr>
 <tr class="memdesc:a932548eb84d824e46657d4736390bd43"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
 <tr class="separator:a932548eb84d824e46657d4736390bd43"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa91fd076a5c734393d750af66cf2067"><td class="memTemplParams" colspan="2"><a id="aaa91fd076a5c734393d750af66cf2067"></a>
+<tr class="memitem:a56b81ad9ec9afe20eeede224590e8946"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a56b81ad9ec9afe20eeede224590e8946"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a56b81ad9ec9afe20eeede224590e8946">matmult</a> (const <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;y, <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;ret)</td></tr>
+<tr class="memdesc:a56b81ad9ec9afe20eeede224590e8946"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the product of a distributed and a non-distributed matrix whose result is distributed, or the transpose of a distributed matrix with a distributed matrix whose result is non-distributed.  <a href="namespacefml_1_1linalg.html#a56b81ad9ec9afe20eeede224590e8946">More...</a><br /></td></tr>
+<tr class="separator:a56b81ad9ec9afe20eeede224590e8946"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a785b088e55412ff32531fde5cb898010"><td class="memTemplParams" colspan="2"><a id="a785b088e55412ff32531fde5cb898010"></a>
 template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a785b088e55412ff32531fde5cb898010"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a785b088e55412ff32531fde5cb898010">matmult</a> (const <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;y)</td></tr>
+<tr class="memdesc:a785b088e55412ff32531fde5cb898010"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:a785b088e55412ff32531fde5cb898010"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aede16fbb6f91c1f935bd2d219a93b504"><td class="memTemplParams" colspan="2"><a id="aede16fbb6f91c1f935bd2d219a93b504"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:aede16fbb6f91c1f935bd2d219a93b504"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#aede16fbb6f91c1f935bd2d219a93b504">matmult</a> (const <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;y, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;ret)</td></tr>
+<tr class="memdesc:aede16fbb6f91c1f935bd2d219a93b504"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:aede16fbb6f91c1f935bd2d219a93b504"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac056c48627e5e76ce8fb049ffb8228f1"><td class="memTemplParams" colspan="2"><a id="ac056c48627e5e76ce8fb049ffb8228f1"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:ac056c48627e5e76ce8fb049ffb8228f1"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#ac056c48627e5e76ce8fb049ffb8228f1">matmult</a> (const <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;y)</td></tr>
+<tr class="memdesc:ac056c48627e5e76ce8fb049ffb8228f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:ac056c48627e5e76ce8fb049ffb8228f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa91fd076a5c734393d750af66cf2067"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:aaa91fd076a5c734393d750af66cf2067"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#aaa91fd076a5c734393d750af66cf2067">crossprod</a> (const REAL alpha, const <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;ret)</td></tr>
-<tr class="memdesc:aaa91fd076a5c734393d750af66cf2067"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes lower triangle of alpha*x^T*x. <br /></td></tr>
+<tr class="memdesc:aaa91fd076a5c734393d750af66cf2067"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes lower triangle of alpha*x^T*x.  <a href="namespacefml_1_1linalg.html#aaa91fd076a5c734393d750af66cf2067">More...</a><br /></td></tr>
 <tr class="separator:aaa91fd076a5c734393d750af66cf2067"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a243397982d98228e50b92d677c93a20a"><td class="memTemplParams" colspan="2"><a id="a243397982d98228e50b92d677c93a20a"></a>
 template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:a243397982d98228e50b92d677c93a20a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a243397982d98228e50b92d677c93a20a">crossprod</a> (const REAL alpha, const <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;x)</td></tr>
 <tr class="memdesc:a243397982d98228e50b92d677c93a20a"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
 <tr class="separator:a243397982d98228e50b92d677c93a20a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1470d3db57d95e7493c1938a408bbf51"><td class="memTemplParams" colspan="2"><a id="a1470d3db57d95e7493c1938a408bbf51"></a>
+<tr class="memitem:a40b829318fdeefb13276aa6a8fed8daa"><td class="memTemplParams" colspan="2"><a id="a40b829318fdeefb13276aa6a8fed8daa"></a>
 template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a40b829318fdeefb13276aa6a8fed8daa"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>qr_R</b> (const int root, <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;R)</td></tr>
+<tr class="separator:a40b829318fdeefb13276aa6a8fed8daa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a594d8d852d0c4d9a3127fe15e673e6e8"><td class="memTemplParams" colspan="2"><a id="a594d8d852d0c4d9a3127fe15e673e6e8"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a594d8d852d0c4d9a3127fe15e673e6e8"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>qr_Q</b> (<a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;qraux, <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;Q)</td></tr>
+<tr class="separator:a594d8d852d0c4d9a3127fe15e673e6e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac002922f371479c86c2e8cbc7617311b"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:ac002922f371479c86c2e8cbc7617311b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#ac002922f371479c86c2e8cbc7617311b">cpsvd</a> (const <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;s)</td></tr>
+<tr class="memdesc:ac002922f371479c86c2e8cbc7617311b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the singular value decomposition using the "crossproducts
+SVD". This method is not numerically stable.  <a href="namespacefml_1_1linalg.html#ac002922f371479c86c2e8cbc7617311b">More...</a><br /></td></tr>
+<tr class="separator:ac002922f371479c86c2e8cbc7617311b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add2ef982ab5d07cbe88244b33887954e"><td class="memTemplParams" colspan="2"><a id="add2ef982ab5d07cbe88244b33887954e"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:add2ef982ab5d07cbe88244b33887954e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#add2ef982ab5d07cbe88244b33887954e">cpsvd</a> (const <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;s, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;u, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;vt)</td></tr>
+<tr class="memdesc:add2ef982ab5d07cbe88244b33887954e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:add2ef982ab5d07cbe88244b33887954e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e580c3749bdd0e1bbec57d842d6cb1b"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a5e580c3749bdd0e1bbec57d842d6cb1b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a5e580c3749bdd0e1bbec57d842d6cb1b">tssvd</a> (<a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;s)</td></tr>
+<tr class="memdesc:a5e580c3749bdd0e1bbec57d842d6cb1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the singular value decomposition by first reducing the rectangular matrix to a square matrix using an orthogonal factorization. If the matrix is square, we skip the orthogonal factorization.  <a href="namespacefml_1_1linalg.html#a5e580c3749bdd0e1bbec57d842d6cb1b">More...</a><br /></td></tr>
+<tr class="separator:a5e580c3749bdd0e1bbec57d842d6cb1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48091f6843a14559708c2798d78d20f1"><td class="memTemplParams" colspan="2"><a id="a48091f6843a14559708c2798d78d20f1"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a48091f6843a14559708c2798d78d20f1"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a48091f6843a14559708c2798d78d20f1">tssvd</a> (<a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;s, <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;u, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;vt)</td></tr>
+<tr class="memdesc:a48091f6843a14559708c2798d78d20f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:a48091f6843a14559708c2798d78d20f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87fab87cdc56206c2ece2d79b969ea37"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a87fab87cdc56206c2ece2d79b969ea37"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a87fab87cdc56206c2ece2d79b969ea37">rsvd</a> (const uint32_t seed, const int k, const int q, <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;s)</td></tr>
+<tr class="memdesc:a87fab87cdc56206c2ece2d79b969ea37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the truncated singular value decomposition using the normal projections method of Halko et al. This method is only an approximation.  <a href="namespacefml_1_1linalg.html#a87fab87cdc56206c2ece2d79b969ea37">More...</a><br /></td></tr>
+<tr class="separator:a87fab87cdc56206c2ece2d79b969ea37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a883df459a99186b663dede0a8a8cd67a"><td class="memTemplParams" colspan="2"><a id="a883df459a99186b663dede0a8a8cd67a"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a883df459a99186b663dede0a8a8cd67a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a883df459a99186b663dede0a8a8cd67a">rsvd</a> (const uint32_t seed, const int k, const int q, <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;s, <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;u, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;vt)</td></tr>
+<tr class="memdesc:a883df459a99186b663dede0a8a8cd67a"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:a883df459a99186b663dede0a8a8cd67a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a131f0bcbd83e2bdd1ad0cce068b7df17"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a131f0bcbd83e2bdd1ad0cce068b7df17"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a131f0bcbd83e2bdd1ad0cce068b7df17">matmult</a> (const <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;y, <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;ret)</td></tr>
+<tr class="memdesc:a131f0bcbd83e2bdd1ad0cce068b7df17"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the product of a distributed and a non-distributed matrix whose result is distributed, or the transpose of a distributed matrix with a distributed matrix whose result is non-distributed.  <a href="namespacefml_1_1linalg.html#a131f0bcbd83e2bdd1ad0cce068b7df17">More...</a><br /></td></tr>
+<tr class="separator:a131f0bcbd83e2bdd1ad0cce068b7df17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d9f090679d6da1c1a9ab2eccf616ca1"><td class="memTemplParams" colspan="2"><a id="a4d9f090679d6da1c1a9ab2eccf616ca1"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a4d9f090679d6da1c1a9ab2eccf616ca1"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a4d9f090679d6da1c1a9ab2eccf616ca1">matmult</a> (const <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;y)</td></tr>
+<tr class="memdesc:a4d9f090679d6da1c1a9ab2eccf616ca1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:a4d9f090679d6da1c1a9ab2eccf616ca1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6ba31945222454912b59451d8762d9e"><td class="memTemplParams" colspan="2"><a id="ac6ba31945222454912b59451d8762d9e"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:ac6ba31945222454912b59451d8762d9e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#ac6ba31945222454912b59451d8762d9e">matmult</a> (const <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;y, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;ret)</td></tr>
+<tr class="memdesc:ac6ba31945222454912b59451d8762d9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:ac6ba31945222454912b59451d8762d9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9bab8e7c06cc62352d4e78aaad3ef99"><td class="memTemplParams" colspan="2"><a id="ac9bab8e7c06cc62352d4e78aaad3ef99"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:ac9bab8e7c06cc62352d4e78aaad3ef99"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#ac9bab8e7c06cc62352d4e78aaad3ef99">matmult</a> (const <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;y)</td></tr>
+<tr class="memdesc:ac9bab8e7c06cc62352d4e78aaad3ef99"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:ac9bab8e7c06cc62352d4e78aaad3ef99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1470d3db57d95e7493c1938a408bbf51"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:a1470d3db57d95e7493c1938a408bbf51"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a1470d3db57d95e7493c1938a408bbf51">crossprod</a> (const REAL alpha, const <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;ret)</td></tr>
-<tr class="memdesc:a1470d3db57d95e7493c1938a408bbf51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes lower triangle of alpha*x^T*x. <br /></td></tr>
+<tr class="memdesc:a1470d3db57d95e7493c1938a408bbf51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes lower triangle of alpha*x^T*x.  <a href="namespacefml_1_1linalg.html#a1470d3db57d95e7493c1938a408bbf51">More...</a><br /></td></tr>
 <tr class="separator:a1470d3db57d95e7493c1938a408bbf51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae850ddccf4a908b690cb728d14234468"><td class="memTemplParams" colspan="2"><a id="ae850ddccf4a908b690cb728d14234468"></a>
 template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:ae850ddccf4a908b690cb728d14234468"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#ae850ddccf4a908b690cb728d14234468">crossprod</a> (const REAL alpha, const <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;x)</td></tr>
 <tr class="memdesc:ae850ddccf4a908b690cb728d14234468"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
 <tr class="separator:ae850ddccf4a908b690cb728d14234468"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f109359b52dc3b2f545474773731a38"><td class="memTemplParams" colspan="2"><a id="a4f109359b52dc3b2f545474773731a38"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a4f109359b52dc3b2f545474773731a38"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>qr_R</b> (const int root, <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;R)</td></tr>
+<tr class="separator:a4f109359b52dc3b2f545474773731a38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a708d453de7c59f361cdbc3cafb69c7d1"><td class="memTemplParams" colspan="2"><a id="a708d453de7c59f361cdbc3cafb69c7d1"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a708d453de7c59f361cdbc3cafb69c7d1"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>qr_Q</b> (<a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;qraux, <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;Q)</td></tr>
+<tr class="separator:a708d453de7c59f361cdbc3cafb69c7d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26ade37d71bec5c7573c3dc8ea727bf7"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a26ade37d71bec5c7573c3dc8ea727bf7"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a26ade37d71bec5c7573c3dc8ea727bf7">cpsvd</a> (const <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;s)</td></tr>
+<tr class="memdesc:a26ade37d71bec5c7573c3dc8ea727bf7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the singular value decomposition using the "crossproducts
+SVD". This method is not numerically stable.  <a href="namespacefml_1_1linalg.html#a26ade37d71bec5c7573c3dc8ea727bf7">More...</a><br /></td></tr>
+<tr class="separator:a26ade37d71bec5c7573c3dc8ea727bf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b0cad5fcd77891c2fb9b728895bec60"><td class="memTemplParams" colspan="2"><a id="a1b0cad5fcd77891c2fb9b728895bec60"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a1b0cad5fcd77891c2fb9b728895bec60"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a1b0cad5fcd77891c2fb9b728895bec60">cpsvd</a> (const <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;s, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;u, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;vt)</td></tr>
+<tr class="memdesc:a1b0cad5fcd77891c2fb9b728895bec60"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:a1b0cad5fcd77891c2fb9b728895bec60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42b6e6c6ba25677a2c37b519a7cdcefd"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a42b6e6c6ba25677a2c37b519a7cdcefd"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a42b6e6c6ba25677a2c37b519a7cdcefd">tssvd</a> (<a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;s)</td></tr>
+<tr class="memdesc:a42b6e6c6ba25677a2c37b519a7cdcefd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the singular value decomposition by first reducing the rectangular matrix to a square matrix using an orthogonal factorization. If the matrix is square, we skip the orthogonal factorization.  <a href="namespacefml_1_1linalg.html#a42b6e6c6ba25677a2c37b519a7cdcefd">More...</a><br /></td></tr>
+<tr class="separator:a42b6e6c6ba25677a2c37b519a7cdcefd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4cd87e83d69f05120e7d9f82f624352"><td class="memTemplParams" colspan="2"><a id="ac4cd87e83d69f05120e7d9f82f624352"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:ac4cd87e83d69f05120e7d9f82f624352"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#ac4cd87e83d69f05120e7d9f82f624352">tssvd</a> (<a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;s, <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;u, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;vt)</td></tr>
+<tr class="memdesc:ac4cd87e83d69f05120e7d9f82f624352"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:ac4cd87e83d69f05120e7d9f82f624352"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e1fc2f09c4c04f6b6be0f592994fb95"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a5e1fc2f09c4c04f6b6be0f592994fb95"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a5e1fc2f09c4c04f6b6be0f592994fb95">rsvd</a> (const uint32_t seed, const int k, const int q, <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;s)</td></tr>
+<tr class="memdesc:a5e1fc2f09c4c04f6b6be0f592994fb95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the truncated singular value decomposition using the normal projections method of Halko et al. This method is only an approximation.  <a href="namespacefml_1_1linalg.html#a5e1fc2f09c4c04f6b6be0f592994fb95">More...</a><br /></td></tr>
+<tr class="separator:a5e1fc2f09c4c04f6b6be0f592994fb95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affe6930ae5e703f12f810b3bf3146031"><td class="memTemplParams" colspan="2"><a id="affe6930ae5e703f12f810b3bf3146031"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:affe6930ae5e703f12f810b3bf3146031"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#affe6930ae5e703f12f810b3bf3146031">rsvd</a> (const uint32_t seed, const int k, const int q, <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;s, <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;u, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;vt)</td></tr>
+<tr class="memdesc:affe6930ae5e703f12f810b3bf3146031"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:affe6930ae5e703f12f810b3bf3146031"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Linear algebra functions. </p>
@@ -1457,7 +1574,7 @@ template&lt;typename REAL &gt; </div>
 </div>
 </div>
 <a id="a08ba317b627fa84ca085686faecf91e5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a08ba317b627fa84ca085686faecf91e5">&#9670;&nbsp;</a></span>cpsvd() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a08ba317b627fa84ca085686faecf91e5">&#9670;&nbsp;</a></span>cpsvd() <span class="overload">[1/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1523,7 +1640,7 @@ template&lt;typename REAL &gt; </div>
 </div>
 </div>
 <a id="a17472ad16a3a5b46bb5fa67b1b3c58a6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a17472ad16a3a5b46bb5fa67b1b3c58a6">&#9670;&nbsp;</a></span>cpsvd() <span class="overload">[2/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a17472ad16a3a5b46bb5fa67b1b3c58a6">&#9670;&nbsp;</a></span>cpsvd() <span class="overload">[2/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1589,7 +1706,7 @@ template&lt;typename REAL &gt; </div>
 </div>
 </div>
 <a id="a69ca0164d6993aa4523b9cc0e6de6bed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a69ca0164d6993aa4523b9cc0e6de6bed">&#9670;&nbsp;</a></span>cpsvd() <span class="overload">[3/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a69ca0164d6993aa4523b9cc0e6de6bed">&#9670;&nbsp;</a></span>cpsvd() <span class="overload">[3/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1654,8 +1771,118 @@ template&lt;typename REAL &gt; </div>
 
 </div>
 </div>
+<a id="ac002922f371479c86c2e8cbc7617311b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac002922f371479c86c2e8cbc7617311b">&#9670;&nbsp;</a></span>cpsvd() <span class="overload">[4/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void fml::linalg::cpsvd </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>s</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the singular value decomposition using the "crossproducts
+SVD". This method is not numerically stable. </p>
+<p>The operation works by computing the crossproducts matrix X^T * X and then computing the eigenvalue decomposition.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">x</td><td>Input data matrix. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">s</td><td>Vector of singular values. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">u</td><td>Matrix of left singular vectors. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">vt</td><td>Matrix of (transposed) right singular vectors.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p><b>Implementation Details</b><br  />
+ Uses a crossproduct which requires communication, followed by a local <code><a class="el" href="namespacefml_1_1linalg.html#afe6aba84a7e95dbdeb614b3f8f70cdce" title="Compute the eigenvalues and optionally the eigenvectors for a symmetric matrix.">linalg::eigen_sym()</a></code> call.</p>
+<p><b>Memory Allocations</b><br  />
+ If the any outputs are inappropriately sized, they will automatically be re-allocated. Additionally, some temporary work storage is needed.</p>
+<p><b>Exceptions</b><br  />
+ If a (re-)allocation is triggered and fails, a <code>bad_alloc</code> exception will be thrown.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a26ade37d71bec5c7573c3dc8ea727bf7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26ade37d71bec5c7573c3dc8ea727bf7">&#9670;&nbsp;</a></span>cpsvd() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void fml::linalg::cpsvd </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>s</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the singular value decomposition using the "crossproducts
+SVD". This method is not numerically stable. </p>
+<p>The operation works by computing the crossproducts matrix X^T * X and then computing the eigenvalue decomposition.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">x</td><td>Input data matrix. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">s</td><td>Vector of singular values. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">u</td><td>Matrix of left singular vectors. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">vt</td><td>Matrix of (transposed) right singular vectors.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p><b>Implementation Details</b><br  />
+ Uses a crossproduct which requires communication, followed by a local <code><a class="el" href="namespacefml_1_1linalg.html#afe6aba84a7e95dbdeb614b3f8f70cdce" title="Compute the eigenvalues and optionally the eigenvectors for a symmetric matrix.">linalg::eigen_sym()</a></code> call.</p>
+<p><b>Memory Allocations</b><br  />
+ If the any outputs are inappropriately sized, they will automatically be re-allocated. Additionally, some temporary work storage is needed.</p>
+<p><b>Exceptions</b><br  />
+ If a (re-)allocation is triggered and fails, a <code>bad_alloc</code> exception will be thrown.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a1932a6365c1b910d332ea2c036500ee4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1932a6365c1b910d332ea2c036500ee4">&#9670;&nbsp;</a></span>crossprod() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a1932a6365c1b910d332ea2c036500ee4">&#9670;&nbsp;</a></span>crossprod() <span class="overload">[1/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1713,7 +1940,7 @@ template&lt;typename REAL &gt; </div>
 </div>
 </div>
 <a id="a396b1ddbdb20fe8e5b62eb104eb47e9c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a396b1ddbdb20fe8e5b62eb104eb47e9c">&#9670;&nbsp;</a></span>crossprod() <span class="overload">[2/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a396b1ddbdb20fe8e5b62eb104eb47e9c">&#9670;&nbsp;</a></span>crossprod() <span class="overload">[2/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1771,7 +1998,7 @@ template&lt;typename REAL &gt; </div>
 </div>
 </div>
 <a id="a11f1f1a03b2ca66ae42893e51bd69d65"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a11f1f1a03b2ca66ae42893e51bd69d65">&#9670;&nbsp;</a></span>crossprod() <span class="overload">[3/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a11f1f1a03b2ca66ae42893e51bd69d65">&#9670;&nbsp;</a></span>crossprod() <span class="overload">[3/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1821,6 +2048,122 @@ template&lt;typename REAL &gt; </div>
  If a reallocation is triggered and fails, a <code>bad_alloc</code> exception will be thrown.</p>
 <p><b>Communication Details</b><br  />
  The method will communicate across all processes in the BLACS grid.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aaa91fd076a5c734393d750af66cf2067"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa91fd076a5c734393d750af66cf2067">&#9670;&nbsp;</a></span>crossprod() <span class="overload">[4/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void fml::linalg::crossprod </td>
+          <td>(</td>
+          <td class="paramtype">const REAL&#160;</td>
+          <td class="paramname"><em>alpha</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ret</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes lower triangle of alpha*x^T*x. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">alpha</td><td>Scalar. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>Input data matrix. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ret</td><td>The product.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p><b>Implementation Details</b><br  />
+ Uses the BLAS function <code>Xsyrk()</code>.</p>
+<p><b>Memory Allocations</b><br  />
+ If the output dimension is inappropriately sized, it will automatically be re-allocated.</p>
+<p><b>Exceptions</b><br  />
+ If a reallocation is triggered and fails, a <code>bad_alloc</code> exception will be thrown.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1470d3db57d95e7493c1938a408bbf51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1470d3db57d95e7493c1938a408bbf51">&#9670;&nbsp;</a></span>crossprod() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void fml::linalg::crossprod </td>
+          <td>(</td>
+          <td class="paramtype">const REAL&#160;</td>
+          <td class="paramname"><em>alpha</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ret</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes lower triangle of alpha*x^T*x. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">alpha</td><td>Scalar. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>Input data matrix. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ret</td><td>The product.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p><b>Implementation Details</b><br  />
+ Uses the BLAS function <code>Xsyrk()</code>.</p>
+<p><b>Memory Allocations</b><br  />
+ If the output dimension is inappropriately sized, it will automatically be re-allocated.</p>
+<p><b>Exceptions</b><br  />
+ If a reallocation is triggered and fails, a <code>bad_alloc</code> exception will be thrown.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
@@ -3075,7 +3418,7 @@ template&lt;typename REAL &gt; </div>
 </div>
 </div>
 <a id="a550d8e6383cfa7f4e000d35c7f834bc4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a550d8e6383cfa7f4e000d35c7f834bc4">&#9670;&nbsp;</a></span>matmult() <span class="overload">[1/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a550d8e6383cfa7f4e000d35c7f834bc4">&#9670;&nbsp;</a></span>matmult() <span class="overload">[1/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3152,7 +3495,7 @@ template&lt;typename REAL &gt; </div>
 </div>
 </div>
 <a id="a6460ba90776e3b8589448edc887791dd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6460ba90776e3b8589448edc887791dd">&#9670;&nbsp;</a></span>matmult() <span class="overload">[2/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a6460ba90776e3b8589448edc887791dd">&#9670;&nbsp;</a></span>matmult() <span class="overload">[2/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3229,7 +3572,7 @@ template&lt;typename REAL &gt; </div>
 </div>
 </div>
 <a id="a218a6b09807150aaf820e95049124ce3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a218a6b09807150aaf820e95049124ce3">&#9670;&nbsp;</a></span>matmult() <span class="overload">[3/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a218a6b09807150aaf820e95049124ce3">&#9670;&nbsp;</a></span>matmult() <span class="overload">[3/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3301,7 +3644,7 @@ template&lt;typename REAL &gt; </div>
 </div>
 </div>
 <a id="add560d8d285bd77f22108a8f08fb8aa0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#add560d8d285bd77f22108a8f08fb8aa0">&#9670;&nbsp;</a></span>matmult() <span class="overload">[4/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#add560d8d285bd77f22108a8f08fb8aa0">&#9670;&nbsp;</a></span>matmult() <span class="overload">[4/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -3370,6 +3713,120 @@ template&lt;typename REAL &gt; </div>
  Uses the PBLAS function <code>pXgemm()</code>.</p>
 <p><b>Communication Details</b><br  />
  The method will communicate across all processes in the BLACS grid.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a56b81ad9ec9afe20eeede224590e8946"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56b81ad9ec9afe20eeede224590e8946">&#9670;&nbsp;</a></span>matmult() <span class="overload">[5/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void fml::linalg::matmult </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ret</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the product of a distributed and a non-distributed matrix whose result is distributed, or the transpose of a distributed matrix with a distributed matrix whose result is non-distributed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">alpha</td><td>Scalar. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>Left multiplicand. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>Right multiplicand. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ret</td><td>The product.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p><b>Exceptions</b><br  />
+ If x and y are inappropriately sized for a matrix product, the method will throw a 'runtime_error' exception.</p>
+<p><b>Implementation Details</b><br  />
+ Uses the BLAS function <code>Xgemm()</code>.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a131f0bcbd83e2bdd1ad0cce068b7df17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a131f0bcbd83e2bdd1ad0cce068b7df17">&#9670;&nbsp;</a></span>matmult() <span class="overload">[6/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void fml::linalg::matmult </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ret</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the product of a distributed and a non-distributed matrix whose result is distributed, or the transpose of a distributed matrix with a distributed matrix whose result is non-distributed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">alpha</td><td>Scalar. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>Left multiplicand. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">y</td><td>Right multiplicand. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ret</td><td>The product.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p><b>Exceptions</b><br  />
+ If x and y are inappropriately sized for a matrix product, the method will throw a 'runtime_error' exception.</p>
+<p><b>Implementation Details</b><br  />
+ Uses the BLAS function <code>Xgemm()</code>.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
@@ -3934,6 +4391,86 @@ template&lt;typename REAL &gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the norm.</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3141aa91a43cbbc2d3ff3a5d9d7b28ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3141aa91a43cbbc2d3ff3a5d9d7b28ea">&#9670;&nbsp;</a></span>prod()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void fml::linalg::prod </td>
+          <td>(</td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>transx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>transy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const REAL&#160;</td>
+          <td class="paramname"><em>alpha</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const REAL&#160;</td>
+          <td class="paramname"><em>beta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ret</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Returns element-wise alpha*op(x) * beta*op(y) where op(A) is A or A^T. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">transx</td><td>Should x^T be used? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">transy</td><td>Should y^T be used? </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">alpha,beta</td><td>Scalars. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x,y</td><td>The inputs to the product. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ret</td><td>The product.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p><b>Exceptions</b><br  />
+ If x and y are inappropriately sized for the sum, the method will throw a 'runtime_error' exception.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
@@ -4673,7 +5210,7 @@ template&lt;typename REAL &gt; </div>
 </div>
 </div>
 <a id="abc1da58b7dfd9cddfb4be7e2215b03a8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abc1da58b7dfd9cddfb4be7e2215b03a8">&#9670;&nbsp;</a></span>rsvd() <span class="overload">[1/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#abc1da58b7dfd9cddfb4be7e2215b03a8">&#9670;&nbsp;</a></span>rsvd() <span class="overload">[1/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -4744,7 +5281,7 @@ template&lt;typename REAL &gt; </div>
 </div>
 </div>
 <a id="a5808d941b1f4802a629b3d4da0620804"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5808d941b1f4802a629b3d4da0620804">&#9670;&nbsp;</a></span>rsvd() <span class="overload">[2/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5808d941b1f4802a629b3d4da0620804">&#9670;&nbsp;</a></span>rsvd() <span class="overload">[2/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -4815,7 +5352,7 @@ template&lt;typename REAL &gt; </div>
 </div>
 </div>
 <a id="ae6cbe11afbd0141274f38cdb9e7baded"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae6cbe11afbd0141274f38cdb9e7baded">&#9670;&nbsp;</a></span>rsvd() <span class="overload">[3/3]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6cbe11afbd0141274f38cdb9e7baded">&#9670;&nbsp;</a></span>rsvd() <span class="overload">[3/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -4872,6 +5409,148 @@ template&lt;typename REAL &gt; </div>
 </dl>
 <p><b>Implementation Details</b><br  />
  Uses a series of QR's and matrix multiplications.</p>
+<p><b>Memory Allocations</b><br  />
+ If the any outputs are inappropriately sized, they will automatically be re-allocated. Additionally, some temporary work storage is needed.</p>
+<p><b>Exceptions</b><br  />
+ If a (re-)allocation is triggered and fails, a <code>bad_alloc</code> exception will be thrown.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a87fab87cdc56206c2ece2d79b969ea37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87fab87cdc56206c2ece2d79b969ea37">&#9670;&nbsp;</a></span>rsvd() <span class="overload">[4/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void fml::linalg::rsvd </td>
+          <td>(</td>
+          <td class="paramtype">const uint32_t&#160;</td>
+          <td class="paramname"><em>seed</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>q</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>s</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the truncated singular value decomposition using the normal projections method of Halko et al. This method is only an approximation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">x</td><td>Input data matrix. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">s</td><td>Vector of singular values. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">u</td><td>Matrix of left singular vectors. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">vt</td><td>Matrix of (transposed) right singular vectors.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p><b>Implementation Details</b><br  />
+ Uses a series of QR's using the TSQR implementation, and matrix multiplications.</p>
+<p><b>Memory Allocations</b><br  />
+ If the any outputs are inappropriately sized, they will automatically be re-allocated. Additionally, some temporary work storage is needed.</p>
+<p><b>Exceptions</b><br  />
+ If a (re-)allocation is triggered and fails, a <code>bad_alloc</code> exception will be thrown.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5e1fc2f09c4c04f6b6be0f592994fb95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e1fc2f09c4c04f6b6be0f592994fb95">&#9670;&nbsp;</a></span>rsvd() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void fml::linalg::rsvd </td>
+          <td>(</td>
+          <td class="paramtype">const uint32_t&#160;</td>
+          <td class="paramname"><em>seed</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const int&#160;</td>
+          <td class="paramname"><em>q</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>s</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the truncated singular value decomposition using the normal projections method of Halko et al. This method is only an approximation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">x</td><td>Input data matrix. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">s</td><td>Vector of singular values. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">u</td><td>Matrix of left singular vectors. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">vt</td><td>Matrix of (transposed) right singular vectors.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p><b>Implementation Details</b><br  />
+ Uses a series of QR's using the TSQR implementation, and matrix multiplications.</p>
 <p><b>Memory Allocations</b><br  />
  If the any outputs are inappropriately sized, they will automatically be re-allocated. Additionally, some temporary work storage is needed.</p>
 <p><b>Exceptions</b><br  />
@@ -5593,6 +6272,114 @@ template&lt;typename REAL &gt; </div>
  Uses the LAPACK functions <code>Xtrtri()</code>.</p>
 <p><b>Exceptions</b><br  />
  If the matrix is non-square, a <code>runtime_error</code> exception is thrown.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5e580c3749bdd0e1bbec57d842d6cb1b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e580c3749bdd0e1bbec57d842d6cb1b">&#9670;&nbsp;</a></span>tssvd() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void fml::linalg::tssvd </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>s</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the singular value decomposition by first reducing the rectangular matrix to a square matrix using an orthogonal factorization. If the matrix is square, we skip the orthogonal factorization. </p>
+<p>If the matrix has more rows than columns, the operation works by computing a QR and then taking the SVD of the R matrix. The left singular vectors are Q times the left singular vectors from R's SVD, and the singular value and the right singular vectors are those from R's SVD. Likewise, if the matrix has more columns than rows, w take the LQ and then the SVD of the L matrix. The left singular vectors are Q times the right singular vectors from L's SVD, and the singular value and the left singular vectors are those from L's SVD.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">x</td><td>Input data matrix. Values are overwritten. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">s</td><td>Vector of singular values. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">u</td><td>Matrix of left singular vectors. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">vt</td><td>Matrix of (transposed) right singular vectors.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p><b>Implementation Details</b><br  />
+ Uses the TSQR implementation to reduce the matrix to a square matrix, and then calls <code><a class="el" href="namespacefml_1_1linalg.html#add583703d1c77a9f7236effb9b568f23" title="Computes the singular value decomposition.">linalg::svd()</a></code>. If computing the vectors, <code><a class="el" href="namespacefml_1_1linalg.html#a273675041a86335869b1a06daab45d2a" title="Compute the matrix inverse of a triangular matrix.">linalg::trinv()</a></code> and a series of matrix multiplications are used.</p>
+<p><b>Memory Allocations</b><br  />
+ If the any outputs are inappropriately sized, they will automatically be re-allocated. Additionally, some temporary work storage is needed.</p>
+<p><b>Exceptions</b><br  />
+ If a (re-)allocation is triggered and fails, a <code>bad_alloc</code> exception will be thrown.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a42b6e6c6ba25677a2c37b519a7cdcefd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42b6e6c6ba25677a2c37b519a7cdcefd">&#9670;&nbsp;</a></span>tssvd() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename REAL &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void fml::linalg::tssvd </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classfml_1_1parmat__gpu.html">parmat_gpu</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;&#160;</td>
+          <td class="paramname"><em>s</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the singular value decomposition by first reducing the rectangular matrix to a square matrix using an orthogonal factorization. If the matrix is square, we skip the orthogonal factorization. </p>
+<p>If the matrix has more rows than columns, the operation works by computing a QR and then taking the SVD of the R matrix. The left singular vectors are Q times the left singular vectors from R's SVD, and the singular value and the right singular vectors are those from R's SVD. Likewise, if the matrix has more columns than rows, w take the LQ and then the SVD of the L matrix. The left singular vectors are Q times the right singular vectors from L's SVD, and the singular value and the left singular vectors are those from L's SVD.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">x</td><td>Input data matrix. Values are overwritten. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">s</td><td>Vector of singular values. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">u</td><td>Matrix of left singular vectors. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">vt</td><td>Matrix of (transposed) right singular vectors.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p><b>Implementation Details</b><br  />
+ Uses the TSQR implementation to reduce the matrix to a square matrix, and then calls <code><a class="el" href="namespacefml_1_1linalg.html#add583703d1c77a9f7236effb9b568f23" title="Computes the singular value decomposition.">linalg::svd()</a></code>. If computing the vectors, <code><a class="el" href="namespacefml_1_1linalg.html#a273675041a86335869b1a06daab45d2a" title="Compute the matrix inverse of a triangular matrix.">linalg::trinv()</a></code> and a series of matrix multiplications are used.</p>
+<p><b>Memory Allocations</b><br  />
+ If the any outputs are inappropriately sized, they will automatically be re-allocated. Additionally, some temporary work storage is needed.</p>
+<p><b>Exceptions</b><br  />
+ If a (re-)allocation is triggered and fails, a <code>bad_alloc</code> exception will be thrown.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>

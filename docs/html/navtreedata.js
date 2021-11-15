@@ -28,8 +28,8 @@ var NAVTREE =
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
-        [ "All", "namespacemembers.html", null ],
-        [ "Functions", "namespacemembers_func.html", null ],
+        [ "All", "namespacemembers.html", "namespacemembers_dup" ],
+        [ "Functions", "namespacemembers_func.html", "namespacemembers_func" ],
         [ "Enumerations", "namespacemembers_enum.html", null ],
         [ "Enumerator", "namespacemembers_eval.html", null ]
       ] ]
@@ -52,8 +52,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "__blacs__prototypes_8h_source.html",
-"classfml_1_1grid.html#aa409081ed7b3489c7b74763d6eddae49",
-"gpu_2linalg_2linalg__svd_8hh_source.html"
+"classfml_1_1grid.html#a9981006d0f4504172ea33a7aafc6c1e3",
+"gpu_2dimops_8hh_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

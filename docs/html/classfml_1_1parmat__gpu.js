@@ -5,5 +5,6 @@ var classfml_1_1parmat__gpu =
     [ "fill_diag", "classfml_1_1parmat__gpu.html#ae2da7b253aff6be45fcc5c1f8854d381", null ],
     [ "fill_eye", "classfml_1_1parmat__gpu.html#a28b7404f195914cf966184e7a9dc17aa", null ],
     [ "fill_linspace", "classfml_1_1parmat__gpu.html#ac3a2c11195150406be4442f5e9247c5b", null ],
+    [ "get_card", "classfml_1_1parmat__gpu.html#a544308b972adea0c15608fd21ed9aae2", null ],
     [ "print", "classfml_1_1parmat__gpu.html#ad890dead73a698376aa9a62f694168f1", null ]
 ];

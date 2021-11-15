@@ -104,53 +104,14 @@ $(document).ready(function(){initNavTree('par_2cpu_2linalg_8hh_source.html','');
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;parmat.hh&quot;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;../../cpu/linalg.hh&quot;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;linalg/blas.hh&quot;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;linalg/qr.hh&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;linalg/svd.hh&quot;</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacefml.html">fml</a></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;{</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">namespace </span>linalg</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;{</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
-<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="namespacefml_1_1linalg.html#aaa91fd076a5c734393d750af66cf2067">   20</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="namespacefml_1_1linalg.html#a1932a6365c1b910d332ea2c036500ee4">crossprod</a>(<span class="keyword">const</span> REAL alpha, <span class="keyword">const</span> <a class="code" href="classfml_1_1parmat__cpu.html">parmat_cpu&lt;REAL&gt;</a> &amp;x, <a class="code" href="classfml_1_1cpumat.html">cpumat&lt;REAL&gt;</a> &amp;ret)</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  {</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keyword">const</span> len_t n = x.ncols();</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="keywordflow">if</span> (n != ret.<a class="code" href="classfml_1_1unimat.html#a5b70212a4383826986be87aad3b8908e">nrows</a>() || n != ret.<a class="code" href="classfml_1_1unimat.html#a6184e02405d68317c536b81e4a512bf4">ncols</a>())</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;      ret.<a class="code" href="classfml_1_1cpumat.html#ad73dece47634d7372a38b27207c74a2d">resize</a>(n, n);</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <a class="code" href="namespacefml_1_1linalg.html#a1932a6365c1b910d332ea2c036500ee4">linalg::crossprod</a>(alpha, x.data_obj(), ret);</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <a class="code" href="classfml_1_1comm.html">comm</a> r = x.get_comm();</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    r.<a class="code" href="classfml_1_1comm.html#a53af04948078f370dfb6b7b158882c02">allreduce</a>(n*n, ret.<a class="code" href="classfml_1_1unimat.html#a38d05f3e788f0597dfc362f1090c002b">data_ptr</a>());</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  }</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;  </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
-<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="namespacefml_1_1linalg.html#a243397982d98228e50b92d677c93a20a">   34</a></span>&#160;  <a class="code" href="classfml_1_1cpumat.html">cpumat&lt;REAL&gt;</a> <a class="code" href="namespacefml_1_1linalg.html#a1932a6365c1b910d332ea2c036500ee4">crossprod</a>(<span class="keyword">const</span> REAL alpha, <span class="keyword">const</span> <a class="code" href="classfml_1_1parmat__cpu.html">parmat_cpu&lt;REAL&gt;</a> &amp;x)</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">const</span> len_t n = x.ncols();</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <a class="code" href="classfml_1_1cpumat.html">cpumat&lt;REAL&gt;</a> ret(n, n);</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="namespacefml_1_1linalg.html#a1932a6365c1b910d332ea2c036500ee4">crossprod</a>(alpha, x, ret);</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordflow">return</span> ret;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;  }</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;}</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;}</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aclassfml_1_1cpumat_html"><div class="ttname"><a href="classfml_1_1cpumat.html">fml::cpumat</a></div><div class="ttdoc">Matrix class for data held on a single CPU.</div><div class="ttdef"><b>Definition:</b> cpumat.hh:36</div></div>
-<div class="ttc" id="aclassfml_1_1parmat__cpu_html"><div class="ttname"><a href="classfml_1_1parmat__cpu.html">fml::parmat_cpu</a></div><div class="ttdef"><b>Definition:</b> parmat.hh:21</div></div>
-<div class="ttc" id="anamespacefml_1_1linalg_html_a1932a6365c1b910d332ea2c036500ee4"><div class="ttname"><a href="namespacefml_1_1linalg.html#a1932a6365c1b910d332ea2c036500ee4">fml::linalg::crossprod</a></div><div class="ttdeci">void crossprod(const REAL alpha, const cpumat&lt; REAL &gt; &amp;x, cpumat&lt; REAL &gt; &amp;ret)</div><div class="ttdoc">Computes lower triangle of alpha*x^T*x.</div><div class="ttdef"><b>Definition:</b> linalg_blas.hh:290</div></div>
-<div class="ttc" id="aclassfml_1_1comm_html_a53af04948078f370dfb6b7b158882c02"><div class="ttname"><a href="classfml_1_1comm.html#a53af04948078f370dfb6b7b158882c02">fml::comm::allreduce</a></div><div class="ttdeci">void allreduce(int n, T *data, MPI_Op op=MPI_SUM) const</div><div class="ttdoc">Sum reduce operation across all processes in the MPI communicator.</div><div class="ttdef"><b>Definition:</b> comm.hh:357</div></div>
-<div class="ttc" id="aclassfml_1_1unimat_html_a5b70212a4383826986be87aad3b8908e"><div class="ttname"><a href="classfml_1_1unimat.html#a5b70212a4383826986be87aad3b8908e">fml::unimat::nrows</a></div><div class="ttdeci">len_t nrows() const</div><div class="ttdoc">Number of rows.</div><div class="ttdef"><b>Definition:</b> unimat.hh:36</div></div>
-<div class="ttc" id="aclassfml_1_1cpumat_html_ad73dece47634d7372a38b27207c74a2d"><div class="ttname"><a href="classfml_1_1cpumat.html#ad73dece47634d7372a38b27207c74a2d">fml::cpumat::resize</a></div><div class="ttdeci">void resize(len_t nrows, len_t ncols)</div><div class="ttdoc">Resize the internal object storage.</div><div class="ttdef"><b>Definition:</b> cpumat.hh:230</div></div>
-<div class="ttc" id="aclassfml_1_1unimat_html_a6184e02405d68317c536b81e4a512bf4"><div class="ttname"><a href="classfml_1_1unimat.html#a6184e02405d68317c536b81e4a512bf4">fml::unimat::ncols</a></div><div class="ttdeci">len_t ncols() const</div><div class="ttdoc">Number of columns.</div><div class="ttdef"><b>Definition:</b> unimat.hh:38</div></div>
-<div class="ttc" id="aclassfml_1_1comm_html"><div class="ttname"><a href="classfml_1_1comm.html">fml::comm</a></div><div class="ttdoc">MPI communicator data and helpers.</div><div class="ttdef"><b>Definition:</b> comm.hh:24</div></div>
-<div class="ttc" id="aclassfml_1_1unimat_html_a38d05f3e788f0597dfc362f1090c002b"><div class="ttname"><a href="classfml_1_1unimat.html#a38d05f3e788f0597dfc362f1090c002b">fml::unimat::data_ptr</a></div><div class="ttdeci">REAL * data_ptr()</div><div class="ttdoc">Pointer to the internal array.</div><div class="ttdef"><b>Definition:</b> unimat.hh:40</div></div>
-<div class="ttc" id="anamespacefml_html"><div class="ttname"><a href="namespacefml.html">fml</a></div><div class="ttdoc">Core namespace.</div><div class="ttdef"><b>Definition:</b> linalgutils.hh:15</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

@@ -22,6 +22,7 @@ var classfml_1_1cpuvec =
     [ "operator=", "classfml_1_1cpuvec.html#ac7d7cbe3bb638c1884c699181846323b", null ],
     [ "operator=", "classfml_1_1cpuvec.html#af0d44a3f82f9655d64403b3c9ef0490e", null ],
     [ "operator==", "classfml_1_1cpuvec.html#a6baa050464eb961e666dc1a34be2de52", null ],
+    [ "pow", "classfml_1_1cpuvec.html#a64e11af25f18f275169693f22ca2d84e", null ],
     [ "print", "classfml_1_1cpuvec.html#a071e80fd48a23bb221a6becc52fe04c9", null ],
     [ "resize", "classfml_1_1cpuvec.html#aa20601932c18e0cc71ccae5217c38b85", null ],
     [ "rev", "classfml_1_1cpuvec.html#a3304c4f9be50b7b9e2504005d7de4d0c", null ],

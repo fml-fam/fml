@@ -21,6 +21,7 @@ var classfml_1_1gpuvec =
     [ "operator!=", "classfml_1_1gpuvec.html#a7a34316271d301a0647984cea1df89b2", null ],
     [ "operator=", "classfml_1_1gpuvec.html#a724231eaf027a5f921bec071929b603d", null ],
     [ "operator==", "classfml_1_1gpuvec.html#a04223b261c67c226faf98a6944e74a20", null ],
+    [ "pow", "classfml_1_1gpuvec.html#a88f28c63b5f917ecab7a7aee9d47928a", null ],
     [ "print", "classfml_1_1gpuvec.html#a639039c81d0530f895a917e3be4bedaf", null ],
     [ "resize", "classfml_1_1gpuvec.html#a5ae34e52ff8226163a3a17ce4770ec8a", null ],
     [ "resize", "classfml_1_1gpuvec.html#acc5ae910fe9c28277469861811f9b3e4", null ],

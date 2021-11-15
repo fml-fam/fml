@@ -4,8 +4,8 @@ var indexSectionsWithContent =
   1: "cgmpu",
   2: "f",
   3: "abcdefgijlmnopqrstvx",
-  4: "bg",
-  5: "p",
+  4: "bgs",
+  5: "ps",
   6: "e",
   7: "fn"
 };

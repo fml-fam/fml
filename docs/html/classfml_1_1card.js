@@ -19,6 +19,7 @@ var classfml_1_1card =
     [ "mem_gpu2gpu", "classfml_1_1card.html#ac4f478a51ee6b17be59149b160d31431", null ],
     [ "mem_set", "classfml_1_1card.html#afca57c34c26dfbc9fa15f517f1f2e086", null ],
     [ "set", "classfml_1_1card.html#a6b6d65fcb28f4d4f0a79060e0ace21f8", null ],
+    [ "set_math_mode", "classfml_1_1card.html#aed20affb7d0029aac3067aa831f069a7", null ],
     [ "synch", "classfml_1_1card.html#af25645746f32effe1b4817bfd21c0a01", null ],
     [ "valid_card", "classfml_1_1card.html#ae3c116dee14a4f8683fb7164fe0f99e2", null ],
     [ "_blas_handle", "classfml_1_1card.html#a2eb45c1bf7910be268cc348bea89e0ec", null ],
