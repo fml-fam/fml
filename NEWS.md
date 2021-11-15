@@ -1,5 +1,26 @@
 # NEWS
 
+## Release 0.4-2 (//):
+
+New:
+  * 
+
+API Changes:
+  * 
+
+Bug Fixes:
+  * 
+
+Internal Changes of Note:
+  * 
+
+Documentation:
+  * 
+
+
+
+
+
 ## Release 0.4-1 (11/15/2021):
 
 New:
