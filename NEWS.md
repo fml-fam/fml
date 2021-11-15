@@ -1,6 +1,6 @@
 # NEWS
 
-## Release 0.4-1 (//):
+## Release 0.4-1 (11/15/2021):
 
 New:
   * Added set_math_mode() method for card objects
@@ -8,7 +8,7 @@ New:
   * Added dimops::rowsweep() and dimops::colsweep()
 
 API Changes:
-  * 
+  * None
 
 Bug Fixes:
   * Fixed linalg::rsvd() issues with mpimat.
