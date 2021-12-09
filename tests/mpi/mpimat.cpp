@@ -120,7 +120,7 @@ TEMPLATE_TEST_CASE("indexing", "[mpimat]", float, double)
   fml::copy::cpu2mpi(x_cpu, x);
   fml::mpimat<TestType> y(g, n, n, 1, 1);
   
-  y.fill_linspace(1, n*n);
+  y.fill_linspace();
   REQUIRE( (x == y) );
   
   y.fill_val(1.f);
@@ -135,7 +135,7 @@ TEMPLATE_TEST_CASE("diag", "[cpumat]", float, double)
   len_t n = 3;
   
   fml::mpimat<TestType> x(g, m, n, 1, 1);
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   
   fml::cpuvec<TestType> v;
   x.diag(v);
@@ -156,7 +156,7 @@ TEMPLATE_TEST_CASE("rev", "[cpumat]", float, double)
   len_t n = 2;
   
   fml::mpimat<TestType> x(g, n, n, 1, 1);
-  x.fill_linspace(1, n*n);
+  x.fill_linspace();
   
   x.rev_cols();
   REQUIRE( fltcmp::eq(x.get(0, 0), 3) );
@@ -175,7 +175,7 @@ TEMPLATE_TEST_CASE("get row/col", "[cpumat]", float, double)
   len_t n = 2;
   
   fml::mpimat<TestType> x(g, n, n, 1, 1);
-  x.fill_linspace(1, n*n);
+  x.fill_linspace();
   
   fml::cpuvec<TestType> v;
   

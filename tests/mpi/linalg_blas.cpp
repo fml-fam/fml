@@ -92,7 +92,7 @@ TEMPLATE_TEST_CASE("crossprod and tcrossprod", "[linalg]", float, double)
   len_t n = 2;
   
   fml::mpimat<TestType> x(g, m, n, 1, 1);
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   
   // regular api
   fml::mpimat<TestType> x_cp = fml::linalg::crossprod((TestType)1, x);
@@ -139,7 +139,7 @@ TEMPLATE_TEST_CASE("xpose", "[linalg]", float, double)
   len_t n = 2;
   
   fml::mpimat<TestType> x(g, m, n, 1, 1);
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   
   fml::mpimat<TestType> tx = fml::linalg::xpose(x);
   REQUIRE( tx.nrows() == x.ncols() );

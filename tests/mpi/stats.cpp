@@ -14,7 +14,7 @@ TEMPLATE_TEST_CASE("stats - pca", "[stats]", float, double)
   len_t n = 2;
   
   fml::mpimat<TestType> x(g, m, n, 1, 1);
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   
   fml::cpuvec<TestType> sdev;
   fml::mpimat<TestType> rot(g, 1, 1);

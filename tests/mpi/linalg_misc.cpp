@@ -15,7 +15,7 @@ TEMPLATE_TEST_CASE("trace", "[linalg]", float, double)
   len_t n = 2;
   
   fml::mpimat<TestType> x(g, n, n, 1, 1);
-  x.fill_linspace(1, n*n);
+  x.fill_linspace();
   
   TestType tr = fml::linalg::trace(x);
   
@@ -29,7 +29,7 @@ TEMPLATE_TEST_CASE("det", "[linalg]", float, double)
   len_t n = 2;
   
   fml::mpimat<TestType> x(g, n, n, 1, 1);
-  x.fill_linspace(1, n*n);
+  x.fill_linspace();
   
   int sign;
   TestType modulus;
@@ -40,7 +40,7 @@ TEMPLATE_TEST_CASE("det", "[linalg]", float, double)
   
   n = 4;
   x.resize(n, n);
-  x.fill_linspace(1, n*n);
+  x.fill_linspace();
   
   fml::linalg::det(x, sign, modulus);
   REQUIRE( fltcmp::eq(sign, 1) );

@@ -57,6 +57,7 @@ namespace fml
       
       void fill_zero();
       void fill_val(const REAL v);
+      void fill_linspace();
       void fill_linspace(const REAL start, const REAL stop);
       void fill_eye();
       void fill_diag(const cpuvec<REAL> &v);
@@ -591,10 +592,19 @@ void fml::mpimat<REAL>::fill_val(const REAL v)
 /**
   @brief Set values to linearly spaced numbers.
   
-  @param[in] start,stop Beginning/ending numbers.
+  @param[in] start,stop Beginning/ending numbers. If not supplied, the matrix
+  will be filled with whole numbers from 1 to the total number of elements.
   
   @comm The method has no communication.
  */
+template <typename T>
+void fml::mpimat<T>::fill_linspace()
+{
+  T start = 1;
+  T stop = (T) (this->m * this->n);
+  this->fill_linspace(start, stop);
+}
+
 template <typename REAL>
 void fml::mpimat<REAL>::fill_linspace(const REAL start, const REAL stop)
 {
