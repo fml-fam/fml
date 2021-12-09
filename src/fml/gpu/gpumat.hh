@@ -52,6 +52,7 @@ namespace fml
       
       void fill_zero();
       void fill_val(const REAL v);
+      void fill_linspace();
       void fill_linspace(const REAL start, const REAL stop);
       void fill_eye();
       void fill_diag(const gpuvec<REAL> &v);
@@ -422,8 +423,17 @@ void fml::gpumat<REAL>::fill_val(const REAL v)
 /**
   @brief Set values to linearly spaced numbers.
   
-  @param[in] start,stop Beginning/ending numbers.
+  @param[in] start,stop Beginning/ending numbers. If not supplied, the matrix
+  will be filled with whole numbers from 1 to the total number of elements.
  */
+template <typename T>
+void fml::gpumat<T>::fill_linspace()
+{
+  T start = 1;
+  T stop = (T) (this->m * this->n);
+  this->fill_linspace(start, stop);
+}
+
 template <typename REAL>
 void fml::gpumat<REAL>::fill_linspace(REAL start, REAL stop)
 {

@@ -49,6 +49,7 @@ namespace fml
       
       void fill_zero();
       void fill_val(const T v);
+      void fill_linspace();
       void fill_linspace(const T start, const T stop);
       
       void scale(const T s);
@@ -408,8 +409,17 @@ void fml::gpuvec<T>::fill_val(const T v)
 /**
   @brief Set values to linearly spaced numbers.
   
-  @param[in] start,stop Beginning/ending numbers.
+  @param[in] start,stop Beginning/ending numbers. If not supplied, the vector
+  will be filled with whole numbers from 1 to the total number of elements.
  */
+template <typename T>
+void fml::gpuvec<T>::fill_linspace()
+{
+  T start = 1;
+  T stop = (T) (this->_size);
+  this->fill_linspace(start, stop);
+}
+
 template <typename T>
 void fml::gpuvec<T>::fill_linspace(const T start, const T stop)
 {

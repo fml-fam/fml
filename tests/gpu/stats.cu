@@ -15,7 +15,7 @@ TEMPLATE_TEST_CASE("stats - pca", "[stats]", float, double)
   len_t n = 2;
   
   gpumat<TestType> x(c, m, n);
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   
   gpuvec<TestType> sdev(c);
   gpumat<TestType> rot(c);

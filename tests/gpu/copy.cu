@@ -19,8 +19,8 @@ TEMPLATE_TEST_CASE("gpu2cpu", "[copy]", float, double)
   fml::gpumat<TestType> x(c, m, n);
   fml::cpumat<TestType> x_true(m, n);
   
-  x.fill_linspace(1, m*n);
-  x_true.fill_linspace(1, m*n);
+  x.fill_linspace();
+  x_true.fill_linspace();
   fml::cpumat<TestType> x_test = fml::copy::gpu2cpu(x);
   REQUIRE( x_test == x_true );
   
@@ -38,10 +38,10 @@ TEMPLATE_TEST_CASE("cpu2gpu", "[copy]", float, double)
   len_t n = 2;
   
   fml::gpumat<TestType> x_true(c, m, n);
-  x_true.fill_linspace(1, m*n);
+  x_true.fill_linspace();
   
   fml::cpumat<TestType> x(m, n);
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   
   fml::gpumat<TestType> x_test(c);
   fml::copy::cpu2gpu(x, x_test);
@@ -58,7 +58,7 @@ TEMPLATE_TEST_CASE("gpu2gpu", "[copy]", float, double)
   
   fml::gpumat<TestType> x_test(c);
   fml::gpumat<TestType> x_true(c, m, n);
-  x_true.fill_linspace(1, m*n);
+  x_true.fill_linspace();
   
   fml::copy::gpu2gpu(x_true, x_test);
   

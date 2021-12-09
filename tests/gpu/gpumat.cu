@@ -113,7 +113,7 @@ TEMPLATE_TEST_CASE("diag", "[gpumat]", float, double)
   len_t n = 3;
   
   gpumat<TestType> x(c, m, n);
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   
   gpuvec<TestType> v(c);
   x.diag(v);
@@ -134,7 +134,7 @@ TEMPLATE_TEST_CASE("rev", "[gpumat]", float, double)
   len_t n = 2;
   
   gpumat<TestType> x(c, n, n);
-  x.fill_linspace(1, n*n);
+  x.fill_linspace();
   
   x.rev_cols();
   REQUIRE( fltcmp::eq(x.get(0, 0), 3) );
@@ -152,7 +152,7 @@ TEMPLATE_TEST_CASE("get row/col", "[gpumat]", float, double)
   len_t n = 2;
 
   gpumat<TestType> x(c, n, n);
-  x.fill_linspace(1, n*n);
+  x.fill_linspace();
 
   gpuvec<TestType> v(c);
 

@@ -43,7 +43,7 @@ TEMPLATE_TEST_CASE("matrix addition", "[linalg]", float, double)
   
   fml::gpumat<TestType> x(c, n, n);
   fml::gpumat<TestType> y(c, n, n);
-  x.fill_linspace(1, n*n);
+  x.fill_linspace();
   y.fill_linspace(n*n, 1);
   
   auto z = fml::linalg::add(false, false, (TestType)1.f, (TestType)1.f, x, y);
@@ -80,7 +80,7 @@ TEMPLATE_TEST_CASE("matrix multiplication", "[linalg]", float, double)
   
   fml::gpumat<TestType> x(c, n, n);
   fml::gpumat<TestType> y(c, n, n);
-  x.fill_linspace(1, n*n);
+  x.fill_linspace();
   y.fill_linspace(n*n, 1);
   
   fml::gpumat<TestType> z = fml::linalg::matmult(false, false, (TestType)1, x, y);
@@ -119,7 +119,7 @@ TEMPLATE_TEST_CASE("crossprod and tcrossprod", "[linalg]", float, double)
   len_t n = 2;
   
   fml::gpumat<TestType> x(c, m, n);
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   
   // regular api
   fml::gpumat<TestType> x_cp = fml::linalg::crossprod((TestType)1, x);
@@ -166,7 +166,7 @@ TEMPLATE_TEST_CASE("xpose", "[linalg]", float, double)
   len_t n = 2;
   
   fml::gpumat<TestType> x(c, m, n);
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   
   fml::gpumat<TestType> tx = fml::linalg::xpose(x);
   REQUIRE( tx.nrows() == x.ncols() );
