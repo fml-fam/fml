@@ -91,7 +91,7 @@ TEMPLATE_TEST_CASE("indexing", "[cpumat]", float, double)
   for (len_t i=0; i<n*n; i++)
     x.set(i, i+1);
   
-  y.fill_linspace(1, n*n);
+  y.fill_linspace();
   REQUIRE( (x == y) );
   
   y.fill_val(1.f);
@@ -106,7 +106,7 @@ TEMPLATE_TEST_CASE("diag", "[cpumat]", float, double)
   len_t n = 3;
   
   cpumat<TestType> x(m, n);
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   
   cpuvec<TestType> v;
   x.diag(v);
@@ -127,7 +127,7 @@ TEMPLATE_TEST_CASE("rev", "[cpumat]", float, double)
   len_t n = 2;
   
   cpumat<TestType> x(n, n);
-  x.fill_linspace(1, n*n);
+  x.fill_linspace();
   
   x.rev_cols();
   REQUIRE( fltcmp::eq(x.get(0, 0), 3) );
@@ -145,7 +145,7 @@ TEMPLATE_TEST_CASE("get row/col", "[cpumat]", float, double)
   len_t n = 2;
   
   cpumat<TestType> x(n, n);
-  x.fill_linspace(1, n*n);
+  x.fill_linspace();
   
   cpuvec<TestType> v;
   

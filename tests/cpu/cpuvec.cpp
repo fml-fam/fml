@@ -86,7 +86,7 @@ TEMPLATE_TEST_CASE("indexing - vec", "[cpuvec]", float, double)
   for (len_t i=0; i<n; i++)
     x.set(i, i+1);
   
-  y.fill_linspace(1, n);
+  y.fill_linspace();
   REQUIRE( (x == y) );
   
   y.fill_val(1.f);
@@ -100,7 +100,7 @@ TEMPLATE_TEST_CASE("rev - vec", "[cpuvec]", float, double)
   len_t n = 2;
   
   fml::cpuvec<TestType> x(n);
-  x.fill_linspace(1, n);
+  x.fill_linspace();
   
   x.rev();
   REQUIRE( fltcmp::eq(x.get(0), 2) );
@@ -114,7 +114,7 @@ TEMPLATE_TEST_CASE("sum/max/min - vec", "[cpuvec]", float, double)
   len_t n = 5;
   
   fml::cpuvec<TestType> x(n);
-  x.fill_linspace(1, n);
+  x.fill_linspace();
   
   TestType s;
   s = x.sum();

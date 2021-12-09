@@ -13,32 +13,32 @@ TEMPLATE_TEST_CASE("tri2zero - tall", "[cpu_utils]", float, double)
   len_t n = 3;
   fml::cpumat<TestType> x(m, n);
   fml::cpumat<TestType> truth(m, n);
-  truth.fill_linspace(1, m*n);
+  truth.fill_linspace();
   
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   fml::cpu_utils::tri2zero('U', false, m, n, x.data_ptr(), m);
   truth.set(0, 1, 0);
   truth.set(0, 2, 0);
   truth.set(1, 2, 0);
   REQUIRE( x == truth );
   
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   fml::cpu_utils::tri2zero('U', true, m, n, x.data_ptr(), m);
   truth.set(0, 0, 0);
   truth.set(1, 1, 0);
   truth.set(2, 2, 0);
   REQUIRE( x == truth );
   
-  truth.fill_linspace(1, m*n);
+  truth.fill_linspace();
   
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   fml::cpu_utils::tri2zero('L', false, n, n, x.data_ptr(), m);
   truth.set(1, 0, 0);
   truth.set(2, 0, 0);
   truth.set(2, 1, 0);
   REQUIRE( x == truth );
   
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   fml::cpu_utils::tri2zero('L', false, m, n, x.data_ptr(), m);
   truth.set(3, 0, 0);
   truth.set(4, 0, 0);
@@ -48,7 +48,7 @@ TEMPLATE_TEST_CASE("tri2zero - tall", "[cpu_utils]", float, double)
   truth.set(4, 2, 0);
   REQUIRE( x == truth );
   
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   fml::cpu_utils::tri2zero('L', true, m, n, x.data_ptr(), m);
   truth.set(0, 0, 0);
   truth.set(1, 1, 0);
@@ -64,32 +64,32 @@ TEMPLATE_TEST_CASE("tri2zero - wide", "[cpu_utils]", float, double)
   len_t n = 5;
   fml::cpumat<TestType> x(m, n);
   fml::cpumat<TestType> truth(m, n);
-  truth.fill_linspace(1, m*n);
+  truth.fill_linspace();
   
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   fml::cpu_utils::tri2zero('L', false, m, n, x.data_ptr(), m);
   truth.set(1, 0, 0);
   truth.set(2, 0, 0);
   truth.set(2, 1, 0);
   REQUIRE( x == truth );
   
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   fml::cpu_utils::tri2zero('L', true, m, n, x.data_ptr(), m);
   truth.set(0, 0, 0);
   truth.set(1, 1, 0);
   truth.set(2, 2, 0);
   REQUIRE( x == truth );
   
-  truth.fill_linspace(1, m*n);
+  truth.fill_linspace();
   
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   fml::cpu_utils::tri2zero('U', false, m, m, x.data_ptr(), m);
   truth.set(0, 1, 0);
   truth.set(0, 2, 0);
   truth.set(1, 2, 0);
   REQUIRE( x == truth );
   
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   fml::cpu_utils::tri2zero('U', false, m, n, x.data_ptr(), m);
   truth.set(0, 3, 0);
   truth.set(0, 4, 0);
@@ -99,7 +99,7 @@ TEMPLATE_TEST_CASE("tri2zero - wide", "[cpu_utils]", float, double)
   truth.set(2, 4, 0);
   REQUIRE( x == truth );
   
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   fml::cpu_utils::tri2zero('U', true, m, n, x.data_ptr(), m);
   truth.set(0, 0, 0);
   truth.set(1, 1, 0);

@@ -12,7 +12,7 @@ TEMPLATE_TEST_CASE("norm", "[linalg]", float, double)
 {
   TestType norm;
   fml::cpumat<TestType> x(3, 2);
-  x.fill_linspace(1, 6);
+  x.fill_linspace();
   
   SECTION("one norm")
   {
@@ -59,7 +59,7 @@ TEMPLATE_TEST_CASE("cond", "[linalg]", float, double)
 {
   TestType cond;
   fml::cpumat<TestType> x(3, 2);
-  x.fill_linspace(1, 6);
+  x.fill_linspace();
   x.set(1, 0, 0);
   x.set(2, 0, 0);
   x.set(2, 1, 0);

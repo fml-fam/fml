@@ -12,7 +12,7 @@ TEMPLATE_TEST_CASE("dimops - sums", "[dimops]", float, double)
   len_t n = 2;
   
   fml::cpumat<TestType> x(m, n);
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   
   fml::cpuvec<TestType> s;
   fml::dimops::rowsums(x, s);
@@ -35,7 +35,7 @@ TEMPLATE_TEST_CASE("dimops - means", "[dimops]", float, double)
   len_t n = 2;
   
   fml::cpumat<TestType> x(m, n);
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   
   fml::cpuvec<TestType> s;
   fml::dimops::rowmeans(x, s);
@@ -60,8 +60,8 @@ TEMPLATE_TEST_CASE("dimops - rowsweep", "[dimops]", float, double)
   fml::cpumat<TestType> x(m, n);
   fml::cpuvec<TestType> s(m);
   
-  x.fill_linspace(1, m*n);
-  s.fill_linspace(1, m);
+  x.fill_linspace();
+  s.fill_linspace();
   fml::dimops::rowsweep(x, s, fml::dimops::SWEEP_ADD);
   
   REQUIRE( fltcmp::eq(x.get(0, 0), 2) );
@@ -69,7 +69,7 @@ TEMPLATE_TEST_CASE("dimops - rowsweep", "[dimops]", float, double)
   REQUIRE( fltcmp::eq(x.get(2, 0), 6) );
   REQUIRE( fltcmp::eq(x.get(2, 1), 9) );
   
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   fml::dimops::rowsweep(x, s, fml::dimops::SWEEP_MUL);
   
   REQUIRE( fltcmp::eq(x.get(0, 0), 1) );
@@ -88,8 +88,8 @@ TEMPLATE_TEST_CASE("dimops - colsweep", "[dimops]", float, double)
   fml::cpumat<TestType> x(m, n);
   fml::cpuvec<TestType> s(n);
   
-  x.fill_linspace(1, m*n);
-  s.fill_linspace(1, n);
+  x.fill_linspace();
+  s.fill_linspace();
   fml::dimops::colsweep(x, s, fml::dimops::SWEEP_ADD);
   
   REQUIRE( fltcmp::eq(x.get(0, 0), 2) );
@@ -97,7 +97,7 @@ TEMPLATE_TEST_CASE("dimops - colsweep", "[dimops]", float, double)
   REQUIRE( fltcmp::eq(x.get(2, 0), 4) );
   REQUIRE( fltcmp::eq(x.get(2, 1), 8) );
   
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   fml::dimops::colsweep(x, s, fml::dimops::SWEEP_MUL);
   
   REQUIRE( fltcmp::eq(x.get(0, 0), 1) );
@@ -114,7 +114,7 @@ TEMPLATE_TEST_CASE("dimops - scale", "[dimops]", float, double)
   len_t n = 2;
   
   fml::cpumat<TestType> x(m, n);
-  x.fill_linspace(1, m*n);
+  x.fill_linspace();
   
   fml::dimops::scale(true, true, x);
   

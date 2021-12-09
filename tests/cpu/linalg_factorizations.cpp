@@ -13,7 +13,7 @@ TEMPLATE_TEST_CASE("lu", "[linalg]", float, double)
   len_t n = 2;
   
   fml::cpumat<TestType> x(n, n);
-  x.fill_linspace(1, n*n);
+  x.fill_linspace();
   
   fml::linalg::lu(x);
   
@@ -91,7 +91,7 @@ TEMPLATE_TEST_CASE("invert", "[linalg]", float, double)
   len_t n = 2;
   
   fml::cpumat<TestType> x(n, n);
-  x.fill_linspace(1, n*n);
+  x.fill_linspace();
   
   fml::linalg::invert(x);
   
