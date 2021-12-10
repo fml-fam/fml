@@ -61,10 +61,10 @@ TEMPLATE_TEST_CASE("stats - cov", "[stats]", float, double)
   fml::cpuvec<TestType> x2;
   x.get_col(0, x1);
   x.get_col(1, x2);
-  TestType c;
   
-  c = fml::stats::cov(x1, x2);
-  REQUIRE( fltcmp::eq(c, -.5) );
-  c = fml::stats::cov(x2, x2);
-  REQUIRE( fltcmp::eq(c, 1) );
+  TestType cv;
+  cv = fml::stats::cov(x1, x2);
+  REQUIRE( fltcmp::eq(cv, -.5) );
+  cv = fml::stats::cov(x2, x2);
+  REQUIRE( fltcmp::eq(cv, 1) );
 }
