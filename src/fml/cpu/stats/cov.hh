@@ -80,12 +80,12 @@ namespace stats
     #pragma omp simd reduction(+: sum_xy, sum_x, sum_y)
     for (len_t i=0; i<n; i++)
     {
-      const REAL tx = x_d[i];
-      const REAL ty = y_d[i];
+      const REAL xi = x_d[i];
+      const REAL yi = y_d[i];
       
-      sum_xy += tx*ty;
-      sum_x += tx;
-      sum_y += ty;
+      sum_xy += xi*yi;
+      sum_x += xi;
+      sum_y += yi;
     }
     
     return (sum_xy - (sum_x*sum_y*((REAL) 1./n))) * ((REAL) 1./(n-1));
