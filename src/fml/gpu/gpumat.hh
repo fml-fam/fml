@@ -745,7 +745,7 @@ void fml::gpumat<REAL>::get_row(const len_t i, fml::gpuvec<REAL> &v) const
   if (i < 0 || i >= this->m)
     throw std::logic_error("invalid matrix row");
   
-  v.resize(this->m);
+  v.resize(this->n);
   
   fml::kernelfuns::kernel_get_row<<<dim_grid, dim_block>>>(i, this->m, this->n, this->data, v.data_ptr());
   this->c->check();
@@ -772,7 +772,7 @@ void fml::gpumat<REAL>::get_col(const len_t j, fml::gpuvec<REAL> &v) const
   if (j < 0 || j >= this->n)
     throw std::logic_error("invalid matrix column");
   
-  v.resize(this->n);
+  v.resize(this->m);
   
   fml::kernelfuns::kernel_get_col<<<dim_grid, dim_block>>>(j, this->m, this->n, this->data, v.data_ptr());
   this->c->check();
