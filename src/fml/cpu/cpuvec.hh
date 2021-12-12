@@ -56,9 +56,9 @@ namespace fml
       void pow(const T p);
       void rev();
       
-      T sum();
-      T max();
-      T min();
+      T sum() const;
+      T max() const;
+      T min() const;
       
       T get(const len_t i) const;
       void set(const len_t i, const T v);
@@ -461,7 +461,7 @@ void fml::cpuvec<T>::rev()
 
 /// @brief Sum the vector.
 template <typename T>
-T fml::cpuvec<T>::sum()
+T fml::cpuvec<T>::sum() const
 {
   T s = 0;
   
@@ -476,7 +476,7 @@ T fml::cpuvec<T>::sum()
 
 /// @brief Maximum value of the vector.
 template <typename T>
-T fml::cpuvec<T>::max()
+T fml::cpuvec<T>::max() const
 {
   T mx = this->data[0];
   
@@ -494,7 +494,7 @@ T fml::cpuvec<T>::max()
 
 /// @brief Minimum value of the vector.
 template <typename T>
-T fml::cpuvec<T>::min()
+T fml::cpuvec<T>::min() const
 {
   T mn = this->data[0];
   
