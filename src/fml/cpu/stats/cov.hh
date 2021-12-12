@@ -17,7 +17,6 @@
 #include "../dimops.hh"
 
 #include "../linalg/linalg_blas.hh"
-#include "../linalg/linalg_invert.hh"
 
 
 namespace fml
