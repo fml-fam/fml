@@ -1,0 +1,101 @@
+// This file is part of fml which is released under the Boost Software
+// License, Version 1.0. See accompanying file LICENSE or copy at
+// https://www.boost.org/LICENSE_1_0.txt
+
+#ifndef FML_CPU_STATS_COR_H
+#define FML_CPU_STATS_COR_H
+#pragma once
+
+
+#include <stdexcept>
+
+#include "../../_internals/omp.hh"
+
+#include "../cpumat.hh"
+#include "../cpuvec.hh"
+
+#include "../dimops.hh"
+
+#include "../linalg/linalg_blas.hh"
+#include "../linalg/linalg_invert.hh"
+
+
+namespace fml
+{
+namespace stats
+{
+  /**
+    @brief Covariance.
+    
+    @details Computes the lower triangle of the Pearson correlation matrix.
+    Centering is done in-place.
+    
+    @param[inout] x,y Input data. For the matrix variants, data is mean-centered
+    on return.
+    @param[out] cov The correlation matrix.
+    
+    @except In the matrix-matrix and vector-vector variants, if the object
+    dimensions/sizes are non-conformable, a `runtime_error` exception is thrown.
+    
+    @tparam REAL should be 'float' or 'double'.
+  */
+  template <typename REAL>
+  void cor(cpumat<REAL> &x, cpumat<REAL> &cov)
+  {
+    dimops::scale(true, true, x);
+    
+    const REAL alpha = 1. / ((REAL) (x.nrows()-1));
+    linalg::crossprod(alpha, x, cov);
+  }
+  
+  
+  
+  /// \overload
+  template <typename REAL>
+  void cor(cpumat<REAL> &x, cpumat<REAL> &y, cpumat<REAL> &cov)
+  {
+    if (x.nrows() != y.nrows())
+      throw std::runtime_error("non-conformable arguments");
+    
+    dimops::scale(true, true, x);
+    dimops::scale(true, true, y);
+    
+    const REAL alpha = 1. / ((REAL) (x.nrows()-1));
+    linalg::matmult(true, false, alpha, x, y, cov);
+  }
+  
+  
+  
+  /// \overload
+  template <typename REAL>
+  REAL cor(const cpuvec<REAL> &x, const cpuvec<REAL> &y)
+  {
+    const len_t n = x.size();
+    if (n != y.size())
+      throw std::runtime_error("non-conformal arguments");
+    
+    const REAL *x_d = x.data_ptr();
+    const REAL *y_d = y.data_ptr();
+    
+    const REAL meanx = x.sum() / n;
+    const REAL meany = y.sum() / n;
+    REAL cp = 0, normx = 0, normy = 0;
+    
+    #pragma omp parallel for reduction(+: cp, normx, normy) if(n>fml::omp::OMP_MIN_SIZE)
+    for (len_t i=0; i<n; i++)
+    {
+      const REAL xi_mm = x_d[i] - meanx;
+      const REAL yi_mm = y_d[i] - meany;
+      
+      cp += xi_mm * yi_mm;
+      normx += xi_mm * xi_mm;
+      normy += yi_mm * yi_mm;
+    }
+    
+    return cp / sqrt(normx * normy);
+  }
+}
+}
+
+
+#endif

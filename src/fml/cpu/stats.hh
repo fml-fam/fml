@@ -7,6 +7,7 @@
 #pragma once
 
 
+#include "stats/cor.hh"
 #include "stats/cov.hh"
 #include "stats/pca.hh"
 
