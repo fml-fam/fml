@@ -9,6 +9,8 @@
 
 #include <stdexcept>
 
+#include "../../_internals/omp.hh"
+
 #include "../cpumat.hh"
 #include "../cpuvec.hh"
 
@@ -77,7 +79,7 @@ namespace stats
     
     REAL sum_xy = 0, sum_x = 0, sum_y = 0;
     
-    #pragma omp simd reduction(+: sum_xy, sum_x, sum_y)
+    #pragma omp parallel for reduction(+: sum_xy, sum_x, sum_y) if(n>fml::omp::OMP_MIN_SIZE)
     for (len_t i=0; i<n; i++)
     {
       const REAL xi = x_d[i];
