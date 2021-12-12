@@ -46,13 +46,13 @@ TEMPLATE_TEST_CASE("stats - cov", "[stats]", float, double)
   x.fill_linspace();
   x.set(3, 2);
   x.set(4, 0);
-  x.set(5, 1);
+  x.set(5, -1);
   
   fml::mpimat<TestType> cov(g, 1, 1);
   
   // mat
   fml::stats::cov(x, cov);
   REQUIRE( fltcmp::eq(cov.get(0), 1) );
-  REQUIRE( fltcmp::eq(cov.get(1), -.5) );
-  REQUIRE( fltcmp::eq(cov.get(3), 1) );
+  REQUIRE( fltcmp::eq(cov.get(1), -1.5) );
+  REQUIRE( fltcmp::eq(cov.get(3), 2+1.0/3.0) );
 }

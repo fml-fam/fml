@@ -49,17 +49,22 @@ TEMPLATE_TEST_CASE("stats - cov", "[stats]", float, double)
   x.fill_linspace();
   x.set(3, 2);
   x.set(4, 0);
-  x.set(5, 1);
+  x.set(5, -1);
   
   fml::gpumat<TestType> cov(c);
   
   // mat
   fml::stats::cov(x, cov);
   REQUIRE( fltcmp::eq(cov.get(0), 1) );
-  REQUIRE( fltcmp::eq(cov.get(1), -.5) );
-  REQUIRE( fltcmp::eq(cov.get(3), 1) );
+  REQUIRE( fltcmp::eq(cov.get(1), -1.5) );
+  REQUIRE( fltcmp::eq(cov.get(3), 2+1.0/3.0) );
   
   // vec-vec
+  x.fill_linspace();
+  x.set(3, 2);
+  x.set(4, 0);
+  x.set(5, -1);
+  
   fml::gpuvec<TestType> x1(c);
   fml::gpuvec<TestType> x2(c);
   x.get_col(0, x1);
@@ -67,7 +72,7 @@ TEMPLATE_TEST_CASE("stats - cov", "[stats]", float, double)
   
   TestType cv;
   cv = fml::stats::cov(x1, x2);
-  REQUIRE( fltcmp::eq(cv, -.5) );
+  REQUIRE( fltcmp::eq(cv, -1.5) );
   cv = fml::stats::cov(x2, x2);
-  REQUIRE( fltcmp::eq(cv, 1) );
+  REQUIRE( fltcmp::eq(cv, 2+1.0/3.0) );
 }
