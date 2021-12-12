@@ -56,3 +56,25 @@ TEMPLATE_TEST_CASE("stats - cov", "[stats]", float, double)
   REQUIRE( fltcmp::eq(cov.get(1), -1.5) );
   REQUIRE( fltcmp::eq(cov.get(3), 2+1.0/3.0) );
 }
+
+
+
+TEMPLATE_TEST_CASE("stats - cor", "[stats]", float, double)
+{
+  len_t m = 3;
+  len_t n = 2;
+  
+  fml::mpimat<TestType> x(g, m, n, 1, 1);
+  x.fill_linspace();
+  x.set(3, 2);
+  x.set(4, 0);
+  x.set(5, -1);
+  
+  fml::mpimat<TestType> cor(g, 1, 1);
+  
+  // mat
+  fml::stats::cor(x, cor);
+  REQUIRE( fltcmp::eq(cor.get(0), 1) );
+  REQUIRE( fltcmp::eq(cor.get(1), -3.0/sqrt(2.0*14.0/3.0)) );
+  REQUIRE( fltcmp::eq(cor.get(3), 1) );
+}
