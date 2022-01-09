@@ -2,8 +2,8 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_MPI_LINALG_LINALG_SVD_H
-#define FML_MPI_LINALG_LINALG_SVD_H
+#ifndef FML_MPI_LINALG_SVD_H
+#define FML_MPI_LINALG_SVD_H
 #pragma once
 
 
@@ -18,9 +18,11 @@
 #include "../copy.hh"
 #include "../mpimat.hh"
 
-#include "linalg_blas.hh"
-#include "linalg_eigen.hh"
-#include "linalg_qr.hh"
+#include "internals/err.hh"
+#include "internals/scalapack.hh"
+#include "eigen.hh"
+#include "qr.hh"
+#include "xpose.hh"
 
 
 namespace fml

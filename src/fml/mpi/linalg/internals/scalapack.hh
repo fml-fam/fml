@@ -2,12 +2,12 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_MPI_LINALG_SCALAPACK_H
-#define FML_MPI_LINALG_SCALAPACK_H
+#ifndef FML_MPI_LINALG_INTERNALS_SCALAPACK_H
+#define FML_MPI_LINALG_INTERNALS_SCALAPACK_H
 #pragma once
 
 
-#include "_scalapack_prototypes.h"
+#include "scalapack_prototypes.h"
 
 
 namespace fml

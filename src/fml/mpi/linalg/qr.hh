@@ -2,25 +2,19 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_MPI_LINALG_LINALG_QR_H
-#define FML_MPI_LINALG_LINALG_QR_H
+#ifndef FML_MPI_LINALG_QR_H
+#define FML_MPI_LINALG_QR_H
 #pragma once
 
-
-#include <stdexcept>
 
 #include "../../_internals/linalgutils.hh"
 #include "../../cpu/cpuvec.hh"
 
-#include "../internals/bcutils.hh"
-#include "../internals/mpi_utils.hh"
-
 #include "../copy.hh"
 #include "../mpimat.hh"
 
-#include "linalg_blas.hh"
-#include "linalg_err.hh"
-#include "scalapack.hh"
+#include "internals/err.hh"
+#include "internals/scalapack.hh"
 
 
 namespace fml

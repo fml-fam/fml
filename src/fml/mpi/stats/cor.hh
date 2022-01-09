@@ -12,10 +12,10 @@
 #include "../../_internals/omp.hh"
 
 #include "../mpimat.hh"
-
 #include "../dimops.hh"
 
-#include "../linalg/linalg_blas.hh"
+#include "../linalg/crossprod.hh"
+#include "../linalg/matmult.hh"
 
 
 namespace fml

@@ -15,7 +15,7 @@
 
 #include "../_internals/print.hh"
 
-#include "internals/_blacs_prototypes.h"
+#include "internals/blacs_prototypes.h"
 
 
 /**

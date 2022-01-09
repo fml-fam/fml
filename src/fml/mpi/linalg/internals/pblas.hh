@@ -2,12 +2,12 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_MPI_INTERNALS_PBLAS_H
-#define FML_MPI_INTERNALS_PBLAS_H
+#ifndef FML_MPI_LINALG_INTERNALS_PBLAS_H
+#define FML_MPI_LINALG_INTERNALS_PBLAS_H
 #pragma once
 
 
-#include "_pblas_prototypes.h"
+#include "pblas_prototypes.h"
 
 
 namespace fml
