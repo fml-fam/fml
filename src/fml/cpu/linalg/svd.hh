@@ -19,7 +19,9 @@
 
 #include "internals/blas.hh"
 #include "internals/lapack.hh"
+#include "crossprod.hh"
 #include "eigen.hh"
+#include "matmult.hh"
 #include "qr.hh"
 #include "xpose.hh"
 
