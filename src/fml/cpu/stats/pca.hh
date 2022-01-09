@@ -9,8 +9,8 @@
 
 #include "../dimops.hh"
 
-#include "../linalg/linalg_blas.hh"
-#include "../linalg/linalg_svd.hh"
+#include "../linalg/svd.hh"
+#include "../linalg/xpose.hh"
 
 
 namespace fml
@@ -51,6 +51,8 @@ namespace stats
     
     linalg::xpose(trot, rot);
   }
+  
+  
   
   /// \overload
   template <typename REAL>

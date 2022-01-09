@@ -19,7 +19,7 @@
 #include "../cpumat.hh"
 #include "../cpuvec.hh"
 
-#include "lapack.hh"
+#include "internals/lapack.hh"
 
 
 namespace fml

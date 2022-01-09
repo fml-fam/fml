@@ -2,12 +2,12 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_CPU_LINALG_BLAS_H
-#define FML_CPU_LINALG_BLAS_H
+#ifndef FML_CPU_LINALG_INTERNALS_BLAS_H
+#define FML_CPU_LINALG_INTERNALS_BLAS_H
 #pragma once
 
 
-#include "_blas_prototypes.h"
+#include "blas_prototypes.h"
 
 
 namespace fml

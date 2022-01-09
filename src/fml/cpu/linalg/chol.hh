@@ -11,13 +11,12 @@
 #include <stdexcept>
 
 #include "../../_internals/linalgutils.hh"
-#include "../../_internals/omp.hh"
 
 #include "../internals/cpu_utils.hh"
 
 #include "../cpumat.hh"
 
-#include "lapack.hh"
+#include "internals/lapack.hh"
 
 
 namespace fml

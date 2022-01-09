@@ -16,9 +16,9 @@
 #include "../cpumat.hh"
 #include "../cpuvec.hh"
 
-#include "lapack.hh"
-#include "linalg_qr.hh"
-#include "linalg_svd.hh"
+#include "internals/lapack.hh"
+#include "qr.hh"
+#include "svd.hh"
 
 
 namespace fml

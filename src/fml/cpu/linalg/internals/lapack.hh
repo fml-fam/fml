@@ -2,12 +2,12 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_CPU_LINALG_LAPACK_H
-#define FML_CPU_LINALG_LAPACK_H
+#ifndef FML_CPU_LINALG_INTERNALS_LAPACK_H
+#define FML_CPU_LINALG_INTERNALS_LAPACK_H
 #pragma once
 
 
-#include "_lapack_prototypes.h"
+#include "lapack_prototypes.h"
 
 
 namespace fml

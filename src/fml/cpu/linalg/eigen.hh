@@ -16,7 +16,7 @@
 #include "../cpumat.hh"
 #include "../cpuvec.hh"
 
-#include "lapack.hh"
+#include "internals/lapack.hh"
 
 
 namespace fml
@@ -69,6 +69,8 @@ namespace linalg
     }
   }
   
+  
+  
   /**
     @brief Compute the eigenvalues and optionally the eigenvectors for a
     symmetric matrix.
@@ -97,6 +99,8 @@ namespace linalg
     int info = eig_sym_internals(true, x, values, ignored);
     fml::linalgutils::check_info(info, "syevr");
   }
+  
+  
   
   /// \overload
   template <typename REAL>

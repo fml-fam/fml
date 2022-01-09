@@ -17,9 +17,11 @@
 #include "../cpumat.hh"
 #include "../cpuvec.hh"
 
-#include "linalg_blas.hh"
-#include "linalg_eigen.hh"
-#include "linalg_qr.hh"
+#include "internals/blas.hh"
+#include "internals/lapack.hh"
+#include "eigen.hh"
+#include "qr.hh"
+#include "xpose.hh"
 
 
 namespace fml

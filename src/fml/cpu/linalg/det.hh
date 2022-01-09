@@ -2,22 +2,17 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_CPU_LINALG_LINALG_MISC_H
-#define FML_CPU_LINALG_LINALG_MISC_H
+#ifndef FML_CPU_LINALG_DET_H
+#define FML_CPU_LINALG_DET_H
 #pragma once
 
 
 #include <cmath>
-#include <stdexcept>
 
-#include "../../_internals/linalgutils.hh"
-#include "../../_internals/omp.hh"
-
-#include "../cpumat.hh"
 #include "../cpuvec.hh"
+#include "../cpumat.hh"
 
-#include "lapack.hh"
-#include "linalg_lu.hh"
+#include "lu.hh"
 
 
 namespace fml
@@ -94,30 +89,6 @@ namespace linalg
     
     modulus = mod;
     sign = sgn;
-  }
-  
-  
-  
-  /**
-    @brief Computes the trace, i.e. the sum of the diagonal.
-    
-    @param[in] x Input data matrix.
-    
-    @tparam REAL should be 'float' or 'double'.
-   */
-  template <typename REAL>
-  REAL trace(const cpumat<REAL> &x)
-  {
-    const REAL *x_d = x.data_ptr();
-    const len_t m = x.nrows();
-    const len_t minmn = std::min(m, x.ncols());
-    
-    REAL tr = 0;
-    #pragma omp parallel for simd if(minmn > fml::omp::OMP_MIN_SIZE) reduction(+:tr)
-    for (len_t i=0; i<minmn; i++)
-      tr += x_d[i + i*m];
-    
-    return tr;
   }
 }
 }

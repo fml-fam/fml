@@ -18,8 +18,8 @@
 #include "../cpumat.hh"
 #include "../cpuvec.hh"
 
-#include "lapack.hh"
-#include "linalg_lu.hh"
+#include "internals/lapack.hh"
+#include "lu.hh"
 
 
 namespace fml
