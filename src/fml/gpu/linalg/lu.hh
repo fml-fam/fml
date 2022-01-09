@@ -19,7 +19,7 @@
 #include "../gpumat.hh"
 #include "../gpuvec.hh"
 
-#include "linalg_err.hh"
+#include "internals/err.hh"
 
 
 namespace fml

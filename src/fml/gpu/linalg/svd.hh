@@ -2,8 +2,8 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_GPU_LINALG_LINALG_SVD_H
-#define FML_GPU_LINALG_LINALG_SVD_H
+#ifndef FML_GPU_LINALG_SVD_H
+#define FML_GPU_LINALG_SVD_H
 #pragma once
 
 
@@ -21,9 +21,11 @@
 #include "../gpumat.hh"
 #include "../gpuvec.hh"
 
-#include "linalg_blas.hh"
-#include "linalg_eigen.hh"
-#include "linalg_qr.hh"
+#include "crossprod.hh"
+#include "eigen.hh"
+#include "matmult.hh"
+#include "qr.hh"
+#include "xpose.hh"
 
 
 namespace fml
@@ -292,6 +294,20 @@ namespace linalg
   }
   
   
+  
+  namespace
+  {
+    template <typename REAL>
+    __global__ void kernel_sweep_cols_div(const len_t m, const len_t n, REAL *data, const REAL *v)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      int j = blockDim.y*blockIdx.y + threadIdx.y;
+      
+      if (i < m && j < n)
+          data[i + m*j] /= v[j];
+    }
+  }
+  
   /**
     @brief Computes the singular value decomposition using the
     "crossproducts SVD". This method is not numerically stable.
@@ -358,8 +374,7 @@ namespace linalg
     
     auto xgrid = x.get_griddim();
     auto xblock = x.get_blockdim();
-    fml::kernelfuns::kernel_sweep_cols_div<<<xgrid, xblock>>>(minmn, minmn,
-      ev_d, s.data_ptr());
+    kernel_sweep_cols_div<<<xgrid, xblock>>>(minmn, minmn, ev_d, s.data_ptr());
     
     if (m >= n)
     {

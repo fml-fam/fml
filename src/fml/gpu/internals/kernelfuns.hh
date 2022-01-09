@@ -253,24 +253,6 @@ namespace fml
     
     
     
-    static __global__ void kernel_min_nz(const len_t len, const float *data, float *mn)
-    {
-      int i = blockDim.x*blockIdx.x + threadIdx.x;
-      
-      if (i < len && data[i] > 0)
-        atomics::atomicMinf(mn, data[i]);
-    }
-    
-    static __global__ void kernel_min_nz(const len_t len, const double *data, double *mn)
-    {
-      int i = blockDim.x*blockIdx.x + threadIdx.x;
-      
-      if (i < len && data[i] > 0)
-        atomics::atomicMinf(mn, data[i]);
-    }
-    
-    
-    
     template <typename REAL>
     __global__ void kernel_any_inf(const len_t m, const len_t n, const REAL *data, int *has_inf)
     {
@@ -314,18 +296,6 @@ namespace fml
         if (!all_eq_local)
           atomicMin(all_eq, 0);
       }
-    }
-    
-    
-    
-    template <typename REAL>
-    __global__ void kernel_trace(const len_t m, const len_t n, const REAL *data, REAL *tr)
-    {
-      int i = blockDim.x*blockIdx.x + threadIdx.x;
-      int j = blockDim.y*blockIdx.y + threadIdx.y;
-      
-      if (i < m && j < n && i == j)
-        atomicAdd(tr, data[i + m*i]);
     }
     
     
@@ -395,18 +365,6 @@ namespace fml
       
       if (i < len)
         x[i] = sqrt(fabs(x[i]));
-    }
-    
-    
-    
-    template <typename REAL>
-    __global__ void kernel_sweep_cols_div(const len_t m, const len_t n, REAL *data, const REAL *v)
-    {
-      int i = blockDim.x*blockIdx.x + threadIdx.x;
-      int j = blockDim.y*blockIdx.y + threadIdx.y;
-      
-      if (i < m && j < n)
-          data[i + m*j] /= v[j];
     }
   }
 }

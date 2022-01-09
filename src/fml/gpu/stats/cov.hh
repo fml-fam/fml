@@ -16,7 +16,8 @@
 
 #include "../dimops.hh"
 
-#include "../linalg/linalg_blas.hh"
+#include "../linalg/crossprod.hh"
+#include "../linalg/matmult.hh"
 
 
 namespace fml

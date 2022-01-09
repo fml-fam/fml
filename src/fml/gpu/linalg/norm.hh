@@ -2,8 +2,8 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_GPU_LINALG_LINALG_NORM_H
-#define FML_GPU_LINALG_LINALG_NORM_H
+#ifndef FML_GPU_LINALG_NORM_H
+#define FML_GPU_LINALG_NORM_H
 #pragma once
 
 
@@ -18,8 +18,8 @@
 
 #include "../gpumat.hh"
 
-#include "linalg_qr.hh"
-#include "linalg_svd.hh"
+#include "qr.hh"
+#include "svd.hh"
 
 
 namespace fml
@@ -387,6 +387,25 @@ namespace linalg
   
   
   
+  namespace
+  {
+    static __global__ void kernel_min_nz(const len_t len, const float *data, float *mn)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      
+      if (i < len && data[i] > 0)
+        atomics::atomicMinf(mn, data[i]);
+    }
+    
+    static __global__ void kernel_min_nz(const len_t len, const double *data, double *mn)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      
+      if (i < len && data[i] > 0)
+        atomics::atomicMinf(mn, data[i]);
+    }
+  }
+  
   /**
     @brief Estimates the condition number under the 2 norm.
     
@@ -417,8 +436,8 @@ namespace linalg
     
     REAL min;
     fml::gpuscalar<REAL> min_gpu(x.get_card());
-    kernelfuns::kernel_min_nz<<<s.get_griddim(), s.get_blockdim()>>>(s.size(),
-      s.data_ptr(), min_gpu.data_ptr());
+    kernel_min_nz<<<s.get_griddim(), s.get_blockdim()>>>(s.size(), s.data_ptr(),
+      min_gpu.data_ptr());
     min_gpu.get_val(&min);
     
     return max/min;

@@ -2,25 +2,21 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_GPU_LINALG_LINALG_MISC_H
-#define FML_GPU_LINALG_LINALG_MISC_H
+#ifndef FML_GPU_LINALG_DET_H
+#define FML_GPU_LINALG_DET_H
 #pragma once
 
 
 #include <stdexcept>
 
-#include "../../_internals/linalgutils.hh"
-
 #include "../arch/arch.hh"
 
 #include "../internals/gpuscalar.hh"
-#include "../internals/kernelfuns.hh"
 
-#include "../gpumat.hh"
 #include "../gpuvec.hh"
+#include "../gpumat.hh"
 
-#include "linalg_err.hh"
-#include "linalg_lu.hh"
+#include "lu.hh"
 
 
 namespace fml
@@ -132,34 +128,6 @@ namespace linalg
     
     sign_gpu.get_val(&sign);
     modulus_gpu.get_val(&modulus);
-  }
-  
-  
-  
-  /**
-    @brief Computes the trace, i.e. the sum of the diagonal.
-    
-    @param[in] x Input data matrix.
-    
-    @tparam REAL should be '__half', 'float', or 'double'.
-   */
-  template <typename REAL>
-  REAL trace(const gpumat<REAL> &x)
-  {
-    const len_t m = x.nrows();
-    const len_t n = x.ncols();
-    auto c = x.get_card();
-    
-    REAL tr = 0;
-    gpuscalar<REAL> tr_gpu(c, tr);
-    
-    fml::kernelfuns::kernel_trace<<<x.get_griddim(), x.get_blockdim()>>>(m, n,
-      x.data_ptr(), tr_gpu.data_ptr());
-    
-    tr_gpu.get_val(&tr);
-    c->check();
-    
-    return tr;
   }
 }
 }

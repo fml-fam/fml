@@ -2,12 +2,10 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_GPU_LINALG_LINALG_CHOL_H
-#define FML_GPU_LINALG_LINALG_CHOL_H
+#ifndef FML_GPU_LINALG_CHOL_H
+#define FML_GPU_LINALG_CHOL_H
 #pragma once
 
-
-#include <stdexcept>
 
 #include "../../_internals/linalgutils.hh"
 
@@ -17,8 +15,6 @@
 #include "../internals/gpuscalar.hh"
 
 #include "../gpumat.hh"
-
-#include "linalg_err.hh"
 
 
 namespace fml

@@ -2,8 +2,8 @@
 // License, Version 1.0. See accompanying file LICENSE or copy at
 // https://www.boost.org/LICENSE_1_0.txt
 
-#ifndef FML_GPU_LINALG_LINALG_SOLVE_H
-#define FML_GPU_LINALG_LINALG_SOLVE_H
+#ifndef FML_GPU_LINALG_SOLVE_H
+#define FML_GPU_LINALG_SOLVE_H
 #pragma once
 
 
@@ -18,8 +18,8 @@
 #include "../gpumat.hh"
 #include "../gpuvec.hh"
 
-#include "linalg_err.hh"
-#include "linalg_lu.hh"
+#include "internals/err.hh"
+#include "lu.hh"
 
 
 namespace fml
