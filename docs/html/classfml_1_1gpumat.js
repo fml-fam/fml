@@ -13,6 +13,7 @@ var classfml_1_1gpumat =
     [ "dupe", "classfml_1_1gpumat.html#a4a0f97855d7656f318aa0a1e25f132af", null ],
     [ "fill_diag", "classfml_1_1gpumat.html#a5ddc592a4295f2f709c0662cc85c70d8", null ],
     [ "fill_eye", "classfml_1_1gpumat.html#abae96fe201b0f98a32026a34fc158337", null ],
+    [ "fill_linspace", "classfml_1_1gpumat.html#aa0b84ca405964472f5841854b0cbc797", null ],
     [ "fill_linspace", "classfml_1_1gpumat.html#a3cb8d8d2b8199b58eda5ea99d3648c99", null ],
     [ "fill_rnorm", "classfml_1_1gpumat.html#a15a3b1e9676353fe4ea68845b5d4a5fa", null ],
     [ "fill_rnorm", "classfml_1_1gpumat.html#a995f035563e60cd9737dd19ee863db97", null ],
@@ -40,5 +41,7 @@ var classfml_1_1gpumat =
     [ "scale", "classfml_1_1gpumat.html#ae57a86446d6d2fccb955ee89c2a06510", null ],
     [ "set", "classfml_1_1gpumat.html#aae537c430ace66ac1d0ec3e53c76a3e2", null ],
     [ "set", "classfml_1_1gpumat.html#a17cca1e1ee09d379b4333355ef853c40", null ],
+    [ "set_col", "classfml_1_1gpumat.html#a7d1ffb4d78b1a332a0402144ca7c73e8", null ],
+    [ "set_row", "classfml_1_1gpumat.html#a0ef33818f3cb12ddef4540067e06ca44", null ],
     [ "c", "classfml_1_1gpumat.html#a0e0b79dc6f66ff2b49a3333202417f28", null ]
 ];

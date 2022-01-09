@@ -95,7 +95,30 @@ $(document).ready(function(){initNavTree('md_fml__n_e_w_s.html',''); initResizab
 <div class="title">NEWS </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1>Release 0.4-1 (11/15/2021):</h1>
+<div class="textblock"><h1>Release 0.4-2 (1/9/2022):</h1>
+<p>New:</p><ul>
+<li>Added stats::cov() and stats::cor() methods.</li>
+<li>Added set_row() and set_col() methods for matrix classes.</li>
+</ul>
+<p>API Changes:</p><ul>
+<li>Added fill_linspace() method with no args passed.</li>
+</ul>
+<p>Bug Fixes:</p><ul>
+<li>None</li>
+</ul>
+<p>Internal Changes of Note:</p><ul>
+<li>Greatly modified linalg internals for each backend (does not affect usage of backend/linalg.hh headers)<ul>
+<li>dropped linalg_ preface in file names</li>
+<li>moved some internal headers to internals/</li>
+<li>exported blas header to individual files (e.g. xpose.hh)</li>
+</ul>
+</li>
+<li>More granular header usage among internals</li>
+</ul>
+<p>Documentation:</p><ul>
+<li>None</li>
+</ul>
+<h1>Release 0.4-1 (11/15/2021):</h1>
 <p>New:</p><ul>
 <li>Added set_math_mode() method for card objects</li>
 <li>Added pow() method for cpuvec and gpuvec objects</li>

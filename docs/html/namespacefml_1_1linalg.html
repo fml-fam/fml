@@ -103,14 +103,6 @@ $(document).ready(function(){initNavTree('namespacefml_1_1linalg.html',''); init
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a631534e78495dbdaf5dd94df17bedda3"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a631534e78495dbdaf5dd94df17bedda3"><td class="memTemplItemLeft" align="right" valign="top">REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a631534e78495dbdaf5dd94df17bedda3">dot</a> (const <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;y)</td></tr>
-<tr class="memdesc:a631534e78495dbdaf5dd94df17bedda3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the dot product of two vectors, i.e. the sum of the product of the elements.  <a href="namespacefml_1_1linalg.html#a631534e78495dbdaf5dd94df17bedda3">More...</a><br /></td></tr>
-<tr class="separator:a631534e78495dbdaf5dd94df17bedda3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4827ed527e605589f495d64fcaf46dfb"><td class="memTemplParams" colspan="2"><a id="a4827ed527e605589f495d64fcaf46dfb"></a>
-template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a4827ed527e605589f495d64fcaf46dfb"><td class="memTemplItemLeft" align="right" valign="top">REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><b>dot</b> (const <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="separator:a4827ed527e605589f495d64fcaf46dfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af31fc17f7e8fcb2d219c2c6071066089"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:af31fc17f7e8fcb2d219c2c6071066089"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#af31fc17f7e8fcb2d219c2c6071066089">add</a> (const bool transx, const bool transy, const REAL alpha, const REAL beta, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;y, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;ret)</td></tr>
 <tr class="memdesc:af31fc17f7e8fcb2d219c2c6071066089"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns alpha*op(x) + beta*op(y) where op(A) is A or A^T.  <a href="namespacefml_1_1linalg.html#af31fc17f7e8fcb2d219c2c6071066089">More...</a><br /></td></tr>
@@ -120,15 +112,66 @@ template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:ab9957370bb61b0952dee6802a900b398"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#ab9957370bb61b0952dee6802a900b398">add</a> (const bool transx, const bool transy, const REAL alpha, const REAL beta, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;y)</td></tr>
 <tr class="memdesc:ab9957370bb61b0952dee6802a900b398"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
 <tr class="separator:ab9957370bb61b0952dee6802a900b398"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3141aa91a43cbbc2d3ff3a5d9d7b28ea"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a3141aa91a43cbbc2d3ff3a5d9d7b28ea"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a3141aa91a43cbbc2d3ff3a5d9d7b28ea">prod</a> (const bool transx, const bool transy, const REAL alpha, const REAL beta, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;y, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;ret)</td></tr>
-<tr class="memdesc:a3141aa91a43cbbc2d3ff3a5d9d7b28ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns element-wise alpha*op(x) * beta*op(y) where op(A) is A or A^T.  <a href="namespacefml_1_1linalg.html#a3141aa91a43cbbc2d3ff3a5d9d7b28ea">More...</a><br /></td></tr>
-<tr class="separator:a3141aa91a43cbbc2d3ff3a5d9d7b28ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff20ca8a13b44ffc42db009a2edd4c9f"><td class="memTemplParams" colspan="2"><a id="aff20ca8a13b44ffc42db009a2edd4c9f"></a>
+<tr class="memitem:a781eb9009441462d4a1fbe6c5a9742ef"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a781eb9009441462d4a1fbe6c5a9742ef"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a781eb9009441462d4a1fbe6c5a9742ef">chol</a> (<a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:a781eb9009441462d4a1fbe6c5a9742ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the Choleski factorization.  <a href="namespacefml_1_1linalg.html#a781eb9009441462d4a1fbe6c5a9742ef">More...</a><br /></td></tr>
+<tr class="separator:a781eb9009441462d4a1fbe6c5a9742ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1932a6365c1b910d332ea2c036500ee4"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a1932a6365c1b910d332ea2c036500ee4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a1932a6365c1b910d332ea2c036500ee4">crossprod</a> (const REAL alpha, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;ret)</td></tr>
+<tr class="memdesc:a1932a6365c1b910d332ea2c036500ee4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes lower triangle of alpha*x^T*x.  <a href="namespacefml_1_1linalg.html#a1932a6365c1b910d332ea2c036500ee4">More...</a><br /></td></tr>
+<tr class="separator:a1932a6365c1b910d332ea2c036500ee4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62973bd2c1cc84a5af82d9ee69048866"><td class="memTemplParams" colspan="2"><a id="a62973bd2c1cc84a5af82d9ee69048866"></a>
 template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:aff20ca8a13b44ffc42db009a2edd4c9f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#aff20ca8a13b44ffc42db009a2edd4c9f">prod</a> (const bool transx, const bool transy, const REAL alpha, const REAL beta, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;y)</td></tr>
-<tr class="memdesc:aff20ca8a13b44ffc42db009a2edd4c9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
-<tr class="separator:aff20ca8a13b44ffc42db009a2edd4c9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62973bd2c1cc84a5af82d9ee69048866"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a62973bd2c1cc84a5af82d9ee69048866">crossprod</a> (const REAL alpha, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:a62973bd2c1cc84a5af82d9ee69048866"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:a62973bd2c1cc84a5af82d9ee69048866"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75d93a2c70ff9521879669e53d772c7d"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a75d93a2c70ff9521879669e53d772c7d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a75d93a2c70ff9521879669e53d772c7d">tcrossprod</a> (const REAL alpha, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;ret)</td></tr>
+<tr class="memdesc:a75d93a2c70ff9521879669e53d772c7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes lower triangle of alpha*x*x^T.  <a href="namespacefml_1_1linalg.html#a75d93a2c70ff9521879669e53d772c7d">More...</a><br /></td></tr>
+<tr class="separator:a75d93a2c70ff9521879669e53d772c7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a7d6bda7e910da429b07a56ce486dfb"><td class="memTemplParams" colspan="2"><a id="a9a7d6bda7e910da429b07a56ce486dfb"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a9a7d6bda7e910da429b07a56ce486dfb"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>tcrossprod</b> (const REAL alpha, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="separator:a9a7d6bda7e910da429b07a56ce486dfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b7ecd011326b0b115562dd9dcf391fb"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a3b7ecd011326b0b115562dd9dcf391fb"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a3b7ecd011326b0b115562dd9dcf391fb">det</a> (<a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, int &amp;sign, REAL &amp;modulus)</td></tr>
+<tr class="memdesc:a3b7ecd011326b0b115562dd9dcf391fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the determinant in logarithmic form.  <a href="namespacefml_1_1linalg.html#a3b7ecd011326b0b115562dd9dcf391fb">More...</a><br /></td></tr>
+<tr class="separator:a3b7ecd011326b0b115562dd9dcf391fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a631534e78495dbdaf5dd94df17bedda3"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a631534e78495dbdaf5dd94df17bedda3"><td class="memTemplItemLeft" align="right" valign="top">REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a631534e78495dbdaf5dd94df17bedda3">dot</a> (const <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;y)</td></tr>
+<tr class="memdesc:a631534e78495dbdaf5dd94df17bedda3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the dot product of two vectors, i.e. the sum of the product of the elements.  <a href="namespacefml_1_1linalg.html#a631534e78495dbdaf5dd94df17bedda3">More...</a><br /></td></tr>
+<tr class="separator:a631534e78495dbdaf5dd94df17bedda3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4827ed527e605589f495d64fcaf46dfb"><td class="memTemplParams" colspan="2"><a id="a4827ed527e605589f495d64fcaf46dfb"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a4827ed527e605589f495d64fcaf46dfb"><td class="memTemplItemLeft" align="right" valign="top">REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a4827ed527e605589f495d64fcaf46dfb">dot</a> (const <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:a4827ed527e605589f495d64fcaf46dfb"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:a4827ed527e605589f495d64fcaf46dfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe6aba84a7e95dbdeb614b3f8f70cdce"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:afe6aba84a7e95dbdeb614b3f8f70cdce"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#afe6aba84a7e95dbdeb614b3f8f70cdce">eigen_sym</a> (<a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;values)</td></tr>
+<tr class="memdesc:afe6aba84a7e95dbdeb614b3f8f70cdce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the eigenvalues and optionally the eigenvectors for a symmetric matrix.  <a href="namespacefml_1_1linalg.html#afe6aba84a7e95dbdeb614b3f8f70cdce">More...</a><br /></td></tr>
+<tr class="separator:afe6aba84a7e95dbdeb614b3f8f70cdce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b34f8ca8f48f4ee32f1539f8876cfba"><td class="memTemplParams" colspan="2"><a id="a0b34f8ca8f48f4ee32f1539f8876cfba"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a0b34f8ca8f48f4ee32f1539f8876cfba"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a0b34f8ca8f48f4ee32f1539f8876cfba">eigen_sym</a> (<a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;values, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;vectors)</td></tr>
+<tr class="memdesc:a0b34f8ca8f48f4ee32f1539f8876cfba"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:a0b34f8ca8f48f4ee32f1539f8876cfba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f00674f4d70ea3199fdcec3531e4397"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a1f00674f4d70ea3199fdcec3531e4397"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a1f00674f4d70ea3199fdcec3531e4397">invert</a> (<a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:a1f00674f4d70ea3199fdcec3531e4397"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the matrix inverse.  <a href="namespacefml_1_1linalg.html#a1f00674f4d70ea3199fdcec3531e4397">More...</a><br /></td></tr>
+<tr class="separator:a1f00674f4d70ea3199fdcec3531e4397"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a273675041a86335869b1a06daab45d2a"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a273675041a86335869b1a06daab45d2a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a273675041a86335869b1a06daab45d2a">trinv</a> (const bool upper, const bool unit_diag, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:a273675041a86335869b1a06daab45d2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the matrix inverse of a triangular matrix.  <a href="namespacefml_1_1linalg.html#a273675041a86335869b1a06daab45d2a">More...</a><br /></td></tr>
+<tr class="separator:a273675041a86335869b1a06daab45d2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05637620851fd435dcf11d50a0fdc782"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a05637620851fd435dcf11d50a0fdc782"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a05637620851fd435dcf11d50a0fdc782">lu</a> (<a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; int &gt; &amp;p, int &amp;info)</td></tr>
+<tr class="memdesc:a05637620851fd435dcf11d50a0fdc782"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the PLU factorization with partial pivoting.  <a href="namespacefml_1_1linalg.html#a05637620851fd435dcf11d50a0fdc782">More...</a><br /></td></tr>
+<tr class="separator:a05637620851fd435dcf11d50a0fdc782"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa127abd53f5cabaab0d46d26a05d1419"><td class="memTemplParams" colspan="2"><a id="aa127abd53f5cabaab0d46d26a05d1419"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:aa127abd53f5cabaab0d46d26a05d1419"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#aa127abd53f5cabaab0d46d26a05d1419">lu</a> (<a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:aa127abd53f5cabaab0d46d26a05d1419"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:aa127abd53f5cabaab0d46d26a05d1419"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a550d8e6383cfa7f4e000d35c7f834bc4"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:a550d8e6383cfa7f4e000d35c7f834bc4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a550d8e6383cfa7f4e000d35c7f834bc4">matmult</a> (const bool transx, const bool transy, const REAL alpha, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;y, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;ret)</td></tr>
 <tr class="memdesc:a550d8e6383cfa7f4e000d35c7f834bc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes ret = alpha*op(x)*op(y) where op(A) is A or A^T.  <a href="namespacefml_1_1linalg.html#a550d8e6383cfa7f4e000d35c7f834bc4">More...</a><br /></td></tr>
@@ -158,70 +201,6 @@ template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:a0ac345282da5df7c46e32843fbdfa7a1"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a0ac345282da5df7c46e32843fbdfa7a1">matmult</a> (const bool transx, const bool transy, const REAL alpha, const <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;y)</td></tr>
 <tr class="memdesc:a0ac345282da5df7c46e32843fbdfa7a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
 <tr class="separator:a0ac345282da5df7c46e32843fbdfa7a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1932a6365c1b910d332ea2c036500ee4"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a1932a6365c1b910d332ea2c036500ee4"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a1932a6365c1b910d332ea2c036500ee4">crossprod</a> (const REAL alpha, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;ret)</td></tr>
-<tr class="memdesc:a1932a6365c1b910d332ea2c036500ee4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes lower triangle of alpha*x^T*x.  <a href="namespacefml_1_1linalg.html#a1932a6365c1b910d332ea2c036500ee4">More...</a><br /></td></tr>
-<tr class="separator:a1932a6365c1b910d332ea2c036500ee4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62973bd2c1cc84a5af82d9ee69048866"><td class="memTemplParams" colspan="2"><a id="a62973bd2c1cc84a5af82d9ee69048866"></a>
-template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a62973bd2c1cc84a5af82d9ee69048866"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a62973bd2c1cc84a5af82d9ee69048866">crossprod</a> (const REAL alpha, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="memdesc:a62973bd2c1cc84a5af82d9ee69048866"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
-<tr class="separator:a62973bd2c1cc84a5af82d9ee69048866"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75d93a2c70ff9521879669e53d772c7d"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a75d93a2c70ff9521879669e53d772c7d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a75d93a2c70ff9521879669e53d772c7d">tcrossprod</a> (const REAL alpha, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;ret)</td></tr>
-<tr class="memdesc:a75d93a2c70ff9521879669e53d772c7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes lower triangle of alpha*x*x^T.  <a href="namespacefml_1_1linalg.html#a75d93a2c70ff9521879669e53d772c7d">More...</a><br /></td></tr>
-<tr class="separator:a75d93a2c70ff9521879669e53d772c7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a7d6bda7e910da429b07a56ce486dfb"><td class="memTemplParams" colspan="2"><a id="a9a7d6bda7e910da429b07a56ce486dfb"></a>
-template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a9a7d6bda7e910da429b07a56ce486dfb"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>tcrossprod</b> (const REAL alpha, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="separator:a9a7d6bda7e910da429b07a56ce486dfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75e1b30c504d3d9b0f52c44bce972fdf"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a75e1b30c504d3d9b0f52c44bce972fdf"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a75e1b30c504d3d9b0f52c44bce972fdf">xpose</a> (const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;tx)</td></tr>
-<tr class="memdesc:a75e1b30c504d3d9b0f52c44bce972fdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the transpose out-of-place (i.e. in a copy).  <a href="namespacefml_1_1linalg.html#a75e1b30c504d3d9b0f52c44bce972fdf">More...</a><br /></td></tr>
-<tr class="separator:a75e1b30c504d3d9b0f52c44bce972fdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af27969af13d0023f6f426cd887946f9e"><td class="memTemplParams" colspan="2"><a id="af27969af13d0023f6f426cd887946f9e"></a>
-template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:af27969af13d0023f6f426cd887946f9e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#af27969af13d0023f6f426cd887946f9e">xpose</a> (const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="memdesc:af27969af13d0023f6f426cd887946f9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
-<tr class="separator:af27969af13d0023f6f426cd887946f9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a781eb9009441462d4a1fbe6c5a9742ef"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a781eb9009441462d4a1fbe6c5a9742ef"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a781eb9009441462d4a1fbe6c5a9742ef">chol</a> (<a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="memdesc:a781eb9009441462d4a1fbe6c5a9742ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the Choleski factorization.  <a href="namespacefml_1_1linalg.html#a781eb9009441462d4a1fbe6c5a9742ef">More...</a><br /></td></tr>
-<tr class="separator:a781eb9009441462d4a1fbe6c5a9742ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe6aba84a7e95dbdeb614b3f8f70cdce"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:afe6aba84a7e95dbdeb614b3f8f70cdce"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#afe6aba84a7e95dbdeb614b3f8f70cdce">eigen_sym</a> (<a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;values)</td></tr>
-<tr class="memdesc:afe6aba84a7e95dbdeb614b3f8f70cdce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the eigenvalues and optionally the eigenvectors for a symmetric matrix.  <a href="namespacefml_1_1linalg.html#afe6aba84a7e95dbdeb614b3f8f70cdce">More...</a><br /></td></tr>
-<tr class="separator:afe6aba84a7e95dbdeb614b3f8f70cdce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b34f8ca8f48f4ee32f1539f8876cfba"><td class="memTemplParams" colspan="2"><a id="a0b34f8ca8f48f4ee32f1539f8876cfba"></a>
-template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a0b34f8ca8f48f4ee32f1539f8876cfba"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a0b34f8ca8f48f4ee32f1539f8876cfba">eigen_sym</a> (<a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;values, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;vectors)</td></tr>
-<tr class="memdesc:a0b34f8ca8f48f4ee32f1539f8876cfba"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
-<tr class="separator:a0b34f8ca8f48f4ee32f1539f8876cfba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f00674f4d70ea3199fdcec3531e4397"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a1f00674f4d70ea3199fdcec3531e4397"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a1f00674f4d70ea3199fdcec3531e4397">invert</a> (<a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="memdesc:a1f00674f4d70ea3199fdcec3531e4397"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the matrix inverse.  <a href="namespacefml_1_1linalg.html#a1f00674f4d70ea3199fdcec3531e4397">More...</a><br /></td></tr>
-<tr class="separator:a1f00674f4d70ea3199fdcec3531e4397"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a273675041a86335869b1a06daab45d2a"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a273675041a86335869b1a06daab45d2a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a273675041a86335869b1a06daab45d2a">trinv</a> (const bool upper, const bool unit_diag, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="memdesc:a273675041a86335869b1a06daab45d2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the matrix inverse of a triangular matrix.  <a href="namespacefml_1_1linalg.html#a273675041a86335869b1a06daab45d2a">More...</a><br /></td></tr>
-<tr class="separator:a273675041a86335869b1a06daab45d2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05637620851fd435dcf11d50a0fdc782"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a05637620851fd435dcf11d50a0fdc782"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a05637620851fd435dcf11d50a0fdc782">lu</a> (<a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; int &gt; &amp;p, int &amp;info)</td></tr>
-<tr class="memdesc:a05637620851fd435dcf11d50a0fdc782"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the PLU factorization with partial pivoting.  <a href="namespacefml_1_1linalg.html#a05637620851fd435dcf11d50a0fdc782">More...</a><br /></td></tr>
-<tr class="separator:a05637620851fd435dcf11d50a0fdc782"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa127abd53f5cabaab0d46d26a05d1419"><td class="memTemplParams" colspan="2"><a id="aa127abd53f5cabaab0d46d26a05d1419"></a>
-template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:aa127abd53f5cabaab0d46d26a05d1419"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#aa127abd53f5cabaab0d46d26a05d1419">lu</a> (<a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="memdesc:aa127abd53f5cabaab0d46d26a05d1419"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
-<tr class="separator:aa127abd53f5cabaab0d46d26a05d1419"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b7ecd011326b0b115562dd9dcf391fb"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a3b7ecd011326b0b115562dd9dcf391fb"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a3b7ecd011326b0b115562dd9dcf391fb">det</a> (<a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, int &amp;sign, REAL &amp;modulus)</td></tr>
-<tr class="memdesc:a3b7ecd011326b0b115562dd9dcf391fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the determinant in logarithmic form.  <a href="namespacefml_1_1linalg.html#a3b7ecd011326b0b115562dd9dcf391fb">More...</a><br /></td></tr>
-<tr class="separator:a3b7ecd011326b0b115562dd9dcf391fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0456e9ec3c112ed3a0ca27cff164686"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:af0456e9ec3c112ed3a0ca27cff164686"><td class="memTemplItemLeft" align="right" valign="top">REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#af0456e9ec3c112ed3a0ca27cff164686">trace</a> (const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="memdesc:af0456e9ec3c112ed3a0ca27cff164686"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the trace, i.e. the sum of the diagonal.  <a href="namespacefml_1_1linalg.html#af0456e9ec3c112ed3a0ca27cff164686">More...</a><br /></td></tr>
-<tr class="separator:af0456e9ec3c112ed3a0ca27cff164686"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a153505fe39cf6c8d37acf40c179c3edf"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:a153505fe39cf6c8d37acf40c179c3edf"><td class="memTemplItemLeft" align="right" valign="top">REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a153505fe39cf6c8d37acf40c179c3edf">norm_1</a> (const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
 <tr class="memdesc:a153505fe39cf6c8d37acf40c179c3edf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the 1 matrix norm, the maximum absolute column sum.  <a href="namespacefml_1_1linalg.html#a153505fe39cf6c8d37acf40c179c3edf">More...</a><br /></td></tr>
@@ -323,14 +302,19 @@ template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:a39ec311d2af53535414d16b3f483dbbb"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a39ec311d2af53535414d16b3f483dbbb">rsvd</a> (const uint32_t seed, const int k, const int q, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;s, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;u, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;vt)</td></tr>
 <tr class="memdesc:a39ec311d2af53535414d16b3f483dbbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
 <tr class="separator:a39ec311d2af53535414d16b3f483dbbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11feb45b302a0bf02ef712899d4dafc3"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a11feb45b302a0bf02ef712899d4dafc3"><td class="memTemplItemLeft" align="right" valign="top">REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a11feb45b302a0bf02ef712899d4dafc3">dot</a> (const <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;y)</td></tr>
-<tr class="memdesc:a11feb45b302a0bf02ef712899d4dafc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the dot product of two vectors, i.e. the sum of the product of the elements.  <a href="namespacefml_1_1linalg.html#a11feb45b302a0bf02ef712899d4dafc3">More...</a><br /></td></tr>
-<tr class="separator:a11feb45b302a0bf02ef712899d4dafc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a713c0ee2d2c2e3faffd974e6bf52b9fa"><td class="memTemplParams" colspan="2"><a id="a713c0ee2d2c2e3faffd974e6bf52b9fa"></a>
+<tr class="memitem:af0456e9ec3c112ed3a0ca27cff164686"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:af0456e9ec3c112ed3a0ca27cff164686"><td class="memTemplItemLeft" align="right" valign="top">REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#af0456e9ec3c112ed3a0ca27cff164686">trace</a> (const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:af0456e9ec3c112ed3a0ca27cff164686"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the trace, i.e. the sum of the diagonal.  <a href="namespacefml_1_1linalg.html#af0456e9ec3c112ed3a0ca27cff164686">More...</a><br /></td></tr>
+<tr class="separator:af0456e9ec3c112ed3a0ca27cff164686"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75e1b30c504d3d9b0f52c44bce972fdf"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a75e1b30c504d3d9b0f52c44bce972fdf"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a75e1b30c504d3d9b0f52c44bce972fdf">xpose</a> (const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;tx)</td></tr>
+<tr class="memdesc:a75e1b30c504d3d9b0f52c44bce972fdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the transpose out-of-place (i.e. in a copy).  <a href="namespacefml_1_1linalg.html#a75e1b30c504d3d9b0f52c44bce972fdf">More...</a><br /></td></tr>
+<tr class="separator:a75e1b30c504d3d9b0f52c44bce972fdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af27969af13d0023f6f426cd887946f9e"><td class="memTemplParams" colspan="2"><a id="af27969af13d0023f6f426cd887946f9e"></a>
 template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a713c0ee2d2c2e3faffd974e6bf52b9fa"><td class="memTemplItemLeft" align="right" valign="top">REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><b>dot</b> (const <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="separator:a713c0ee2d2c2e3faffd974e6bf52b9fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af27969af13d0023f6f426cd887946f9e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#af27969af13d0023f6f426cd887946f9e">xpose</a> (const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:af27969af13d0023f6f426cd887946f9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:af27969af13d0023f6f426cd887946f9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa02a3f6e65195feca81a0b76024caf38"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:aa02a3f6e65195feca81a0b76024caf38"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#aa02a3f6e65195feca81a0b76024caf38">add</a> (const bool transx, const bool transy, const REAL alpha, const REAL beta, const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;y, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;ret)</td></tr>
 <tr class="memdesc:aa02a3f6e65195feca81a0b76024caf38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns alpha*op(x) + beta*op(y) where op(A) is A or A^T.  <a href="namespacefml_1_1linalg.html#aa02a3f6e65195feca81a0b76024caf38">More...</a><br /></td></tr>
@@ -340,6 +324,67 @@ template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:ae87ad0a0eb3d91d82240b2c6e7ee7047"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#ae87ad0a0eb3d91d82240b2c6e7ee7047">add</a> (const bool transx, const bool transy, const REAL alpha, const REAL beta, const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;y)</td></tr>
 <tr class="memdesc:ae87ad0a0eb3d91d82240b2c6e7ee7047"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
 <tr class="separator:ae87ad0a0eb3d91d82240b2c6e7ee7047"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a975107e72bac0267373ea0b4a85941bf"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a975107e72bac0267373ea0b4a85941bf"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a975107e72bac0267373ea0b4a85941bf">chol</a> (<a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:a975107e72bac0267373ea0b4a85941bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the Choleski factorization.  <a href="namespacefml_1_1linalg.html#a975107e72bac0267373ea0b4a85941bf">More...</a><br /></td></tr>
+<tr class="separator:a975107e72bac0267373ea0b4a85941bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a396b1ddbdb20fe8e5b62eb104eb47e9c"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a396b1ddbdb20fe8e5b62eb104eb47e9c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a396b1ddbdb20fe8e5b62eb104eb47e9c">crossprod</a> (const REAL alpha, const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;ret)</td></tr>
+<tr class="memdesc:a396b1ddbdb20fe8e5b62eb104eb47e9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes lower triangle of alpha*x^T*x.  <a href="namespacefml_1_1linalg.html#a396b1ddbdb20fe8e5b62eb104eb47e9c">More...</a><br /></td></tr>
+<tr class="separator:a396b1ddbdb20fe8e5b62eb104eb47e9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b96114e7f71f280ab685978ce0ad181"><td class="memTemplParams" colspan="2"><a id="a8b96114e7f71f280ab685978ce0ad181"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a8b96114e7f71f280ab685978ce0ad181"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a8b96114e7f71f280ab685978ce0ad181">crossprod</a> (const REAL alpha, const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:a8b96114e7f71f280ab685978ce0ad181"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:a8b96114e7f71f280ab685978ce0ad181"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b75d2e7c76340e7a32cd34d5e1b3087"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a1b75d2e7c76340e7a32cd34d5e1b3087"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a1b75d2e7c76340e7a32cd34d5e1b3087">tcrossprod</a> (const REAL alpha, const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;ret)</td></tr>
+<tr class="memdesc:a1b75d2e7c76340e7a32cd34d5e1b3087"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes lower triangle of alpha*x*x^T.  <a href="namespacefml_1_1linalg.html#a1b75d2e7c76340e7a32cd34d5e1b3087">More...</a><br /></td></tr>
+<tr class="separator:a1b75d2e7c76340e7a32cd34d5e1b3087"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29f0bf2ef1bc711fd78a81e9fb226fa1"><td class="memTemplParams" colspan="2"><a id="a29f0bf2ef1bc711fd78a81e9fb226fa1"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a29f0bf2ef1bc711fd78a81e9fb226fa1"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a29f0bf2ef1bc711fd78a81e9fb226fa1">tcrossprod</a> (const REAL alpha, const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:a29f0bf2ef1bc711fd78a81e9fb226fa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:a29f0bf2ef1bc711fd78a81e9fb226fa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19f79bc22832caf30b170e2f0796bca2"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a19f79bc22832caf30b170e2f0796bca2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a19f79bc22832caf30b170e2f0796bca2">det</a> (<a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x, int &amp;sign, REAL &amp;modulus)</td></tr>
+<tr class="memdesc:a19f79bc22832caf30b170e2f0796bca2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the determinant in logarithmic form.  <a href="namespacefml_1_1linalg.html#a19f79bc22832caf30b170e2f0796bca2">More...</a><br /></td></tr>
+<tr class="separator:a19f79bc22832caf30b170e2f0796bca2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11feb45b302a0bf02ef712899d4dafc3"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a11feb45b302a0bf02ef712899d4dafc3"><td class="memTemplItemLeft" align="right" valign="top">REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a11feb45b302a0bf02ef712899d4dafc3">dot</a> (const <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;y)</td></tr>
+<tr class="memdesc:a11feb45b302a0bf02ef712899d4dafc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the dot product of two vectors, i.e. the sum of the product of the elements.  <a href="namespacefml_1_1linalg.html#a11feb45b302a0bf02ef712899d4dafc3">More...</a><br /></td></tr>
+<tr class="separator:a11feb45b302a0bf02ef712899d4dafc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a713c0ee2d2c2e3faffd974e6bf52b9fa"><td class="memTemplParams" colspan="2"><a id="a713c0ee2d2c2e3faffd974e6bf52b9fa"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a713c0ee2d2c2e3faffd974e6bf52b9fa"><td class="memTemplItemLeft" align="right" valign="top">REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a713c0ee2d2c2e3faffd974e6bf52b9fa">dot</a> (const <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:a713c0ee2d2c2e3faffd974e6bf52b9fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:a713c0ee2d2c2e3faffd974e6bf52b9fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b4c23508e3b9382368f83f4212595ce"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a6b4c23508e3b9382368f83f4212595ce"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a6b4c23508e3b9382368f83f4212595ce">eigen_sym</a> (<a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;values)</td></tr>
+<tr class="memdesc:a6b4c23508e3b9382368f83f4212595ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the eigenvalues and optionally the eigenvectors for a symmetric matrix.  <a href="namespacefml_1_1linalg.html#a6b4c23508e3b9382368f83f4212595ce">More...</a><br /></td></tr>
+<tr class="separator:a6b4c23508e3b9382368f83f4212595ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac32a873832974d1fbf5a0bd1beb09f2f"><td class="memTemplParams" colspan="2"><a id="ac32a873832974d1fbf5a0bd1beb09f2f"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:ac32a873832974d1fbf5a0bd1beb09f2f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#ac32a873832974d1fbf5a0bd1beb09f2f">eigen_sym</a> (<a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;values, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;vectors)</td></tr>
+<tr class="memdesc:ac32a873832974d1fbf5a0bd1beb09f2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:ac32a873832974d1fbf5a0bd1beb09f2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a442ad9b632db67a7a25c25ad517af908"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a442ad9b632db67a7a25c25ad517af908"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a442ad9b632db67a7a25c25ad517af908">invert</a> (<a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:a442ad9b632db67a7a25c25ad517af908"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the matrix inverse.  <a href="namespacefml_1_1linalg.html#a442ad9b632db67a7a25c25ad517af908">More...</a><br /></td></tr>
+<tr class="separator:a442ad9b632db67a7a25c25ad517af908"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d4060a5a0de65bcd984c288ea4e77e5"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a3d4060a5a0de65bcd984c288ea4e77e5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a3d4060a5a0de65bcd984c288ea4e77e5">trinv</a> (const bool upper, const bool unit_diag, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:a3d4060a5a0de65bcd984c288ea4e77e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the matrix inverse of a triangular matrix.  <a href="namespacefml_1_1linalg.html#a3d4060a5a0de65bcd984c288ea4e77e5">More...</a><br /></td></tr>
+<tr class="separator:a3d4060a5a0de65bcd984c288ea4e77e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8e637b5cf435c79755089664d9aae1e"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:aa8e637b5cf435c79755089664d9aae1e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#aa8e637b5cf435c79755089664d9aae1e">lu</a> (<a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; int &gt; &amp;p, int &amp;info)</td></tr>
+<tr class="memdesc:aa8e637b5cf435c79755089664d9aae1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the PLU factorization with partial pivoting.  <a href="namespacefml_1_1linalg.html#aa8e637b5cf435c79755089664d9aae1e">More...</a><br /></td></tr>
+<tr class="separator:aa8e637b5cf435c79755089664d9aae1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe4a1d17d751e929b8dbcaeef780ce41"><td class="memTemplParams" colspan="2"><a id="afe4a1d17d751e929b8dbcaeef780ce41"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:afe4a1d17d751e929b8dbcaeef780ce41"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#afe4a1d17d751e929b8dbcaeef780ce41">lu</a> (<a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:afe4a1d17d751e929b8dbcaeef780ce41"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:afe4a1d17d751e929b8dbcaeef780ce41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6460ba90776e3b8589448edc887791dd"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:a6460ba90776e3b8589448edc887791dd"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a6460ba90776e3b8589448edc887791dd">matmult</a> (const bool transx, const bool transy, const REAL alpha, const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;y, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;ret)</td></tr>
 <tr class="memdesc:a6460ba90776e3b8589448edc887791dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes ret = alpha*op(x)*op(y) where op(A) is A or A^T.  <a href="namespacefml_1_1linalg.html#a6460ba90776e3b8589448edc887791dd">More...</a><br /></td></tr>
@@ -369,71 +414,6 @@ template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:a79138410941488929219202d3d2bdd6f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a79138410941488929219202d3d2bdd6f">matmult</a> (const bool transx, const bool transy, const REAL alpha, const <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;y)</td></tr>
 <tr class="memdesc:a79138410941488929219202d3d2bdd6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
 <tr class="separator:a79138410941488929219202d3d2bdd6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a396b1ddbdb20fe8e5b62eb104eb47e9c"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a396b1ddbdb20fe8e5b62eb104eb47e9c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a396b1ddbdb20fe8e5b62eb104eb47e9c">crossprod</a> (const REAL alpha, const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;ret)</td></tr>
-<tr class="memdesc:a396b1ddbdb20fe8e5b62eb104eb47e9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes lower triangle of alpha*x^T*x.  <a href="namespacefml_1_1linalg.html#a396b1ddbdb20fe8e5b62eb104eb47e9c">More...</a><br /></td></tr>
-<tr class="separator:a396b1ddbdb20fe8e5b62eb104eb47e9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b96114e7f71f280ab685978ce0ad181"><td class="memTemplParams" colspan="2"><a id="a8b96114e7f71f280ab685978ce0ad181"></a>
-template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a8b96114e7f71f280ab685978ce0ad181"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a8b96114e7f71f280ab685978ce0ad181">crossprod</a> (const REAL alpha, const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="memdesc:a8b96114e7f71f280ab685978ce0ad181"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
-<tr class="separator:a8b96114e7f71f280ab685978ce0ad181"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b75d2e7c76340e7a32cd34d5e1b3087"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a1b75d2e7c76340e7a32cd34d5e1b3087"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a1b75d2e7c76340e7a32cd34d5e1b3087">tcrossprod</a> (const REAL alpha, const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;ret)</td></tr>
-<tr class="memdesc:a1b75d2e7c76340e7a32cd34d5e1b3087"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes lower triangle of alpha*x*x^T.  <a href="namespacefml_1_1linalg.html#a1b75d2e7c76340e7a32cd34d5e1b3087">More...</a><br /></td></tr>
-<tr class="separator:a1b75d2e7c76340e7a32cd34d5e1b3087"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29f0bf2ef1bc711fd78a81e9fb226fa1"><td class="memTemplParams" colspan="2"><a id="a29f0bf2ef1bc711fd78a81e9fb226fa1"></a>
-template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a29f0bf2ef1bc711fd78a81e9fb226fa1"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a29f0bf2ef1bc711fd78a81e9fb226fa1">tcrossprod</a> (const REAL alpha, const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="memdesc:a29f0bf2ef1bc711fd78a81e9fb226fa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
-<tr class="separator:a29f0bf2ef1bc711fd78a81e9fb226fa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2fb08fbc91d1ef95535349b764040ff"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:ab2fb08fbc91d1ef95535349b764040ff"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#ab2fb08fbc91d1ef95535349b764040ff">xpose</a> (const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;tx)</td></tr>
-<tr class="memdesc:ab2fb08fbc91d1ef95535349b764040ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the transpose out-of-place (i.e. in a copy).  <a href="namespacefml_1_1linalg.html#ab2fb08fbc91d1ef95535349b764040ff">More...</a><br /></td></tr>
-<tr class="separator:ab2fb08fbc91d1ef95535349b764040ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb832a2776a9333fe28e6dc2a227f755"><td class="memTemplParams" colspan="2"><a id="abb832a2776a9333fe28e6dc2a227f755"></a>
-template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:abb832a2776a9333fe28e6dc2a227f755"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#abb832a2776a9333fe28e6dc2a227f755">xpose</a> (const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="memdesc:abb832a2776a9333fe28e6dc2a227f755"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
-<tr class="separator:abb832a2776a9333fe28e6dc2a227f755"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a975107e72bac0267373ea0b4a85941bf"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a975107e72bac0267373ea0b4a85941bf"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a975107e72bac0267373ea0b4a85941bf">chol</a> (<a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="memdesc:a975107e72bac0267373ea0b4a85941bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the Choleski factorization.  <a href="namespacefml_1_1linalg.html#a975107e72bac0267373ea0b4a85941bf">More...</a><br /></td></tr>
-<tr class="separator:a975107e72bac0267373ea0b4a85941bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b4c23508e3b9382368f83f4212595ce"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a6b4c23508e3b9382368f83f4212595ce"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a6b4c23508e3b9382368f83f4212595ce">eigen_sym</a> (<a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;values)</td></tr>
-<tr class="memdesc:a6b4c23508e3b9382368f83f4212595ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the eigenvalues and optionally the eigenvectors for a symmetric matrix.  <a href="namespacefml_1_1linalg.html#a6b4c23508e3b9382368f83f4212595ce">More...</a><br /></td></tr>
-<tr class="separator:a6b4c23508e3b9382368f83f4212595ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac32a873832974d1fbf5a0bd1beb09f2f"><td class="memTemplParams" colspan="2"><a id="ac32a873832974d1fbf5a0bd1beb09f2f"></a>
-template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:ac32a873832974d1fbf5a0bd1beb09f2f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#ac32a873832974d1fbf5a0bd1beb09f2f">eigen_sym</a> (<a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;values, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;vectors)</td></tr>
-<tr class="memdesc:ac32a873832974d1fbf5a0bd1beb09f2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
-<tr class="separator:ac32a873832974d1fbf5a0bd1beb09f2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a442ad9b632db67a7a25c25ad517af908"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a442ad9b632db67a7a25c25ad517af908"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a442ad9b632db67a7a25c25ad517af908">invert</a> (<a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="memdesc:a442ad9b632db67a7a25c25ad517af908"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the matrix inverse.  <a href="namespacefml_1_1linalg.html#a442ad9b632db67a7a25c25ad517af908">More...</a><br /></td></tr>
-<tr class="separator:a442ad9b632db67a7a25c25ad517af908"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d4060a5a0de65bcd984c288ea4e77e5"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a3d4060a5a0de65bcd984c288ea4e77e5"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a3d4060a5a0de65bcd984c288ea4e77e5">trinv</a> (const bool upper, const bool unit_diag, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="memdesc:a3d4060a5a0de65bcd984c288ea4e77e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the matrix inverse of a triangular matrix.  <a href="namespacefml_1_1linalg.html#a3d4060a5a0de65bcd984c288ea4e77e5">More...</a><br /></td></tr>
-<tr class="separator:a3d4060a5a0de65bcd984c288ea4e77e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8e637b5cf435c79755089664d9aae1e"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:aa8e637b5cf435c79755089664d9aae1e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#aa8e637b5cf435c79755089664d9aae1e">lu</a> (<a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; int &gt; &amp;p, int &amp;info)</td></tr>
-<tr class="memdesc:aa8e637b5cf435c79755089664d9aae1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the PLU factorization with partial pivoting.  <a href="namespacefml_1_1linalg.html#aa8e637b5cf435c79755089664d9aae1e">More...</a><br /></td></tr>
-<tr class="separator:aa8e637b5cf435c79755089664d9aae1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe4a1d17d751e929b8dbcaeef780ce41"><td class="memTemplParams" colspan="2"><a id="afe4a1d17d751e929b8dbcaeef780ce41"></a>
-template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:afe4a1d17d751e929b8dbcaeef780ce41"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#afe4a1d17d751e929b8dbcaeef780ce41">lu</a> (<a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="memdesc:afe4a1d17d751e929b8dbcaeef780ce41"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
-<tr class="separator:afe4a1d17d751e929b8dbcaeef780ce41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a19f79bc22832caf30b170e2f0796bca2"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a19f79bc22832caf30b170e2f0796bca2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a19f79bc22832caf30b170e2f0796bca2">det</a> (<a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x, int &amp;sign, REAL &amp;modulus)</td></tr>
-<tr class="memdesc:a19f79bc22832caf30b170e2f0796bca2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the determinant in logarithmic form.  <a href="namespacefml_1_1linalg.html#a19f79bc22832caf30b170e2f0796bca2">More...</a><br /></td></tr>
-<tr class="separator:a19f79bc22832caf30b170e2f0796bca2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a239113c5267ec96f309b345366816f5c"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a239113c5267ec96f309b345366816f5c"><td class="memTemplItemLeft" align="right" valign="top">REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a239113c5267ec96f309b345366816f5c">trace</a> (const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="memdesc:a239113c5267ec96f309b345366816f5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the trace, i.e. the sum of the diagonal.  <a href="namespacefml_1_1linalg.html#a239113c5267ec96f309b345366816f5c">More...</a><br /></td></tr>
-<tr class="separator:a239113c5267ec96f309b345366816f5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f08a68f10da4b7f771ac48051877fcd"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:a3f08a68f10da4b7f771ac48051877fcd"><td class="memTemplItemLeft" align="right" valign="top">REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a3f08a68f10da4b7f771ac48051877fcd">norm_1</a> (const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
 <tr class="memdesc:a3f08a68f10da4b7f771ac48051877fcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the 1 matrix norm, the maximum absolute column sum.  <a href="namespacefml_1_1linalg.html#a3f08a68f10da4b7f771ac48051877fcd">More...</a><br /></td></tr>
@@ -535,6 +515,19 @@ template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:a30b577ec86b2caf811c0f900755a6938"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a30b577ec86b2caf811c0f900755a6938">rsvd</a> (const uint32_t seed, const int k, const int q, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpuvec.html">gpuvec</a>&lt; REAL &gt; &amp;s, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;u, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;vt)</td></tr>
 <tr class="memdesc:a30b577ec86b2caf811c0f900755a6938"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
 <tr class="separator:a30b577ec86b2caf811c0f900755a6938"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a239113c5267ec96f309b345366816f5c"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a239113c5267ec96f309b345366816f5c"><td class="memTemplItemLeft" align="right" valign="top">REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a239113c5267ec96f309b345366816f5c">trace</a> (const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:a239113c5267ec96f309b345366816f5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the trace, i.e. the sum of the diagonal.  <a href="namespacefml_1_1linalg.html#a239113c5267ec96f309b345366816f5c">More...</a><br /></td></tr>
+<tr class="separator:a239113c5267ec96f309b345366816f5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2fb08fbc91d1ef95535349b764040ff"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:ab2fb08fbc91d1ef95535349b764040ff"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#ab2fb08fbc91d1ef95535349b764040ff">xpose</a> (const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;tx)</td></tr>
+<tr class="memdesc:ab2fb08fbc91d1ef95535349b764040ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the transpose out-of-place (i.e. in a copy).  <a href="namespacefml_1_1linalg.html#ab2fb08fbc91d1ef95535349b764040ff">More...</a><br /></td></tr>
+<tr class="separator:ab2fb08fbc91d1ef95535349b764040ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb832a2776a9333fe28e6dc2a227f755"><td class="memTemplParams" colspan="2"><a id="abb832a2776a9333fe28e6dc2a227f755"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:abb832a2776a9333fe28e6dc2a227f755"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#abb832a2776a9333fe28e6dc2a227f755">xpose</a> (const <a class="el" href="classfml_1_1gpumat.html">gpumat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:abb832a2776a9333fe28e6dc2a227f755"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:abb832a2776a9333fe28e6dc2a227f755"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ac3b2bfdd57e2f1aa167cc21260741f"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:a9ac3b2bfdd57e2f1aa167cc21260741f"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a9ac3b2bfdd57e2f1aa167cc21260741f">add</a> (const bool transx, const bool transy, const REAL alpha, const REAL beta, const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;y, <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;ret)</td></tr>
 <tr class="memdesc:a9ac3b2bfdd57e2f1aa167cc21260741f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns alpha*op(x) + beta*op(y) where op(A) is A or A^T.  <a href="namespacefml_1_1linalg.html#a9ac3b2bfdd57e2f1aa167cc21260741f">More...</a><br /></td></tr>
@@ -544,14 +537,10 @@ template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:adef7f955518464357f02c4563adedb39"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#adef7f955518464357f02c4563adedb39">add</a> (const bool transx, const bool transy, const REAL alpha, const REAL beta, const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;y)</td></tr>
 <tr class="memdesc:adef7f955518464357f02c4563adedb39"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
 <tr class="separator:adef7f955518464357f02c4563adedb39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a218a6b09807150aaf820e95049124ce3"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a218a6b09807150aaf820e95049124ce3"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a218a6b09807150aaf820e95049124ce3">matmult</a> (const bool transx, const bool transy, const REAL alpha, const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;y)</td></tr>
-<tr class="memdesc:a218a6b09807150aaf820e95049124ce3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns alpha*op(x)*op(y) where op(A) is A or A^T.  <a href="namespacefml_1_1linalg.html#a218a6b09807150aaf820e95049124ce3">More...</a><br /></td></tr>
-<tr class="separator:a218a6b09807150aaf820e95049124ce3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add560d8d285bd77f22108a8f08fb8aa0"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:add560d8d285bd77f22108a8f08fb8aa0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#add560d8d285bd77f22108a8f08fb8aa0">matmult</a> (const bool transx, const bool transy, const REAL alpha, const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;y, <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;ret)</td></tr>
-<tr class="memdesc:add560d8d285bd77f22108a8f08fb8aa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes ret = alpha*op(x)*op(y) where op(A) is A or A^T.  <a href="namespacefml_1_1linalg.html#add560d8d285bd77f22108a8f08fb8aa0">More...</a><br /></td></tr>
-<tr class="separator:add560d8d285bd77f22108a8f08fb8aa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab55c9aac32d61af8902f7e9e842aba1e"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:ab55c9aac32d61af8902f7e9e842aba1e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#ab55c9aac32d61af8902f7e9e842aba1e">chol</a> (<a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:ab55c9aac32d61af8902f7e9e842aba1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the Choleski factorization.  <a href="namespacefml_1_1linalg.html#ab55c9aac32d61af8902f7e9e842aba1e">More...</a><br /></td></tr>
+<tr class="separator:ab55c9aac32d61af8902f7e9e842aba1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11f1f1a03b2ca66ae42893e51bd69d65"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:a11f1f1a03b2ca66ae42893e51bd69d65"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a11f1f1a03b2ca66ae42893e51bd69d65">crossprod</a> (const REAL alpha, const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;ret)</td></tr>
 <tr class="memdesc:a11f1f1a03b2ca66ae42893e51bd69d65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes lower triangle of alpha*x^T*x.  <a href="namespacefml_1_1linalg.html#a11f1f1a03b2ca66ae42893e51bd69d65">More...</a><br /></td></tr>
@@ -570,19 +559,10 @@ template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:a44ea57c87dc555fec39191be8e5cab2b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a44ea57c87dc555fec39191be8e5cab2b">tcrossprod</a> (const REAL alpha, const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x)</td></tr>
 <tr class="memdesc:a44ea57c87dc555fec39191be8e5cab2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
 <tr class="separator:a44ea57c87dc555fec39191be8e5cab2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d68d60ff6528f2f6cd4d78e7da71fdd"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a1d68d60ff6528f2f6cd4d78e7da71fdd"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a1d68d60ff6528f2f6cd4d78e7da71fdd">xpose</a> (const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;tx)</td></tr>
-<tr class="memdesc:a1d68d60ff6528f2f6cd4d78e7da71fdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the transpose out-of-place (i.e. in a copy).  <a href="namespacefml_1_1linalg.html#a1d68d60ff6528f2f6cd4d78e7da71fdd">More...</a><br /></td></tr>
-<tr class="separator:a1d68d60ff6528f2f6cd4d78e7da71fdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf6efaf460c0c49ab839d04b4453e048"><td class="memTemplParams" colspan="2"><a id="acf6efaf460c0c49ab839d04b4453e048"></a>
-template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:acf6efaf460c0c49ab839d04b4453e048"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#acf6efaf460c0c49ab839d04b4453e048">xpose</a> (const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="memdesc:acf6efaf460c0c49ab839d04b4453e048"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
-<tr class="separator:acf6efaf460c0c49ab839d04b4453e048"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab55c9aac32d61af8902f7e9e842aba1e"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:ab55c9aac32d61af8902f7e9e842aba1e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#ab55c9aac32d61af8902f7e9e842aba1e">chol</a> (<a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="memdesc:ab55c9aac32d61af8902f7e9e842aba1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the Choleski factorization.  <a href="namespacefml_1_1linalg.html#ab55c9aac32d61af8902f7e9e842aba1e">More...</a><br /></td></tr>
-<tr class="separator:ab55c9aac32d61af8902f7e9e842aba1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d87be93e642f5f4b5d2176fb855bf32"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a3d87be93e642f5f4b5d2176fb855bf32"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a3d87be93e642f5f4b5d2176fb855bf32">det</a> (<a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x, int &amp;sign, REAL &amp;modulus)</td></tr>
+<tr class="memdesc:a3d87be93e642f5f4b5d2176fb855bf32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the determinant in logarithmic form.  <a href="namespacefml_1_1linalg.html#a3d87be93e642f5f4b5d2176fb855bf32">More...</a><br /></td></tr>
+<tr class="separator:a3d87be93e642f5f4b5d2176fb855bf32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab11d2ad0dc980fa3feb70ca118b6165"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:aab11d2ad0dc980fa3feb70ca118b6165"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#aab11d2ad0dc980fa3feb70ca118b6165">eigen_sym</a> (<a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;values)</td></tr>
 <tr class="memdesc:aab11d2ad0dc980fa3feb70ca118b6165"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the eigenvalues and optionally the eigenvectors for a symmetric matrix.  <a href="namespacefml_1_1linalg.html#aab11d2ad0dc980fa3feb70ca118b6165">More...</a><br /></td></tr>
@@ -609,14 +589,14 @@ template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:a56c4de4002dbb8449116083e1d2cba2a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a56c4de4002dbb8449116083e1d2cba2a">lu</a> (<a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x)</td></tr>
 <tr class="memdesc:a56c4de4002dbb8449116083e1d2cba2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
 <tr class="separator:a56c4de4002dbb8449116083e1d2cba2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d87be93e642f5f4b5d2176fb855bf32"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a3d87be93e642f5f4b5d2176fb855bf32"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a3d87be93e642f5f4b5d2176fb855bf32">det</a> (<a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x, int &amp;sign, REAL &amp;modulus)</td></tr>
-<tr class="memdesc:a3d87be93e642f5f4b5d2176fb855bf32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the determinant in logarithmic form.  <a href="namespacefml_1_1linalg.html#a3d87be93e642f5f4b5d2176fb855bf32">More...</a><br /></td></tr>
-<tr class="separator:a3d87be93e642f5f4b5d2176fb855bf32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a780067acbd06a526e148e08dbd71cba0"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
-<tr class="memitem:a780067acbd06a526e148e08dbd71cba0"><td class="memTemplItemLeft" align="right" valign="top">REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a780067acbd06a526e148e08dbd71cba0">trace</a> (const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x)</td></tr>
-<tr class="memdesc:a780067acbd06a526e148e08dbd71cba0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the trace, i.e. the sum of the diagonal.  <a href="namespacefml_1_1linalg.html#a780067acbd06a526e148e08dbd71cba0">More...</a><br /></td></tr>
-<tr class="separator:a780067acbd06a526e148e08dbd71cba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a218a6b09807150aaf820e95049124ce3"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a218a6b09807150aaf820e95049124ce3"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a218a6b09807150aaf820e95049124ce3">matmult</a> (const bool transx, const bool transy, const REAL alpha, const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;y)</td></tr>
+<tr class="memdesc:a218a6b09807150aaf820e95049124ce3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns alpha*op(x)*op(y) where op(A) is A or A^T.  <a href="namespacefml_1_1linalg.html#a218a6b09807150aaf820e95049124ce3">More...</a><br /></td></tr>
+<tr class="separator:a218a6b09807150aaf820e95049124ce3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add560d8d285bd77f22108a8f08fb8aa0"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:add560d8d285bd77f22108a8f08fb8aa0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#add560d8d285bd77f22108a8f08fb8aa0">matmult</a> (const bool transx, const bool transy, const REAL alpha, const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;y, <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;ret)</td></tr>
+<tr class="memdesc:add560d8d285bd77f22108a8f08fb8aa0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes ret = alpha*op(x)*op(y) where op(A) is A or A^T.  <a href="namespacefml_1_1linalg.html#add560d8d285bd77f22108a8f08fb8aa0">More...</a><br /></td></tr>
+<tr class="separator:add560d8d285bd77f22108a8f08fb8aa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37a8bc4594a3ac1bcfd74bcf3b4c9b3d"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:a37a8bc4594a3ac1bcfd74bcf3b4c9b3d"><td class="memTemplItemLeft" align="right" valign="top">REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a37a8bc4594a3ac1bcfd74bcf3b4c9b3d">norm_1</a> (const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x)</td></tr>
 <tr class="memdesc:a37a8bc4594a3ac1bcfd74bcf3b4c9b3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the 1 matrix norm, the maximum absolute column sum.  <a href="namespacefml_1_1linalg.html#a37a8bc4594a3ac1bcfd74bcf3b4c9b3d">More...</a><br /></td></tr>
@@ -704,6 +684,19 @@ template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:a932548eb84d824e46657d4736390bd43"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a932548eb84d824e46657d4736390bd43">rsvd</a> (const uint32_t seed, const int k, const int q, <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1cpuvec.html">cpuvec</a>&lt; REAL &gt; &amp;s, <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;u, <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;vt)</td></tr>
 <tr class="memdesc:a932548eb84d824e46657d4736390bd43"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
 <tr class="separator:a932548eb84d824e46657d4736390bd43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a780067acbd06a526e148e08dbd71cba0"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a780067acbd06a526e148e08dbd71cba0"><td class="memTemplItemLeft" align="right" valign="top">REAL&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a780067acbd06a526e148e08dbd71cba0">trace</a> (const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:a780067acbd06a526e148e08dbd71cba0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the trace, i.e. the sum of the diagonal.  <a href="namespacefml_1_1linalg.html#a780067acbd06a526e148e08dbd71cba0">More...</a><br /></td></tr>
+<tr class="separator:a780067acbd06a526e148e08dbd71cba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d68d60ff6528f2f6cd4d78e7da71fdd"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:a1d68d60ff6528f2f6cd4d78e7da71fdd"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a1d68d60ff6528f2f6cd4d78e7da71fdd">xpose</a> (const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x, <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;tx)</td></tr>
+<tr class="memdesc:a1d68d60ff6528f2f6cd4d78e7da71fdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the transpose out-of-place (i.e. in a copy).  <a href="namespacefml_1_1linalg.html#a1d68d60ff6528f2f6cd4d78e7da71fdd">More...</a><br /></td></tr>
+<tr class="separator:a1d68d60ff6528f2f6cd4d78e7da71fdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf6efaf460c0c49ab839d04b4453e048"><td class="memTemplParams" colspan="2"><a id="acf6efaf460c0c49ab839d04b4453e048"></a>
+template&lt;typename REAL &gt; </td></tr>
+<tr class="memitem:acf6efaf460c0c49ab839d04b4453e048"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#acf6efaf460c0c49ab839d04b4453e048">xpose</a> (const <a class="el" href="classfml_1_1mpimat.html">mpimat</a>&lt; REAL &gt; &amp;x)</td></tr>
+<tr class="memdesc:acf6efaf460c0c49ab839d04b4453e048"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is an overloaded member function, provided for convenience. It differs from the above function only in what argument(s) it accepts. <br /></td></tr>
+<tr class="separator:acf6efaf460c0c49ab839d04b4453e048"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56b81ad9ec9afe20eeede224590e8946"><td class="memTemplParams" colspan="2">template&lt;typename REAL &gt; </td></tr>
 <tr class="memitem:a56b81ad9ec9afe20eeede224590e8946"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacefml_1_1linalg.html#a56b81ad9ec9afe20eeede224590e8946">matmult</a> (const <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;x, const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;y, <a class="el" href="classfml_1_1parmat__cpu.html">parmat_cpu</a>&lt; REAL &gt; &amp;ret)</td></tr>
 <tr class="memdesc:a56b81ad9ec9afe20eeede224590e8946"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the product of a distributed and a non-distributed matrix whose result is distributed, or the transpose of a distributed matrix with a distributed matrix whose result is non-distributed.  <a href="namespacefml_1_1linalg.html#a56b81ad9ec9afe20eeede224590e8946">More...</a><br /></td></tr>
@@ -4391,86 +4384,6 @@ template&lt;typename REAL &gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the norm.</dd></dl>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a3141aa91a43cbbc2d3ff3a5d9d7b28ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3141aa91a43cbbc2d3ff3a5d9d7b28ea">&#9670;&nbsp;</a></span>prod()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename REAL &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void fml::linalg::prod </td>
-          <td>(</td>
-          <td class="paramtype">const bool&#160;</td>
-          <td class="paramname"><em>transx</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const bool&#160;</td>
-          <td class="paramname"><em>transy</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const REAL&#160;</td>
-          <td class="paramname"><em>alpha</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const REAL&#160;</td>
-          <td class="paramname"><em>beta</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>y</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classfml_1_1cpumat.html">cpumat</a>&lt; REAL &gt; &amp;&#160;</td>
-          <td class="paramname"><em>ret</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Returns element-wise alpha*op(x) * beta*op(y) where op(A) is A or A^T. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">transx</td><td>Should x^T be used? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">transy</td><td>Should y^T be used? </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">alpha,beta</td><td>Scalars. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">x,y</td><td>The inputs to the product. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ret</td><td>The product.</td></tr>
-  </table>
-  </dd>
-</dl>
-<p><b>Exceptions</b><br  />
- If x and y are inappropriately sized for the sum, the method will throw a 'runtime_error' exception.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">REAL</td><td>should be 'float' or 'double'. </td></tr>

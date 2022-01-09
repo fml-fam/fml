@@ -158,8 +158,11 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="memitem:ac4d9b2b5f81fcd55ba0e8a9fb1fd1982"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1gpuvec.html#ac4d9b2b5f81fcd55ba0e8a9fb1fd1982">fill_val</a> (const T v)</td></tr>
 <tr class="memdesc:ac4d9b2b5f81fcd55ba0e8a9fb1fd1982"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set all values to input value.  <a href="classfml_1_1gpuvec.html#ac4d9b2b5f81fcd55ba0e8a9fb1fd1982">More...</a><br /></td></tr>
 <tr class="separator:ac4d9b2b5f81fcd55ba0e8a9fb1fd1982"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c25ee7059f54a1b3cfb19e9db946ca9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1gpuvec.html#a8c25ee7059f54a1b3cfb19e9db946ca9">fill_linspace</a> (const T start, const T stop)</td></tr>
-<tr class="memdesc:a8c25ee7059f54a1b3cfb19e9db946ca9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set values to linearly spaced numbers.  <a href="classfml_1_1gpuvec.html#a8c25ee7059f54a1b3cfb19e9db946ca9">More...</a><br /></td></tr>
+<tr class="memitem:aa71a281092b4c82887b4a6a4789f475d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1gpuvec.html#aa71a281092b4c82887b4a6a4789f475d">fill_linspace</a> ()</td></tr>
+<tr class="memdesc:aa71a281092b4c82887b4a6a4789f475d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set values to linearly spaced numbers.  <a href="classfml_1_1gpuvec.html#aa71a281092b4c82887b4a6a4789f475d">More...</a><br /></td></tr>
+<tr class="separator:aa71a281092b4c82887b4a6a4789f475d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c25ee7059f54a1b3cfb19e9db946ca9"><td class="memItemLeft" align="right" valign="top"><a id="a8c25ee7059f54a1b3cfb19e9db946ca9"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>fill_linspace</b> (const T start, const T stop)</td></tr>
 <tr class="separator:a8c25ee7059f54a1b3cfb19e9db946ca9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac57ec2eac1757200e711a5342578c45f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfml_1_1gpuvec.html#ac57ec2eac1757200e711a5342578c45f">scale</a> (const T s)</td></tr>
 <tr class="memdesc:ac57ec2eac1757200e711a5342578c45f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiply all values by the input value.  <a href="classfml_1_1gpuvec.html#ac57ec2eac1757200e711a5342578c45f">More...</a><br /></td></tr>
@@ -264,8 +267,8 @@ class fml::gpuvec&lt; T &gt;</h3>
   </dd>
 </dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a8c25ee7059f54a1b3cfb19e9db946ca9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c25ee7059f54a1b3cfb19e9db946ca9">&#9670;&nbsp;</a></span>fill_linspace()</h2>
+<a id="aa71a281092b4c82887b4a6a4789f475d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa71a281092b4c82887b4a6a4789f475d">&#9670;&nbsp;</a></span>fill_linspace()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -273,21 +276,7 @@ class fml::gpuvec&lt; T &gt;</h3>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classfml_1_1gpuvec.html">fml::gpuvec</a>&lt; T &gt;::fill_linspace </td>
-          <td>(</td>
-          <td class="paramtype">const T&#160;</td>
-          <td class="paramname"><em>start</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const T&#160;</td>
-          <td class="paramname"><em>stop</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="memname">void <a class="el" href="classfml_1_1gpuvec.html">fml::gpuvec</a>&lt; T &gt;::fill_linspace</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -295,7 +284,7 @@ template&lt;typename T &gt; </div>
 <p>Set values to linearly spaced numbers. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">start,stop</td><td>Beginning/ending numbers. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">start,stop</td><td>Beginning/ending numbers. If not supplied, the vector will be filled with whole numbers from 1 to the total number of elements. </td></tr>
   </table>
   </dd>
 </dl>

@@ -104,60 +104,14 @@ $(document).ready(function(){initNavTree('gpu_2stats_8hh_source.html',''); initR
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;dimops.hh&quot;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;linalg.hh&quot;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;stats/cor.hh&quot;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;stats/cov.hh&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;stats/pca.hh&quot;</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacefml.html">fml</a></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;{</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">namespace </span>stats</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;{</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="namespacefml_1_1stats.html#ae3f9524f6682d92f48f8608845cbe139">   38</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="namespacefml_1_1stats.html#a6aa408715c73d8643423737257edd01c">pca</a>(<span class="keyword">const</span> <span class="keywordtype">bool</span> rm_mean, <span class="keyword">const</span> <span class="keywordtype">bool</span> rm_sd, <a class="code" href="classfml_1_1gpumat.html">gpumat&lt;REAL&gt;</a> &amp;x, <a class="code" href="classfml_1_1gpuvec.html">gpuvec&lt;REAL&gt;</a> &amp;sdev, <a class="code" href="classfml_1_1gpumat.html">gpumat&lt;REAL&gt;</a> &amp;rot)</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;  {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    linalg::err::check_card(x, sdev, rot);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <a class="code" href="namespacefml_1_1dimops.html#a1de537269cc6365e97db971b2407419e">dimops::scale</a>(rm_mean, rm_sd, x);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">auto</span> c = x.get_card();</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <a class="code" href="classfml_1_1gpumat.html">gpumat&lt;REAL&gt;</a> u(c);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <a class="code" href="classfml_1_1gpumat.html">gpumat&lt;REAL&gt;</a> trot(c);</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <a class="code" href="namespacefml_1_1linalg.html#add583703d1c77a9f7236effb9b568f23">linalg::svd</a>(x, sdev, u, trot);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">const</span> REAL d = 1.0 / sqrt((REAL)std::max(x.<a class="code" href="classfml_1_1unimat.html#a5b70212a4383826986be87aad3b8908e">nrows</a>()-1, 1));</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    sdev.<a class="code" href="classfml_1_1gpuvec.html#ac57ec2eac1757200e711a5342578c45f">scale</a>(d);</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="namespacefml_1_1linalg.html#a75e1b30c504d3d9b0f52c44bce972fdf">linalg::xpose</a>(trot, rot);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;  }</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;  </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;  <span class="keyword">template</span> &lt;<span class="keyword">typename</span> REAL&gt;</div>
-<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="namespacefml_1_1stats.html#a612abfc075a0af54dbc7e0d598e94266">   57</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="namespacefml_1_1stats.html#a6aa408715c73d8643423737257edd01c">pca</a>(<span class="keyword">const</span> <span class="keywordtype">bool</span> rm_mean, <span class="keyword">const</span> <span class="keywordtype">bool</span> rm_sd, <a class="code" href="classfml_1_1gpumat.html">gpumat&lt;REAL&gt;</a> &amp;x, <a class="code" href="classfml_1_1gpuvec.html">gpuvec&lt;REAL&gt;</a> &amp;sdev)</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;  {</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    linalg::err::check_card(x, sdev);</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <a class="code" href="namespacefml_1_1dimops.html#a1de537269cc6365e97db971b2407419e">dimops::scale</a>(rm_mean, rm_sd, x);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <a class="code" href="namespacefml_1_1linalg.html#add583703d1c77a9f7236effb9b568f23">linalg::svd</a>(x, sdev);</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">const</span> REAL d = 1.0 / sqrt((REAL)std::max(x.<a class="code" href="classfml_1_1unimat.html#a5b70212a4383826986be87aad3b8908e">nrows</a>()-1, 1));</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    sdev.<a class="code" href="classfml_1_1gpuvec.html#ac57ec2eac1757200e711a5342578c45f">scale</a>(d);</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;  }</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;}</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;}</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespacefml_1_1linalg_html_a75e1b30c504d3d9b0f52c44bce972fdf"><div class="ttname"><a href="namespacefml_1_1linalg.html#a75e1b30c504d3d9b0f52c44bce972fdf">fml::linalg::xpose</a></div><div class="ttdeci">void xpose(const cpumat&lt; REAL &gt; &amp;x, cpumat&lt; REAL &gt; &amp;tx)</div><div class="ttdoc">Computes the transpose out-of-place (i.e. in a copy).</div><div class="ttdef"><b>Definition:</b> linalg_blas.hh:463</div></div>
-<div class="ttc" id="aclassfml_1_1gpuvec_html"><div class="ttname"><a href="classfml_1_1gpuvec.html">fml::gpuvec</a></div><div class="ttdoc">Vector class for data held on a single GPU.</div><div class="ttdef"><b>Definition:</b> gpuvec.hh:32</div></div>
-<div class="ttc" id="aclassfml_1_1unimat_html_a5b70212a4383826986be87aad3b8908e"><div class="ttname"><a href="classfml_1_1unimat.html#a5b70212a4383826986be87aad3b8908e">fml::unimat::nrows</a></div><div class="ttdeci">len_t nrows() const</div><div class="ttdoc">Number of rows.</div><div class="ttdef"><b>Definition:</b> unimat.hh:36</div></div>
-<div class="ttc" id="anamespacefml_1_1stats_html_a6aa408715c73d8643423737257edd01c"><div class="ttname"><a href="namespacefml_1_1stats.html#a6aa408715c73d8643423737257edd01c">fml::stats::pca</a></div><div class="ttdeci">void pca(const bool rm_mean, const bool rm_sd, cpumat&lt; REAL &gt; &amp;x, cpuvec&lt; REAL &gt; &amp;sdev, cpumat&lt; REAL &gt; &amp;rot)</div><div class="ttdoc">Principal components analysis.</div><div class="ttdef"><b>Definition:</b> stats.hh:38</div></div>
-<div class="ttc" id="anamespacefml_1_1dimops_html_a1de537269cc6365e97db971b2407419e"><div class="ttname"><a href="namespacefml_1_1dimops.html#a1de537269cc6365e97db971b2407419e">fml::dimops::scale</a></div><div class="ttdeci">void scale(const bool rm_mean, const bool rm_sd, cpumat&lt; REAL &gt; &amp;x)</div><div class="ttdoc">Remove the mean and/or the sd from a matrix.</div><div class="ttdef"><b>Definition:</b> dimops.hh:376</div></div>
-<div class="ttc" id="anamespacefml_1_1linalg_html_add583703d1c77a9f7236effb9b568f23"><div class="ttname"><a href="namespacefml_1_1linalg.html#add583703d1c77a9f7236effb9b568f23">fml::linalg::svd</a></div><div class="ttdeci">void svd(cpumat&lt; REAL &gt; &amp;x, cpuvec&lt; REAL &gt; &amp;s)</div><div class="ttdoc">Computes the singular value decomposition.</div><div class="ttdef"><b>Definition:</b> linalg_svd.hh:97</div></div>
-<div class="ttc" id="aclassfml_1_1gpuvec_html_ac57ec2eac1757200e711a5342578c45f"><div class="ttname"><a href="classfml_1_1gpuvec.html#ac57ec2eac1757200e711a5342578c45f">fml::gpuvec::scale</a></div><div class="ttdeci">void scale(const T s)</div><div class="ttdoc">Multiply all values by the input value.</div><div class="ttdef"><b>Definition:</b> gpuvec.hh:428</div></div>
-<div class="ttc" id="anamespacefml_html"><div class="ttname"><a href="namespacefml.html">fml</a></div><div class="ttdoc">Core namespace.</div><div class="ttdef"><b>Definition:</b> dimops.hh:10</div></div>
-<div class="ttc" id="aclassfml_1_1gpumat_html"><div class="ttname"><a href="classfml_1_1gpumat.html">fml::gpumat</a></div><div class="ttdoc">Matrix class for data held on a single GPU.</div><div class="ttdef"><b>Definition:</b> gpumat.hh:35</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

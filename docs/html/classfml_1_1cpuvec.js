@@ -8,16 +8,17 @@ var classfml_1_1cpuvec =
     [ "~cpuvec", "classfml_1_1cpuvec.html#a32494845a28d7eedbd3fda9aded7680f", null ],
     [ "dont_free_on_destruct", "classfml_1_1cpuvec.html#aadcfc45e35f5155a283bf4c5745d97b6", null ],
     [ "dupe", "classfml_1_1cpuvec.html#a52919244d0e0686700e6d6641235cf31", null ],
+    [ "fill_linspace", "classfml_1_1cpuvec.html#a7864220fe542c6841ced5a9d743268af", null ],
     [ "fill_linspace", "classfml_1_1cpuvec.html#a301deb0dac956b2c4a0d56189437aa1e", null ],
-    [ "fill_linspace", "classfml_1_1cpuvec.html#add43f458496ef11669251a16bd21e3c7", null ],
+    [ "fill_linspace", "classfml_1_1cpuvec.html#ae07fb8a49cffeb65bcc229d704674276", null ],
     [ "fill_val", "classfml_1_1cpuvec.html#ac8a5a115514a8494b02c45bd5b2b4003", null ],
     [ "fill_zero", "classfml_1_1cpuvec.html#a767108623147a46f8c7b4d437ea2dd3b", null ],
     [ "free_on_destruct", "classfml_1_1cpuvec.html#a1059d997492c41b0ea954246f861c394", null ],
     [ "get", "classfml_1_1cpuvec.html#ad57ab7218e361d2f00c192c7d966ae1e", null ],
     [ "info", "classfml_1_1cpuvec.html#a60de8dc896f3f62287975f61eb756455", null ],
     [ "inherit", "classfml_1_1cpuvec.html#ad71710c987ec87f9945dc485ac7f3e8a", null ],
-    [ "max", "classfml_1_1cpuvec.html#a359407a6cc45017bb7fd48bf388e106a", null ],
-    [ "min", "classfml_1_1cpuvec.html#ad1f1a2b4f2808d8e8511e389ee9fb3eb", null ],
+    [ "max", "classfml_1_1cpuvec.html#a2c954d07b0a4e2e7b39e521f5fc8c4b8", null ],
+    [ "min", "classfml_1_1cpuvec.html#a48e25c40b1ec7b99b44eda0b1f1f64ee", null ],
     [ "operator!=", "classfml_1_1cpuvec.html#a574c70d9ba83e4ea72d3981dfe67dcff", null ],
     [ "operator=", "classfml_1_1cpuvec.html#ac7d7cbe3bb638c1884c699181846323b", null ],
     [ "operator=", "classfml_1_1cpuvec.html#af0d44a3f82f9655d64403b3c9ef0490e", null ],
@@ -29,5 +30,5 @@ var classfml_1_1cpuvec =
     [ "scale", "classfml_1_1cpuvec.html#a36acbd37a113642dfa6087377eb522d2", null ],
     [ "set", "classfml_1_1cpuvec.html#a65e69bed1eefdd3f3582e466f57c605e", null ],
     [ "subset", "classfml_1_1cpuvec.html#a3d2311961daebdd7731000d3c2de15cb", null ],
-    [ "sum", "classfml_1_1cpuvec.html#a0c9955f6bd45d9e19fdb362530726c0f", null ]
+    [ "sum", "classfml_1_1cpuvec.html#a3654c550a05979c0bb2413513e8765df", null ]
 ];

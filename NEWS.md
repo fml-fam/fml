@@ -1,21 +1,26 @@
 # NEWS
 
-## Release 0.4-2 (//):
+## Release 0.4-2 (1/9/2022):
 
 New:
-  * 
+  * Added stats::cov() and stats::cor() methods.
+  * Added set_row() and set_col() methods for matrix classes.
 
 API Changes:
-  * 
+  * Added fill_linspace() method with no args passed.
 
 Bug Fixes:
-  * 
+  * None
 
 Internal Changes of Note:
-  * 
+  * Greatly modified linalg internals for each backend (does not affect usage of backend/linalg.hh headers)
+      - dropped linalg_ preface in file names
+      - moved some internal headers to internals/
+      - exported blas header to individual files (e.g. xpose.hh)
+  * More granular header usage among internals
 
 Documentation:
-  * 
+  * None
 
 
 

@@ -6,6 +6,7 @@ var classfml_1_1gpuvec =
     [ "gpuvec", "classfml_1_1gpuvec.html#a16687a617973ecd6374343b1d6878317", null ],
     [ "~gpuvec", "classfml_1_1gpuvec.html#ab8237b5abfc94d65d8c78f1736761f00", null ],
     [ "dupe", "classfml_1_1gpuvec.html#ae40fca3b52988765887b2f05b328826a", null ],
+    [ "fill_linspace", "classfml_1_1gpuvec.html#aa71a281092b4c82887b4a6a4789f475d", null ],
     [ "fill_linspace", "classfml_1_1gpuvec.html#a8c25ee7059f54a1b3cfb19e9db946ca9", null ],
     [ "fill_val", "classfml_1_1gpuvec.html#ac4d9b2b5f81fcd55ba0e8a9fb1fd1982", null ],
     [ "fill_zero", "classfml_1_1gpuvec.html#ac4d02e14735a68d50f6b356fda00cf33", null ],
