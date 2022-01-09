@@ -75,7 +75,9 @@ namespace fml
       void set(const len_t i, const REAL v);
       void set(const len_t i, const len_t j, const REAL v);
       void get_row(const len_t i, gpuvec<REAL> &v) const;
+      void set_row(const len_t i, const gpuvec<REAL> &v);
       void get_col(const len_t j, gpuvec<REAL> &v) const;
+      void set_col(const len_t j, const gpuvec<REAL> &v);
       
       bool operator==(const gpumat<REAL> &x) const;
       bool operator!=(const gpumat<REAL> &x) const;
@@ -754,6 +756,30 @@ void fml::gpumat<REAL>::get_row(const len_t i, fml::gpuvec<REAL> &v) const
 
 
 /**
+  @brief Set the specified row.
+  
+  @param[in] i The desired row, 0-indexed.
+  @param[in] v The row values.
+  
+  @except If `i` is an inappropriate value (i.e. does not refer to a matrix
+  row), then the method will throw a `logic_error` exception. If the vector
+  is inappropriately sized, a `runtime_error` exception will be thrown.
+ */
+template <typename REAL>
+void fml::gpumat<REAL>::set_row(const len_t i, const fml::gpuvec<REAL> &v)
+{
+  if (i < 0 || i >= this->m)
+    throw std::logic_error("invalid matrix row");
+  if (v.size() != this->n)
+    throw std::runtime_error("non-conformable arguments");
+  
+  fml::kernelfuns::kernel_set_row<<<dim_grid, dim_block>>>(i, this->m, this->n, this->data, v.data_ptr());
+  this->c->check();
+}
+
+
+
+/**
   @brief Get the specified column.
   
   @param[in] j The desired column, 0-indexed.
@@ -775,6 +801,30 @@ void fml::gpumat<REAL>::get_col(const len_t j, fml::gpuvec<REAL> &v) const
   v.resize(this->m);
   
   fml::kernelfuns::kernel_get_col<<<dim_grid, dim_block>>>(j, this->m, this->n, this->data, v.data_ptr());
+  this->c->check();
+}
+
+
+
+/**
+  @brief Set the specified column.
+  
+  @param[in] i The desired row, 0-indexed.
+  @param[in] v The column values.
+  
+  @except If `i` is an inappropriate value (i.e. does not refer to a matrix
+  row), then the method will throw a `logic_error` exception. If the vector
+  is inappropriately sized, a `runtime_error` exception will be thrown.
+ */
+template <typename REAL>
+void fml::gpumat<REAL>::set_col(const len_t i, const fml::gpuvec<REAL> &v)
+{
+  if (i < 0 || i >= this->n)
+    throw std::logic_error("invalid matrix row");
+  if (v.size() != this->m)
+    throw std::runtime_error("non-conformable arguments");
+  
+  fml::kernelfuns::kernel_set_col<<<dim_grid, dim_block>>>(i, this->m, this->n, this->data, v.data_ptr());
   this->c->check();
 }
 

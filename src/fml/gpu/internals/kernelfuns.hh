@@ -336,11 +336,18 @@ namespace fml
       int i = blockDim.x*blockIdx.x + threadIdx.x;
       int j = blockDim.y*blockIdx.y + threadIdx.y;
       
-      if (i < m && j < n)
-      {
-        if (i == row)
-          v[j] = data[i + m*j];
-      }
+      if (i < m && j < n && i == row)
+        v[j] = data[i + m*j];
+    }
+    
+    template <typename REAL>
+    __global__ void kernel_set_row(const len_t row, const len_t m, const len_t n, REAL *data, const REAL *v)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      int j = blockDim.y*blockIdx.y + threadIdx.y;
+      
+      if (i < m && j < n && i == row)
+        data[i + m*j] = v[j];
     }
     
     template <typename REAL>
@@ -349,11 +356,18 @@ namespace fml
       int i = blockDim.x*blockIdx.x + threadIdx.x;
       int j = blockDim.y*blockIdx.y + threadIdx.y;
       
-      if (i < m && j < n)
-      {
-        if (j == col)
-          v[i] = data[i + m*j];
-      }
+      if (i < m && j < n && j == col)
+        v[i] = data[i + m*j];
+    }
+    
+    template <typename REAL>
+    __global__ void kernel_set_col(const len_t col, const len_t m, const len_t n, REAL *data, const REAL *v)
+    {
+      int i = blockDim.x*blockIdx.x + threadIdx.x;
+      int j = blockDim.y*blockIdx.y + threadIdx.y;
+      
+      if (i < m && j < n && j == col)
+        data[i + m*j] = v[i];
     }
     
     
