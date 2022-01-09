@@ -80,7 +80,9 @@ namespace fml
       void set(const len_t i, const REAL v);
       void set(const len_t i, const len_t j, const REAL v);
       void get_row(const len_t i, cpuvec<REAL> &v) const;
+      void set_row(const len_t i, const cpuvec<REAL> &v);
       void get_col(const len_t j, cpuvec<REAL> &v) const;
+      void set_col(const len_t j, const cpuvec<REAL> &v);
       
       bool operator==(const mpimat<REAL> &x) const;
       bool operator!=(const mpimat<REAL> &x) const;
@@ -1238,8 +1240,44 @@ void fml::mpimat<REAL>::get_row(const len_t i, fml::cpuvec<REAL> &v) const
       v_ptr[j] = this->data[i_local + this->m_local*j_local];
   }
   
-  
   this->g.allreduce(this->n, 1, v_ptr, 'A');
+}
+
+
+
+/**
+  @brief Set the specified row.
+  
+  @param[in] i The desired row, 0-indexed.
+  @param[in] v The row values.
+  
+  @except If `i` is an inappropriate value (i.e. does not refer to a matrix
+  row), then the method will throw a `logic_error` exception. If the vector
+  is inappropriately sized, a `runtime_error` exception will be thrown.
+  
+  @comm The method will communicate across all processes in the BLACS grid.
+ */
+template <typename REAL>
+void fml::mpimat<REAL>::set_row(const len_t i, const fml::cpuvec<REAL> &v)
+{
+  if (i < 0 || i >= this->m)
+    throw std::logic_error("invalid matrix row");
+  if (v.size() != this->n)
+    throw std::runtime_error("non-conformable arguments");
+  
+  REAL *v_ptr = v.data_ptr();
+  #pragma omp parallel for if(this->n > fml::omp::OMP_MIN_SIZE)
+  for (len_t j=0; j<this->n; j++)
+  {
+    const len_local_t i_local = fml::bcutils::g2l(i, this->mb, this->g.nprow());
+    const len_local_t j_local = fml::bcutils::g2l(j, this->nb, this->g.npcol());
+    
+    const int pr = fml::bcutils::g2p(i, this->mb, this->g.nprow());
+    const int pc = fml::bcutils::g2p(j, this->nb, this->g.npcol());
+    
+    if (pr == this->g.myrow() && pc == this->g.mycol())
+      this->data[i_local + this->m_local*j_local] = v_ptr[j];
+  }
 }
 
 
@@ -1284,8 +1322,49 @@ void fml::mpimat<REAL>::get_col(const len_t j, fml::cpuvec<REAL> &v) const
       v_ptr[i] = this->data[i_local + this->m_local*j_local];
   }
   
-  
   this->g.allreduce(this->m, 1, v_ptr, 'A');
+}
+
+
+
+/**
+  @brief Set the specified column.
+  
+  @details The return vector of column values is set on all processes.
+  
+  @param[in] j The desired column, 0-indexed.
+  @param[in] v The column values.
+  
+  @allocs If the output dimension is inappropriately sized, it will
+  automatically be re-allocated.
+  
+  @except If `j` is an inappropriate value (i.e. does not refer to a matrix
+  column), then the method will throw a `logic_error` exception. If the vector
+  is inappropriately sized, a `runtime_error` exception will be thrown.
+  
+  @comm The method will communicate across all processes in the BLACS grid.
+ */
+template <typename REAL>
+void fml::mpimat<REAL>::set_col(const len_t j, const fml::cpuvec<REAL> &v)
+{
+  if (j < 0 || j >= this->n)
+    throw std::logic_error("invalid matrix column");
+  if (v.size() != this->m)
+    throw std::runtime_error("non-conformable arguments");
+  
+  REAL *v_ptr = v.data_ptr();
+  #pragma omp parallel for if(this->m > fml::omp::OMP_MIN_SIZE)
+  for (len_t i=0; i<this->m; i++)
+  {
+    const len_local_t i_local = fml::bcutils::g2l(i, this->mb, this->g.nprow());
+    const len_local_t j_local = fml::bcutils::g2l(j, this->nb, this->g.npcol());
+    
+    const int pr = fml::bcutils::g2p(i, this->mb, this->g.nprow());
+    const int pc = fml::bcutils::g2p(j, this->nb, this->g.npcol());
+    
+    if (pr == this->g.myrow() && pc == this->g.mycol())
+      this->data[i_local + this->m_local*j_local] = v_ptr[i];
+  }
 }
 
 
