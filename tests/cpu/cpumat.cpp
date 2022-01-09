@@ -157,3 +157,24 @@ TEMPLATE_TEST_CASE("get row/col", "[cpumat]", float, double)
   REQUIRE( fltcmp::eq(x.get(0, 0), v.get(0)) );
   REQUIRE( fltcmp::eq(x.get(1, 0), v.get(1)) );
 }
+
+
+
+TEMPLATE_TEST_CASE("set row/col", "[cpumat]", float, double)
+{
+  len_t n = 2;
+  
+  cpumat<TestType> x(n, n);
+  x.fill_linspace();
+  
+  cpuvec<TestType> v(n);
+  v.fill_linspace(9, 8);
+  
+  x.set_row(1, v);
+  REQUIRE( fltcmp::eq(x.get(1, 0), v.get(0)) );
+  REQUIRE( fltcmp::eq(x.get(1, 1), v.get(1)) );
+  
+  x.set_col(0, v);
+  REQUIRE( fltcmp::eq(x.get(0, 0), v.get(0)) );
+  REQUIRE( fltcmp::eq(x.get(1, 0), v.get(1)) );
+}

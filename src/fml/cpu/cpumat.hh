@@ -76,7 +76,9 @@ namespace fml
       void set(const len_t i, const REAL v);
       void set(const len_t i, const len_t j, const REAL v);
       void get_row(const len_t i, cpuvec<REAL> &v) const;
+      void set_row(const len_t i, const cpuvec<REAL> &v);
       void get_col(const len_t j, cpuvec<REAL> &v) const;
+      void set_col(const len_t i, const cpuvec<REAL> &v);
       
       bool operator==(const cpumat<REAL> &x) const;
       bool operator!=(const cpumat<REAL> &x) const;
@@ -786,6 +788,32 @@ void fml::cpumat<REAL>::get_row(const len_t i, cpuvec<REAL> &v) const
 
 
 /**
+  @brief Set the specified row.
+  
+  @param[in] i The desired row, 0-indexed.
+  @param[in] v The row values.
+  
+  @except If `i` is an inappropriate value (i.e. does not refer to a matrix
+  row), then the method will throw a `logic_error` exception. If the vector
+  is inappropriately sized, a `runtime_error` exception will be thrown.
+ */
+template <typename REAL>
+void fml::cpumat<REAL>::set_row(const len_t i, const cpuvec<REAL> &v)
+{
+  if (i < 0 || i >= this->m)
+    throw std::logic_error("invalid matrix row");
+  if (v.size() != this->n)
+    throw std::runtime_error("non-conformable arguments");
+  
+  REAL *v_d = v.data_ptr();
+  #pragma omp parallel for simd if(this->n > fml::omp::OMP_MIN_SIZE)
+  for (len_t j=0; j<this->n; j++)
+    this->data[i + this->m*j] = v_d[j];
+}
+
+
+
+/**
   @brief Get the specified column.
   
   @param[in] j The desired column, 0-indexed.
@@ -810,6 +838,32 @@ void fml::cpumat<REAL>::get_col(const len_t j, cpuvec<REAL> &v) const
   #pragma omp parallel for if(this->m > fml::omp::OMP_MIN_SIZE)
   for (len_t i=0; i<this->m; i++)
     v_d[i] = this->data[i + this->m*j];
+}
+
+
+
+/**
+  @brief Set the specified column.
+  
+  @param[in] j The desired column, 0-indexed.
+  @param[in] v The column values.
+  
+  @except If `i` is an inappropriate value (i.e. does not refer to a matrix
+  row), then the method will throw a `logic_error` exception. If the vector
+  is inappropriately sized, a `runtime_error` exception will be thrown.
+ */
+template <typename REAL>
+void fml::cpumat<REAL>::set_col(const len_t j, const cpuvec<REAL> &v)
+{
+  if (j < 0 || j >= this->n)
+    throw std::logic_error("invalid matrix column");
+  if (v.size() != this->m)
+    throw std::runtime_error("non-conformable arguments");
+  
+  REAL *v_d = v.data_ptr();
+  #pragma omp parallel for simd if(this->n > fml::omp::OMP_MIN_SIZE)
+  for (len_t i=0; i<this->m; i++)
+    this->data[i + this->m*j] = v_d[i];
 }
 
 
